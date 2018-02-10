@@ -6,9 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.xuhongcheng.archipelago.R;
-import com.example.xuhongcheng.archipelago.SinglePlayerActivity;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -35,7 +35,13 @@ public class MainActivity extends AppCompatActivity {
         singlePlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, SinglePlayerActivity.class));
+                Intent launchIntent = getPackageManager().getLaunchIntentForPackage(getResources().getString(R.string.gamePackageName));
+                if(launchIntent != null){
+                    startActivity(launchIntent);
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Could not find game APK", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
