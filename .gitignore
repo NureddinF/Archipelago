@@ -8,32 +8,39 @@
 /captures
 .externalNativeBuild
 
-# =============== #
-# Unity generated #
-# =============== #
-Temp/
-Obj/
-UnityGenerated/
-Library/
-Assets/AssetStoreTools*
+###
+# Unity folders and files
+###
+[Aa]ssets/AssetStoreTools*
+[Bb]uild/
+[Ll]ibrary/
+[Ll]ocal[Cc]ache/
+[Oo]bj/
+[Tt]emp/
+[Uu]nityGenerated/
+# file on crash reports
+sysinfo.txt
+# Unity3D generated meta files
+*.pidb.meta
 
-# ===================================== #
-# Visual Studio / MonoDevelop generated #
-# ===================================== #
-ExportedObj/
-*.svd
-*.userprefs
-*.csproj
-*.pidb
-*.suo
-*.sln
-*.user
-*.unityproj
+###
+# VS/MD solution and project files
+###
+[Ee]xportedObj/
 *.booproj
+*.csproj
+*.sln
+*.suo
+*.svd
+*.unityproj
+*.user
+*.userprefs
+*.pidb
+.DS_Store
 
-# ============ #
-# OS generated #
-# ============ #
+###
+# OS generated
+###
 .DS_Store
 .DS_Store?
 ._*
