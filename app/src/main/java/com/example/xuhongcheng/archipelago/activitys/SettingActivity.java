@@ -35,7 +35,7 @@ public class SettingActivity extends Activity {
     }
 
     private void initView() {
-//        初始化按钮对象
+//        Initialize the object of button
         mOptions = (RadioGroup) findViewById(R.id.rg_options);
         mTurnOn = (RadioButton) findViewById(R.id.rb_turn_on);
         mTurnOff = (RadioButton) findViewById(R.id.rb_turn_off);
