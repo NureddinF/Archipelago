@@ -27,8 +27,8 @@ public class RegisterActivity extends Activity {
 
 
     public void setAccount(View v){
-    		//保存账号密码
-    		//1拿到账号和密码
+    		//Store username and password
+    		//1Get the username and password
     		String name = et_name.getText().toString().trim();
     		String pass = et_pass.getText().toString().trim();
 
@@ -39,7 +39,7 @@ public class RegisterActivity extends Activity {
 				Toast.makeText(this, "Empty Password!", Toast.LENGTH_SHORT).show();
 				return ;
 			}
-    		//2把账号密码写入文件
+    		//2Write the username and password to the file
 //    		File file = new File(getFilesDir(), "/info.txt");
     		File file = new File(getCacheDir(), "/info.txt");
     		try {
