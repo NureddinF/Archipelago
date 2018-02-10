@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.xuhongcheng.archipelago">
 
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -20,6 +21,15 @@
         <activity android:name=".activitys.RegisterActivity" />
         <activity android:name=".activitys.MainActivity" />
         <activity android:name=".activitys.SettingActivity" />
+        <!--
+               Set to true if your app is Standalone, that is, it does not require the handheld
+               app to run.
+        -->
+
+        <activity
+            android:name=".SinglePlayerActivity"
+            android:parentActivityName=".activitys.MainActivity"></activity>
+        <activity android:name=".activitys.ProfileActivity"></activity>
     </application>
 
 </manifest>
