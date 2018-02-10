@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     public Button hostMulti;
     public Button joinMulti;
     public Button logout;
+    public Button profile;
     public ImageButton btn_settings;
 
     @Override
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         joinMulti = findViewById(R.id.join);
         logout = findViewById(R.id.logout);
         btn_settings = findViewById(R.id.setting);
+        profile = findViewById(R.id.profile);
 
         singlePlayer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
             }
         });
 
@@ -48,6 +50,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, SettingActivity.class ));
+            }
+        });
+
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
             }
         });
     }
