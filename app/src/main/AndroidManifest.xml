@@ -28,9 +28,8 @@
 
         <activity
             android:name=".SinglePlayerActivity"
-            android:parentActivityName=".activitys.MainActivity">
-
-        </activity>
+            android:parentActivityName=".activitys.MainActivity"></activity>
+        <activity android:name=".activitys.ProfileActivity"></activity>
     </application>
 
 </manifest>
