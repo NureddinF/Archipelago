@@ -21,8 +21,8 @@ import java.io.InputStreamReader;
 
 public class LoginActivity extends Activity {
 	
-	private String name ;  // 本地账号
-	private String pass ;  // 本地密码
+	private String name ;  // Local username
+	private String pass ;  // Local password
 	EditText et_name;
 	EditText et_pass;
 	TextView tv_guest_login ;
@@ -32,7 +32,7 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_login);
-        //获取用户输入的内容
+        //Acquire inputs from user
 //        readAccount(); //读取本地文件的账号密码
         et_name = (EditText) findViewById(R.id.et_name);
     	et_pass = (EditText) findViewById(R.id.et_pass);

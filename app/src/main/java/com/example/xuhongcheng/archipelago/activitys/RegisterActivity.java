@@ -11,6 +11,7 @@ import com.example.xuhongcheng.archipelago.R;
 import java.io.File;
 import java.io.FileOutputStream;
 
+
 public class RegisterActivity extends Activity {
 
 	EditText et_name;
@@ -18,7 +19,7 @@ public class RegisterActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       setTitle("设置密码");
+       setTitle("Set Password");
         setContentView(R.layout.activity_register);
         et_name = (EditText) findViewById(R.id.et_name);
     	et_pass = (EditText) findViewById(R.id.et_pass);
@@ -39,9 +40,7 @@ public class RegisterActivity extends Activity {
 				return ;
 			}
     		//2把账号密码写入文件
-    		//返回一个file对象，路径就是data/data/com.wuzhoudao.note/files
 //    		File file = new File(getFilesDir(), "/info.txt");
-    		//返回一个file对象，路径就是data/data/com.itheima.apirwinrom/cache
     		File file = new File(getCacheDir(), "/info.txt");
     		try {
 				FileOutputStream fos = new FileOutputStream(file);

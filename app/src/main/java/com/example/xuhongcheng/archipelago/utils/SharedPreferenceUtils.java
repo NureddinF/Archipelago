@@ -21,4 +21,54 @@ public class SharedPreferenceUtils {
 		return sp.getBoolean(key, defValue);
 		
 	}
+	public class password {
+
+		String s;
+
+		public password(String s) {
+			this.s = s;
+		}
+
+		public int Name(){
+			if (s.equals("password"))
+				return 0;
+			else
+				return 1;
+		}
+
+		public int Length(){
+			if (s.length() >= 8)
+				return 1;
+			else
+				return 0;
+		}
+
+		public int Special(){
+			if (s.contains("s"))
+				return 1;
+			else
+				return 0;
+		}
+
+		public int Digit(){
+			if (s.matches(".*\\d+.*"))
+				return 1;
+			else
+				return 0;
+		}
+
+		public int UpLo(){
+			if (s.equals(s.toLowerCase()) || s.equals(s.toUpperCase()))
+				return 0;
+			else
+				return 1;
+		}
+
+		public int pass() {
+			return Name() + Length() + Special() + Digit() + UpLo();
+		}
+
+
+
+	}
 }
