@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 13
-  productGUID: 7fafa7e0fa76bd340b9a605f3fd0797c
+  productGUID: 7809846185a0621438a941dea17817bb
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   defaultScreenOrientation: 4
@@ -603,8 +603,8 @@ PlayerSettings:
     UNet: 1
   facebookSdkVersion: 7.9.4
   apiCompatibilityLevel: 2
-  cloudProjectId: 846f330f-a37f-4b7a-841e-407774c70406
-  projectName: Archipelago (1)
+  cloudProjectId: bea909ca-cb5f-4bc6-83db-b71c66f31db6
+  projectName: Archipelago (2)
   organizationId: eddiecj1
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
