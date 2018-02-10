@@ -33,7 +33,7 @@ public class LoginActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_login);
         //Acquire inputs from user
-//        readAccount(); //读取本地文件的账号密码
+//        readAccount(); //Read the username and password for local files
         et_name = (EditText) findViewById(R.id.et_name);
     	et_pass = (EditText) findViewById(R.id.et_pass);
 		tv_guest_login = (TextView) findViewById(R.id.tv_guest_login);
@@ -50,7 +50,8 @@ public class LoginActivity extends Activity {
 				startActivity(new Intent(LoginActivity.this,MainActivity.class));
 			}
 		});
-    	//判断是否保存过信息，如果isSaved存在代表保存过,返回true，不存在默认返回false
+    	//**Use Utils method, used to check
+		//判断是否保存过信息，如果isSaved存在代表保存过,返回true，不存在默认返回false
 		if(SharedPreferenceUtils.getBoolean(LoginActivity.this,"isSaved",false)){
 			//把账号密码回显至输入框
     		et_name.setText(name);
@@ -87,6 +88,8 @@ public class LoginActivity extends Activity {
 			break;
 		}
     }
+
+    public void logout(View v){}
 
     //回显账号
     public void readAccount(){
