@@ -166,7 +166,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 8.18878
+  orthographic size: 26.721004
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -189,8 +189,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 596975294}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -17.52, y: 8.07, z: -10}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -7.2, y: -4.5, z: -10}
+  m_LocalScale: {x: 1.0398413, y: 1.0398406, z: 1.0398406}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -206,4 +206,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dea3944213a20040bf57b67c76d4a7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hex: {fileID: 1296910495518180, guid: 0e0eeeb4d8ae5d24eb808e72dd02b113, type: 2}
+  tileGrass: {fileID: 1887932279860976, guid: e107cdb6c292a964a8630d145b8c247f, type: 2}
+  tilePlayer1Base: {fileID: 1920015907123518, guid: bf6d98c9c434d9a428d8a520f155c199,
+    type: 2}
+  tilePlayer2Base: {fileID: 1308510330598628, guid: 04241fb745664e844a5ea75535b92b95,
+    type: 2}
+  tileRocks: {fileID: 1911887524060852, guid: 010e802b7f79e2f429516a708d5e4208, type: 2}
+  tileSand: {fileID: 1525019519285986, guid: b54aca97b2beebb4682d4f76bfa14721, type: 2}
+  tileTrees: {fileID: 1808643531072644, guid: 6ef0db94457237e4e97fcfffcce0845c, type: 2}
+  tileWater: {fileID: 1974426177275934, guid: 1be3cb836ad194140a74ad2b155a9a68, type: 2}
