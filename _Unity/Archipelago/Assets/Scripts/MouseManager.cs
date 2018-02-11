@@ -35,28 +35,6 @@ public class MouseManager : MonoBehaviour {
             //If left mouse button pressed, only calls once on initial press(e.g not constantly calling on hold)
             if (Input.GetMouseButtonDown(0))
             {
-<<<<<<< HEAD
-				Debug.Log ("Hello World");
-                //List of direct cell neighbors
-				/*
-                List<GameObject> neighbors = collidedHitInfo.GetComponent<Hex>().getNeighbors();
-                for (int i = 0; i < neighbors.Count; i++)
-                {
-                    Debug.Log("X: " + neighbors[i].GetComponent<Hex>().x + " Y: " +neighbors[i].GetComponent<Hex>().y);
-                }
-                */
-				if (collidedHitInfo.tag == "Grass") {
-					collidedHitInfo.GetComponent<SpriteRenderer> ().sprite = tileGrassOwned;
-				}
-				else if (collidedHitInfo.tag == "Sand") {
-					collidedHitInfo.GetComponent<SpriteRenderer> ().sprite = tileSandOwned;
-				}
-				else if (collidedHitInfo.tag == "Tree") {
-					collidedHitInfo.GetComponent<SpriteRenderer> ().sprite = tileTreeOwned;
-				}
-				else if (collidedHitInfo.tag == "Rock") {
-					collidedHitInfo.GetComponent<SpriteRenderer> ().sprite = tileRockOwned;
-=======
 				// Check what we clicked on
 				if (collidedHitInfo.GetComponent<Hex> () != null) {
 					//clicked on a hex
@@ -77,8 +55,28 @@ public class MouseManager : MonoBehaviour {
 					Unit clickedUnit = collidedHitInfo.GetComponent<Unit>();
 					if(clickedUnit == selectedUnit) deselectUnit();
 					else selectUnit(clickedUnit);
->>>>>>> master
 				}
+
+				Debug.Log ("Hello World");
+				//List of direct cell neighbors
+				/*
+                List<GameObject> neighbors = collidedHitInfo.GetComponent<Hex>().getNeighbors();
+                for (int i = 0; i < neighbors.Count; i++)
+                {
+                    Debug.Log("X: " + neighbors[i].GetComponent<Hex>().x + " Y: " +neighbors[i].GetComponent<Hex>().y);
+                }
+                */
+				if (collidedHitInfo.tag == "Grass") {
+					collidedHitInfo.GetComponent<SpriteRenderer> ().sprite = tileGrassOwned;
+				}
+				else if (collidedHitInfo.tag == "Sand") {
+					collidedHitInfo.GetComponent<SpriteRenderer> ().sprite = tileSandOwned;
+				}
+				else if (collidedHitInfo.tag == "Tree") {
+					collidedHitInfo.GetComponent<SpriteRenderer> ().sprite = tileTreeOwned;
+				}
+				else if (collidedHitInfo.tag == "Rock") {
+					collidedHitInfo.GetComponent<SpriteRenderer> ().sprite = tileRockOwned;
             }
         }
 	}
