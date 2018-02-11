@@ -20,8 +20,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4511303998385874}
   - component: {fileID: 212359652091449338}
-  - component: {fileID: 61187911803580530}
-  - component: {fileID: 114270341985944742}
+  - component: {fileID: 60735842741046392}
+  - component: {fileID: 114221270697248378}
   m_Layer: 0
   m_Name: tileRocks
   m_TagString: Untagged
@@ -42,8 +42,8 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &61187911803580530
-BoxCollider2D:
+--- !u!60 &60735842741046392
+PolygonCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -64,10 +64,17 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 4, y: 4}
-  m_EdgeRadius: 0
---- !u!114 &114270341985944742
+  m_Points:
+    m_Paths:
+    - - {x: -1.01, y: 1.9399999}
+      - {x: -1.9399999, y: 0.02}
+      - {x: -1.9399999, y: -0.02}
+      - {x: -1, y: -1.9399999}
+      - {x: 1.01, y: -1.9399999}
+      - {x: 1.9399999, y: -0.08}
+      - {x: 1.9399999, y: 0.02}
+      - {x: 1.02, y: 1.9399999}
+--- !u!114 &114221270697248378
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -75,9 +82,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1911887524060852}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30c98e03909037049b806841027c859c, type: 3}
+  m_Script: {fileID: 11500000, guid: a6df63fddf43a894f923d1131471aab7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  x: 0
+  y: 0
 --- !u!212 &212359652091449338
 SpriteRenderer:
   m_ObjectHideFlags: 1
