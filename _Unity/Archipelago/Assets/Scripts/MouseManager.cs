@@ -38,7 +38,7 @@ public class MouseManager : MonoBehaviour {
             //If left mouse button pressed, only calls once on initial press(e.g not constantly calling on hold)
             if (Input.GetMouseButtonDown(0))
             {
-				// Check what we clicked on
+                // Check what we clicked on
 				if (collidedHitInfo.GetComponent<Hex> () != null) {
 					Debug.Log ("Clicked On Hex");
 					//clicked on a hex
