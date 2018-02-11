@@ -20,8 +20,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4482348437542684}
   - component: {fileID: 212709610846333418}
-  - component: {fileID: 61767674362741286}
-  - component: {fileID: 114519743353504836}
+  - component: {fileID: 60781279853068240}
+  - component: {fileID: 114310641812230322}
   m_Layer: 0
   m_Name: tileSand
   m_TagString: Untagged
@@ -42,8 +42,8 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &61767674362741286
-BoxCollider2D:
+--- !u!60 &60781279853068240
+PolygonCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -64,10 +64,17 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 4, y: 4}
-  m_EdgeRadius: 0
---- !u!114 &114519743353504836
+  m_Points:
+    m_Paths:
+    - - {x: -1.01, y: 1.9399999}
+      - {x: -1.9399999, y: 0.02}
+      - {x: -1.9399999, y: -0.02}
+      - {x: -1, y: -1.9399999}
+      - {x: 1.01, y: -1.9399999}
+      - {x: 1.9399999, y: -0.08}
+      - {x: 1.9399999, y: 0.02}
+      - {x: 1.02, y: 1.9399999}
+--- !u!114 &114310641812230322
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -75,9 +82,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1525019519285986}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30c98e03909037049b806841027c859c, type: 3}
+  m_Script: {fileID: 11500000, guid: a6df63fddf43a894f923d1131471aab7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  x: 0
+  y: 0
 --- !u!212 &212709610846333418
 SpriteRenderer:
   m_ObjectHideFlags: 1

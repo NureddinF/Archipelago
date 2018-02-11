@@ -14,5 +14,4 @@ public class HoverChange : MonoBehaviour {
         this.GetComponent<SpriteRenderer>().color = startColor;
 
     }
-
 }
