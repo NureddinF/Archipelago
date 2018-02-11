@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour {
 
-
 	public Vector3 destination;
 	public int speed = 1;
+	public bool shouldMove = false;
 	
 	// Update is called once per frame
 	void Update () {
-		if (destination != null) {
+		if (shouldMove) {
 			moveTowards(destination);
 		}
 	}
@@ -27,5 +27,19 @@ public class Unit : MonoBehaviour {
 
 		// Update position
 		this.transform.Translate(actual_distance);
+		if(this.transform.position.Equals(destination)){
+			reachedWaypoint();
+		}
+	}
+
+	public void setDestination(Vector3 dest){
+		dest.z = this.transform.position.z;
+		this.destination = dest;
+		shouldMove = true;
+	}
+	
+	private void reachedWaypoint(){
+		// TODO: pathfinding
+		shouldMove = false;
 	}
 }
