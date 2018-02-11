@@ -20,9 +20,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4444919370480266}
   - component: {fileID: 212750094891792766}
+  - component: {fileID: 114322085150676562}
+  - component: {fileID: 60338078478125996}
   m_Layer: 0
   m_Name: tileRocks
-  m_TagString: Untagged
+  m_TagString: Rock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -40,6 +42,51 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!60 &60338078478125996
+PolygonCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1318565723524908}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 4, y: 4}
+    newSize: {x: 4, y: 4}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -1.01, y: 1.9399999}
+      - {x: -1.9399999, y: 0.02}
+      - {x: -1.9399999, y: -0.02}
+      - {x: -1, y: -1.9399999}
+      - {x: 1.01, y: -1.9399999}
+      - {x: 1.9399999, y: -0.08}
+      - {x: 1.9399999, y: 0.02}
+      - {x: 1.02, y: 1.9399999}
+--- !u!114 &114322085150676562
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1318565723524908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6df63fddf43a894f923d1131471aab7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  x: 0
+  y: 0
 --- !u!212 &212750094891792766
 SpriteRenderer:
   m_ObjectHideFlags: 1

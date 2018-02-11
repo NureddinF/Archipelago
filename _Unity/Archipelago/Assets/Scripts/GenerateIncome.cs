@@ -9,14 +9,18 @@ public class GenerateIncome : MonoBehaviour {
 	public int maxIncome;
 	public int minIncome;
 	public int baseIncome;
-	public int ownedTerritory;
+	public int grassTerritory;
+	public int treeTerritory;
+	public int sandTerritory;
+	public int rockTerritory;
+
 	public Text incomeText;
 	public Text rateText;
 	public int timeFrame;
 
 	private float startTime;
-
-	private float currentIncome;
+	private float increaseAmt;
+	public float currentIncome;
 
 	// Use this for initialization
 	void Start () {
@@ -36,9 +40,10 @@ public class GenerateIncome : MonoBehaviour {
 		*/
 		// timeframe has passed
 		if(Time.time > timeFrame + startTime) {
-			currentIncome += baseIncome * rateMultiplier;
+			increaseAmt = (baseIncome + grassTerritory + rockTerritory + sandTerritory + treeTerritory) * rateMultiplier;
+			currentIncome += increaseAmt;
 			incomeText.text = "" + currentIncome;
-			rateText.text = "+ " + baseIncome * rateMultiplier + "/" + timeFrame + "secs";
+			rateText.text = "+ " + increaseAmt + "/" + timeFrame + "secs";
 			startTime = Time.time;
 		}
 
