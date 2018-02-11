@@ -17,6 +17,7 @@ public class HexGrid : MonoBehaviour
     private static int gridWidth;
     private static int gridHeight;
 
+    //Get methods for grid dimensions
     public static int getGridHeight() { return gridHeight; }
     public static int getGridWidth() { return gridWidth;  }
 
@@ -36,12 +37,16 @@ public class HexGrid : MonoBehaviour
 
     // Initialization
     void Start()
-    {       
+    {   
+        //Initialize map, and sizes
         initiateMapStructure();
         initializeSizes();
+
+        //Create the hex grid
         createHexGrid();
     }
 
+    //Method to store the sizes of grid/hexes/offsets
     private void initializeSizes()
     {
         hexHeight = tileGrass.GetComponent<SpriteRenderer>().bounds.size.y;
@@ -52,6 +57,7 @@ public class HexGrid : MonoBehaviour
         gridWidth = mapStructure.GetLength(1);
     }
 
+    //This method contains the matrix representation of the map
     private void initiateMapStructure()
     {
         int[,] map = new int[10, 20]
@@ -71,6 +77,7 @@ public class HexGrid : MonoBehaviour
         mapStructure = map;
     }
 
+    //Turns a grid position to unity coordinates
     public Vector3 calcUnityCoord(Vector2 gridPos)
     {
         float x = gridPos.x * (hexWidth - xOffset/2);
@@ -82,16 +89,20 @@ public class HexGrid : MonoBehaviour
         return new Vector3(x, y, 0);
     }
 
+    //Method to create the hex grid
     void createHexGrid()
     {
         GameObject hexGridObject = new GameObject("HexGrid");
+        //Makes sure all generated game objects are under a parent. Allows tidier scene management
         hexGridObject.transform.parent = this.transform;
 
+        //Incrementing through the two dimensional map array, row by row.
         for (int y = 0; y < gridHeight; y++)
         {
             for (int x = 0; x < gridWidth; x++)
             {
                 GameObject thisHex;
+                //What tile type wants to be created
                 if (mapStructure[y, x] == 0)
                     thisHex = (GameObject)Instantiate(tileGrass);
                 else if (mapStructure[y, x] == 1)
@@ -107,6 +118,7 @@ public class HexGrid : MonoBehaviour
                 else
                     thisHex = (GameObject)Instantiate(tileWater);
 
+                //Set it's position, tranformation, name and other variables attached to the hex. 0 0 is top left corner
                 Vector2 gridPos = new Vector2(x, y);
                 thisHex.transform.position = calcUnityCoord(gridPos);
                 thisHex.transform.parent = hexGridObject.transform;
