@@ -34,7 +34,6 @@ public class MouseManager : MonoBehaviour {
                     Debug.Log("X: " + neighbors[i].GetComponent<Hex>().x + " Y: " +neighbors[i].GetComponent<Hex>().y);
                 }
             }
-
         }
 	}
 }
