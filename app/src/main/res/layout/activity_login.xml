@@ -62,15 +62,17 @@
             android:onClick="login"
             android:text="Register"
             android:textAllCaps="false" />
-    </LinearLayout>
-
-    <TextView
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <Button
         android:id="@+id/tv_guest_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:layout_marginTop="5dp"
         android:clickable="true"
-        android:text="Login as Guest"
-        android:textSize="16sp" />
+        android:text="Login as Guest" />
+    </LinearLayout>
+    </LinearLayout>
 </LinearLayout>
