@@ -9,55 +9,57 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1247218437752098}
+  m_RootGameObject: {fileID: 1482389211920394}
   m_IsPrefabParent: 1
---- !u!1 &1247218437752098
+--- !u!1 &1482389211920394
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4542974940998438}
-  - component: {fileID: 212950595602216112}
-  - component: {fileID: 114846032919989684}
+  - component: {fileID: 4277988614737378}
+  - component: {fileID: 212144084585374948}
+  - component: {fileID: 114764213880093946}
   m_Layer: 0
-  m_Name: tileGrass
+  m_Name: tileGrassEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4542974940998438
+--- !u!4 &4277988614737378
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1247218437752098}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_GameObject: {fileID: 1482389211920394}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -63, y: -2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114846032919989684
+--- !u!114 &114764213880093946
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1247218437752098}
+  m_GameObject: {fileID: 1482389211920394}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 134714b285b0b43179e7427655449055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!212 &212950595602216112
+  ownedTile: {fileID: 0}
+  enemyTile: {fileID: 0}
+--- !u!212 &212144084585374948
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1247218437752098}
+  m_GameObject: {fileID: 1482389211920394}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -86,7 +88,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: ba41802b8d0ee420bacc5581f5e6da4d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9c01b3acbdd4b49ee9a0e9bc7bbf85c8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

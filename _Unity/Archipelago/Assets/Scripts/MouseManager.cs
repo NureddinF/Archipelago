@@ -51,7 +51,6 @@ public class MouseManager : MonoBehaviour {
 					else selectUnit(clickedUnit);
 				}
             }
-
         }
 	}
 
