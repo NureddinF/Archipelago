@@ -65,21 +65,33 @@ public class MouseManager : MonoBehaviour {
                			 }
                			 */
 						if (collidedHitInfo.tag == "Grass") {
-							collidedHitInfo.GetComponent<SpriteRenderer> ().sprite = tileGrassOwned;
-							incomeCount.GetComponent<GenerateIncome> ().currentIncome -= 200;
-							incomeCount.GetComponent<GenerateIncome> ().grassTerritory += 2;
+							if(incomeCount.GetComponent<GenerateIncome> ().currentIncome >= 200) {
+								collidedHitInfo.GetComponent<SpriteRenderer> ().sprite = tileGrassOwned;
+								incomeCount.GetComponent<GenerateIncome> ().currentIncome -= 200;
+								incomeCount.GetComponent<GenerateIncome> ().grassTerritory += 2;
+							}
+
 						} else if (collidedHitInfo.tag == "Sand") {
-							collidedHitInfo.GetComponent<SpriteRenderer> ().sprite = tileSandOwned;
-							incomeCount.GetComponent<GenerateIncome> ().currentIncome -= 100;
-							incomeCount.GetComponent<GenerateIncome> ().sandTerritory += 1;
+							if(incomeCount.GetComponent<GenerateIncome> ().currentIncome >= 100) {
+								collidedHitInfo.GetComponent<SpriteRenderer> ().sprite = tileSandOwned;
+								incomeCount.GetComponent<GenerateIncome> ().currentIncome -= 100;
+								incomeCount.GetComponent<GenerateIncome> ().sandTerritory += 1;
+							}
+
 						} else if (collidedHitInfo.tag == "Tree") {
-							collidedHitInfo.GetComponent<SpriteRenderer> ().sprite = tileTreeOwned;
-							incomeCount.GetComponent<GenerateIncome> ().currentIncome -= 300;
-							incomeCount.GetComponent<GenerateIncome> ().treeTerritory += 3;
+							if(incomeCount.GetComponent<GenerateIncome> ().currentIncome >= 300) {
+								collidedHitInfo.GetComponent<SpriteRenderer> ().sprite = tileTreeOwned;
+								incomeCount.GetComponent<GenerateIncome> ().currentIncome -= 300;
+								incomeCount.GetComponent<GenerateIncome> ().treeTerritory += 3;
+							}
+
 						} else if (collidedHitInfo.tag == "Rock") {
-							collidedHitInfo.GetComponent<SpriteRenderer> ().sprite = tileRockOwned;
-							incomeCount.GetComponent<GenerateIncome> ().currentIncome -= 500;
-							incomeCount.GetComponent<GenerateIncome> ().rockTerritory += 4;
+							if(incomeCount.GetComponent<GenerateIncome> ().currentIncome >= 500) {
+								collidedHitInfo.GetComponent<SpriteRenderer> ().sprite = tileRockOwned;
+								incomeCount.GetComponent<GenerateIncome> ().currentIncome -= 500;
+								incomeCount.GetComponent<GenerateIncome> ().rockTerritory += 4;
+							}
+
 						}
 					}
 				}
