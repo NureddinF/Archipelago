@@ -191,6 +191,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94da06098b49b964a8ccc73719b42b50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  incomeCount: {fileID: 0}
+  tileGrassOwned: {fileID: 0}
+  tileSandOwned: {fileID: 0}
+  tileTreeOwned: {fileID: 0}
+  tileRockOwned: {fileID: 0}
+  unitDeselected: {fileID: 0}
+  unitSelected: {fileID: 0}
 --- !u!4 &431947363
 Transform:
   m_ObjectHideFlags: 0
@@ -216,7 +223,7 @@ GameObject:
   - component: {fileID: 730327345}
   - component: {fileID: 730327346}
   m_Layer: 0
-  m_Name: New Sprite
+  m_Name: New Unit Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
