@@ -19,8 +19,8 @@ public class MouseManager : MonoBehaviour {
         {
             GameObject collidedHitInfo = hitInfo.collider.transform.gameObject;
             
-            if (Input.GetMouseButtonDown(0))
-            {
+            if (Input.GetMouseButtonDown(0)){
+				
                 List <GameObject> neighbors = collidedHitInfo.GetComponent<Hex>().getNeighbors();
                 Debug.Log(neighbors);
             }

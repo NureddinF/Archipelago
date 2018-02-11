@@ -5,7 +5,7 @@ using UnityEngine;
 public class Unit : MonoBehaviour {
 
 
-	public Vector3 destination = null;
+	public Vector3 destination;
 	public int speed = 1;
 	
 	// Update is called once per frame
