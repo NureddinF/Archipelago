@@ -113,57 +113,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &463588562
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 463588564}
-  - component: {fileID: 463588563}
-  m_Layer: 0
-  m_Name: Hex Grid
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &463588563
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 463588562}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6dea3944213a20040bf57b67c76d4a7a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tileGrass: {fileID: 1887932279860976, guid: e107cdb6c292a964a8630d145b8c247f, type: 2}
-  tilePlayer1Base: {fileID: 1920015907123518, guid: bf6d98c9c434d9a428d8a520f155c199,
-    type: 2}
-  tilePlayer2Base: {fileID: 1308510330598628, guid: 04241fb745664e844a5ea75535b92b95,
-    type: 2}
-  tileRocks: {fileID: 1911887524060852, guid: 010e802b7f79e2f429516a708d5e4208, type: 2}
-  tileSand: {fileID: 1525019519285986, guid: b54aca97b2beebb4682d4f76bfa14721, type: 2}
-  tileTrees: {fileID: 1808643531072644, guid: 6ef0db94457237e4e97fcfffcce0845c, type: 2}
-  tileWater: {fileID: 1974426177275934, guid: 1be3cb836ad194140a74ad2b155a9a68, type: 2}
-  yOffsetGap: 0.01
-  xOffsetGap: 0.01
---- !u!4 &463588564
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 463588562}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &596975294
 GameObject:
   m_ObjectHideFlags: 0
@@ -175,6 +124,7 @@ GameObject:
   - component: {fileID: 596975297}
   - component: {fileID: 596975296}
   - component: {fileID: 596975295}
+  - component: {fileID: 596975299}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -239,49 +189,29 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 596975294}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 39.5, y: -21.5, z: -10}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -7.2, y: -4.5, z: -10}
+  m_LocalScale: {x: 1.0398413, y: 1.0398406, z: 1.0398406}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2025904180
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 2025904181}
-  - component: {fileID: 2025904182}
-  m_Layer: 0
-  m_Name: InteractionManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2025904181
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2025904180}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 36.42659, y: 3.7870913, z: -10.807256}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2025904182
+--- !u!114 &596975299
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2025904180}
+  m_GameObject: {fileID: 596975294}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94da06098b49b964a8ccc73719b42b50, type: 3}
+  m_Script: {fileID: 11500000, guid: 6dea3944213a20040bf57b67c76d4a7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tileGrass: {fileID: 1887932279860976, guid: e107cdb6c292a964a8630d145b8c247f, type: 2}
+  tilePlayer1Base: {fileID: 1920015907123518, guid: bf6d98c9c434d9a428d8a520f155c199,
+    type: 2}
+  tilePlayer2Base: {fileID: 1308510330598628, guid: 04241fb745664e844a5ea75535b92b95,
+    type: 2}
+  tileRocks: {fileID: 1911887524060852, guid: 010e802b7f79e2f429516a708d5e4208, type: 2}
+  tileSand: {fileID: 1525019519285986, guid: b54aca97b2beebb4682d4f76bfa14721, type: 2}
+  tileTrees: {fileID: 1808643531072644, guid: 6ef0db94457237e4e97fcfffcce0845c, type: 2}
+  tileWater: {fileID: 1974426177275934, guid: 1be3cb836ad194140a74ad2b155a9a68, type: 2}

@@ -1,10 +1,12 @@
-﻿using System.Collections;
+﻿/** https://stormworks.co.uk/hexagonal-grid-in-unity/ **/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class HexGrid : MonoBehaviour
 {
-    //Tile variant prefab gameobjects for building the map
+
     public GameObject tileGrass; //0
     public GameObject tilePlayer1Base; //1
     public GameObject tilePlayer2Base; //2
@@ -14,43 +16,27 @@ public class HexGrid : MonoBehaviour
     public GameObject tileWater; //6
 
     //Grid dimensions measured by number of hexes
-    private static int gridWidth;
-    private static int gridHeight;
+    private int gridWidth;
+    private int gridHeight;
 
-    public static int getGridHeight() { return gridHeight; }
-    public static int getGridWidth() { return gridWidth;  }
-
-
-    //Dimensions of individual hex
     private float hexWidth;
     private float hexHeight;
 
-    //Offset measurements
-    public float yOffsetGap = 0.01f;
-    public float xOffsetGap = 0.01f;
-    private float xOffset;
-    private float yOffset;
-
-    //Map layout matrix
     private int[,] mapStructure;
 
     // Initialization
     void Start()
-    {       
+    {
+        //Set the width and height to the attached gameobjects width/height
+        hexHeight = tileGrass.GetComponent<SpriteRenderer>().bounds.size.y;
+        hexWidth = tileGrass.GetComponent<SpriteRenderer>().bounds.size.x;
         initiateMapStructure();
-        initializeSizes();
+        gridHeight = mapStructure.GetLength(0);
+        gridWidth = mapStructure.GetLength(1);
+
         createHexGrid();
     }
 
-    private void initializeSizes()
-    {
-        hexHeight = tileGrass.GetComponent<SpriteRenderer>().bounds.size.y;
-        hexWidth = tileGrass.GetComponent<SpriteRenderer>().bounds.size.x;
-        xOffset = hexWidth * (0.5f - xOffsetGap);
-        yOffset = hexHeight * (0.5f + yOffsetGap);
-        gridHeight = mapStructure.GetLength(0);
-        gridWidth = mapStructure.GetLength(1);
-    }
 
     private void initiateMapStructure()
     {
@@ -64,21 +50,34 @@ public class HexGrid : MonoBehaviour
             {6,4,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,1,4,6},
             {6,4,0,0,0,0,0,0,0,4,6,4,0,0,5,0,0,0,4,6},
             {6,4,0,0,0,0,3,0,0,4,6,4,0,5,5,0,0,0,4,6},
-            {6,4,0,5,0,0,0,0,0,4,6,4,0,0,0,0,0,0,4,6},
+            {6,4,0,0,0,0,0,0,0,4,6,4,0,0,0,0,0,0,4,6},
             {6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6}
         };
 
         mapStructure = map;
     }
 
+    Vector3 calcInitialPos()
+    {
+        Vector3 initialPos;
+        initialPos = new Vector3(-hexWidth * gridWidth / 2f + hexWidth / 2, gridHeight / 2f * hexHeight / 2, 0);
+        return initialPos;
+    }
+
     public Vector3 calcUnityCoord(Vector2 gridPos)
     {
-        float x = gridPos.x * (hexWidth - xOffset/2);
-        float y = -gridPos.y * hexHeight;
+        Vector3 initPos = calcInitialPos();
+        float xoffset = 0;
+        float yoffset = 0;
 
-        if (gridPos.x % 2 == 1)
-            y -= yOffset;
+        if (gridPos.x % 2 != 0)
 
+            yoffset = hexHeight / 2;
+
+        float y = initPos.y + yoffset - gridPos.y * hexHeight;
+
+        xoffset = 0.75f;
+        float x = initPos.x + gridPos.x * hexWidth * xoffset;
         return new Vector3(x, y, 0);
     }
 
@@ -92,9 +91,9 @@ public class HexGrid : MonoBehaviour
             for (int x = 0; x < gridWidth; x++)
             {
                 GameObject thisHex;
-                if (mapStructure[y, x] == 0)
+                if (mapStructure[y,x] == 0)
                     thisHex = (GameObject)Instantiate(tileGrass);
-                else if (mapStructure[y, x] == 1)
+                else if (mapStructure[y,x] == 1)
                     thisHex = (GameObject)Instantiate(tilePlayer1Base);
                 else if (mapStructure[y, x] == 2)
                     thisHex = (GameObject)Instantiate(tilePlayer2Base);
@@ -106,16 +105,10 @@ public class HexGrid : MonoBehaviour
                     thisHex = (GameObject)Instantiate(tileTrees);
                 else
                     thisHex = (GameObject)Instantiate(tileWater);
+                
 
                 Vector2 gridPos = new Vector2(x, y);
                 thisHex.transform.position = calcUnityCoord(gridPos);
-                thisHex.transform.parent = hexGridObject.transform;
-                thisHex.name = "Hex_" + x + "_" + y;
-                thisHex.GetComponent<Hex>().x = x;
-                thisHex.GetComponent<Hex>().y = y;
-
-                //Potential Optimization for hexgrid
-                thisHex.isStatic = true;
             }
 
         }
