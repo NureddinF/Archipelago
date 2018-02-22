@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GenerateIncome : MonoBehaviour {
+public class Player : MonoBehaviour {
+
+	public enum PlayerId {P1,P2, NEUTRAL};
+
+	public PlayerId playerId;
 
 	public float rateMultiplier;
 	public int maxIncome;
@@ -32,22 +36,28 @@ public class GenerateIncome : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		/*
-		float translation = Time.deltaTime * rateMultiplier;
-		currentIncome += translation;
-		incomeText.text = "" + Mathf.RoundToInt(currentIncome);
-		rateText.text = "+ " + rateMultiplier + "/sec";
-		*/
-		// timeframe has passed
+		// Use discrete chunks of income
+		generateIncomeDiscrete();
+	}
+
+	// Generates income in discrete chunks rather than each frame
+	public void generateIncomeDiscrete(){
 		if(Time.time > timeFrame + startTime) {
+			// timeframe has passed
 			increaseAmt = (baseIncome + grassTerritory + rockTerritory + sandTerritory + treeTerritory) * rateMultiplier;
 			currentIncome += increaseAmt;
 			incomeText.text = "" + currentIncome;
 			rateText.text = "+ " + increaseAmt + "/" + timeFrame + "secs";
 			startTime = Time.time;
 		}
+	}
 
 
-
+	//Generate income and add to total money each frame
+	public void generateIncomeContinuous(){
+		float translation = Time.deltaTime * rateMultiplier;
+		currentIncome += translation;
+		incomeText.text = "" + Mathf.RoundToInt(currentIncome);
+		rateText.text = "+ " + rateMultiplier + "/sec";
 	}
 }

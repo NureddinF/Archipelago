@@ -36,18 +36,10 @@ public class MouseManager : MonoBehaviour {
             GameObject collidedHitInfo = hitInfo.collider.transform.gameObject;
 
             //If left mouse button pressed, only calls once on initial press(e.g not constantly calling on hold)
-            if (Input.GetMouseButtonDown(0))
-            {
+            if (Input.GetMouseButtonDown(0)) {
                 // Check what we clicked on
 				if (collidedHitInfo.GetComponent<Hex> () != null) {
-					Debug.Log ("Clicked On Hex");
 					//clicked on a hex
-					//List of direct cell neighbors
-					/*List<GameObject> neighbors = collidedHitInfo.GetComponent<Hex> ().getNeighbors ();
-					for (int i = 0; i < neighbors.Count; i++) {
-						Debug.Log ("X: " + neighbors [i].GetComponent<Hex> ().x + " Y: " + neighbors [i].GetComponent<Hex> ().y);
-					}*/
-
 
 					// Check if we need to move unit to destination
 					if (selectedUnit != null) {
@@ -55,41 +47,32 @@ public class MouseManager : MonoBehaviour {
 						Debug.Log ("Moving Unit to: x:" + v.x + ", y:" + v.y + ", z:" + v.z);
 						selectedUnit.setDestination (collidedHitInfo.GetComponent<Hex> ().transform.position);
 					} else {
-						Debug.Log ("Hello World");
-						//List of direct cell neighbors
-						/*
-               			 List<GameObject> neighbors = collidedHitInfo.GetComponent<Hex>().getNeighbors();
-                		for (int i = 0; i < neighbors.Count; i++)
-                		{
-                		    Debug.Log("X: " + neighbors[i].GetComponent<Hex>().x + " Y: " +neighbors[i].GetComponent<Hex>().y);
-               			 }
-               			 */
 						if (collidedHitInfo.tag == "Grass") {
-							if(incomeCount.GetComponent<GenerateIncome> ().currentIncome >= 200) {
+							if(incomeCount.GetComponent<Player> ().currentIncome >= 200) {
 								collidedHitInfo.GetComponent<SpriteRenderer> ().sprite = tileGrassOwned;
-								incomeCount.GetComponent<GenerateIncome> ().currentIncome -= 200;
-								incomeCount.GetComponent<GenerateIncome> ().grassTerritory += 2;
+								incomeCount.GetComponent<Player> ().currentIncome -= 200;
+								incomeCount.GetComponent<Player> ().grassTerritory += 2;
 							}
 
 						} else if (collidedHitInfo.tag == "Sand") {
-							if(incomeCount.GetComponent<GenerateIncome> ().currentIncome >= 100) {
+							if(incomeCount.GetComponent<Player> ().currentIncome >= 100) {
 								collidedHitInfo.GetComponent<SpriteRenderer> ().sprite = tileSandOwned;
-								incomeCount.GetComponent<GenerateIncome> ().currentIncome -= 100;
-								incomeCount.GetComponent<GenerateIncome> ().sandTerritory += 1;
+								incomeCount.GetComponent<Player> ().currentIncome -= 100;
+								incomeCount.GetComponent<Player> ().sandTerritory += 1;
 							}
 
 						} else if (collidedHitInfo.tag == "Tree") {
-							if(incomeCount.GetComponent<GenerateIncome> ().currentIncome >= 300) {
+							if(incomeCount.GetComponent<Player> ().currentIncome >= 300) {
 								collidedHitInfo.GetComponent<SpriteRenderer> ().sprite = tileTreeOwned;
-								incomeCount.GetComponent<GenerateIncome> ().currentIncome -= 300;
-								incomeCount.GetComponent<GenerateIncome> ().treeTerritory += 3;
+								incomeCount.GetComponent<Player> ().currentIncome -= 300;
+								incomeCount.GetComponent<Player> ().treeTerritory += 3;
 							}
 
 						} else if (collidedHitInfo.tag == "Rock") {
-							if(incomeCount.GetComponent<GenerateIncome> ().currentIncome >= 500) {
+							if(incomeCount.GetComponent<Player> ().currentIncome >= 500) {
 								collidedHitInfo.GetComponent<SpriteRenderer> ().sprite = tileRockOwned;
-								incomeCount.GetComponent<GenerateIncome> ().currentIncome -= 500;
-								incomeCount.GetComponent<GenerateIncome> ().rockTerritory += 4;
+								incomeCount.GetComponent<Player> ().currentIncome -= 500;
+								incomeCount.GetComponent<Player> ().rockTerritory += 4;
 							}
 
 						}

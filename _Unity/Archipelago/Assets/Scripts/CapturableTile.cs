@@ -24,6 +24,9 @@ public class CapturableTile: MonoBehaviour{
 	public int numP1UnitsOnHex = 0;
 	public int numP2UnitsOnHex = 0;
 
+	//Store who owns the tile
+	public Player.PlayerId tileOwner = Player.PlayerId.NEUTRAL;
+
 	//Initializeation
 	public void Start(){
 		captureBoarder = GetComponent<Image>();
