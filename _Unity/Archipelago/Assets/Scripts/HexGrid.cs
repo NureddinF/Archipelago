@@ -32,6 +32,9 @@ public class HexGrid : MonoBehaviour
     private float xOffset;
     private float yOffset;
 
+	//Rounding factor. Needed due to size of hexes causing normal rounding errors
+	const float roundingFactor = 0.1f;
+
     //Map layout matrix
     private int[,] mapStructure;
 	//Matrix of instanciated hexes
@@ -93,7 +96,7 @@ public class HexGrid : MonoBehaviour
 
     //Method to create the hex grid
     void createHexGrid() {
-		mapHexes = new GameObject[gridWidth,gridHeight];
+		mapHexes = new GameObject[gridHeight,gridWidth];
 
         GameObject hexGridObject = new GameObject("HexGrid");
         //Makes sure all generated game objects are under a parent. Allows tidier scene management
@@ -132,22 +135,33 @@ public class HexGrid : MonoBehaviour
                 //Potential Optimization for hexgrid
                 thisHex.isStatic = true;
 
-				mapHexes [x, y] = thisHex;
+				mapHexes [y, x] = thisHex;
             }
 
         }
     }
-
-
+		
 	public GameObject getHex(Vector3 unityCoord){
-		int x = (int)(unityCoord.x / (hexWidth - xOffset / 2));
+		// Perform inver operation used to generate map
+		float X = (unityCoord.x / (hexWidth - xOffset / 2));
+		int x = (int)X;
+		// Have to manually round due to size of hexes
+		if(X%1.0f > roundingFactor){
+			x++;
+		}
 		if (x % 2 == 1) {
 			unityCoord.y += yOffset;
 		}
-		int y = (int)(-unityCoord.y / hexHeight);
+		float Y =(-unityCoord.y / hexHeight);
+		int y = (int)Y;
+		if(Y%1.0f > roundingFactor){
+			y++;
+		}
 
-		//Debug.Log("getting hex at (x,y): (" + x +"," + y + ")"); 
+		if (Input.GetKeyDown(KeyCode.Q)) {
+			Debug.Log ("getting hex at (x,y): (" + x + "," + y + ") = (" + X + "," + Y + ")"); 
+		}
 
-		return mapHexes [x, y];
+		return mapHexes [y, x];
 	}
 }

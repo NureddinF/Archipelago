@@ -77,7 +77,6 @@ public class CapturableTile: MonoBehaviour{
 			} 
 
 			float newAmountCaptured = amountCaptured + Time.deltaTime * captureSpeedPerUnit * (numP1UnitsOnHex - numP2UnitsOnHex - neutralUnitFactor);
-			Debug.Log ("new amount captured: " + newAmountCaptured);
 
 			if (numP1UnitsOnHex > 0) {
 				if(newAmountCaptured > totalCaptureCost){
