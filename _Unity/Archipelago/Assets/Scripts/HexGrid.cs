@@ -34,6 +34,8 @@ public class HexGrid : MonoBehaviour
 
     //Map layout matrix
     private int[,] mapStructure;
+	//Matrix of instanciated hexes
+	private GameObject[,] mapHexes;
 
     // Initialization
     void Start()
@@ -90,8 +92,9 @@ public class HexGrid : MonoBehaviour
     }
 
     //Method to create the hex grid
-    void createHexGrid()
-    {
+    void createHexGrid() {
+		mapHexes = new GameObject[gridWidth,gridHeight];
+
         GameObject hexGridObject = new GameObject("HexGrid");
         //Makes sure all generated game objects are under a parent. Allows tidier scene management
         hexGridObject.transform.parent = this.transform;
@@ -128,8 +131,23 @@ public class HexGrid : MonoBehaviour
 
                 //Potential Optimization for hexgrid
                 thisHex.isStatic = true;
+
+				mapHexes [x, y] = thisHex;
             }
 
         }
     }
+
+
+	public GameObject getHex(Vector3 unityCoord){
+		int x = (int)(unityCoord.x / (hexWidth - xOffset / 2));
+		if (x % 2 == 1) {
+			unityCoord.y += yOffset;
+		}
+		int y = (int)(-unityCoord.y / hexHeight);
+
+		//Debug.Log("getting hex at (x,y): (" + x +"," + y + ")"); 
+
+		return mapHexes [x, y];
+	}
 }

@@ -7,7 +7,7 @@ public class Unit : MonoBehaviour {
 	public Vector3 destination;
 	public int speed = 1;
 	public bool shouldMove = false;
-	
+
 	// Update is called once per frame
 	void Update () {
 		if (shouldMove) {
