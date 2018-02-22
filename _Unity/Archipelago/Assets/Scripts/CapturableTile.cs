@@ -9,6 +9,11 @@ public class CapturableTile: MonoBehaviour{
 	public Sprite p1CaptureBorder;
 	public Sprite p2CaptureBorder;
 
+	// SPrites for captured version of tile
+	private SpriteRenderer tileSprite; // this displays the sprites
+	public Sprite p1CaptureTile;
+	public Sprite p2CaptureTile;
+
 	// This is the hex script on the same tile which holds information about who owns the tile?
 
 	// Factors determining how long it takes to capture a tile
@@ -29,6 +34,7 @@ public class CapturableTile: MonoBehaviour{
 
 	//Initializeation
 	public void Start(){
+		tileSprite = GetComponentInParent<SpriteRenderer> ();
 		captureBoarder = GetComponent<Image>();
 		// This is mostly for testing. Fill Amount should be set to 0 so the tiles starts neutral.
 		amountCaptured = captureBoarder.fillAmount * totalCaptureCost;
@@ -42,40 +48,42 @@ public class CapturableTile: MonoBehaviour{
 
 
 	// Unit calls this when it enters the tile
-	public void addUnits(int numUnits, bool player1){
-		if(tileOwned){return;}
+	public void addUnits(int numUnits, Player.PlayerId player){
+		if(tileOwner != Player.PlayerId.NEUTRAL){return;}
 
-		Sprite border;
-		if (player1) {
+		Sprite border = new Sprite();
+		bool captureClockwise = true;
+		if (player == Player.PlayerId.P1) {
 			numP1UnitsOnHex += numUnits;
 			border = p1CaptureBorder;
-		} else {
+		} else if(player == Player.PlayerId.P2){
 			numP2UnitsOnHex += numUnits;
 			border = p2CaptureBorder;
+			captureClockwise = false;
 		}
 		if (!captureBoarder.enabled) {
 			captureBoarder.enabled = true;
 			captureBoarder.sprite = border;
+			captureBoarder.fillClockwise = captureClockwise;
 		}
 	}
 
 	// Unit calls this when it leaves the tile
-	public void removeUnit(int numUnits, bool player1){
-		if(tileOwned){return;}
+	public void removeUnit(int numUnits, Player.PlayerId player){
+		if(tileOwner != Player.PlayerId.NEUTRAL){return;}
 
-		if (player1) {
+		if (player == Player.PlayerId.P1) {
 			numP1UnitsOnHex -= numUnits;
-		} else {
+		} else if(player == Player.PlayerId.P2){
 			numP2UnitsOnHex -= numUnits;
 		}
 	}
 
 
-	bool tileOwned = false;
 	// Adnvace state towards capturing the tile
 	private void progressTileCapture(){
 
-		if (!tileOwned && captureBoarder.enabled) {
+		if (tileOwner == Player.PlayerId.NEUTRAL && captureBoarder.enabled) {
 
 			if(amountCaptured >0){
 				neutralUnitFactor = Mathf.Abs (neutralUnitFactor);
@@ -84,7 +92,7 @@ public class CapturableTile: MonoBehaviour{
 			}
 
 			if (numP1UnitsOnHex > 0 && numP2UnitsOnHex > 0) {
-				//units fight
+				//TODO: units fight or something
 				return;
 			} 
 
@@ -93,20 +101,24 @@ public class CapturableTile: MonoBehaviour{
 			if (numP1UnitsOnHex > 0) {
 				if(newAmountCaptured > totalCaptureCost){
 					//p1 captured tile
-					tileOwned = true;
+					tileOwner = Player.PlayerId.P1;
 					captureBoarder.enabled = false;
+					tileSprite.sprite = p1CaptureTile;
 				} else if (newAmountCaptured * amountCaptured < 0){
 					// change occured
 					captureBoarder.sprite = p1CaptureBorder;
+					captureBoarder.fillClockwise = true;
 				}
 			} else if (numP2UnitsOnHex > 0) {
-				if(newAmountCaptured > totalCaptureCost){
+				if(newAmountCaptured < -totalCaptureCost){
 					//p2 captured tile
-					tileOwned = true;
+					tileOwner = Player.PlayerId.P2;
 					captureBoarder.enabled = false;
+					tileSprite.sprite = p2CaptureTile;
 				} else if (newAmountCaptured * amountCaptured < 0){
 					// change occured
 					captureBoarder.sprite = p2CaptureBorder;
+					captureBoarder.fillClockwise = false;
 				}
 			} else {
 				//capture amount degrades towards neutral

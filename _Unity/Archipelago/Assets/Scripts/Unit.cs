@@ -8,6 +8,8 @@ public class Unit : MonoBehaviour {
 	public int speed = 1;
 	public bool shouldMove = false;
 
+	public Player.PlayerId unitOwner = Player.PlayerId.P1;
+
 	// Update is called once per frame
 	void Update () {
 		if (shouldMove) {
