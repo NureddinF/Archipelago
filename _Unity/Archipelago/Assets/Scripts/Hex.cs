@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class Hex : MonoBehaviour {
 
@@ -13,8 +15,7 @@ public class Hex : MonoBehaviour {
     private int maxX = HexGrid.getGridWidth() - 1;
 
     //Method to return a list of a hex's direct neighbors
-    public List <GameObject> getNeighbors()
-    {
+    public List <GameObject> getNeighbors(){
         List<GameObject> neighbors = new List<GameObject>();
 
         //Check there are hexes above this object, if not don't add since hex has no neighbors above
@@ -78,4 +79,6 @@ public class Hex : MonoBehaviour {
         
         return neighbors;
     }
+
+
 }
