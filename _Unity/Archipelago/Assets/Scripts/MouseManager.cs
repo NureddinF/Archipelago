@@ -93,9 +93,8 @@ public class MouseManager : MonoBehaviour {
 
 	private void selectUnit(Unit unit){
 		deselectUnit ();
-		Debug.Log ("Selected unit: " + unit.name);
 		this.selectedUnit = unit;
-		//TODO: add UI things to indicate a unit was selected
+		//change sprite to indicate a unit was selected
 		unit.GetComponent<SpriteRenderer>().sprite = unitSelected;
 	}
 

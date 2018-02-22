@@ -26,8 +26,16 @@ public class Player : MonoBehaviour {
 	private float increaseAmt;
 	public float currentIncome;
 
+	private Dictionary<HexGrid.TileType , int> ownedTiles;
+
 	// Use this for initialization
 	void Start () {
+		ownedTiles = new Dictionary<HexGrid.TileType , int> ();
+		ownedTiles.Add (HexGrid.TileType.BASE, 1);
+		ownedTiles.Add (HexGrid.TileType.GRASS, 0);
+		ownedTiles.Add (HexGrid.TileType.ROCK, 0);
+		ownedTiles.Add (HexGrid.TileType.TREE, 0);
+		ownedTiles.Add (HexGrid.TileType.SAND, 0);
 		currentIncome = 0;
 		incomeText.text = "Hello";
 		rateText.text = "+ 0/sec";
@@ -44,7 +52,9 @@ public class Player : MonoBehaviour {
 	public void generateIncomeDiscrete(){
 		if(Time.time > timeFrame + startTime) {
 			// timeframe has passed
-			increaseAmt = (baseIncome + grassTerritory + rockTerritory + sandTerritory + treeTerritory) * rateMultiplier;
+			increaseAmt = (baseIncome + ownedTiles[HexGrid.TileType.BASE] + ownedTiles[HexGrid.TileType.GRASS] + 
+				ownedTiles[HexGrid.TileType.TREE]+ ownedTiles[HexGrid.TileType.ROCK] + 
+				ownedTiles[HexGrid.TileType.SAND]) * rateMultiplier;
 			currentIncome += increaseAmt;
 			incomeText.text = "" + currentIncome;
 			rateText.text = "+ " + increaseAmt + "/" + timeFrame + "secs";
@@ -59,5 +69,10 @@ public class Player : MonoBehaviour {
 		currentIncome += translation;
 		incomeText.text = "" + Mathf.RoundToInt(currentIncome);
 		rateText.text = "+ " + rateMultiplier + "/sec";
+	}
+
+
+	public void captureTile(HexGrid.TileType tileType){
+		ownedTiles [tileType]++;
 	}
 }

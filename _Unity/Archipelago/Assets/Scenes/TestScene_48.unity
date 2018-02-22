@@ -295,14 +295,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dea3944213a20040bf57b67c76d4a7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileGrass: {fileID: 1707609422111180, guid: 8d3cdf8863aa6af4583cd5311517832e, type: 2}
+  tileGrass: {fileID: 1712939722596536, guid: 8d3cdf8863aa6af4583cd5311517832e, type: 2}
   tilePlayer1Base: {fileID: 1920015907123518, guid: bf6d98c9c434d9a428d8a520f155c199,
     type: 2}
   tilePlayer2Base: {fileID: 1308510330598628, guid: 04241fb745664e844a5ea75535b92b95,
     type: 2}
-  tileRocks: {fileID: 1799878452999780, guid: 9ad7eb3fa27b3674b86d1983c8f06cae, type: 2}
+  tileRocks: {fileID: 1468155676758264, guid: 9ad7eb3fa27b3674b86d1983c8f06cae, type: 2}
   tileSand: {fileID: 1525019519285986, guid: b54aca97b2beebb4682d4f76bfa14721, type: 2}
-  tileTrees: {fileID: 1102967335622808, guid: a7887081a08931d4d84a3643987d020e, type: 2}
+  tileTrees: {fileID: 1837440499697218, guid: a7887081a08931d4d84a3643987d020e, type: 2}
   tileWater: {fileID: 1974426177275934, guid: 1be3cb836ad194140a74ad2b155a9a68, type: 2}
   yOffsetGap: 0.01
   xOffsetGap: 0.01
@@ -920,7 +920,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerId: 0
-  rateMultiplier: 0
+  rateMultiplier: 1
   maxIncome: 0
   minIncome: 0
   baseIncome: 0
@@ -930,7 +930,7 @@ MonoBehaviour:
   rockTerritory: 0
   incomeText: {fileID: 953916417}
   rateText: {fileID: 1034984132}
-  timeFrame: 0
+  timeFrame: 3
   currentIncome: 0
 --- !u!224 &1894239936
 RectTransform:
@@ -995,19 +995,19 @@ Prefab:
         type: 2}
       propertyPath: tileGrass
       value: 
-      objectReference: {fileID: 1707609422111180, guid: 8d3cdf8863aa6af4583cd5311517832e,
+      objectReference: {fileID: 1712939722596536, guid: 8d3cdf8863aa6af4583cd5311517832e,
         type: 2}
     - target: {fileID: 114200828406377140, guid: 2fff18e2d9846b24abc3e699c472c973,
         type: 2}
       propertyPath: tileRocks
       value: 
-      objectReference: {fileID: 1799878452999780, guid: 9ad7eb3fa27b3674b86d1983c8f06cae,
+      objectReference: {fileID: 1468155676758264, guid: 9ad7eb3fa27b3674b86d1983c8f06cae,
         type: 2}
     - target: {fileID: 114200828406377140, guid: 2fff18e2d9846b24abc3e699c472c973,
         type: 2}
       propertyPath: tileTrees
       value: 
-      objectReference: {fileID: 1102967335622808, guid: a7887081a08931d4d84a3643987d020e,
+      objectReference: {fileID: 1837440499697218, guid: a7887081a08931d4d84a3643987d020e,
         type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2fff18e2d9846b24abc3e699c472c973, type: 2}

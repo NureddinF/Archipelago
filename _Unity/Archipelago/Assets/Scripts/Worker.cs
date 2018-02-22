@@ -9,31 +9,41 @@ public class Worker : MonoBehaviour {
 
 	private Unit thisUnit;
 
+	//initialization
 	public void Start(){
+		//initialize references
 		thisUnit = GetComponent<Unit> ();
 		map = GameObject.Find ("Hex Grid").GetComponent<HexGrid>();
+		//place unit on map
 		hex = map.getHex(transform.position);
-		CapturableTile tile = hex.GetComponentInChildren<CapturableTile>();
-		if(tile != null){
-			tile.addUnits(1,thisUnit.unitOwner);
+		if(hex != null){
+			CapturableTile tile = hex.GetComponentInChildren<CapturableTile>();
+			if(tile != null){
+				tile.addUnits(1,thisUnit.unitOwner);
+			}
 		}
-		Debug.Log ("Started on tile: " + hex.name);
 	}
 
 	// Update is called once per frame
 	void Update () {
+		//Get the hex the unit is standing on
 		GameObject newHex = map.getHex (transform.position);
+		//Check if this is a new hex
 		if (newHex != hex) {
-			CapturableTile tile = hex.GetComponentInChildren<CapturableTile>();
-			if(tile != null){
-				tile.removeUnit(1,thisUnit.unitOwner);
+			//it's a new hex so remove unit from previous tile
+			CapturableTile tile;
+			if (hex != null) {
+				tile = hex.GetComponentInChildren<CapturableTile> ();
+				if (tile != null) {
+					tile.removeUnit (1, thisUnit.unitOwner);
+				}
 			}
+			//Then add unit to new tile
 			tile = newHex.GetComponentInChildren<CapturableTile>();
 			if(tile != null){
 				tile.addUnits(1,thisUnit.unitOwner);
 			}
 			hex = newHex;
-			Debug.Log ("moved over tile: " + hex.name);
 		}
 	}
 }

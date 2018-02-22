@@ -32,8 +32,12 @@ public class CapturableTile: MonoBehaviour{
 	//Store who owns the tile
 	public Player.PlayerId tileOwner = Player.PlayerId.NEUTRAL;
 
+	//Hex script associated with this tile
+	Hex thisHex;
+
 	//Initializeation
 	public void Start(){
+		thisHex = GetComponentInParent<Hex> ();
 		tileSprite = GetComponentInParent<SpriteRenderer> ();
 		captureBoarder = GetComponent<Image>();
 		// This is mostly for testing. Fill Amount should be set to 0 so the tiles starts neutral.
@@ -104,6 +108,7 @@ public class CapturableTile: MonoBehaviour{
 					tileOwner = Player.PlayerId.P1;
 					captureBoarder.enabled = false;
 					tileSprite.sprite = p1CaptureTile;
+					finalizeCapture ();
 				} else if (newAmountCaptured * amountCaptured < 0){
 					// change occured
 					captureBoarder.sprite = p1CaptureBorder;
@@ -115,6 +120,7 @@ public class CapturableTile: MonoBehaviour{
 					tileOwner = Player.PlayerId.P2;
 					captureBoarder.enabled = false;
 					tileSprite.sprite = p2CaptureTile;
+					finalizeCapture();
 				} else if (newAmountCaptured * amountCaptured < 0){
 					// change occured
 					captureBoarder.sprite = p2CaptureBorder;
@@ -131,6 +137,17 @@ public class CapturableTile: MonoBehaviour{
 			// Update visual
 			amountCaptured = newAmountCaptured;
 			captureBoarder.fillAmount = Mathf.Abs (amountCaptured / totalCaptureCost);
+		}
+	}
+
+	// Increase income of player once tile is captured
+	private void finalizeCapture(){
+		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
+		for(int i=0; i<players.Length; i++){
+			Player player = players[i].GetComponentInChildren<Player>();
+			if(player.playerId.Equals(tileOwner)){
+				player.captureTile (thisHex.tileType);
+			}
 		}
 	}
 }

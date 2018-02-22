@@ -10,6 +10,8 @@ public class Hex : MonoBehaviour {
     public int x;
     public int y;
 
+	public HexGrid.TileType tileType;
+
     //Set maxY and maxX of a hex, -1 for off by one error
     private int maxY = HexGrid.getGridHeight() - 1;
     private int maxX = HexGrid.getGridWidth() - 1;

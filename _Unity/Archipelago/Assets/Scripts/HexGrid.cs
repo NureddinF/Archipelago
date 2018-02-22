@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HexGrid : MonoBehaviour
-{
+public class HexGrid : MonoBehaviour {
     //Tile variant prefab gameobjects for building the map
     public GameObject tileGrass; //0
     public GameObject tilePlayer1Base; //1
@@ -39,6 +38,10 @@ public class HexGrid : MonoBehaviour
     private int[,] mapStructure;
 	//Matrix of instanciated hexes
 	private GameObject[,] mapHexes;
+
+
+	//Enumerate the different types of tiles
+	public enum TileType {GRASS, BASE, TREE, SAND, ROCK, WATER }
 
     // Initialization
     void Start()
@@ -109,8 +112,44 @@ public class HexGrid : MonoBehaviour
             {
                 GameObject thisHex;
                 //What tile type wants to be created
-                if (mapStructure[y, x] == 0)
-                    thisHex = (GameObject)Instantiate(tileGrass);
+				switch(mapStructure[y, x]){
+					case 0:{
+						thisHex = (GameObject)Instantiate (tileGrass);
+						thisHex.GetComponent<Hex> ().tileType = TileType.GRASS;
+						break;
+					}
+					case 1:{
+						thisHex = (GameObject)Instantiate (tilePlayer1Base);
+						thisHex.GetComponent<Hex>().tileType = TileType.BASE;
+						break;
+					}
+					case 2:{
+						thisHex = (GameObject)Instantiate (tilePlayer2Base);
+						thisHex.GetComponent<Hex>().tileType = TileType.BASE;
+						break;
+					}
+					case 3:{
+						thisHex = (GameObject)Instantiate (tileRocks);
+						thisHex.GetComponent<Hex>().tileType = TileType.ROCK;
+						break;
+					}
+					case 4:{
+						thisHex = (GameObject)Instantiate (tileSand);
+						thisHex.GetComponent<Hex>().tileType = TileType.SAND;
+						break;
+					}
+					case 5:{
+						thisHex = (GameObject)Instantiate (tileTrees);
+						thisHex.GetComponent<Hex>().tileType = TileType.TREE;
+						break;
+					}
+					default:{
+						thisHex = (GameObject)Instantiate (tileWater);
+						thisHex.GetComponent<Hex>().tileType = TileType.WATER;
+						break;
+					}
+				}
+				/*
                 else if (mapStructure[y, x] == 1)
                     thisHex = (GameObject)Instantiate(tilePlayer1Base);
                 else if (mapStructure[y, x] == 2)
@@ -122,7 +161,7 @@ public class HexGrid : MonoBehaviour
                 else if (mapStructure[y, x] == 5)
                     thisHex = (GameObject)Instantiate(tileTrees);
                 else
-                    thisHex = (GameObject)Instantiate(tileWater);
+                    thisHex = (GameObject)Instantiate(tileWater);*/
 
                 //Set it's position, tranformation, name and other variables attached to the hex. 0 0 is top left corner
                 Vector2 gridPos = new Vector2(x, y);
@@ -158,10 +197,10 @@ public class HexGrid : MonoBehaviour
 			y++;
 		}
 
-		if (Input.GetKeyDown(KeyCode.Q)) {
-			Debug.Log ("getting hex at (x,y): (" + x + "," + y + ") = (" + X + "," + Y + ")"); 
+		GameObject hex = null;
+		if(x < gridWidth && y < gridHeight){
+			hex = mapHexes [y, x];
 		}
-
-		return mapHexes [y, x];
+		return hex;
 	}
 }
