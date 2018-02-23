@@ -46,45 +46,13 @@ public class MouseManager : MonoBehaviour {
 						Vector3 v = collidedHitInfo.GetComponent<Hex> ().transform.position;
 						Debug.Log ("Moving Unit to: x:" + v.x + ", y:" + v.y + ", z:" + v.z);
 						selectedUnit.setDestination (collidedHitInfo.GetComponent<Hex> ().transform.position);
-					} else {
-						if (collidedHitInfo.tag == "Grass") {
-							if(incomeCount.GetComponent<Player> ().currentIncome >= 200) {
-								collidedHitInfo.GetComponent<SpriteRenderer> ().sprite = tileGrassOwned;
-								incomeCount.GetComponent<Player> ().currentIncome -= 200;
-								incomeCount.GetComponent<Player> ().grassTerritory += 2;
-							}
-
-						} else if (collidedHitInfo.tag == "Sand") {
-							if(incomeCount.GetComponent<Player> ().currentIncome >= 100) {
-								collidedHitInfo.GetComponent<SpriteRenderer> ().sprite = tileSandOwned;
-								incomeCount.GetComponent<Player> ().currentIncome -= 100;
-								incomeCount.GetComponent<Player> ().sandTerritory += 1;
-							}
-
-						} else if (collidedHitInfo.tag == "Tree") {
-							if(incomeCount.GetComponent<Player> ().currentIncome >= 300) {
-								collidedHitInfo.GetComponent<SpriteRenderer> ().sprite = tileTreeOwned;
-								incomeCount.GetComponent<Player> ().currentIncome -= 300;
-								incomeCount.GetComponent<Player> ().treeTerritory += 3;
-							}
-
-						} else if (collidedHitInfo.tag == "Rock") {
-							if(incomeCount.GetComponent<Player> ().currentIncome >= 500) {
-								collidedHitInfo.GetComponent<SpriteRenderer> ().sprite = tileRockOwned;
-								incomeCount.GetComponent<Player> ().currentIncome -= 500;
-								incomeCount.GetComponent<Player> ().rockTerritory += 4;
-							}
-
-						}
 					}
-				}
-				else if (collidedHitInfo.GetComponent<Unit>() != null){
+				} else if (collidedHitInfo.GetComponent<Unit>() != null){
 					//clicked on a unit
 					Unit clickedUnit = collidedHitInfo.GetComponent<Unit>();
 					if(clickedUnit == selectedUnit) deselectUnit();
 					else selectUnit(clickedUnit);
 				}
-
 
             }
         }
@@ -99,7 +67,7 @@ public class MouseManager : MonoBehaviour {
 	}
 
 	private void deselectUnit(){
-		//TODO: Do UI things related to deslecting a unit
+		//change sprite to indicate a unit was deselected
 		if (selectedUnit != null) {
 			SpriteRenderer temp = selectedUnit.GetComponent<SpriteRenderer> ();
 			if (temp != null) {
