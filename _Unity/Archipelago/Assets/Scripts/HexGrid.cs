@@ -149,19 +149,6 @@ public class HexGrid : MonoBehaviour {
 						break;
 					}
 				}
-				/*
-                else if (mapStructure[y, x] == 1)
-                    thisHex = (GameObject)Instantiate(tilePlayer1Base);
-                else if (mapStructure[y, x] == 2)
-                    thisHex = (GameObject)Instantiate(tilePlayer2Base);
-                else if (mapStructure[y, x] == 3)
-                    thisHex = (GameObject)Instantiate(tileRocks);
-                else if (mapStructure[y, x] == 4)
-                    thisHex = (GameObject)Instantiate(tileSand);
-                else if (mapStructure[y, x] == 5)
-                    thisHex = (GameObject)Instantiate(tileTrees);
-                else
-                    thisHex = (GameObject)Instantiate(tileWater);*/
 
                 //Set it's position, tranformation, name and other variables attached to the hex. 0 0 is top left corner
                 Vector2 gridPos = new Vector2(x, y);
