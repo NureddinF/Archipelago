@@ -13,10 +13,6 @@ public class Player : MonoBehaviour {
 	public int maxIncome;
 	public int minIncome;
 	public int baseIncome;
-	public int grassTerritory;
-	public int treeTerritory;
-	public int sandTerritory;
-	public int rockTerritory;
 
 	public Text incomeText;
 	public Text rateText;
@@ -31,7 +27,7 @@ public class Player : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		ownedTiles = new Dictionary<HexGrid.TileType , int> ();
-		ownedTiles.Add (HexGrid.TileType.BASE, 1);
+		ownedTiles.Add (HexGrid.TileType.BASE, 1); // start with 1 base
 		ownedTiles.Add (HexGrid.TileType.GRASS, 0);
 		ownedTiles.Add (HexGrid.TileType.ROCK, 0);
 		ownedTiles.Add (HexGrid.TileType.TREE, 0);

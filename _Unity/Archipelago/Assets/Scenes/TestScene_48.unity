@@ -301,7 +301,7 @@ MonoBehaviour:
   tilePlayer2Base: {fileID: 1308510330598628, guid: 04241fb745664e844a5ea75535b92b95,
     type: 2}
   tileRocks: {fileID: 1468155676758264, guid: 9ad7eb3fa27b3674b86d1983c8f06cae, type: 2}
-  tileSand: {fileID: 1525019519285986, guid: b54aca97b2beebb4682d4f76bfa14721, type: 2}
+  tileSand: {fileID: 1471681828661282, guid: 4ec27a25073ab624680a471714850afa, type: 2}
   tileTrees: {fileID: 1837440499697218, guid: a7887081a08931d4d84a3643987d020e, type: 2}
   tileWater: {fileID: 1974426177275934, guid: 1be3cb836ad194140a74ad2b155a9a68, type: 2}
   yOffsetGap: 0.01
@@ -924,10 +924,6 @@ MonoBehaviour:
   maxIncome: 0
   minIncome: 0
   baseIncome: 0
-  grassTerritory: 0
-  treeTerritory: 0
-  sandTerritory: 0
-  rockTerritory: 0
   incomeText: {fileID: 953916417}
   rateText: {fileID: 1034984132}
   timeFrame: 3
@@ -1008,6 +1004,12 @@ Prefab:
       propertyPath: tileTrees
       value: 
       objectReference: {fileID: 1837440499697218, guid: a7887081a08931d4d84a3643987d020e,
+        type: 2}
+    - target: {fileID: 114200828406377140, guid: 2fff18e2d9846b24abc3e699c472c973,
+        type: 2}
+      propertyPath: tileSand
+      value: 
+      objectReference: {fileID: 1471681828661282, guid: 4ec27a25073ab624680a471714850afa,
         type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2fff18e2d9846b24abc3e699c472c973, type: 2}
