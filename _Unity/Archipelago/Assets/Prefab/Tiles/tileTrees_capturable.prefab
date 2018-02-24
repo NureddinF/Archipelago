@@ -211,7 +211,8 @@ MonoBehaviour:
   y: 0
   hexOwner: 2
   tileType: 2
-  menuOptions: []
+  menuOptions:
+  - {fileID: 114592137397769502, guid: 67d83359745ea8148a650403c72f4278, type: 2}
 --- !u!212 &212274528097736614
 SpriteRenderer:
   m_ObjectHideFlags: 1

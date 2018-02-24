@@ -191,7 +191,7 @@ MonoBehaviour:
   hexOwner: 2
   tileType: 3
   menuOptions:
-  - {fileID: 0}
+  - {fileID: 114133288614199244, guid: fbd37abd39cb348489f13fce751bf0aa, type: 2}
 --- !u!114 &114780846985952216
 MonoBehaviour:
   m_ObjectHideFlags: 1
