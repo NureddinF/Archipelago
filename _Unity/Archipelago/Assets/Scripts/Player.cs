@@ -73,8 +73,9 @@ public class Player : MonoBehaviour {
 	}
 
 
-	public void makeUnit(GameObject unitType){
-		GameObject newUnit = Instantiate(unitType);
+	public void makeUnit(GameObject unitObject){
+		Unit unitInfo = unitObject.GetComponent<Unit> ();
+		GameObject newUnit = Instantiate(unitObject);
 		newUnit.GetComponent<Unit> ().unitOwner = Player.PlayerId.P1;
 		Vector3 temp = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 		newUnit.transform.position = new Vector3(temp.x, temp.y, -5);
