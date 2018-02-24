@@ -9,17 +9,17 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1657927074844454}
+  m_RootGameObject: {fileID: 1940891514127418}
   m_IsPrefabParent: 1
---- !u!1 &1657927074844454
+--- !u!1 &1940891514127418
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4814704425224250}
-  - component: {fileID: 114699900700719722}
+  - component: {fileID: 4395594795424330}
+  - component: {fileID: 114134782142362000}
   m_Layer: 0
   m_Name: Cabin
   m_TagString: Untagged
@@ -27,12 +27,12 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4814704425224250
+--- !u!4 &4395594795424330
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1657927074844454}
+  m_GameObject: {fileID: 1940891514127418}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 20.025068, y: -17.430214, z: 0.023914587}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -40,12 +40,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114699900700719722
+--- !u!114 &114134782142362000
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1657927074844454}
+  m_GameObject: {fileID: 1940891514127418}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6f793c2afe2a3b64db9fea45fa2b2fd1, type: 3}

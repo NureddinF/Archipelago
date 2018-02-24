@@ -131,6 +131,7 @@ MonoBehaviour:
   paused: 0
   numP1UnitsOnHex: 0
   numP2UnitsOnHex: 0
+  tileIncome: 1
 --- !u!114 &114295563799081320
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -189,7 +190,8 @@ MonoBehaviour:
   y: 0
   hexOwner: 2
   tileType: 3
-  menuOptions: []
+  menuOptions:
+  - {fileID: 0}
 --- !u!114 &114780846985952216
 MonoBehaviour:
   m_ObjectHideFlags: 1
