@@ -5,7 +5,7 @@ using UnityEngine;
 // This script contains information about things needed to display something in the right menu
 public class MenuItem : MonoBehaviour {
 
-	public enum MenuItemType {UNIT, BUILDING};
+	public enum MenuItemType {UNIT, BUILDING, TRAP};
 	public MenuItemType type;
 
 	// Texture for the icon to display in the menu

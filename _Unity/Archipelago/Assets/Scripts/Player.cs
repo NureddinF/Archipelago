@@ -66,6 +66,9 @@ public class Player : MonoBehaviour {
 		totalTileIncome += tile.tileIncome;
 	}
 
+	public void removeTile(CapturableTile tile){
+		totalTileIncome -= tile.tileIncome;
+	}
 
 	public void makeUnit(GameObject unitObject){
 		Unit unitInfo = unitObject.GetComponent<Unit> ();
@@ -131,25 +134,49 @@ public class Player : MonoBehaviour {
 
 	public void upgradeTile(Hex hex, GameObject buildingObject){
 		Building buildingInfo = buildingObject.GetComponent<Building> ();
-		if(buildingInfo.cost > this.currentMoney){
+		if(buildingInfo.moneyCost > this.currentMoney){
 			// Unit costs too much
-			Debug.Log("Can't afford a " + buildingObject.name + " for " + buildingInfo.cost);
+			Debug.Log("Can't afford a " + buildingObject.name + " for " + buildingInfo.moneyCost);
 			return;
 		}
 		if(hex == null){
-			Debug.Log ("Can't place building on something that's not a hex");
+			Debug.Log ("Can't place buildings on something that's not a hex");
 			return;
 		}
 		if(hex.hexOwner != playerId){
-			Debug.Log ("Can't place unit on tile you don't own");
+			Debug.Log ("Can't place buildings on tile you don't own");
 			return;
 		}
+		switch(buildingInfo.type){
+			case Building.BuildingType.ECONOMIC:{
+				upgradeToEconBuilding (hex, buildingInfo);
+				break;
+			}
+			case Building.BuildingType.MILITARY:{
+				upgradeToMilitaryBuilding (hex, buildingInfo);
+				break;	
+			}
+			default:{
+				break;
+			}	
+		}
+	}
+
+	// Tile is making an economic improvement
+	private void upgradeToEconBuilding(Hex hex, Building buildingInfo){
 		// Can build building
-		currentMoney -= buildingInfo.cost;
-		hex.menuOptions = buildingInfo.menuOptions;
-		//TODO: make upgrade take time
-		hex.GetComponentInChildren<CapturableTile>().tileIncome += buildingInfo.incomeAdjustment;
-		totalTileIncome += buildingInfo.incomeAdjustment;
-		hex.GetComponent<SpriteRenderer> ().sprite = buildingInfo.buildingSprite;
+		//Subtract cost of building from player's money
+		currentMoney -= buildingInfo.moneyCost;
+		//Update the menu
+		hex.menuOptions = buildingInfo.constructionMenuOptions;
+		//change the sprite to construction site
+		hex.GetComponent<SpriteRenderer> ().sprite = buildingInfo.constructionSprite;
+		//let hex handle actually building the building
+		hex.GetComponentInChildren<CapturableTile> ().beginConstruction (buildingInfo);
+	}
+
+
+	private void upgradeToMilitaryBuilding(Hex hex, Building buildingInfo){
+		
 	}
 }

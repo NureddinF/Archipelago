@@ -14,6 +14,10 @@ public class Menu : MonoBehaviour {
 	public Texture2D menuBackground;
 	private Hex selectedHex;
 
+	public void Update(){
+		updateMenu (selectedHex);
+	}
+
 	// Create menu on right side of screen
 	public void OnGUI(){
 		//Load background textrue
@@ -35,7 +39,6 @@ public class Menu : MonoBehaviour {
 					player.makeUnit (menuItems [i].objectPrefab, selectedHex.transform.position);
 				} else if (menuItems[i].type == MenuItem.MenuItemType.BUILDING){
 					player.upgradeTile (selectedHex, menuItems [i].objectPrefab);
-					updateMenu (selectedHex);
 				}
 			}
 		}

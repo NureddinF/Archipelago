@@ -55,12 +55,13 @@ public class CapturableTile: MonoBehaviour{
 	void Update (){
 		// progress tile capturing each frame
 		progressTileCapture ();
+		// progress tile construction each frame
+		progressTileConstruction();
 	}
 
 
 	// Unit calls this when it enters the tile
 	public void addUnits(int numUnits, Player.PlayerId player){
-		if(thisHex.hexOwner != Player.PlayerId.NEUTRAL){return;}
 
 		Sprite border = new Sprite();
 		bool captureClockwise = true;
@@ -72,7 +73,7 @@ public class CapturableTile: MonoBehaviour{
 			border = p2CaptureBorder;
 			captureClockwise = false;
 		}
-		if (!captureBoarder.enabled) {
+		if (!captureBoarder.enabled && thisHex.hexOwner == Player.PlayerId.NEUTRAL) {
 			captureBoarder.enabled = true;
 			captureBoarder.sprite = border;
 			captureBoarder.fillClockwise = captureClockwise;
@@ -81,7 +82,6 @@ public class CapturableTile: MonoBehaviour{
 
 	// Unit calls this when it leaves the tile
 	public void removeUnit(int numUnits, Player.PlayerId player){
-		if(thisHex.hexOwner != Player.PlayerId.NEUTRAL){return;}
 
 		if (player == Player.PlayerId.P1) {
 			numP1UnitsOnHex -= numUnits;
@@ -149,12 +149,84 @@ public class CapturableTile: MonoBehaviour{
 
 	// Increase income of player once tile is captured
 	private void finalizeCapture(){
+		Player player = getPlayer ();
+		if(player != null){
+			player.captureTile (this);
+		}
+	}
+
+	// Get the player object for the owner of this tile
+	private Player getPlayer(){
 		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
 		for(int i=0; i<players.Length; i++){
 			Player player = players[i].GetComponentInChildren<Player>();
 			if(player.playerId.Equals(thisHex.hexOwner)){
-				player.captureTile (this);
+				return player;
 			}
 		}
+		return null;
+	}
+
+
+
+	private Building buildingUnderConstrcution = null;
+	public float constructionSpeedPerUnit = 1;
+	public float passiveConstructionSpeed = 0;
+	private float constructionProgress = 0;
+	// Start process of upgrading tile
+	public void beginConstruction(Building buildingInfo){
+		buildingUnderConstrcution = buildingInfo;
+		constructionProgress = 0;
+		captureBoarder.enabled = true;
+	}
+
+
+	// Adnvace state towards capturing the tile
+	private void progressTileConstruction(){
+
+		if (buildingUnderConstrcution != null && thisHex.hexOwner != Player.PlayerId.NEUTRAL) {
+
+			if (numP1UnitsOnHex > 0 && numP2UnitsOnHex > 0) {
+				//TODO: units fight or something
+				return;
+			} 
+			float playerUnits = 0;
+			if(thisHex.hexOwner == Player.PlayerId.P1){
+				playerUnits = numP1UnitsOnHex;
+			} else if (thisHex.hexOwner == Player.PlayerId.P2){
+				playerUnits = numP2UnitsOnHex;
+			}
+
+			float newAmountConstructed = constructionProgress + Time.deltaTime * constructionSpeedPerUnit * (playerUnits + passiveConstructionSpeed);
+
+			Debug.Log ("Constructing on tile: " + this.transform.parent.parent.name + "; player units: " + playerUnits + "; amount done: " + newAmountConstructed);
+
+			if(newAmountConstructed > buildingUnderConstrcution.constructionTime){
+				//Building completed
+				finalizeConstruction ();
+				return;
+			}
+
+			// Update visual
+			constructionProgress = newAmountConstructed;
+			captureBoarder.fillAmount = Mathf.Abs (constructionProgress / buildingUnderConstrcution.constructionTime);
+		}
+	}
+
+	// finish vonstructing the building
+	private void finalizeConstruction(){
+		// Update sprites/UI
+		captureBoarder.enabled = false;
+		tileSprite.sprite = buildingUnderConstrcution.builtSprite;
+		thisHex.menuOptions = buildingUnderConstrcution.builtMenuOptions;
+
+		//Adjust the player income
+		Player player = getPlayer ();
+		player.removeTile (this);
+		tileIncome += buildingUnderConstrcution.incomeAdjustment;
+		player.captureTile (this);
+
+		//terminate the construction
+		buildingUnderConstrcution = null;
 	}
 }
