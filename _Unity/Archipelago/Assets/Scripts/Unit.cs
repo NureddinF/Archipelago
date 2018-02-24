@@ -6,6 +6,7 @@ public class Unit : MonoBehaviour {
 
 	// Unit parameters
 	public int speed = 1;
+	public float cost = 3;
 
 	// State variables
 	private Vector3 destination;

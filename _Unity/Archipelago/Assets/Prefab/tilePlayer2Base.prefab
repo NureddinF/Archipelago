@@ -87,6 +87,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   x: 0
   y: 0
+  hexOwner: 1
+  tileType: 1
 --- !u!212 &212218913899025482
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -129,5 +131,5 @@ SpriteRenderer:
   m_Size: {x: 4, y: 4}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0

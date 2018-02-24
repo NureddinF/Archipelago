@@ -179,7 +179,6 @@ MonoBehaviour:
   paused: 0
   numP1UnitsOnHex: 0
   numP2UnitsOnHex: 0
-  tileOwner: 2
 --- !u!114 &114272053765437040
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -209,6 +208,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   x: 0
   y: 0
+  hexOwner: 2
+  tileType: 2
 --- !u!212 &212274528097736614
 SpriteRenderer:
   m_ObjectHideFlags: 1

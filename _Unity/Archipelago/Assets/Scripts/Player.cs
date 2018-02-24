@@ -20,9 +20,11 @@ public class Player : MonoBehaviour {
 
 	private float startTime;
 	private float increaseAmt;
-	public float currentIncome;
+	public float currentMoney;
 
 	private Dictionary<HexGrid.TileType , int> ownedTiles;
+
+	public HexGrid map;
 
 	// Use this for initialization
 	void Start () {
@@ -32,7 +34,7 @@ public class Player : MonoBehaviour {
 		ownedTiles.Add (HexGrid.TileType.ROCK, 0);
 		ownedTiles.Add (HexGrid.TileType.TREE, 0);
 		ownedTiles.Add (HexGrid.TileType.SAND, 0);
-		currentIncome = 0;
+		currentMoney = 0;
 		incomeText.text = "Hello";
 		rateText.text = "+ 0/sec";
 		startTime = Time.time;
@@ -51,8 +53,8 @@ public class Player : MonoBehaviour {
 			increaseAmt = (baseIncome + ownedTiles[HexGrid.TileType.BASE] + ownedTiles[HexGrid.TileType.GRASS] + 
 				ownedTiles[HexGrid.TileType.TREE]+ ownedTiles[HexGrid.TileType.ROCK] + 
 				ownedTiles[HexGrid.TileType.SAND]) * rateMultiplier;
-			currentIncome += increaseAmt;
-			incomeText.text = "" + currentIncome;
+			currentMoney += increaseAmt;
+			incomeText.text = "" + currentMoney;
 			rateText.text = "+ " + increaseAmt + "/" + timeFrame + "secs";
 			startTime = Time.time;
 		}
@@ -62,8 +64,8 @@ public class Player : MonoBehaviour {
 	//Generate income and add to total money each frame
 	public void generateIncomeContinuous(){
 		float translation = Time.deltaTime * rateMultiplier;
-		currentIncome += translation;
-		incomeText.text = "" + Mathf.RoundToInt(currentIncome);
+		currentMoney += translation;
+		incomeText.text = "" + Mathf.RoundToInt(currentMoney);
 		rateText.text = "+ " + rateMultiplier + "/sec";
 	}
 
@@ -75,9 +77,30 @@ public class Player : MonoBehaviour {
 
 	public void makeUnit(GameObject unitObject){
 		Unit unitInfo = unitObject.GetComponent<Unit> ();
+		if(unitInfo.cost > this.currentMoney){
+			// Unit costs too much
+			Debug.Log("Can't afford a " + unitObject.name + " for " + unitInfo.cost);
+			return;
+		}
+		Vector3 proposedUnitPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+		GameObject hexObject = map.getHex (proposedUnitPosition);
+		if(hexObject == null){
+			Debug.Log ("Did not place unit on map");
+		}
+		Hex hex = hexObject.GetComponent<Hex> ();
+		if(hex == null){
+			Debug.Log ("Can't place unit on something that's not a hex");
+			return;
+		}
+		if(hex.hexOwner != playerId){
+			Debug.Log ("Can't place unit on tile you don't own");
+			return;
+		}
+		currentMoney -= unitInfo.cost;
 		GameObject newUnit = Instantiate(unitObject);
 		newUnit.GetComponent<Unit> ().unitOwner = Player.PlayerId.P1;
-		Vector3 temp = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-		newUnit.transform.position = new Vector3(temp.x, temp.y, -5);
+		proposedUnitPosition = hex.transform.position;
+		proposedUnitPosition.z = -5;
+		newUnit.transform.position = proposedUnitPosition;
 	}
 }

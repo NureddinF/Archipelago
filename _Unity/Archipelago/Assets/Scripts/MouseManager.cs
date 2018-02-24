@@ -10,8 +10,6 @@ public class MouseManager : MonoBehaviour {
 	// Unit that has been clicked
 	private Unit selectedUnit;
 
-	public Text incomeCount;
-
 	// Building/unit creation
 	public List<GameObject> unitPrefabs = new List<GameObject>();
 	private int unitIndex = -1;
@@ -82,9 +80,14 @@ public class MouseManager : MonoBehaviour {
 
 
 	public void cycleNextUnit(){
-		unitIndex++;
-		if(unitIndex >= unitPrefabs.Count){
+		if (!buildUnit) {
+			deselectUnit ();
 			unitIndex = 0;
+		} else {
+			unitIndex++;
+			if (unitIndex >= unitPrefabs.Count) {
+				unitIndex = 0;
+			}
 		}
 		buildUnit = true;
 		Debug.Log ("Selecting to build unit: " + unitPrefabs [unitIndex].name);

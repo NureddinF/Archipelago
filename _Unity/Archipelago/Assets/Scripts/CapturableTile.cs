@@ -29,9 +29,6 @@ public class CapturableTile: MonoBehaviour{
 	public int numP1UnitsOnHex = 0;
 	public int numP2UnitsOnHex = 0;
 
-	//Store who owns the tile
-	public Player.PlayerId tileOwner = Player.PlayerId.NEUTRAL;
-
 	//Hex script associated with this tile
 	Hex thisHex;
 
@@ -53,7 +50,7 @@ public class CapturableTile: MonoBehaviour{
 
 	// Unit calls this when it enters the tile
 	public void addUnits(int numUnits, Player.PlayerId player){
-		if(tileOwner != Player.PlayerId.NEUTRAL){return;}
+		if(thisHex.hexOwner != Player.PlayerId.NEUTRAL){return;}
 
 		Sprite border = new Sprite();
 		bool captureClockwise = true;
@@ -74,7 +71,7 @@ public class CapturableTile: MonoBehaviour{
 
 	// Unit calls this when it leaves the tile
 	public void removeUnit(int numUnits, Player.PlayerId player){
-		if(tileOwner != Player.PlayerId.NEUTRAL){return;}
+		if(thisHex.hexOwner != Player.PlayerId.NEUTRAL){return;}
 
 		if (player == Player.PlayerId.P1) {
 			numP1UnitsOnHex -= numUnits;
@@ -87,7 +84,7 @@ public class CapturableTile: MonoBehaviour{
 	// Adnvace state towards capturing the tile
 	private void progressTileCapture(){
 
-		if (tileOwner == Player.PlayerId.NEUTRAL && captureBoarder.enabled) {
+		if (thisHex.hexOwner == Player.PlayerId.NEUTRAL && captureBoarder.enabled) {
 
 			if(amountCaptured >0){
 				neutralUnitFactor = Mathf.Abs (neutralUnitFactor);
@@ -105,7 +102,7 @@ public class CapturableTile: MonoBehaviour{
 			if (numP1UnitsOnHex > 0) {
 				if(newAmountCaptured > totalCaptureCost){
 					//p1 captured tile
-					tileOwner = Player.PlayerId.P1;
+					thisHex.hexOwner = Player.PlayerId.P1;
 					captureBoarder.enabled = false;
 					tileSprite.sprite = p1CaptureTile;
 					finalizeCapture ();
@@ -117,7 +114,7 @@ public class CapturableTile: MonoBehaviour{
 			} else if (numP2UnitsOnHex > 0) {
 				if(newAmountCaptured < -totalCaptureCost){
 					//p2 captured tile
-					tileOwner = Player.PlayerId.P2;
+					thisHex.hexOwner = Player.PlayerId.P2;
 					captureBoarder.enabled = false;
 					tileSprite.sprite = p2CaptureTile;
 					finalizeCapture();
@@ -145,7 +142,7 @@ public class CapturableTile: MonoBehaviour{
 		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
 		for(int i=0; i<players.Length; i++){
 			Player player = players[i].GetComponentInChildren<Player>();
-			if(player.playerId.Equals(tileOwner)){
+			if(player.playerId.Equals(thisHex.hexOwner)){
 				player.captureTile (thisHex.tileType);
 			}
 		}

@@ -68,9 +68,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4734b4495f8b6214bba11bef9a203476, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destination: {x: 0, y: 0, z: 0}
   speed: 1
-  shouldMove: 0
+  cost: 1
   unitDeselected: {fileID: 21300000, guid: 80327bc8a94f74cee9e3bd34697b6959, type: 3}
   unitSelected: {fileID: 21300000, guid: 910f46b8a3d6a44aaa35b728327cf569, type: 3}
   unitOwner: 0

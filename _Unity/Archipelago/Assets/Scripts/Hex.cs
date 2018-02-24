@@ -10,6 +10,9 @@ public class Hex : MonoBehaviour {
     public int x;
     public int y;
 
+	//Store who owns the hex
+	public Player.PlayerId hexOwner = Player.PlayerId.NEUTRAL;
+
 	public HexGrid.TileType tileType;
 
     //Set maxY and maxX of a hex, -1 for off by one error
