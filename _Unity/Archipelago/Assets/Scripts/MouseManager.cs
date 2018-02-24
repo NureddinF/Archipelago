@@ -15,6 +15,9 @@ public class MouseManager : MonoBehaviour {
 	private int unitIndex = -1;
 	private bool buildUnit = false;
 
+	//Right hand menu for building things
+	public Menu menu;
+
 	// Update is called once per frame
 	void Update () {
 
@@ -39,15 +42,22 @@ public class MouseManager : MonoBehaviour {
             if (Input.GetMouseButtonDown(0)) {
                 // Check what we clicked on
 				if (collidedHitInfo.GetComponent<Hex> () != null) {
+					Hex hex = collidedHitInfo.GetComponent<Hex> ();
 					//clicked on a hex
 
 					// Check if we need to move unit to destination
 					if (selectedUnit != null) {
-						Vector3 v = collidedHitInfo.GetComponent<Hex> ().transform.position;
+						Vector3 v = hex.transform.position;
 						Debug.Log ("Moving Unit to: x:" + v.x + ", y:" + v.y + ", z:" + v.z);
-						selectedUnit.setDestination (collidedHitInfo.GetComponent<Hex> ().transform.position);
+						selectedUnit.setDestination (hex.transform.position);
 					} else if (buildUnit){
+						//TODO: remove this condition
 						player.makeUnit (unitPrefabs[unitIndex]);
+					} else {
+						//bring up menu
+						menu.updateMenu(hex);
+
+
 					}
 				} else if (collidedHitInfo.GetComponent<Unit>() != null){
 					//clicked on a unit
@@ -55,6 +65,7 @@ public class MouseManager : MonoBehaviour {
 					if(clickedUnit == selectedUnit) deselectUnit();
 					else selectUnit(clickedUnit);
 					buildUnit = false;
+					menu.updateMenu(null);
 				}
 
             }

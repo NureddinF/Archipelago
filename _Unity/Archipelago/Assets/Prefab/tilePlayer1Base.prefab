@@ -89,6 +89,9 @@ MonoBehaviour:
   y: 0
   hexOwner: 0
   tileType: 1
+  menuOptions:
+  - {fileID: 114079560248775170, guid: a2617187e71eef941acd204b39d9e97f, type: 2}
+  - {fileID: 114781515146305516, guid: df9ce854d83393c47b8dc252a4951754, type: 2}
 --- !u!212 &212457063213512984
 SpriteRenderer:
   m_ObjectHideFlags: 1

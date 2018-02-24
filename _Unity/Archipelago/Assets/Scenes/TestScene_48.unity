@@ -113,6 +113,54 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &31710731 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114403691301524924, guid: b8b880a565daea8489c000cc2c142ed4,
+    type: 2}
+  m_PrefabInternal: {fileID: 371172829}
+  m_Script: {fileID: 11500000, guid: d17631f1cd65ede41a3e9a5f27698d75, type: 3}
+--- !u!1 &51062364
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 51062366}
+  - component: {fileID: 51062365}
+  m_Layer: 0
+  m_Name: Menu
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &51062365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 51062364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c75bfd4435c1dd4883764956a5e4a3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 31710731}
+  menuBackground: {fileID: 2800000, guid: 958fdeb4ca841a549a79a67a34251acf, type: 3}
+--- !u!4 &51062366
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 51062364}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 355.99277, y: 164.47621, z: -3.0218842}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &140691159
 GameObject:
   m_ObjectHideFlags: 0
@@ -300,6 +348,16 @@ Prefab:
         type: 2}
       propertyPath: m_AnchoredPosition.x
       value: 576
+      objectReference: {fileID: 0}
+    - target: {fileID: 114287592027194574, guid: b8b880a565daea8489c000cc2c142ed4,
+        type: 2}
+      propertyPath: menu
+      value: 
+      objectReference: {fileID: 51062365}
+    - target: {fileID: 114403691301524924, guid: b8b880a565daea8489c000cc2c142ed4,
+        type: 2}
+      propertyPath: timeFrame
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b8b880a565daea8489c000cc2c142ed4, type: 2}

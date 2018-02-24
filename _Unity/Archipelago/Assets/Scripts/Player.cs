@@ -103,4 +103,33 @@ public class Player : MonoBehaviour {
 		proposedUnitPosition.z = -5;
 		newUnit.transform.position = proposedUnitPosition;
 	}
+
+
+	public void makeUnit(GameObject unitObject, Vector3 proposedUnitPosition){
+		Unit unitInfo = unitObject.GetComponent<Unit> ();
+		if(unitInfo.cost > this.currentMoney){
+			// Unit costs too much
+			Debug.Log("Can't afford a " + unitObject.name + " for " + unitInfo.cost);
+			return;
+		}
+		GameObject hexObject = map.getHex (proposedUnitPosition);
+		if(hexObject == null){
+			Debug.Log ("Did not place unit on map");
+		}
+		Hex hex = hexObject.GetComponent<Hex> ();
+		if(hex == null){
+			Debug.Log ("Can't place unit on something that's not a hex");
+			return;
+		}
+		if(hex.hexOwner != playerId){
+			Debug.Log ("Can't place unit on tile you don't own");
+			return;
+		}
+		currentMoney -= unitInfo.cost;
+		GameObject newUnit = Instantiate(unitObject);
+		newUnit.GetComponent<Unit> ().unitOwner = Player.PlayerId.P1;
+		proposedUnitPosition = hex.transform.position;
+		proposedUnitPosition.z = -5;
+		newUnit.transform.position = proposedUnitPosition;
+	}
 }
