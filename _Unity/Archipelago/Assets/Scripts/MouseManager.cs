@@ -55,7 +55,9 @@ public class MouseManager : MonoBehaviour {
 						player.makeUnit (unitPrefabs[unitIndex]);
 					} else {
 						//bring up menu
-						menu.updateMenu(hex);
+						if(hex.hexOwner == player.playerId){
+							menu.updateMenu(hex);	
+						}
 
 
 					}
