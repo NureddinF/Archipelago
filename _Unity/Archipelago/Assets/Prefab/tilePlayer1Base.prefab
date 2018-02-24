@@ -87,6 +87,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   x: 0
   y: 0
+  hexOwner: 0
+  tileType: 1
 --- !u!212 &212457063213512984
 SpriteRenderer:
   m_ObjectHideFlags: 1
