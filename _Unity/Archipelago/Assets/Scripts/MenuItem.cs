@@ -12,7 +12,6 @@ public class MenuItem : MonoBehaviour {
 	public Texture2D menuIcon;
 
 	// Prefab of the object to place into the world.
-	// Not always used.
 	public GameObject objectPrefab;
 
 }
