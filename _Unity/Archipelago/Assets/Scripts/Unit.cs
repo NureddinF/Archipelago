@@ -4,9 +4,16 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour {
 
-	public Vector3 destination;
+	// Unit parameters
 	public int speed = 1;
-	public bool shouldMove = false;
+
+	// State variables
+	private Vector3 destination;
+	private bool shouldMove = false;
+
+	//Sprites for unit when it's selected or not selected
+	public Sprite unitDeselected;
+	public Sprite unitSelected;
 
 	public Player.PlayerId unitOwner = Player.PlayerId.P1;
 
@@ -43,5 +50,19 @@ public class Unit : MonoBehaviour {
 	private void reachedWaypoint(){
 		// TODO: pathfinding
 		shouldMove = false;
+	}
+
+
+	// update sprite when unit is selected
+	public void selectUnit(){
+		GetComponent<SpriteRenderer>().sprite = unitSelected;
+	}
+
+	// update sprite when unit is deselected
+	public void deselectUnit(){
+		SpriteRenderer temp = GetComponent<SpriteRenderer> ();
+		if (temp != null) {
+			temp.sprite = unitDeselected;
+		}
 	}
 }

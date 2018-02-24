@@ -4,16 +4,18 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class MouseManager : MonoBehaviour {
+	// human player who is associated with this mouse manager
+	public Player player;
+
 	// Unit that has been clicked
 	private Unit selectedUnit;
 
 	public Text incomeCount;
-	public Sprite tileGrassOwned;	// Worth 2	
-	public Sprite tileSandOwned;	// Worth 1
-	public Sprite tileTreeOwned;	// Worth 3
-	public Sprite tileRockOwned;	// Worth 4
-	public Sprite unitDeselected;
-	public Sprite unitSelected;
+
+	// Building/unit creation
+	public List<GameObject> unitPrefabs = new List<GameObject>();
+	private int unitIndex = -1;
+	private bool buildUnit = false;
 
 	// Update is called once per frame
 	void Update () {
@@ -46,12 +48,15 @@ public class MouseManager : MonoBehaviour {
 						Vector3 v = collidedHitInfo.GetComponent<Hex> ().transform.position;
 						Debug.Log ("Moving Unit to: x:" + v.x + ", y:" + v.y + ", z:" + v.z);
 						selectedUnit.setDestination (collidedHitInfo.GetComponent<Hex> ().transform.position);
+					} else if (buildUnit){
+						player.makeUnit (unitPrefabs[unitIndex]);
 					}
 				} else if (collidedHitInfo.GetComponent<Unit>() != null){
 					//clicked on a unit
 					Unit clickedUnit = collidedHitInfo.GetComponent<Unit>();
 					if(clickedUnit == selectedUnit) deselectUnit();
 					else selectUnit(clickedUnit);
+					buildUnit = false;
 				}
 
             }
@@ -63,17 +68,26 @@ public class MouseManager : MonoBehaviour {
 		deselectUnit ();
 		this.selectedUnit = unit;
 		//change sprite to indicate a unit was selected
-		unit.GetComponent<SpriteRenderer>().sprite = unitSelected;
+		unit.selectUnit();
 	}
 
 	private void deselectUnit(){
 		//change sprite to indicate a unit was deselected
 		if (selectedUnit != null) {
-			SpriteRenderer temp = selectedUnit.GetComponent<SpriteRenderer> ();
-			if (temp != null) {
-				temp.sprite = unitDeselected;
-			}
+			selectedUnit.deselectUnit ();
 			this.selectedUnit = null;
 		}
 	}
+
+
+
+	public void cycleNextUnit(){
+		unitIndex++;
+		if(unitIndex >= unitPrefabs.Count){
+			unitIndex = 0;
+		}
+		buildUnit = true;
+		Debug.Log ("Selecting to build unit: " + unitPrefabs [unitIndex].name);
+	}
+		
 }
