@@ -210,6 +210,7 @@ MonoBehaviour:
   y: 0
   hexOwner: 2
   tileType: 2
+  menuOptions: []
 --- !u!212 &212274528097736614
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -54,10 +54,10 @@ public class Player : MonoBehaviour {
 				ownedTiles[HexGrid.TileType.TREE]+ ownedTiles[HexGrid.TileType.ROCK] + 
 				ownedTiles[HexGrid.TileType.SAND]) * rateMultiplier;
 			currentMoney += increaseAmt;
-			incomeText.text = "" + currentMoney;
-			rateText.text = "+ " + increaseAmt + "/" + timeFrame + "secs";
 			startTime = Time.time;
 		}
+		incomeText.text = "" + currentMoney;
+		rateText.text = "+ " + increaseAmt + "/" + timeFrame + "secs";
 	}
 
 
@@ -131,5 +131,26 @@ public class Player : MonoBehaviour {
 		proposedUnitPosition = hex.transform.position;
 		proposedUnitPosition.z = -5;
 		newUnit.transform.position = proposedUnitPosition;
+	}
+
+
+	public void upgradeTile(Hex hex, GameObject buildingObject){
+		Building buildingInfo = buildingObject.GetComponent<Building> ();
+		if(buildingInfo.cost > this.currentMoney){
+			// Unit costs too much
+			Debug.Log("Can't afford a " + buildingObject.name + " for " + buildingInfo.cost);
+			return;
+		}
+		if(hex == null){
+			Debug.Log ("Can't place building on something that's not a hex");
+			return;
+		}
+		if(hex.hexOwner != playerId){
+			Debug.Log ("Can't place unit on tile you don't own");
+			return;
+		}
+		currentMoney -= buildingInfo.cost;
+		hex.menuOptions = buildingInfo.menuOptions;
+		hex.GetComponent<SpriteRenderer> ().sprite = buildingInfo.buildingSprite;
 	}
 }

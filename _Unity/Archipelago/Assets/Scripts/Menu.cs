@@ -33,11 +33,15 @@ public class Menu : MonoBehaviour {
 				Debug.Log ("Clicked " + menuItems [i]);
 				if(menuItems[i].type == MenuItem.MenuItemType.UNIT){
 					player.makeUnit (menuItems [i].objectPrefab, selectedHex.transform.position);
+				} else if (menuItems[i].type == MenuItem.MenuItemType.BUILDING){
+					player.upgradeTile (selectedHex, menuItems [i].objectPrefab);
+					updateMenu (selectedHex);
 				}
 			}
 		}
 	}
 
+	// Display the menu options for given hex
 	public void updateMenu(Hex hex){
 		selectedHex = hex;
 		if (hex != null) {

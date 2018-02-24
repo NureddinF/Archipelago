@@ -147,6 +147,7 @@ MonoBehaviour:
   y: 0
   hexOwner: 2
   tileType: 4
+  menuOptions: []
 --- !u!114 &114330541013523252
 MonoBehaviour:
   m_ObjectHideFlags: 1

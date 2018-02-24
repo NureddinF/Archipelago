@@ -134,7 +134,8 @@ MonoBehaviour:
   y: 0
   hexOwner: 2
   tileType: 0
-  menuOptions: []
+  menuOptions:
+  - {fileID: 114251124377204716, guid: b79339b07af2d8f4d9dcf7d5725515ba, type: 2}
 --- !u!114 &114355972234670298
 MonoBehaviour:
   m_ObjectHideFlags: 1
