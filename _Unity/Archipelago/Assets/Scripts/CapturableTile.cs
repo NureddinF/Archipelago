@@ -32,11 +32,21 @@ public class CapturableTile: MonoBehaviour{
 	//Hex script associated with this tile
 	Hex thisHex;
 
+	// Information about how much money this tile generates
+	public const float baseTileIncome = 1;
+	public float tileIncome = baseTileIncome;
+
 	//Initializeation
 	public void Start(){
 		thisHex = GetComponentInParent<Hex> ();
 		tileSprite = GetComponentInParent<SpriteRenderer> ();
 		captureBoarder = GetComponent<Image>();
+
+		// Update player income if this tile is spawned with an owner
+		if(thisHex.hexOwner != Player.PlayerId.NEUTRAL){
+			finalizeCapture ();	
+		}
+
 		// This is mostly for testing. Fill Amount should be set to 0 so the tiles starts neutral.
 		amountCaptured = captureBoarder.fillAmount * totalCaptureCost;
 	}
@@ -143,7 +153,7 @@ public class CapturableTile: MonoBehaviour{
 		for(int i=0; i<players.Length; i++){
 			Player player = players[i].GetComponentInChildren<Player>();
 			if(player.playerId.Equals(thisHex.hexOwner)){
-				player.captureTile (thisHex.tileType);
+				player.captureTile (this);
 			}
 		}
 	}

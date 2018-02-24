@@ -392,7 +392,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileGrass: {fileID: 1712939722596536, guid: 8d3cdf8863aa6af4583cd5311517832e, type: 2}
-  tilePlayer1Base: {fileID: 1920015907123518, guid: bf6d98c9c434d9a428d8a520f155c199,
+  tilePlayer1Base: {fileID: 1972973093731316, guid: 3a2165068a310f74a807fef8f222cd95,
     type: 2}
   tilePlayer2Base: {fileID: 1308510330598628, guid: 04241fb745664e844a5ea75535b92b95,
     type: 2}
@@ -540,6 +540,12 @@ Prefab:
       propertyPath: tileSand
       value: 
       objectReference: {fileID: 1471681828661282, guid: 4ec27a25073ab624680a471714850afa,
+        type: 2}
+    - target: {fileID: 114200828406377140, guid: 2fff18e2d9846b24abc3e699c472c973,
+        type: 2}
+      propertyPath: tilePlayer1Base
+      value: 
+      objectReference: {fileID: 1972973093731316, guid: 3a2165068a310f74a807fef8f222cd95,
         type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2fff18e2d9846b24abc3e699c472c973, type: 2}

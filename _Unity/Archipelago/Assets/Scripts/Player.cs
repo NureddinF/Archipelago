@@ -5,35 +5,29 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour {
 
+	// Identify who this player is
 	public enum PlayerId {P1,P2, NEUTRAL};
-
 	public PlayerId playerId;
 
+	// Player parameters
 	public float rateMultiplier;
-	public int maxIncome;
-	public int minIncome;
 	public int baseIncome;
+	public int timeFrame; // how long between discrete burst of money
 
+	// UI
 	public Text incomeText;
 	public Text rateText;
-	public int timeFrame;
 
+	// State variables
 	private float startTime;
-	private float increaseAmt;
-	public float currentMoney;
+	private float totalTileIncome;
+	private float currentMoney;
 
-	private Dictionary<HexGrid.TileType , int> ownedTiles;
-
+	// Reference to the map so Player can access tiles
 	public HexGrid map;
 
 	// Use this for initialization
 	void Start () {
-		ownedTiles = new Dictionary<HexGrid.TileType , int> ();
-		ownedTiles.Add (HexGrid.TileType.BASE, 1); // start with 1 base
-		ownedTiles.Add (HexGrid.TileType.GRASS, 0);
-		ownedTiles.Add (HexGrid.TileType.ROCK, 0);
-		ownedTiles.Add (HexGrid.TileType.TREE, 0);
-		ownedTiles.Add (HexGrid.TileType.SAND, 0);
 		currentMoney = 0;
 		incomeText.text = "Hello";
 		rateText.text = "+ 0/sec";
@@ -48,11 +42,9 @@ public class Player : MonoBehaviour {
 
 	// Generates income in discrete chunks rather than each frame
 	public void generateIncomeDiscrete(){
+		float increaseAmt = (baseIncome + totalTileIncome) * rateMultiplier;
 		if(Time.time > timeFrame + startTime) {
 			// timeframe has passed
-			increaseAmt = (baseIncome + ownedTiles[HexGrid.TileType.BASE] + ownedTiles[HexGrid.TileType.GRASS] + 
-				ownedTiles[HexGrid.TileType.TREE]+ ownedTiles[HexGrid.TileType.ROCK] + 
-				ownedTiles[HexGrid.TileType.SAND]) * rateMultiplier;
 			currentMoney += increaseAmt;
 			startTime = Time.time;
 		}
@@ -60,7 +52,7 @@ public class Player : MonoBehaviour {
 		rateText.text = "+ " + increaseAmt + "/" + timeFrame + "secs";
 	}
 
-
+	//@Depricated
 	//Generate income and add to total money each frame
 	public void generateIncomeContinuous(){
 		float translation = Time.deltaTime * rateMultiplier;
@@ -70,8 +62,8 @@ public class Player : MonoBehaviour {
 	}
 
 
-	public void captureTile(HexGrid.TileType tileType){
-		ownedTiles [tileType]++;
+	public void captureTile(CapturableTile tile){
+		totalTileIncome += tile.tileIncome;
 	}
 
 
@@ -125,7 +117,10 @@ public class Player : MonoBehaviour {
 			Debug.Log ("Can't place unit on tile you don't own");
 			return;
 		}
+		//Can build the unit
+		//remove money from player
 		currentMoney -= unitInfo.cost;
+		//Instanciate unit in world at the correct position
 		GameObject newUnit = Instantiate(unitObject);
 		newUnit.GetComponent<Unit> ().unitOwner = Player.PlayerId.P1;
 		proposedUnitPosition = hex.transform.position;
@@ -149,8 +144,12 @@ public class Player : MonoBehaviour {
 			Debug.Log ("Can't place unit on tile you don't own");
 			return;
 		}
+		// Can build building
 		currentMoney -= buildingInfo.cost;
 		hex.menuOptions = buildingInfo.menuOptions;
+		//TODO: make upgrade take time
+		hex.GetComponentInChildren<CapturableTile>().tileIncome += buildingInfo.incomeAdjustment;
+		totalTileIncome += buildingInfo.incomeAdjustment;
 		hex.GetComponent<SpriteRenderer> ().sprite = buildingInfo.buildingSprite;
 	}
 }
