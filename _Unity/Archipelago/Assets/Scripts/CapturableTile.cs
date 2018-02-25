@@ -19,7 +19,7 @@ public class CapturableTile: MonoBehaviour{
 	// Factors determining how long it takes to capture a tile
 	public float captureSpeedPerUnit = 1;
 	public float neutralUnitFactor = 0.25f; //this is how fast the tile will reset if nothing is on it
-	const float totalCaptureCost = 10;
+	public float totalCaptureCost = 10;
 
 	//Current state of capturing the tile
 	private float amountCaptured = 0;

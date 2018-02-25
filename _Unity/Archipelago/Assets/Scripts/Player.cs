@@ -131,7 +131,7 @@ public class Player : MonoBehaviour {
 		newUnit.transform.position = proposedUnitPosition;
 	}
 
-
+	// Called when Player wants to upgrade a hex to a building
 	public void upgradeTile(Hex hex, GameObject buildingObject){
 		Building buildingInfo = buildingObject.GetComponent<Building> ();
 		if(buildingInfo.moneyCost > this.currentMoney){
@@ -147,23 +147,6 @@ public class Player : MonoBehaviour {
 			Debug.Log ("Can't place buildings on tile you don't own");
 			return;
 		}
-		switch(buildingInfo.type){
-			case Building.BuildingType.ECONOMIC:{
-				upgradeToEconBuilding (hex, buildingInfo);
-				break;
-			}
-			case Building.BuildingType.MILITARY:{
-				upgradeToMilitaryBuilding (hex, buildingInfo);
-				break;	
-			}
-			default:{
-				break;
-			}	
-		}
-	}
-
-	// Tile is making an economic improvement
-	private void upgradeToEconBuilding(Hex hex, Building buildingInfo){
 		// Can build building
 		//Subtract cost of building from player's money
 		currentMoney -= buildingInfo.moneyCost;
@@ -173,10 +156,5 @@ public class Player : MonoBehaviour {
 		hex.GetComponent<SpriteRenderer> ().sprite = buildingInfo.constructionSprite;
 		//let hex handle actually building the building
 		hex.GetComponentInChildren<CapturableTile> ().beginConstruction (buildingInfo);
-	}
-
-
-	private void upgradeToMilitaryBuilding(Hex hex, Building buildingInfo){
-		
 	}
 }

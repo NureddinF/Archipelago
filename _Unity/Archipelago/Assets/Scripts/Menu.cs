@@ -15,6 +15,7 @@ public class Menu : MonoBehaviour {
 	private Hex selectedHex;
 
 	public void Update(){
+		// make sure menu stays up to date if hex menu options change (e.g. if tile is upgraded)
 		updateMenu (selectedHex);
 	}
 

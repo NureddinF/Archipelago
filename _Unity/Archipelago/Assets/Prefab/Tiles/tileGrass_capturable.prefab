@@ -136,6 +136,7 @@ MonoBehaviour:
   tileType: 0
   menuOptions:
   - {fileID: 114251124377204716, guid: b79339b07af2d8f4d9dcf7d5725515ba, type: 2}
+  - {fileID: 114277424994940152, guid: 3e2f575e4aaf44445aeb7d97e0a98841, type: 2}
 --- !u!114 &114355972234670298
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -153,9 +154,11 @@ MonoBehaviour:
   p2CaptureTile: {fileID: 21300000, guid: 9c01b3acbdd4b49ee9a0e9bc7bbf85c8, type: 3}
   captureSpeedPerUnit: 1
   neutralUnitFactor: 0.25
-  paused: 0
+  constructionSpeedPerUnit: 1
+  passiveConstructionSpeed: 0
   numP1UnitsOnHex: 0
   numP2UnitsOnHex: 0
+  tileIncome: 1
 --- !u!114 &114418433076335232
 MonoBehaviour:
   m_ObjectHideFlags: 1
