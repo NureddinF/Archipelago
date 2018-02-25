@@ -51,7 +51,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f793c2afe2a3b64db9fea45fa2b2fd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cost: 3
+  moneyCost: 3
   incomeAdjustment: 1
-  menuOptions: []
-  buildingSprite: {fileID: 21300000, guid: 745de7e74fc72b543be2d79fbd7282ec, type: 3}
+  constructionTime: 5
+  builtMenuOptions: []
+  constructionMenuOptions: []
+  type: 0
+  builtSprite: {fileID: 21300000, guid: 745de7e74fc72b543be2d79fbd7282ec, type: 3}
+  constructionSprite: {fileID: 21300000, guid: a73a253afb5804348875cea91ef24140, type: 3}

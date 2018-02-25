@@ -23,7 +23,14 @@ public class CapturableTile: MonoBehaviour{
 
 	//Current state of capturing the tile
 	private float amountCaptured = 0;
-	public bool paused = false;
+
+	//Construction parameters
+	public float constructionSpeedPerUnit = 1;
+	public float passiveConstructionSpeed = 0;
+
+	//Current state of constructing tile
+	private Building buildingUnderConstrcution = null;
+	private float constructionProgress = 0;
 
 	//number of units on a hex. used to progress state of capturing proccess
 	public int numP1UnitsOnHex = 0;
@@ -166,13 +173,7 @@ public class CapturableTile: MonoBehaviour{
 		}
 		return null;
 	}
-
-
-
-	private Building buildingUnderConstrcution = null;
-	public float constructionSpeedPerUnit = 1;
-	public float passiveConstructionSpeed = 0;
-	private float constructionProgress = 0;
+		
 	// Start process of upgrading tile
 	public void beginConstruction(Building buildingInfo){
 		buildingUnderConstrcution = buildingInfo;
@@ -198,8 +199,6 @@ public class CapturableTile: MonoBehaviour{
 			}
 
 			float newAmountConstructed = constructionProgress + Time.deltaTime * constructionSpeedPerUnit * (playerUnits + passiveConstructionSpeed);
-
-			Debug.Log ("Constructing on tile: " + this.transform.parent.parent.name + "; player units: " + playerUnits + "; amount done: " + newAmountConstructed);
 
 			if(newAmountConstructed > buildingUnderConstrcution.constructionTime){
 				//Building completed
