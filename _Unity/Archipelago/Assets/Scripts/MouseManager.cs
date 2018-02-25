@@ -15,26 +15,29 @@ public class MouseManager : MonoBehaviour {
 	public Sprite unitDeselected;
 	public Sprite unitSelected;
 
-	public float zoomSpeed = .5f;
-
+	public float zoomSpeed = 1f;
+	public float i;
 
 	// Update is called once per frame
 	void Update () {
 
 		if (Input.touchCount == 2) {
+			
 			Touch touchZero = Input.GetTouch(0);
 			Touch touchOne = Input.GetTouch (1);
 
 			Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
-			Vector2 touchOnePrevPos = touchOne.position = touchOne.deltaPosition;
+			Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
 
 			float prevTouchMag = (touchZeroPrevPos - touchOnePrevPos).magnitude;
 			float touchMag = (touchZero.position - touchOne.position).magnitude;
 
 			float magnitudeDiff = prevTouchMag - touchMag;
 
-			Camera.main.orthographicSize += magnitudeDiff * zoomSpeed;
-			Camera.main.orthographicSize = Mathf.Max (Camera.main.orthographicSize, .1f);
+			Camera.main.orthographicSize += magnitudeDiff * zoomSpeed;;
+			Camera.main.orthographicSize = Mathf.Max (Camera.main.orthographicSize, 5f);
+			Camera.main.orthographicSize = Mathf.Min (Camera.main.orthographicSize, 30f);
+		
 		}
 
         // mouse location, provides coordinates relative to screen pixels
