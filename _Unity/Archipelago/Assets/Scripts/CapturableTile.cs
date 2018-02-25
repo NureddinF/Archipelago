@@ -45,9 +45,9 @@ public class CapturableTile: MonoBehaviour{
 
 	//Initializeation
 	public void Start(){
-		thisHex = GetComponentInParent<Hex> ();
-		tileSprite = GetComponentInParent<SpriteRenderer> ();
-		captureBoarder = GetComponent<Image>();
+		thisHex = GetComponent<Hex> ();
+		tileSprite = GetComponent<SpriteRenderer> ();
+		captureBoarder = GetComponentInChildren<Image>();
 
 		// Update player income if this tile is spawned with an owner
 		if(thisHex.hexOwner != Player.PlayerId.NEUTRAL){

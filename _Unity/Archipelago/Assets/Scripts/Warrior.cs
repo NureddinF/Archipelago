@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Warrior : MonoBehaviour {
 
+	//TODO: Warrior game logic
+
 	// Use this for initialization
 	void Start () {
 		
