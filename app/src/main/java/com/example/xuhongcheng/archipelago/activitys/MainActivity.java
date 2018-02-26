@@ -32,6 +32,14 @@ public class MainActivity extends AppCompatActivity {
         btn_settings = (ImageButton) findViewById(R.id.setting);
         profile = (Button) findViewById(R.id.profile);
 
+        boolean isLogin = SharedPreferenceUtils.getBoolean(MainActivity.this,"isLogin",false);
+        if(!isLogin){
+            profile.setVisibility(View.INVISIBLE);
+        }
+
+
+
+
         singlePlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

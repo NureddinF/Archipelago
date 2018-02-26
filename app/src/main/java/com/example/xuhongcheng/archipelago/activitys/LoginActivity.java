@@ -82,6 +82,7 @@ public class LoginActivity extends Activity {
 				//2.检验账号和密码
 				if (name1.equals(name) && pass1.equals(pass)) {
 					Toast.makeText(this, "Login Successfully!", Toast.LENGTH_SHORT).show();
+					SharedPreferenceUtils.saveBoolean(LoginActivity.this, "isLogin", true);
 					startActivity(new Intent(this, MainActivity.class));
 				} else {
 					Toast.makeText(this, "Wrong username or password!", Toast.LENGTH_SHORT).show();
@@ -138,5 +139,13 @@ public class LoginActivity extends Activity {
 //            Toast.makeText(this, "授权成功！", Toast.LENGTH_SHORT).show();
 			Log.e("XXX", "checkPermission: 已经授权！");
 		}
+
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		SharedPreferenceUtils.saveBoolean(LoginActivity.this, "isLogin", false);
+
 	}
 }
