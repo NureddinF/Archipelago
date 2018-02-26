@@ -8,13 +8,13 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".activitys.MainActivity">
+    tools:context="com.example.xuhongcheng.archipelago.activitys.MainActivity">
 
     <ImageButton
-        android:layout_gravity="right"
         android:id="@+id/setting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="right"
         android:background="@drawable/setting" />
 
     <EditText
@@ -62,17 +62,20 @@
             android:onClick="login"
             android:text="Register"
             android:textAllCaps="false" />
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <Button
-        android:id="@+id/tv_guest_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginTop="5dp"
-        android:clickable="true"
-        android:text="Login as Guest" />
-    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/tv_guest_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginTop="5dp"
+                android:clickable="true"
+                android:text="Login as Guest"
+                android:textAllCaps="false" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

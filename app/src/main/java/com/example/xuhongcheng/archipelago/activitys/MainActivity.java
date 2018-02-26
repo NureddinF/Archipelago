@@ -8,7 +8,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.example.xuhongcheng.archipelago.R;
+import com.example.xuhongcheng.archipelago.myapplication.R;
+import com.example.xuhongcheng.archipelago.utils.SharedPreferenceUtils;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -24,22 +25,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        singlePlayer = findViewById(R.id.singlePlayer);
-        hostMulti = findViewById(R.id.host);
-        joinMulti = findViewById(R.id.join);
-        logout = findViewById(R.id.logout);
-        btn_settings = findViewById(R.id.setting);
-        profile = findViewById(R.id.profile);
+        singlePlayer = (Button) findViewById(R.id.singlePlayer);
+        hostMulti = (Button) findViewById(R.id.host);
+        joinMulti = (Button) findViewById(R.id.join);
+        logout = (Button) findViewById(R.id.logout);
+        btn_settings = (ImageButton) findViewById(R.id.setting);
+        profile = (Button) findViewById(R.id.profile);
 
         singlePlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent launchIntent = getPackageManager().getLaunchIntentForPackage(getResources().getString(R.string.gamePackageName));
-                if(launchIntent != null){
+                if (launchIntent != null) {
                     startActivity(launchIntent);
-                }
-                else {
+                } else {
                     Toast.makeText(getApplicationContext(), "Could not find game APK", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -48,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                SharedPreferenceUtils.saveBoolean(MainActivity.this, "isSaved", false);
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
             }
         });
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         btn_settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, SettingActivity.class ));
+                startActivity(new Intent(MainActivity.this, SettingActivity.class));
             }
         });
 
@@ -66,4 +66,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }

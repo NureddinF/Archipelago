@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 212224325134275160}
   - component: {fileID: 114794685772338824}
   m_Layer: 0
-  m_Name: tileGrass Owned
+  m_Name: tileGrassOwned
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -52,8 +52,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 134714b285b0b43179e7427655449055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultTile: {fileID: 0}
   ownedTile: {fileID: 0}
   enemyTile: {fileID: 0}
+  owned: 0
 --- !u!212 &212224325134275160
 SpriteRenderer:
   m_ObjectHideFlags: 1
