@@ -5,14 +5,19 @@ using UnityEngine;
 //reference: https://www.youtube.com/watch?v=BW7xXaFmSyY
 public class Menu : MonoBehaviour {
 
+	// Dimensions of icons in the menu
 	private const int menuIconWidth = 50;
 	private const int menuIconHeight = 50;
+	// The background image for the menu
+	public Texture2D menuBackground;
 
+	// Menu options to display when player clicks on the hex
 	private List <MenuItem> menuItems = new List <MenuItem> ();
+	// The hex that the player clicked on
+	private Hex selectedHex;
+	// Player who is interacting with the menu
 	public Player player;
 
-	public Texture2D menuBackground;
-	private Hex selectedHex;
 
 	public void Update(){
 		// make sure menu stays up to date if hex menu options change (e.g. if tile is upgraded)
@@ -30,16 +35,16 @@ public class Menu : MonoBehaviour {
 		int padding = 5;
 		for(int i=0; i < menuItems.Count; i++){
 			GUIStyle icon = new GUIStyle ();
-			// Reference for sprite to texture conversion https://answers.unity.com/questions/651984/convert-sprite-image-to-texture.html
-
 			icon.normal.background = menuItems [i].menuIcon;
 
 			if(GUI.Button(new Rect(Screen.width - menuIconWidth, (menuIconHeight+padding)*i, menuIconWidth, menuIconHeight),"",icon)){
-				Debug.Log ("Clicked " + menuItems [i]);
+				//Button was clicked
 				if(menuItems[i].type == MenuItem.MenuItemType.UNIT){
+					// player clicked on a unit button
 					player.makeUnit (menuItems [i].objectPrefab, selectedHex.transform.position);
 				} else if (menuItems[i].type == MenuItem.MenuItemType.BUILDING){
-					player.upgradeTile (selectedHex, menuItems [i].objectPrefab);
+					// player clicked on a building button
+					player.upgradeTileToBuilding (selectedHex, menuItems [i].objectPrefab);
 				}
 			}
 		}
@@ -49,8 +54,10 @@ public class Menu : MonoBehaviour {
 	public void updateMenu(Hex hex){
 		selectedHex = hex;
 		if (hex != null) {
+			// Display menu options for the hex
 			menuItems = hex.menuOptions;
 		} else {
+			// Clear menu options
 			menuItems = new List<MenuItem> ();
 		}
 	}

@@ -18,7 +18,7 @@ public class CapturableTile: MonoBehaviour{
 
 	// Factors determining how long it takes to capture a tile
 	public float captureSpeedPerUnit = 1;
-	public float neutralUnitFactor = 0.25f; //this is how fast the tile will reset if nothing is on it
+	public float neutralResetSpeed = 0.25f; //this is how fast the tile will reset if nothing is on it
 	public float totalCaptureCost = 10;
 
 	//Current state of capturing the tile
@@ -33,11 +33,11 @@ public class CapturableTile: MonoBehaviour{
 	private float constructionProgress = 0;
 
 	//number of units on a hex. used to progress state of capturing proccess
-	public int numP1UnitsOnHex = 0;
-	public int numP2UnitsOnHex = 0;
+	private int numP1UnitsOnHex = 0;
+	private int numP2UnitsOnHex = 0;
 
 	//Hex script associated with this tile
-	Hex thisHex;
+	private Hex thisHex;
 
 	// Information about how much money this tile generates
 	public const float baseTileIncome = 1;
@@ -104,9 +104,9 @@ public class CapturableTile: MonoBehaviour{
 		if (thisHex.hexOwner == Player.PlayerId.NEUTRAL && captureBoarder.enabled) {
 
 			if(amountCaptured >0){
-				neutralUnitFactor = Mathf.Abs (neutralUnitFactor);
+				neutralResetSpeed = Mathf.Abs (neutralResetSpeed);
 			} else {
-				neutralUnitFactor = -Mathf.Abs (neutralUnitFactor);
+				neutralResetSpeed = -Mathf.Abs (neutralResetSpeed);
 			}
 
 			if (numP1UnitsOnHex > 0 && numP2UnitsOnHex > 0) {
@@ -114,7 +114,7 @@ public class CapturableTile: MonoBehaviour{
 				return;
 			} 
 
-			float newAmountCaptured = amountCaptured + Time.deltaTime * captureSpeedPerUnit * (numP1UnitsOnHex - numP2UnitsOnHex - neutralUnitFactor);
+			float newAmountCaptured = amountCaptured + Time.deltaTime * captureSpeedPerUnit * (numP1UnitsOnHex - numP2UnitsOnHex - neutralResetSpeed);
 
 			if (numP1UnitsOnHex > 0) {
 				if(newAmountCaptured > totalCaptureCost){
@@ -182,7 +182,7 @@ public class CapturableTile: MonoBehaviour{
 	}
 
 
-	// Adnvace state towards capturing the tile
+	// Advance state towards capturing the tile
 	private void progressTileConstruction(){
 
 		if (buildingUnderConstrcution != null && thisHex.hexOwner != Player.PlayerId.NEUTRAL) {
@@ -191,22 +191,24 @@ public class CapturableTile: MonoBehaviour{
 				//TODO: units fight or something
 				return;
 			} 
+			//Figure out construction speed
 			float playerUnits = 0;
 			if(thisHex.hexOwner == Player.PlayerId.P1){
 				playerUnits = numP1UnitsOnHex;
 			} else if (thisHex.hexOwner == Player.PlayerId.P2){
 				playerUnits = numP2UnitsOnHex;
 			}
-
+			// Calculate how much construction is done
 			float newAmountConstructed = constructionProgress + Time.deltaTime * constructionSpeedPerUnit * (playerUnits + passiveConstructionSpeed);
 
+			//check if building is done
 			if(newAmountConstructed > buildingUnderConstrcution.constructionTime){
 				//Building completed
 				finalizeConstruction ();
 				return;
 			}
 
-			// Update visual
+			// Construction not done, Update progress bar
 			constructionProgress = newAmountConstructed;
 			captureBoarder.fillAmount = Mathf.Abs (constructionProgress / buildingUnderConstrcution.constructionTime);
 		}

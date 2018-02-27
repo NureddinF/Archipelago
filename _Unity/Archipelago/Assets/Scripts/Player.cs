@@ -132,7 +132,7 @@ public class Player : MonoBehaviour {
 	}
 
 	// Called when Player wants to upgrade a hex to a building
-	public void upgradeTile(Hex hex, GameObject buildingObject){
+	public void upgradeTileToBuilding(Hex hex, GameObject buildingObject){
 		Building buildingInfo = buildingObject.GetComponent<Building> ();
 		if(buildingInfo.moneyCost > this.currentMoney){
 			// Unit costs too much
@@ -155,6 +155,6 @@ public class Player : MonoBehaviour {
 		//change the sprite to construction site
 		hex.GetComponent<SpriteRenderer> ().sprite = buildingInfo.constructionSprite;
 		//let hex handle actually building the building
-		hex.GetComponentInChildren<CapturableTile> ().beginConstruction (buildingInfo);
+		hex.GetComponent<CapturableTile> ().beginConstruction (buildingInfo);
 	}
 }
