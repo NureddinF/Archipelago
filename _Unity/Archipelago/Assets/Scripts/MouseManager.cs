@@ -34,46 +34,49 @@ public class MouseManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-
-		if (Input.touchCount == 2) {
+		//Zoom
+		if (Input.touchCount == 2) { //Checks for 2 touches on the screen
 			
-			Touch touchZero = Input.GetTouch(0);
+			Touch touchZero = Input.GetTouch(0); //stores the touches
 			Touch touchOne = Input.GetTouch (1);
 
-			Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
+			Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition; //gets the distance between touches
 			Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
 
-			float prevTouchMag = (touchZeroPrevPos - touchOnePrevPos).magnitude;
+			float prevTouchMag = (touchZeroPrevPos - touchOnePrevPos).magnitude; //magnitudes of the touches
 			float touchMag = (touchZero.position - touchOne.position).magnitude;
 
-			float magnitudeDiff = prevTouchMag - touchMag;
+			float magnitudeDiff = prevTouchMag - touchMag; 
 
-			Camera.main.orthographicSize += magnitudeDiff * zoomSpeed;;
-			Camera.main.orthographicSize = Mathf.Max (Camera.main.orthographicSize, 5f);
-			Camera.main.orthographicSize = Mathf.Min (Camera.main.orthographicSize, 30f);
+			Camera.main.orthographicSize += magnitudeDiff * zoomSpeed;; //sets madnitude with zoomespeed to orthographicSize
+			Camera.main.orthographicSize = Mathf.Max (Camera.main.orthographicSize, 5f); //sets the zoomout max size 
+			Camera.main.orthographicSize = Mathf.Min (Camera.main.orthographicSize, 30f); //sets zoom-in max size
 		
 		}
 
-		if (Input.touchCount == 1) {
+		//panning
+		if (Input.touchCount == 1) { //one touch on screen
 			original = Camera.main.transform.eulerAngles;    
 			rotx = original.x;
 			roty = original.y;
 
-			touchBegin = Input.GetTouch (0);
+			touchBegin = Input.GetTouch (0); //stores touch
 
-			if (touchBegin.phase == TouchPhase.Began) {
-				initPos = touchBegin.position;
+			if (touchBegin.phase == TouchPhase.Began) { //checks touch phase
+				initPos = touchBegin.position; //gets touch position
 			}
 
-			if (touchBegin.phase == TouchPhase.Moved) {
+			if (touchBegin.phase == TouchPhase.Moved) { //check phase if moved
 
-				Vector2 touchDelta = touchBegin.deltaPosition;
-				Camera.main.transform.Translate (-touchDelta.x * panSpeed, -touchDelta.y * panSpeed, 0);
+				Vector2 touchDelta = touchBegin.deltaPosition; //stores delta postions of touch
+				/*TODO: STOP CAMERA FROM PANNING OFF MAP*/
+
+				Camera.main.transform.Translate (-touchDelta.x * panSpeed, -touchDelta.y * panSpeed, 0); //transforms the screen with pan sprred
 
 			}
 		
-			if (touchBegin.phase == TouchPhase.Ended) {
-				touchBegin = new Touch ();
+			if (touchBegin.phase == TouchPhase.Ended) { //touch phase ended
+				touchBegin = new Touch (); //removes the touch 
 
 			}
 		}
