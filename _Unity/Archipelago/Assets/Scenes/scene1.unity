@@ -9531,6 +9531,19 @@ MonoBehaviour:
   tileRockOwned: {fileID: 21300000, guid: d3a1c3a99d4714da58cba91cd85b1b84, type: 3}
   unitDeselected: {fileID: 21300000, guid: 80327bc8a94f74cee9e3bd34697b6959, type: 3}
   unitSelected: {fileID: 21300000, guid: 910f46b8a3d6a44aaa35b728327cf569, type: 3}
+  zoomSpeed: 0.5
+  panSpeed: 0.1
+  i: 0
+  rotx: 0
+  roty: 0
+  dir: -1
+  maxX: 120
+  minX: -66
+  maxY: 44
+  minY: -50
+  original: {x: 0, y: 0, z: 0}
+  finalPos: {x: 0, y: 0}
+  move: {x: 0, y: 0}
 --- !u!1001 &223008573
 Prefab:
   m_ObjectHideFlags: 0
@@ -49531,7 +49544,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 20
+  orthographic size: 15
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2

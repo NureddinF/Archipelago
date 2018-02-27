@@ -20,12 +20,14 @@ public class MouseManager : MonoBehaviour {
 	public float i;
 	public float rotx = 0f;
 	public float roty = 0f;
-	public float dir = -1;
-	public float maxX = 120f;
-	public float minX = -66f;
-	public float maxY = 44f;
-	public float minY = -50f;
+	public float dir;
+	public float maxX;
+	public float minX;
+	public float maxY;
+	public float minY;
+	public float direction = -1;
 	public Touch touchBegin = new Touch();
+	public Vector2 initPos;
 	public Vector3 original;
 	public Vector2 finalPos;
 	public Vector2 move;
@@ -53,44 +55,27 @@ public class MouseManager : MonoBehaviour {
 		}
 
 		if (Input.touchCount == 1) {
-			original = Camera.main.transform.eulerAngles;
+			original = Camera.main.transform.eulerAngles;    
 			rotx = original.x;
 			roty = original.y;
 
-			Touch touch = Input.GetTouch(0);
-			Vector2 initTouch = touch.position;
+			touchBegin = Input.GetTouch (0);
 
-			if (touch.phase == TouchPhase.Began) {
-				touchBegin = Input.GetTouch (0);
+			if (touchBegin.phase == TouchPhase.Began) {
+				initPos = touchBegin.position;
 			}
-			if (touch.phase == TouchPhase.Moved) {
 
-				float deltax = touchBegin.position.x - initTouch.x;
-				float deltay = touchBegin.position.y - initTouch.y;
+			if (touchBegin.phase == TouchPhase.Moved) {
 
-				rotx -= deltax * Time.deltaTime * panSpeed * dir;
-				roty += deltay * Time.deltaTime * panSpeed * dir;
+				Vector2 touchDelta = touchBegin.deltaPosition;
+				Camera.main.transform.Translate (-touchDelta.x * panSpeed, -touchDelta.y * panSpeed, 0);
 
-				if (rotx >= minX && rotx <= maxX) {
-					
-				}
-					
-				move = new Vector2 (Mathf.Clamp(rotx,-66,120),Mathf.Clamp(roty,-50,44));
-				Camera.main.transform.Translate (move, Space.World);
+			}
 		
-			}
-
-			if (touch.phase == TouchPhase.Ended) {
+			if (touchBegin.phase == TouchPhase.Ended) {
 				touchBegin = new Touch ();
+
 			}
-
-
-
-//			Vector3 pos = Camera.main.ScreenToViewportPoint (finalPos);
-//			Vector3 move = new Vector3 (pos.x * zoomSpeed, 0, pos.y * zoomSpeed);
-//
-//			Camera.main.transform.Translate (move, Space.World);
-
 		}
 
         // mouse location, provides coordinates relative to screen pixels
