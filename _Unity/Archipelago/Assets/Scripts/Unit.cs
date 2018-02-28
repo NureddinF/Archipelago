@@ -4,10 +4,20 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour {
 
-	public Vector3 destination;
+	// Unit parameters
 	public int speed = 1;
-	public bool shouldMove = false;
-	
+	public float cost = 3;
+
+	// State variables
+	private Vector3 destination;
+	private bool shouldMove = false;
+
+	//Sprites for unit when it's selected or not selected
+	public Sprite unitDeselected;
+	public Sprite unitSelected;
+
+	public Player.PlayerId unitOwner = Player.PlayerId.P1;
+
 	// Update is called once per frame
 	void Update () {
 		if (shouldMove) {
@@ -41,5 +51,19 @@ public class Unit : MonoBehaviour {
 	private void reachedWaypoint(){
 		// TODO: pathfinding
 		shouldMove = false;
+	}
+
+
+	// update sprite when unit is selected
+	public void selectUnit(){
+		GetComponent<SpriteRenderer>().sprite = unitSelected;
+	}
+
+	// update sprite when unit is deselected
+	public void deselectUnit(){
+		SpriteRenderer temp = GetComponent<SpriteRenderer> ();
+		if (temp != null) {
+			temp.sprite = unitDeselected;
+		}
 	}
 }

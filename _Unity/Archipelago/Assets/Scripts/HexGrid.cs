@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HexGrid : MonoBehaviour
-{
+public class HexGrid : MonoBehaviour {
     //Tile variant prefab gameobjects for building the map
     public GameObject tileGrass; //0
     public GameObject tilePlayer1Base; //1
@@ -32,8 +31,17 @@ public class HexGrid : MonoBehaviour
     private float xOffset;
     private float yOffset;
 
+	//Rounding factor. Needed due to size of hexes causing normal rounding errors
+	const float roundingFactor = 0.1f;
+
     //Map layout matrix
     private int[,] mapStructure;
+	//Matrix of instanciated hexes
+	private GameObject[,] mapHexes;
+
+
+	//Enumerate the different types of tiles
+	public enum TileType {GRASS, BASE, TREE, SAND, ROCK, WATER }
 
     // Initialization
     void Start()
@@ -90,8 +98,9 @@ public class HexGrid : MonoBehaviour
     }
 
     //Method to create the hex grid
-    void createHexGrid()
-    {
+    void createHexGrid() {
+		mapHexes = new GameObject[gridHeight,gridWidth];
+
         GameObject hexGridObject = new GameObject("HexGrid");
         //Makes sure all generated game objects are under a parent. Allows tidier scene management
         hexGridObject.transform.parent = this.transform;
@@ -103,20 +112,43 @@ public class HexGrid : MonoBehaviour
             {
                 GameObject thisHex;
                 //What tile type wants to be created
-                if (mapStructure[y, x] == 0)
-                    thisHex = (GameObject)Instantiate(tileGrass);
-                else if (mapStructure[y, x] == 1)
-                    thisHex = (GameObject)Instantiate(tilePlayer1Base);
-                else if (mapStructure[y, x] == 2)
-                    thisHex = (GameObject)Instantiate(tilePlayer2Base);
-                else if (mapStructure[y, x] == 3)
-                    thisHex = (GameObject)Instantiate(tileRocks);
-                else if (mapStructure[y, x] == 4)
-                    thisHex = (GameObject)Instantiate(tileSand);
-                else if (mapStructure[y, x] == 5)
-                    thisHex = (GameObject)Instantiate(tileTrees);
-                else
-                    thisHex = (GameObject)Instantiate(tileWater);
+				switch(mapStructure[y, x]){
+					case 0:{
+						thisHex = (GameObject)Instantiate (tileGrass);
+						thisHex.GetComponent<Hex> ().tileType = TileType.GRASS;
+						break;
+					}
+					case 1:{
+						thisHex = (GameObject)Instantiate (tilePlayer1Base);
+						thisHex.GetComponent<Hex>().tileType = TileType.BASE;
+						break;
+					}
+					case 2:{
+						thisHex = (GameObject)Instantiate (tilePlayer2Base);
+						thisHex.GetComponent<Hex>().tileType = TileType.BASE;
+						break;
+					}
+					case 3:{
+						thisHex = (GameObject)Instantiate (tileRocks);
+						thisHex.GetComponent<Hex>().tileType = TileType.ROCK;
+						break;
+					}
+					case 4:{
+						thisHex = (GameObject)Instantiate (tileSand);
+						thisHex.GetComponent<Hex>().tileType = TileType.SAND;
+						break;
+					}
+					case 5:{
+						thisHex = (GameObject)Instantiate (tileTrees);
+						thisHex.GetComponent<Hex>().tileType = TileType.TREE;
+						break;
+					}
+					default:{
+						thisHex = (GameObject)Instantiate (tileWater);
+						thisHex.GetComponent<Hex>().tileType = TileType.WATER;
+						break;
+					}
+				}
 
                 //Set it's position, tranformation, name and other variables attached to the hex. 0 0 is top left corner
                 Vector2 gridPos = new Vector2(x, y);
@@ -128,8 +160,34 @@ public class HexGrid : MonoBehaviour
 
                 //Potential Optimization for hexgrid
                 thisHex.isStatic = true;
+
+				mapHexes [y, x] = thisHex;
             }
 
         }
     }
+		
+	public GameObject getHex(Vector3 unityCoord){
+		// Perform inver operation used to generate map
+		float X = (unityCoord.x / (hexWidth - xOffset / 2));
+		int x = (int)X;
+		// Have to manually round due to size of hexes
+		if(X%1.0f > roundingFactor){
+			x++;
+		}
+		if (x % 2 == 1) {
+			unityCoord.y += yOffset;
+		}
+		float Y =(-unityCoord.y / hexHeight);
+		int y = (int)Y;
+		if(Y%1.0f > roundingFactor){
+			y++;
+		}
+
+		GameObject hex = null;
+		if(x < gridWidth && y < gridHeight){
+			hex = mapHexes [y, x];
+		}
+		return hex;
+	}
 }
