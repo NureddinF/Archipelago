@@ -9524,13 +9524,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94da06098b49b964a8ccc73719b42b50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  incomeCount: {fileID: 1261547410}
-  tileGrassOwned: {fileID: 21300000, guid: 952df488996444f898a7eae9b1c963ad, type: 3}
-  tileSandOwned: {fileID: 21300000, guid: c591bc3c4116044bfb42bb2fb451f497, type: 3}
-  tileTreeOwned: {fileID: 21300000, guid: 3f3b981c39a2a46c581a2101f5b54a3e, type: 3}
-  tileRockOwned: {fileID: 21300000, guid: d3a1c3a99d4714da58cba91cd85b1b84, type: 3}
-  unitDeselected: {fileID: 21300000, guid: 80327bc8a94f74cee9e3bd34697b6959, type: 3}
-  unitSelected: {fileID: 21300000, guid: 910f46b8a3d6a44aaa35b728327cf569, type: 3}
+  player: {fileID: 0}
+  unitPrefabs: []
+  menu: {fileID: 0}
 --- !u!1001 &223008573
 Prefab:
   m_ObjectHideFlags: 0
@@ -39517,7 +39513,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad5945c3f91f82645a6bfa055b52bc7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unit: {fileID: 1875453897615410, guid: f489d981f1664f84c99e458047159577, type: 2}
+  unit: {fileID: 1058154063995710, guid: f489d981f1664f84c99e458047159577, type: 2}
 --- !u!212 &960863969
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -49558,7 +49554,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1236667311
 Prefab:

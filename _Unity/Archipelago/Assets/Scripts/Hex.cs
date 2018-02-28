@@ -19,6 +19,11 @@ public class Hex : MonoBehaviour {
     private int maxY = HexGrid.getGridHeight() - 1;
     private int maxX = HexGrid.getGridWidth() - 1;
 
+	// Menu options to display when player clicks on the hex
+	public List<MenuItem> menuOptions = new List<MenuItem>();
+
+
+
     //Method to return a list of a hex's direct neighbors
     public List <GameObject> getNeighbors(){
         List<GameObject> neighbors = new List<GameObject>();
