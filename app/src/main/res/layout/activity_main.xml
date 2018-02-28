@@ -38,46 +38,46 @@
      </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="25dp">
+        android:layout_margin="25dp"
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/singlePlayer"
-            android:text="Single Player"
-            android:background="@color/colorPrimary"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="25dp"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content" />
+            android:background="@color/colorPrimary"
+            android:text="Single Player" />
 
         <Button
             android:id="@+id/host"
-            android:text="Host Multiplayer"
-            android:background="@color/colorPrimary"
-            android:layout_gravity="center"
             android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_margin="25dp"
-            android:layout_height="wrap_content" />
+            android:background="@color/colorPrimary"
+            android:text="Host Multiplayer" />
 
         <Button
             android:id="@+id/join"
-            android:text="Join Multiplayer"
-            android:layout_gravity="center"
-            android:background="@color/colorPrimary"
-            android:layout_margin="25dp"
             android:layout_width="150dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="25dp"
+            android:background="@color/colorPrimary"
+            android:text="Join Multiplayer" />
 
         <Button
             android:id="@+id/profile"
-            android:text="Profile"
-            android:background="@color/colorPrimary"
-            android:layout_margin="25dp"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:layout_margin="25dp"
+            android:background="@color/colorPrimary"
+            android:text="Profile" />
 
     </LinearLayout>
 

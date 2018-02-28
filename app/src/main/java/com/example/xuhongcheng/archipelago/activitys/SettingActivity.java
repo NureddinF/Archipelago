@@ -11,7 +11,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.example.xuhongcheng.archipelago.R;
+import com.example.xuhongcheng.archipelago.myapplication.R;
 
 
 public class SettingActivity extends Activity {
