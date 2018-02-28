@@ -51,10 +51,10 @@ public class RegisterActivity extends Activity {
 		}
 		String passRegex = "^(?:(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])).{6,12}$";
 		String emailRegex = "^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$";
-		if(name.matches("^[a-zA-Z]\\w*$")){
-			Toast.makeText(this, "Invalid Username！!", Toast.LENGTH_SHORT).show();
-			return;
-		}
+//		if(name.matches("^[a-zA-Z]\\w*$")){
+//			Toast.makeText(this, "Invalid Username！!", Toast.LENGTH_SHORT).show();
+//			return;
+//		}
 		if (!pass.matches(passRegex)) {
 			Toast.makeText(this, "Invalid Password！!", Toast.LENGTH_SHORT).show();
 			return;
