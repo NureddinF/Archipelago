@@ -12,15 +12,17 @@ public class Hex : MonoBehaviour {
 
 	//Store who owns the hex
 	public Player.PlayerId hexOwner = Player.PlayerId.NEUTRAL;
+    public Playerv2.PlayerId hexOwner2 = Playerv2.PlayerId.NEUTRAL;
 
-	public HexGrid.TileType tileType;
+    public HexGrid.TileType tileType;
 
     //Set maxY and maxX of a hex, -1 for off by one error
     private int maxY = HexGrid.getGridHeight() - 1;
     private int maxX = HexGrid.getGridWidth() - 1;
 
-	// Menu options to display when player clicks on the hex
-	public List<MenuItem> menuOptions = new List<MenuItem>();
+
+    // Menu options to display when player clicks on the hex
+    public List<MenuItem> menuOptions = new List<MenuItem>();
 
 
 

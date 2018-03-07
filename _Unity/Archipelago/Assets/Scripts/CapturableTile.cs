@@ -13,9 +13,7 @@ public class CapturableTile: MonoBehaviour{
 	private SpriteRenderer tileSprite; // this displays the sprites
 	public Sprite p1CaptureTile;
 	public Sprite p2CaptureTile;
-
-	// This is the hex script on the same tile which holds information about who owns the tile?
-
+    
 	// Factors determining how long it takes to capture a tile
 	public float captureSpeedPerUnit = 1;
 	public float neutralResetSpeed = 0.25f; //this is how fast the tile will reset if nothing is on it
