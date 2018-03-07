@@ -30,7 +30,7 @@ public class Playerv2 : MonoBehaviour
     // Reference to the map so Player can access tiles
     public HexGrid map;
 
-    // List of owned hexes and list of owned players. Initialized in start()
+    // List of owned hexes
     private List<Hex> hexesOwned;
 
     // Use this for initialization
@@ -77,12 +77,12 @@ public class Playerv2 : MonoBehaviour
     }
 
 
-    public void captureTile(CapturableTilev2 tile)
+    public void captureTile(CapturableTile tile)
     {
         totalTileIncome += tile.tileIncome;
     }
 
-    public void removeTile(CapturableTilev2 tile)
+    public void removeTile(CapturableTile tile)
     {
         totalTileIncome -= tile.tileIncome;
     }

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class MouseManager : MonoBehaviour {
 	// human player who is associated with this mouse manager
-	public Player player;
+	public Playerv2 player;
 
 	// Unit that has been clicked
 	private Unit selectedUnit;
@@ -14,9 +14,6 @@ public class MouseManager : MonoBehaviour {
 	public List<GameObject> unitPrefabs = new List<GameObject>();
 	private int unitIndex = -1;
 	private bool buildUnit = false;
-
-	//Right hand menu for building things
-	public Menu menu;
 
 	public float zoomSpeed = 1f;
 	public float panSpeed = 0.1f;
@@ -106,10 +103,11 @@ public class MouseManager : MonoBehaviour {
                 // Check what we clicked on
 				if (collidedHitInfo.GetComponent<Hex> () != null) {
 					Hex hex = collidedHitInfo.GetComponent<Hex> ();
-					//clicked on a hex
+                    //clicked on a hex
+                    
 
-					// Check if we need to move unit to destination
-					if (selectedUnit != null) {
+                    // Check if we need to move unit to destination
+                    if (selectedUnit != null) {
 						Vector3 v = hex.transform.position;
 						Debug.Log ("Moving Unit to: x:" + v.x + ", y:" + v.y + ", z:" + v.z);
 						selectedUnit.setDestination (hex.transform.position);
@@ -118,9 +116,9 @@ public class MouseManager : MonoBehaviour {
 						player.makeUnit (unitPrefabs[unitIndex]);
 					} else {
 						//bring up menu
-						if(hex.hexOwner == player.playerId){
-							menu.updateMenu(hex);	
-						}
+						//if(hex.hexOwner2 == player.playerId){
+                            player.GetComponent<HexMenuController>().setSelectedHex(hex);
+                        //}
 
 
 					}
@@ -130,7 +128,6 @@ public class MouseManager : MonoBehaviour {
 					if(clickedUnit == selectedUnit) deselectUnit();
 					else selectUnit(clickedUnit);
 					buildUnit = false;
-					menu.updateMenu(null);
 				}
 
             }
