@@ -18,7 +18,7 @@ public class MouseManager : MonoBehaviour {
 	//Right hand menu for building things
 	public Menu menu;
 
-	public float zoomSpeed = 1f;
+	public float zoomSpeed = 0.07f;
 	public float panSpeed = 0.1f;
 	public float i;
 	public float rotx = 0f;
@@ -35,6 +35,7 @@ public class MouseManager : MonoBehaviour {
 	public Vector2 finalPos;
 	public Vector2 move;
 
+
 	// Update is called once per frame
 	void Update () {
 		//Zoom
@@ -45,13 +46,16 @@ public class MouseManager : MonoBehaviour {
 
 			Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition; //gets the distance between touches
 			Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
+			Vector2 centerPoint = (touchZero.position + touchOne.position) / 2;
+
 
 			float prevTouchMag = (touchZeroPrevPos - touchOnePrevPos).magnitude; //magnitudes of the touches
 			float touchMag = (touchZero.position - touchOne.position).magnitude;
 
 			float magnitudeDiff = prevTouchMag - touchMag; 
 
-			Camera.main.orthographicSize += magnitudeDiff * zoomSpeed;; //sets madnitude with zoomespeed to orthographicSize
+
+			Camera.main.orthographicSize += magnitudeDiff * zoomSpeed; //sets madnitude with zoomespeed to orthographicSize
 			Camera.main.orthographicSize = Mathf.Max (Camera.main.orthographicSize, 5f); //sets the zoomout max size 
 			Camera.main.orthographicSize = Mathf.Min (Camera.main.orthographicSize, 30f); //sets zoom-in max size
 		
