@@ -20,49 +20,89 @@ public class MouseManager : MonoBehaviour {
 
 	public float zoomSpeed = 0.07f;
 	public float panSpeed = 0.1f;
-	public float i;
 	public float rotx = 0f;
 	public float roty = 0f;
-	public float dir;
-	public float maxX;
-	public float minX;
-	public float maxY;
-	public float minY;
-	public float direction = -1;
+
 	public Touch touchBegin = new Touch();
 	public Vector2 initPos;
 	public Vector3 original;
 	public Vector2 finalPos;
-	public Vector2 move;
 
+	public BoxCollider2D border;
+	private Vector3 minBounds;
+	private Vector2 maxBounds;
+	private Camera main;
+	private float halfHeight;
+	private float halfWidth;
+			
+	void Start() {
+		minBounds = border.bounds.min;
+		maxBounds = border.bounds.max;
+
+		main = Camera.main;
+
+		halfHeight = main.orthographicSize;
+		halfWidth = halfHeight * Screen.width / Screen.height;
+	}
 
 	// Update is called once per frame
 	void Update () {
 		//Zoom
 		if (Input.touchCount == 2) { //Checks for 2 touches on the screen
-			
+
+//			main = Camera.main;
+
 			Touch touchZero = Input.GetTouch(0); //stores the touches
-			Touch touchOne = Input.GetTouch (1);
+			Touch touchOne = Input.GetTouch(1);
 
-			Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition; //gets the distance between touches
-			Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
-			Vector2 centerPoint = (touchZero.position + touchOne.position) / 2;
+			if (touchZero.phase == TouchPhase.Began || touchOne.phase == TouchPhase.Began) {
+				
+				initPos = touchZero.position;
+				finalPos = touchOne.position;
+
+				Debug.Log ("First touch: "+Camera.main.ScreenToWorldPoint(touchZero.position));
+				Debug.Log ("First touch: "+Camera.main.ScreenToWorldPoint(touchOne.position));
+
+				Vector3 centerPoint = new Vector3((main.ScreenToWorldPoint(initPos).x + main.ScreenToWorldPoint(finalPos).x) / 2f, (main.ScreenToWorldPoint(initPos).y + main.ScreenToWorldPoint(finalPos).y) / 2f,-10);
 
 
-			float prevTouchMag = (touchZeroPrevPos - touchOnePrevPos).magnitude; //magnitudes of the touches
-			float touchMag = (touchZero.position - touchOne.position).magnitude;
+				transform.position = centerPoint;
 
-			float magnitudeDiff = prevTouchMag - touchMag; 
+				float clammpedX = Mathf.Clamp (transform.position.x, minBounds.x + halfWidth, maxBounds.x - halfWidth);
+				float clammpedY = Mathf.Clamp (transform.position.y, minBounds.y + halfHeight, maxBounds.y - halfHeight);
+				transform.position = new Vector3 (clammpedX, clammpedY, transform.position.z);
 
 
-			Camera.main.orthographicSize += magnitudeDiff * zoomSpeed; //sets madnitude with zoomespeed to orthographicSize
-			Camera.main.orthographicSize = Mathf.Max (Camera.main.orthographicSize, 5f); //sets the zoomout max size 
-			Camera.main.orthographicSize = Mathf.Min (Camera.main.orthographicSize, 30f); //sets zoom-in max size
+				Debug.Log ("Camera pos: "+main.transform.position);
+			}
+
+			if(touchZero.phase == TouchPhase.Moved || touchOne.phase == TouchPhase.Moved){
+
+				Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition; //gets the distance between touches
+				Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
+		
+				float prevTouchMag = (touchZeroPrevPos - touchOnePrevPos).magnitude; //magnitudes of the touches
+				float touchMag = (touchZero.position - touchOne.position).magnitude;
+
+				float magnitudeDiff = prevTouchMag - touchMag; 
+	
+				Camera.main.orthographicSize += magnitudeDiff * zoomSpeed; //sets magnitude with zoomspeed to orthographicSize
+
+				Camera.main.orthographicSize = Mathf.Max (Camera.main.orthographicSize, 5f); //sets the zoomout max size 
+				Camera.main.orthographicSize = Mathf.Min (Camera.main.orthographicSize, 10f); //sets zoom-in max size
+			}
+			if (touchZero.phase == TouchPhase.Ended || touchOne.phase == TouchPhase.Ended) {
+				touchZero = new Touch ();
+				touchOne = new Touch ();
+			}
 		
 		}
 
 		//panning
 		if (Input.touchCount == 1) { //one touch on screen
+
+//			https://answers.unity.com/questions/517529/pan-camera-2d-by-touch.html
+			
 			original = Camera.main.transform.eulerAngles;    
 			rotx = original.x;
 			roty = original.y;
@@ -78,8 +118,11 @@ public class MouseManager : MonoBehaviour {
 				Vector2 touchDelta = touchBegin.deltaPosition; //stores delta postions of touch
 				/*TODO: STOP CAMERA FROM PANNING OFF MAP*/
 
-				Camera.main.transform.Translate (-touchDelta.x * panSpeed, -touchDelta.y * panSpeed, 0); //transforms the screen with pan sprred
+				transform.Translate (-touchDelta.x * panSpeed, -touchDelta.y * panSpeed, 0); //transforms the screen with pan speed
 
+				float clammpedX = Mathf.Clamp(transform.position.x, minBounds.x + halfWidth, maxBounds.x - halfWidth);
+				float clammpedY = Mathf.Clamp(transform.position.y, minBounds.y + halfHeight, maxBounds.y - halfHeight);
+				transform.position = new Vector3 (clammpedX, clammpedY, transform.position.z);
 			}
 		
 			if (touchBegin.phase == TouchPhase.Ended) { //touch phase ended
@@ -172,5 +215,5 @@ public class MouseManager : MonoBehaviour {
 		buildUnit = true;
 		Debug.Log ("Selecting to build unit: " + unitPrefabs [unitIndex].name);
 	}
-		
+				
 }
