@@ -19,7 +19,8 @@ public class MouseManager : MonoBehaviour {
 	public Menu menu;
 
 	public float zoomSpeed = 0.07f;
-	public float panSpeed = 0.1f;
+	public float shiftSpeed = 10f;
+	public float panSpeed = 0.07f;
 	public float rotx = 0f;
 	public float roty = 0f;
 
@@ -27,6 +28,7 @@ public class MouseManager : MonoBehaviour {
 	public Vector2 initPos;
 	public Vector3 original;
 	public Vector2 finalPos;
+	public Vector3 offset;
 
 	public BoxCollider2D border;
 	private Vector3 minBounds;
@@ -34,8 +36,10 @@ public class MouseManager : MonoBehaviour {
 	private Camera main;
 	private float halfHeight;
 	private float halfWidth;
+	public Vector3 centerPoint;
 			
 	void Start() {
+		//https://www.youtube.com/watch?v=fQ2Dvj5-pfc
 		minBounds = border.bounds.min;
 		maxBounds = border.bounds.max;
 
@@ -47,10 +51,59 @@ public class MouseManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		//panning
+		if (Input.touchCount == 1) { //one touch on screen
+
+			//https://answers.unity.com/questions/517529/pan-camera-2d-by-touch.html
+
+			original = Camera.main.transform.eulerAngles;    
+			rotx = original.x;
+			roty = original.y;
+
+			offset = new Vector3 (2f, 2f,0);
+
+			touchBegin = Input.GetTouch (0); //stores touch
+
+			if (touchBegin.phase == TouchPhase.Began) { //checks touch phase
+				initPos = touchBegin.position; //gets touch position
+				Debug.Log("Began: "+touchBegin.phase);
+			}
+
+			if (touchBegin.phase == TouchPhase.Moved) { //check phase if moved
+
+				Debug.Log ("Moved: " + touchBegin.phase);
+
+				Vector2 touchDelta = touchBegin.deltaPosition; //stores delta postions of touch
+				Debug.Log (touchBegin.position.x + "," + touchBegin.position.y);
+
+
+				offset.x += main.ScreenToWorldPoint(touchBegin.position).x;
+				offset.y += main.ScreenToWorldPoint(touchBegin.position).y;
+
+				Debug.Log (offset.x + "," + offset.y);
+
+				float potentialX = main.transform.position.x - touchDelta.x * panSpeed;
+				float potentialY = main.transform.position.y - touchDelta.y * panSpeed;
+				Debug.Log (potentialX + "," + potentialY);
+			
+				transform.Translate (-touchDelta.x * panSpeed, -touchDelta.y * panSpeed, 0); //transforms the screen with pan speed
+				float clammpedX = Mathf.Clamp (transform.position.x, minBounds.x + halfWidth, maxBounds.x - halfWidth);
+				float clammpedY = Mathf.Clamp (transform.position.y, minBounds.y + halfHeight, maxBounds.y - halfHeight);
+				transform.position = new Vector3 (clammpedX, clammpedY, transform.position.z);
+
+			}
+
+			else { //touch phase ended
+				touchBegin = new Touch (); //removes the touch 
+				Debug.Log("Ended: "+touchBegin.phase);
+				selection (initPos);
+
+
+			}
+		}
+
 		//Zoom
 		if (Input.touchCount == 2) { //Checks for 2 touches on the screen
-
-//			main = Camera.main;
 
 			Touch touchZero = Input.GetTouch(0); //stores the touches
 			Touch touchOne = Input.GetTouch(1);
@@ -60,20 +113,17 @@ public class MouseManager : MonoBehaviour {
 				initPos = touchZero.position;
 				finalPos = touchOne.position;
 
-				Debug.Log ("First touch: "+Camera.main.ScreenToWorldPoint(touchZero.position));
-				Debug.Log ("First touch: "+Camera.main.ScreenToWorldPoint(touchOne.position));
+//				Debug.Log ("First touch: "+Camera.main.ScreenToWorldPoint(touchZero.position));
+//				Debug.Log ("Second touch: "+Camera.main.ScreenToWorldPoint(touchOne.position));
 
-				Vector3 centerPoint = new Vector3((main.ScreenToWorldPoint(initPos).x + main.ScreenToWorldPoint(finalPos).x) / 2f, (main.ScreenToWorldPoint(initPos).y + main.ScreenToWorldPoint(finalPos).y) / 2f,-10);
+				centerPoint = new Vector3((main.ScreenToWorldPoint(initPos).x + main.ScreenToWorldPoint(finalPos).x) / 2f, (main.ScreenToWorldPoint(initPos).y + main.ScreenToWorldPoint(finalPos).y) / 2f,-10);
 
-
-				transform.position = centerPoint;
+//				Debug.Log ("Center point" + centerPoint);
 
 				float clammpedX = Mathf.Clamp (transform.position.x, minBounds.x + halfWidth, maxBounds.x - halfWidth);
 				float clammpedY = Mathf.Clamp (transform.position.y, minBounds.y + halfHeight, maxBounds.y - halfHeight);
 				transform.position = new Vector3 (clammpedX, clammpedY, transform.position.z);
 
-
-				Debug.Log ("Camera pos: "+main.transform.position);
 			}
 
 			if(touchZero.phase == TouchPhase.Moved || touchOne.phase == TouchPhase.Moved){
@@ -86,71 +136,52 @@ public class MouseManager : MonoBehaviour {
 
 				float magnitudeDiff = prevTouchMag - touchMag; 
 	
-				Camera.main.orthographicSize += magnitudeDiff * zoomSpeed; //sets magnitude with zoomspeed to orthographicSize
+				Camera.main.orthographicSize += magnitudeDiff * zoomSpeed * 2f; //sets magnitude with zoomspeed to orthographicSize
 
 				Camera.main.orthographicSize = Mathf.Max (Camera.main.orthographicSize, 5f); //sets the zoomout max size 
-				Camera.main.orthographicSize = Mathf.Min (Camera.main.orthographicSize, 10f); //sets zoom-in max size
+				Camera.main.orthographicSize = Mathf.Min (Camera.main.orthographicSize, 12f); //sets zoom-in max size
+
+
+				Camera.main.transform.position = Vector2.Lerp (Camera.main.transform.position, centerPoint * 2f, shiftSpeed * 2f);
+				Camera.main.transform.position = new Vector3 (Camera.main.transform.position.x, Camera.main.transform.position.y, -10);
+
+//				Debug.Log ("Camera pos: "+main.transform.position);
+				float clammpedX = Mathf.Clamp (transform.position.x, minBounds.x + halfWidth, maxBounds.x - halfWidth);
+				float clammpedY = Mathf.Clamp (transform.position.y, minBounds.y + halfHeight, maxBounds.y - halfHeight);
+				transform.position = new Vector3 (clammpedX, clammpedY, transform.position.z);
+			
 			}
-			if (touchZero.phase == TouchPhase.Ended || touchOne.phase == TouchPhase.Ended) {
+			else {
+				selection (touchBegin.position);
 				touchZero = new Touch ();
 				touchOne = new Touch ();
-			}
-		
-		}
-
-		//panning
-		if (Input.touchCount == 1) { //one touch on screen
-
-//			https://answers.unity.com/questions/517529/pan-camera-2d-by-touch.html
-			
-			original = Camera.main.transform.eulerAngles;    
-			rotx = original.x;
-			roty = original.y;
-
-			touchBegin = Input.GetTouch (0); //stores touch
-
-			if (touchBegin.phase == TouchPhase.Began) { //checks touch phase
-				initPos = touchBegin.position; //gets touch position
-			}
-
-			if (touchBegin.phase == TouchPhase.Moved) { //check phase if moved
-
-				Vector2 touchDelta = touchBegin.deltaPosition; //stores delta postions of touch
-				/*TODO: STOP CAMERA FROM PANNING OFF MAP*/
-
-				transform.Translate (-touchDelta.x * panSpeed, -touchDelta.y * panSpeed, 0); //transforms the screen with pan speed
-
-				float clammpedX = Mathf.Clamp(transform.position.x, minBounds.x + halfWidth, maxBounds.x - halfWidth);
-				float clammpedY = Mathf.Clamp(transform.position.y, minBounds.y + halfHeight, maxBounds.y - halfHeight);
-				transform.position = new Vector3 (clammpedX, clammpedY, transform.position.z);
-			}
-		
-			if (touchBegin.phase == TouchPhase.Ended) { //touch phase ended
-				touchBegin = new Touch (); //removes the touch 
 
 			}
 		}
+	}
 
-        // mouse location, provides coordinates relative to screen pixels
-        Vector3 mousePos = Input.mousePosition;
-        mousePos.z = 0;
+	public void selection(Vector2 position){
 
-        //Screen pos is relative to camera location in unity coordinates
-        Vector3 screenPos = Camera.main.ScreenToWorldPoint(mousePos);
+		// mouse location, provides coordinates relative to screen pixels
+		Vector3 mousePos = position;
+		mousePos.z = 0;
 
-        //Information regarding the object the ray collides with
-        //Returns true or false but also provides information of object collider coliided with
-        RaycastHit2D hitInfo = Physics2D.Raycast(screenPos, Vector2.zero);
+		//Screen pos is relative to camera location in unity coordinates
+		Vector3 screenPos = Camera.main.ScreenToWorldPoint(mousePos);
 
-        //If ray collides with an object
-        if (hitInfo)
-        {   
-            //Return the gameobject that the ray has collided with
-            GameObject collidedHitInfo = hitInfo.collider.transform.gameObject;
+		//Information regarding the object the ray collides with
+		//Returns true or false but also provides information of object collider coliided with
+		RaycastHit2D hitInfo = Physics2D.Raycast(screenPos, Vector2.zero);
 
-            //If left mouse button pressed, only calls once on initial press(e.g not constantly calling on hold)
-            if (Input.GetMouseButtonDown(0)) {
-                // Check what we clicked on
+		//If ray collides with an object
+		if (hitInfo)
+		{   
+			//Return the gameobject that the ray has collided with
+			GameObject collidedHitInfo = hitInfo.collider.transform.gameObject;
+
+			//If left mouse button pressed, only calls once on initial press(e.g not constantly calling on hold)
+			if (Input.GetMouseButtonDown(0)) {
+				// Check what we clicked on
 				if (collidedHitInfo.GetComponent<Hex> () != null) {
 					Hex hex = collidedHitInfo.GetComponent<Hex> ();
 					//clicked on a hex
@@ -180,8 +211,8 @@ public class MouseManager : MonoBehaviour {
 					menu.updateMenu(null);
 				}
 
-            }
-        }
+			}
+		}
 	}
 
 
