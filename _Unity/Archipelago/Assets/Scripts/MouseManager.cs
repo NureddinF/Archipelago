@@ -145,6 +145,9 @@ public class MouseManager : MonoBehaviour {
 				Camera.main.transform.position = Vector2.Lerp (Camera.main.transform.position, centerPoint * 2f, shiftSpeed * 2f);
 				Camera.main.transform.position = new Vector3 (Camera.main.transform.position.x, Camera.main.transform.position.y, -10);
 
+				halfHeight = main.orthographicSize;
+				halfWidth = halfHeight * Screen.width / Screen.height;
+
 //				Debug.Log ("Camera pos: "+main.transform.position);
 				float clammpedX = Mathf.Clamp (transform.position.x, minBounds.x + halfWidth, maxBounds.x - halfWidth);
 				float clammpedY = Mathf.Clamp (transform.position.y, minBounds.y + halfHeight, maxBounds.y - halfHeight);
