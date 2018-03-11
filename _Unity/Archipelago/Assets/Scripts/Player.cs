@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class Player : MonoBehaviour {
 
@@ -23,6 +24,9 @@ public class Player : MonoBehaviour {
 	private float totalTileIncome;
 	private float currentMoney;
 
+	private WinPanel winPanel;
+	private UnityAction goBack;
+
 	// Reference to the map so Player can access tiles
 	public HexGrid map;
 
@@ -33,11 +37,25 @@ public class Player : MonoBehaviour {
 		rateText.text = "+ 0/sec";
 		startTime = Time.time;
 	}
+
+	void Awake(){
+
+		winPanel = WinPanel.instance ();
+		goBack = new UnityAction (backAction);
+
+	}
 	
 	// Update is called once per frame
 	void Update () {
 		// Use discrete chunks of income
 		generateIncomeDiscrete();
+		if (currentMoney >= 10) {
+			rateText.text = "WIN";
+			incomeText.text = "";
+
+			winPanel.back("You Win!", goBack);
+
+		}
 	}
 
 	// Generates income in discrete chunks rather than each frame
@@ -156,5 +174,10 @@ public class Player : MonoBehaviour {
 		hex.GetComponent<SpriteRenderer> ().sprite = buildingInfo.constructionSprite;
 		//let hex handle actually building the building
 		hex.GetComponent<CapturableTile> ().beginConstruction (buildingInfo);
+	}
+
+	public void backAction(){
+
+		Application.Quit();
 	}
 }
