@@ -21,14 +21,11 @@ public class MouseManager : MonoBehaviour {
 	public float zoomSpeed = 0.07f;
 	public float shiftSpeed = 10f;
 	public float panSpeed = 0.07f;
-	public float rotx = 0f;
-	public float roty = 0f;
 
 	public Touch touchBegin = new Touch();
 	public Vector2 initPos;
 	public Vector3 original;
 	public Vector2 finalPos;
-	public Vector3 offset;
 
 	public BoxCollider2D border;
 	private Vector3 minBounds;
@@ -37,7 +34,6 @@ public class MouseManager : MonoBehaviour {
 	private float halfHeight;
 	private float halfWidth;
 	public Vector3 centerPoint;
-	public Vector3 difference;
 			
 	void Start() {
 		//https://www.youtube.com/watch?v=fQ2Dvj5-pfc
@@ -55,67 +51,28 @@ public class MouseManager : MonoBehaviour {
 		//panning
 		if (Input.touchCount == 1) { //one touch on screen
 
-			//https://answers.unity.com/questions/517529/pan-camera-2d-by-touch.html
-
-			original = Camera.main.transform.eulerAngles;    
-			rotx = original.x;
-			roty = original.y;
-
-			offset = new Vector3 (2f, 2f,0);
+//			https://answers.unity.com/questions/517529/pan-camera-2d-by-touch.html , setting the boundary
+//			https://answers.unity.com/questions/813224/move-camera-by-drag.html , creating a drag a zoom
 
 			touchBegin = Input.GetTouch (0); //stores touch
 
 			if (touchBegin.phase == TouchPhase.Began) { //checks touch phase
+
 				initPos = touchBegin.position; //gets touch position
-				difference = main.ScreenToWorldPoint(initPos);
-				difference.z = -10;
-				Debug.Log("Began: "+touchBegin.phase);
+				original = main.ScreenToWorldPoint(initPos);
+				original.z = -10;
 			}
 
 			if (touchBegin.phase == TouchPhase.Moved) { //check phase if moved
 
-				Debug.Log ("Moved: " + touchBegin.phase);
+				Debug.Log (touchBegin.phase);
 
 				Vector3 pos = main.ScreenToWorldPoint (touchBegin.position);
 				pos.z = -10;
-				transform.position += difference - pos;
-			
-				//drag left, pan right
-//				if (initPos.x > touchBegin.position.x) {
-//
-//
-//				}
-//				//drag right, pan left
-//				if (initPos.x < touchBegin.position.x) {
-//
-//				}
-//				//drag down, pan up 
-//				if (initPos.y > touchBegin.position.y) {
-//
-//				}
-//				//drag up, pan down
-//				if (initPos.y < touchBegin.position.y) {
-//
-//				}
-//
-//				Vector3 pos = main.ScreenToWorldPoint (touchBegin.position - initPos);
-
-//				Vector3 move = new Vector3 (pos.x * panSpeed, 0 ,pos.y * panSpeed);
-//
-//				transform.Translate (move, Space.World);
-
-				Vector2 touchDelta = touchBegin.deltaPosition; //stores delta postions of touch
-//				Debug.Log (touchBegin.position.x + "," + touchBegin.position.y);
-
-
-
-
-//				offset.x += main.ScreenToWorldPoint(touchBegin.position).x;
-//				offset.y += main.ScreenToWorldPoint(touchBegin.position).y;
-//
-//				Debug.Log (offset.x + "," + offset.y);
-			
-//				transform.Translate (-touchDelta.x * panSpeed, -touchDelta.y * panSpeed, 0); //transforms the screen with pan speed
+				//adds the difference of the fist position of the touch and the last touch after drag, increments that to the position
+				transform.position += original - pos;		
+						
+				//Clamps the camera movement so it doens not go past the boundary
 				float clammpedX = Mathf.Clamp (transform.position.x, minBounds.x + halfWidth, maxBounds.x - halfWidth);
 				float clammpedY = Mathf.Clamp (transform.position.y, minBounds.y + halfHeight, maxBounds.y - halfHeight);
 				transform.position = new Vector3 (clammpedX, clammpedY, transform.position.z);
@@ -125,9 +82,6 @@ public class MouseManager : MonoBehaviour {
 			else { //touch phase ended
 				touchBegin = new Touch (); //removes the touch 
 				Debug.Log("Ended: "+touchBegin.phase);
-				selection (initPos);
-
-
 			}
 		}
 
@@ -142,13 +96,8 @@ public class MouseManager : MonoBehaviour {
 				initPos = touchZero.position;
 				finalPos = touchOne.position;
 
-//				Debug.Log ("First touch: "+Camera.main.ScreenToWorldPoint(touchZero.position));
-//				Debug.Log ("Second touch: "+Camera.main.ScreenToWorldPoint(touchOne.position));
-
 				centerPoint = new Vector3((main.ScreenToWorldPoint(initPos).x + main.ScreenToWorldPoint(finalPos).x) / 2f, (main.ScreenToWorldPoint(initPos).y + main.ScreenToWorldPoint(finalPos).y) / 2f,-10);
-
-//				Debug.Log ("Center point" + centerPoint);
-
+			
 				float clammpedX = Mathf.Clamp (transform.position.x, minBounds.x + halfWidth, maxBounds.x - halfWidth);
 				float clammpedY = Mathf.Clamp (transform.position.y, minBounds.y + halfHeight, maxBounds.y - halfHeight);
 				transform.position = new Vector3 (clammpedX, clammpedY, transform.position.z);
@@ -177,25 +126,21 @@ public class MouseManager : MonoBehaviour {
 				halfHeight = main.orthographicSize;
 				halfWidth = halfHeight * Screen.width / Screen.height;
 
-//				Debug.Log ("Camera pos: "+main.transform.position);
+				//Clamps the camera movement so it doens not go past the boundary
 				float clammpedX = Mathf.Clamp (transform.position.x, minBounds.x + halfWidth, maxBounds.x - halfWidth);
 				float clammpedY = Mathf.Clamp (transform.position.y, minBounds.y + halfHeight, maxBounds.y - halfHeight);
 				transform.position = new Vector3 (clammpedX, clammpedY, transform.position.z);
 			
 			}
 			else {
-				selection (touchBegin.position);
 				touchZero = new Touch ();
 				touchOne = new Touch ();
 
 			}
 		}
-	}
-
-	public void selection(Vector2 position){
 
 		// mouse location, provides coordinates relative to screen pixels
-		Vector3 mousePos = position;
+		Vector3 mousePos = Input.mousePosition;
 		mousePos.z = 0;
 
 		//Screen pos is relative to camera location in unity coordinates
