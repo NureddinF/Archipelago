@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         logout = (Button) findViewById(R.id.logout);
         btn_settings = (ImageButton) findViewById(R.id.setting);
         profile = (Button) findViewById(R.id.profile);
-
+        //https://stackoverflow.com/questions/6173400/how-to-hide-a-button-programmatically
         boolean isLogin = SharedPreferenceUtils.getBoolean(MainActivity.this,"isLogin",false);
         if(!isLogin){
             profile.setVisibility(View.INVISIBLE);
