@@ -37,6 +37,7 @@ public class MouseManager : MonoBehaviour {
 	private float halfHeight;
 	private float halfWidth;
 	public Vector3 centerPoint;
+	public Vector3 difference;
 			
 	void Start() {
 		//https://www.youtube.com/watch?v=fQ2Dvj5-pfc
@@ -66,6 +67,8 @@ public class MouseManager : MonoBehaviour {
 
 			if (touchBegin.phase == TouchPhase.Began) { //checks touch phase
 				initPos = touchBegin.position; //gets touch position
+				difference = main.ScreenToWorldPoint(initPos);
+				difference.z = -10;
 				Debug.Log("Began: "+touchBegin.phase);
 			}
 
@@ -73,20 +76,46 @@ public class MouseManager : MonoBehaviour {
 
 				Debug.Log ("Moved: " + touchBegin.phase);
 
-				Vector2 touchDelta = touchBegin.deltaPosition; //stores delta postions of touch
-				Debug.Log (touchBegin.position.x + "," + touchBegin.position.y);
-
-
-				offset.x += main.ScreenToWorldPoint(touchBegin.position).x;
-				offset.y += main.ScreenToWorldPoint(touchBegin.position).y;
-
-				Debug.Log (offset.x + "," + offset.y);
-
-				float potentialX = main.transform.position.x - touchDelta.x * panSpeed;
-				float potentialY = main.transform.position.y - touchDelta.y * panSpeed;
-				Debug.Log (potentialX + "," + potentialY);
+				Vector3 pos = main.ScreenToWorldPoint (touchBegin.position);
+				pos.z = -10;
+				transform.position += difference - pos;
 			
-				transform.Translate (-touchDelta.x * panSpeed, -touchDelta.y * panSpeed, 0); //transforms the screen with pan speed
+				//drag left, pan right
+//				if (initPos.x > touchBegin.position.x) {
+//
+//
+//				}
+//				//drag right, pan left
+//				if (initPos.x < touchBegin.position.x) {
+//
+//				}
+//				//drag down, pan up 
+//				if (initPos.y > touchBegin.position.y) {
+//
+//				}
+//				//drag up, pan down
+//				if (initPos.y < touchBegin.position.y) {
+//
+//				}
+//
+//				Vector3 pos = main.ScreenToWorldPoint (touchBegin.position - initPos);
+
+//				Vector3 move = new Vector3 (pos.x * panSpeed, 0 ,pos.y * panSpeed);
+//
+//				transform.Translate (move, Space.World);
+
+				Vector2 touchDelta = touchBegin.deltaPosition; //stores delta postions of touch
+//				Debug.Log (touchBegin.position.x + "," + touchBegin.position.y);
+
+
+
+
+//				offset.x += main.ScreenToWorldPoint(touchBegin.position).x;
+//				offset.y += main.ScreenToWorldPoint(touchBegin.position).y;
+//
+//				Debug.Log (offset.x + "," + offset.y);
+			
+//				transform.Translate (-touchDelta.x * panSpeed, -touchDelta.y * panSpeed, 0); //transforms the screen with pan speed
 				float clammpedX = Mathf.Clamp (transform.position.x, minBounds.x + halfWidth, maxBounds.x - halfWidth);
 				float clammpedY = Mathf.Clamp (transform.position.y, minBounds.y + halfHeight, maxBounds.y - halfHeight);
 				transform.position = new Vector3 (clammpedX, clammpedY, transform.position.z);
