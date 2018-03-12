@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class MouseManager : MonoBehaviour {
+
+	public static bool isEnabled = false;
 	// human player who is associated with this mouse manager
 	public Player player;
 
@@ -37,6 +39,10 @@ public class MouseManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+
+		if (isEnabled) {
+			return;
+		}
 		//Zoom
 		if (Input.touchCount == 2) { //Checks for 2 touches on the screen
 			

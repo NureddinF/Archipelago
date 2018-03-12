@@ -10,6 +10,7 @@ public class WinPanel : MonoBehaviour {
 	public Text winstatement; //statment displayed in pop-up box
 	public Button goBack; //back button
 	public GameObject windowObject;
+	public UnityAction backToMenu;
 
 	private static WinPanel winPanel;
 
@@ -25,14 +26,25 @@ public class WinPanel : MonoBehaviour {
 		return winPanel;
 	}
 
-	public void back(string statement, UnityAction backEvent){ //takes in the statement to be displayed, and the backbutton action
+	public void back(string statement){ //takes in the statement to be displayed, and the backbutton action
 		windowObject.SetActive (true);  //sets window to true
 		goBack.onClick.RemoveAllListeners (); //removes any previouse listeners
-		goBack.onClick.AddListener (backEvent); //creates a listener to the back button
+		goBack.onClick.AddListener (backToMenu); //creates a listener to the back button
 
 		this.winstatement.text = statement;  //sets the statement to the statment to bo displayes
 		goBack.gameObject.SetActive (true); //makes the backbutton active
 
+		backToMenu = new UnityAction (backAction); //calls on backAction function when clicked
+
+//		GameObject.Find ("Menu").SetActive (false); //removes menu to stop game interaction
+
+		enabled = false;
+
+	}
+		
+	public void backAction(){ //envokes the action when button clicked
+		//closes application
+		Application.Quit();
 	}
 
 }

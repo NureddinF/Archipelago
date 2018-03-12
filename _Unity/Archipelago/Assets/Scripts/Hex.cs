@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class Hex : MonoBehaviour {
 
+	public static bool isEnabled = false;
+
     //Stores coordinate in the map
     public int x;
     public int y;
@@ -21,6 +23,13 @@ public class Hex : MonoBehaviour {
 
 	// Menu options to display when player clicks on the hex
 	public List<MenuItem> menuOptions = new List<MenuItem>();
+
+	void Update(){
+
+		if (isEnabled) {
+			return;
+		}
+	}
 
 
 

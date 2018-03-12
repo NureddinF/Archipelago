@@ -5,6 +5,8 @@ using UnityEngine;
 //reference: https://www.youtube.com/watch?v=BW7xXaFmSyY
 public class Menu : MonoBehaviour {
 
+	public static bool isEnabled = false;
+
 	// Dimensions of icons in the menu
 	private const int menuIconWidth = 50;
 	private const int menuIconHeight = 50;
@@ -20,6 +22,9 @@ public class Menu : MonoBehaviour {
 
 
 	public void Update(){
+		if (isEnabled) {
+			return;
+		}
 		// make sure menu stays up to date if hex menu options change (e.g. if tile is upgraded)
 		updateMenu (selectedHex);
 	}
