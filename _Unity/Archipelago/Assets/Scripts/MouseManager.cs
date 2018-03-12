@@ -27,7 +27,6 @@ public class MouseManager : MonoBehaviour {
 	public Vector3 original;
 	public Vector2 finalPos;
 
-	public BoxCollider2D border;
 	private Vector3 minBounds;
 	private Vector2 maxBounds;
 	private Camera main;
@@ -37,9 +36,6 @@ public class MouseManager : MonoBehaviour {
 			
 	void Start() {
 		//https://www.youtube.com/watch?v=fQ2Dvj5-pfc
-		minBounds = border.bounds.min;
-		maxBounds = border.bounds.max;
-
 		main = Camera.main;
 
 		halfHeight = main.orthographicSize;
@@ -48,6 +44,7 @@ public class MouseManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+
 		//panning
 		if (Input.touchCount == 1) { //one touch on screen
 
@@ -60,31 +57,30 @@ public class MouseManager : MonoBehaviour {
 
 				initPos = touchBegin.position; //gets touch position
 				original = main.ScreenToWorldPoint(initPos);
-				original.z = -10;
-			}
-
-			if (touchBegin.phase == TouchPhase.Moved) { //check phase if moved
+				original.z = main.transform.position.z;
+			} else if (touchBegin.phase == TouchPhase.Moved) { //check phase if moved
 
 				Debug.Log (touchBegin.phase);
 
-				Vector3 pos = main.ScreenToWorldPoint (touchBegin.position);
-				pos.z = -10;
+				//Vector3 pos = main.ScreenToWorldPoint (touchBegin.position);
 				//adds the difference of the fist position of the touch and the last touch after drag, increments that to the position
-				transform.position += original - pos;		
+				Vector3 deltaTouch = (touchBegin.position  - initPos);
+				Vector3 deltaCameraPos = main.ScreenToWorldPoint (touchBegin.position) - main.ScreenToWorldPoint (initPos); //TODO: this line???
+				Vector3 newCameraPos = main.transform.position - deltaCameraPos;
 						
 				//Clamps the camera movement so it doens not go past the boundary
-				float clammpedX = Mathf.Clamp (transform.position.x, minBounds.x + halfWidth, maxBounds.x - halfWidth);
-				float clammpedY = Mathf.Clamp (transform.position.y, minBounds.y + halfHeight, maxBounds.y - halfHeight);
-				transform.position = new Vector3 (clammpedX, clammpedY, transform.position.z);
+				float clammpedX = Mathf.Clamp (newCameraPos.x, minBounds.x + halfWidth, maxBounds.x - halfWidth);
+				float clammpedY = Mathf.Clamp (newCameraPos.y, minBounds.y + halfHeight, maxBounds.y - halfHeight);
+				newCameraPos = new Vector3 (clammpedX, clammpedY, main.transform.position.z);
+				initPos = touchBegin.position;
+				main.transform.position = newCameraPos;
 
-			}
-
-			else { //touch phase ended
+			} else { //touch phase ended
 				touchBegin = new Touch (); //removes the touch 
 				Debug.Log("Ended: "+touchBegin.phase);
 			}
 		}
-
+		return;
 		//Zoom
 		if (Input.touchCount == 2) { //Checks for 2 touches on the screen
 
@@ -224,4 +220,9 @@ public class MouseManager : MonoBehaviour {
 		Debug.Log ("Selecting to build unit: " + unitPrefabs [unitIndex].name);
 	}
 				
+
+	public void setBounds (BoxCollider2D bounds){
+		minBounds = bounds.bounds.min;
+		maxBounds = bounds.bounds.max;
+	}
 }
