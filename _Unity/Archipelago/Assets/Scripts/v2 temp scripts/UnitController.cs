@@ -32,7 +32,6 @@ public class UnitController : MonoBehaviour {
         if (initialNumOfWorkers > 0)
             //Add initial location and amount of warriors into the correct dict
             workerLocations.Add(initialX + "." + initialY, initialNumOfWorkers);
-
     }
 
     //Method to add new warrior(s) given a specified amount and a hex
@@ -149,5 +148,33 @@ public class UnitController : MonoBehaviour {
             total += entry.Value;
 
         return total;
+    }
+
+    //Given an x and a y coordinate for a tile, return the number of workers on that tile
+    public int getWorkerCountByTileCoords(int x, int y)
+    {
+        string tileString = x + "." + y;
+        //Check if there are workers stored at this location
+        //If so then return the amount, else return 0
+        if (workerLocations.ContainsKey(tileString))
+        {
+            return workerLocations[tileString];
+        }
+        else
+            return 0;
+    }
+
+    //Given an x and a y coordinate for a tile, return the number of warriors on that tile
+    public int getWarriorCountByTileCoords(int x, int y)
+    {
+        string tileString = x + "." + y;
+        //Check if there are warriors stored at this location
+        //If so then return the amount, else return 0
+        if (warriorLocations.ContainsKey(tileString))
+        {
+            return warriorLocations[tileString];
+        }
+        else
+            return 0;
     }
 }

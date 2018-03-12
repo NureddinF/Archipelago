@@ -11,6 +11,8 @@ public class HexMenuController : MonoBehaviour
     private Text tileStage; //TODO
     private Text tileIncome;
     private Image tileImage;
+    private Text tileWorkerCount;
+    private Text tileWarriorCount;
 
     private List<Image> actionOptions;
 
@@ -25,6 +27,8 @@ public class HexMenuController : MonoBehaviour
         tileStage = hexMenu.transform.Find("TileStage").gameObject.GetComponent<Text>();
         tileIncome = hexMenu.transform.Find("TileIncome").gameObject.GetComponent<Text>();
         tileImage = hexMenu.transform.Find("TileImage").gameObject.GetComponent<Image>();
+        tileWorkerCount = hexMenu.transform.Find("TileWorkerCount").gameObject.GetComponent<Text>();
+        tileWarriorCount = hexMenu.transform.Find("TileWarriorCount").gameObject.GetComponent<Text>();
         selectedHex = null;
         hideHexMenu();
     }
@@ -64,6 +68,8 @@ public class HexMenuController : MonoBehaviour
             }
 
             tileImage.sprite = h.GetComponent<SpriteRenderer>().sprite;
+            tileWorkerCount.text = gameObject.GetComponent<UnitController>().getWorkerCountByTileCoords(h.x, h.y).ToString();
+            tileWarriorCount.text = gameObject.GetComponent<UnitController>().getWarriorCountByTileCoords(h.x, h.y).ToString();
 
             hexMenu.SetActive(true);
         }
