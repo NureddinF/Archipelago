@@ -30,8 +30,7 @@ public class Hex : MonoBehaviour {
     public void setTileType(HexGrid.TileType type) { this.tileType = type; }
 
     public HexGrid.TileType getTileType() { return tileType; }
-
-
+    
     //Method to return a list of a hex's direct neighbors
     public List <GameObject> getNeighbors(){
         List<GameObject> neighbors = new List<GameObject>();

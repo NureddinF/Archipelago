@@ -26,18 +26,18 @@ public class UnitController : MonoBehaviour {
         //Initialize number of warriors, only if initial amount specified > 0 
         if (initialNumOfWarriors > 0)
             //Add initial location and amount of warriors into the correct dict
-            warriorLocations.Add(initialX + "." + initialY, initialNumOfWarriors);
+            warriorLocations.Add(initialX + "_" + initialY, initialNumOfWarriors);
 
         //Initialize number of warriors, only if initial amount specified > 0 
         if (initialNumOfWorkers > 0)
             //Add initial location and amount of warriors into the correct dict
-            workerLocations.Add(initialX + "." + initialY, initialNumOfWorkers);
+            workerLocations.Add(initialX + "_" + initialY, initialNumOfWorkers);
     }
 
     //Method to add new warrior(s) given a specified amount and a hex
     public void addWarriors(int amount, Hex h) {
         //Create the hex location string to use as a key for the warrior location dictionary
-        string hexLocationKey = h.x + "." + h.y;
+        string hexLocationKey = h.x + "_" + h.y;
         //Call the add warriors by key method with this newly created key
         addWarriors(amount, hexLocationKey);
     }
@@ -51,13 +51,17 @@ public class UnitController : MonoBehaviour {
             warriorLocations[key] += amount;
         else
             warriorLocations.Add(key, amount);
+        if (GameObject.Find("Hex_" + key).GetComponent<CapturableTile>() != null)
+        {
+            GameObject.Find("Hex_" + key).GetComponent<CapturableTile>().addUnits(amount, gameObject.GetComponent<Player>().playerId);
+        }
     }
 
     //Method to remove new warrior(s) given a specified amount and a hex
     public void removeWarriors(int amount, Hex h)
     {
         //Create the hex location string to use as a key for the warrior location dictionary
-        string hexLocationKey = h.x + "." + h.y;
+        string hexLocationKey = h.x + "_" + h.y;
         //Call the remove warriors by key method with this newly created key
         removeWarriors(amount, hexLocationKey);
     }
@@ -75,6 +79,10 @@ public class UnitController : MonoBehaviour {
                 if (warriorLocations[key] == 0)
                 {
                     warriorLocations.Remove(key);
+                    if (GameObject.Find("Hex_" + key).GetComponent<CapturableTile>() != null)
+                    {
+                        GameObject.Find("Hex_" + key).GetComponent<CapturableTile>().removeUnit(amount, gameObject.GetComponent<Player>().playerId);
+                    }
                 }
             }
             else
@@ -103,7 +111,7 @@ public class UnitController : MonoBehaviour {
     public void addWorkers(int amount, Hex h)
     {
         //Create the hex location string to use as a key for the worker location dictionary
-        string hexLocationKey = h.x + "." + h.y;
+        string hexLocationKey = h.x + "_" + h.y;
 
         //Call the add workers by key method with this newly created key
         addWorkers(amount, hexLocationKey);
@@ -118,13 +126,19 @@ public class UnitController : MonoBehaviour {
             workerLocations[key] += amount;
         else
             workerLocations.Add(key, amount);
+
+        if(GameObject.Find("Hex_" + key).GetComponent<CapturableTile>() != null)
+        {
+             GameObject.Find("Hex_" + key).GetComponent<CapturableTile>().addUnits(amount, gameObject.GetComponent<Player>().playerId);
+        }
+       
     }
     
     //Method to remove new worker(s) given a specified amount and a hex
     public void removeWorkers(int amount, Hex h)
     {
         //Create the hex location string to use as a key for the worker location dictionary
-        string hexLocationKey = h.x + "." + h.y;
+        string hexLocationKey = h.x + "_" + h.y;
         //Call the remove workers by key method with this newly created key
         removeWorkers(amount, hexLocationKey);
     }
@@ -144,6 +158,10 @@ public class UnitController : MonoBehaviour {
                 if (workerLocations[key] == 0)
                 {
                     workerLocations.Remove(key);
+                    if (GameObject.Find("Hex_" + key).GetComponent<CapturableTile>() != null)
+                    {
+                        GameObject.Find("Hex_" + key).GetComponent<CapturableTile>().removeUnit(amount, gameObject.GetComponent<Player>().playerId);
+                    }
                 }
             }
             else
@@ -187,7 +205,7 @@ public class UnitController : MonoBehaviour {
         //If it's closer than the current closest stored then store this instead
         foreach (string s in workerLocations.Keys)
         {
-            string[] coords = s.Split('.');
+            string[] coords = s.Split('_');
             int xFrom = System.Int32.Parse(coords[0]);
             int yFrom = System.Int32.Parse(coords[1]);
 
@@ -207,7 +225,7 @@ public class UnitController : MonoBehaviour {
         //If a suitable unit/hex was found
         if (currentShortestX != null)
         {
-            moveWorkers(1, currentShortestX + "."+currentShortestY, hexTo.x + "." + hexTo.y);
+            moveWorkers(1, currentShortestX + "_"+currentShortestY, hexTo.x + "_" + hexTo.y);
         }
         else
             Debug.Log("No Units avaible to move currently");
@@ -232,7 +250,7 @@ public class UnitController : MonoBehaviour {
         //If it's closer than the current closest stored then store this instead
         foreach (string s in warriorLocations.Keys)
         {
-            string[] coords = s.Split('.');
+            string[] coords = s.Split('_');
             int xFrom = System.Int32.Parse(coords[0]);
             int yFrom = System.Int32.Parse(coords[1]);
 
@@ -252,7 +270,7 @@ public class UnitController : MonoBehaviour {
         //If a suitable unit/hex was found
         if (currentShortestX != null)
         {
-            moveWarriors(1, currentShortestX + "." + currentShortestY, hexTo.x + "." + hexTo.y);
+            moveWarriors(1, currentShortestX + "_" + currentShortestY, hexTo.x + "_" + hexTo.y);
         }
         else
             Debug.Log("No Units avaible to move currently");
@@ -285,7 +303,7 @@ public class UnitController : MonoBehaviour {
     //Given an x and a y coordinate for a tile, return the number of workers on that tile
     public int getWorkerCountByTileCoords(int x, int y)
     {
-        string tileString = x + "." + y;
+        string tileString = x + "_" + y;
         //Check if there are workers stored at this location
         //If so then return the amount, else return 0
         if (workerLocations.ContainsKey(tileString))
@@ -299,7 +317,7 @@ public class UnitController : MonoBehaviour {
     //Given an x and a y coordinate for a tile, return the number of warriors on that tile
     public int getWarriorCountByTileCoords(int x, int y)
     {
-        string tileString = x + "." + y;
+        string tileString = x + "_" + y;
         //Check if there are warriors stored at this location
         //If so then return the amount, else return 0
         if (warriorLocations.ContainsKey(tileString))

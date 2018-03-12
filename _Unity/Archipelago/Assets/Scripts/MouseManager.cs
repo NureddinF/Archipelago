@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class MouseManager : MonoBehaviour {
 	// human player who is associated with this mouse manager
-	public Playerv2 player;
+	public Player player;
 
 	// Unit that has been clicked
 	private Unit selectedUnit;

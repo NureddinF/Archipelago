@@ -78,11 +78,9 @@ public class HexMenuController : MonoBehaviour
     {
         hideHexMenu();
         selectedHex = null;
-
     }
 
-    public void hideHexMenu()
-    {
+    public void hideHexMenu() {
         hexMenu.SetActive(false);
     }
 
@@ -93,6 +91,8 @@ public class HexMenuController : MonoBehaviour
             gameObject.GetComponent<UnitController>().moveClosestWorker(selectedHex);
             tileWorkerCount.text = gameObject.GetComponent<UnitController>().getWorkerCountByTileCoords(selectedHex.x, selectedHex.y).ToString();
         }
+        else
+            Debug.Log("No hex selected to move a worker unit to");
     }
 
     public void moveWarriorToSelectedHex()
@@ -102,5 +102,7 @@ public class HexMenuController : MonoBehaviour
             gameObject.GetComponent<UnitController>().moveClosestWarrior(selectedHex);
             tileWarriorCount.text = gameObject.GetComponent<UnitController>().getWarriorCountByTileCoords(selectedHex.x, selectedHex.y).ToString();
         }
+        else
+            Debug.Log("No hex selected to move a warrior unit to");
     }
 }
