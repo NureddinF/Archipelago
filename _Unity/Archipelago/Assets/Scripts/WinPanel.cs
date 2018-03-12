@@ -35,11 +35,6 @@ public class WinPanel : MonoBehaviour {
 		goBack.gameObject.SetActive (true); //makes the backbutton active
 
 		backToMenu = new UnityAction (backAction); //calls on backAction function when clicked
-
-//		GameObject.Find ("Menu").SetActive (false); //removes menu to stop game interaction
-
-		enabled = false;
-
 	}
 		
 	public void backAction(){ //envokes the action when button clicked

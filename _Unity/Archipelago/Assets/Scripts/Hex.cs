@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class Hex : MonoBehaviour {
 
-	public static bool isEnabled = false;
+	public static bool isEnabled = false; 
 
     //Stores coordinate in the map
     public int x;
@@ -25,7 +25,7 @@ public class Hex : MonoBehaviour {
 	public List<MenuItem> menuOptions = new List<MenuItem>();
 
 	void Update(){
-
+		//to pause script
 		if (isEnabled) {
 			return;
 		}

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Worker : MonoBehaviour {
 
-	public static bool isEnabled = false;
+	public static bool isEnabled = false; 
 
 	public HexGrid map;
 	private GameObject hex;
@@ -28,7 +28,7 @@ public class Worker : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-
+		//to pause script
 		if (isEnabled) {
 			return;
 		}

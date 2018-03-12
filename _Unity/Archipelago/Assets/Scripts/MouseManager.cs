@@ -39,7 +39,7 @@ public class MouseManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-
+		//to pause script
 		if (isEnabled) {
 			return;
 		}
