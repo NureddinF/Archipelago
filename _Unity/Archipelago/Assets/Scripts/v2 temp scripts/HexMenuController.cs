@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class HexMenuController : MonoBehaviour
 {
     public GameObject hexMenu;
+    public GameObject Player;
 
     private Text tileType;
     private Text tileStage; //TODO
@@ -79,11 +80,27 @@ public class HexMenuController : MonoBehaviour
     {
         hideHexMenu();
         selectedHex = null;
-        
+
     }
 
     public void hideHexMenu()
     {
         hexMenu.SetActive(false);
+    }
+
+    public void moveWorkerToSelectedHex()
+    {
+        if (selectedHex != null)
+        {
+            Player.GetComponent<UnitController>().moveClosestWorker(selectedHex);
+        }
+    }
+
+    public void moveWarriorToSelectedHex()
+    {
+        if (selectedHex != null)
+        {
+            Player.GetComponent<UnitController>().moveClosestWarrior(selectedHex);
+        }
     }
 }

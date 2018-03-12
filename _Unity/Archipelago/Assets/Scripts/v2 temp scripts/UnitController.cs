@@ -38,12 +38,19 @@ public class UnitController : MonoBehaviour {
     public void addWarriors(int amount, Hex h) {
         //Create the hex location string to use as a key for the warrior location dictionary
         string hexLocationKey = h.x + "." + h.y;
+        //Call the add warriors by key method with this newly created key
+        addWarriors(amount, hexLocationKey);
+    }
+
+    //Method to add new warrior(s) given a specified amount and coordinate string key
+    private void addWarriors(int amount, string key)
+    {
         //Check if there are already warriors stored at this location
         //If so then add the amount, else create a new entry
-        if (warriorLocations.ContainsKey(hexLocationKey))
-            warriorLocations[hexLocationKey] += amount;
+        if (warriorLocations.ContainsKey(key))
+            warriorLocations[key] += amount;
         else
-            warriorLocations.Add(hexLocationKey, amount);
+            warriorLocations.Add(key, amount);
     }
 
     //Method to remove new warrior(s) given a specified amount and a hex
@@ -51,21 +58,27 @@ public class UnitController : MonoBehaviour {
     {
         //Create the hex location string to use as a key for the warrior location dictionary
         string hexLocationKey = h.x + "." + h.y;
+        //Call the remove warriors by key method with this newly created key
+        removeWarriors(amount, hexLocationKey);
+    }
+
+    //Method to remove warrior(s) given a specified amount and coordinate string key
+    private void removeWarriors(int amount, string key) { 
         //Check if there are warriors stored at this location
         //If so then remove the amount
-        if (warriorLocations.ContainsKey(hexLocationKey)) {
+        if (warriorLocations.ContainsKey(key)) {
             //check that >= stored in hex than requested to remove, if so remove them, else show debug log error message
-            if (warriorLocations[hexLocationKey] >= amount)
+            if (warriorLocations[key] >= amount)
             {
-                warriorLocations[hexLocationKey] -= amount;
+                warriorLocations[key] -= amount;
                 //If amount on this hex now zero then delete this dictionary key value pair
-                if (warriorLocations[hexLocationKey] == 0)
+                if (warriorLocations[key] == 0)
                 {
-                    warriorLocations.Remove(hexLocationKey);
+                    warriorLocations.Remove(key);
                 }
             }
             else
-                Debug.Log("There were only " + warriorLocations[hexLocationKey] + " warriors at the specified hex, yet " +
+                Debug.Log("There were only " + warriorLocations[key] + " warriors at the specified hex, yet " +
                     amount + " were requested to be removed. This is therefore not possible and no action has been taken");
            
         } else
@@ -79,40 +92,62 @@ public class UnitController : MonoBehaviour {
         addWarriors(amount, hexTo);
     }
 
+    //Method to move warriors using the add remove methods. Removes then adds.
+    private void moveWarriors(int amount, string hexFrom, string hexTo)
+    {
+        removeWarriors(amount, hexFrom);
+        addWarriors(amount, hexTo);
+    }
+
     //Method to add new worker(s) given a specified amount and a hex 
     public void addWorkers(int amount, Hex h)
     {
         //Create the hex location string to use as a key for the worker location dictionary
         string hexLocationKey = h.x + "." + h.y;
-        //Check if there are already workers stored at this location
-        //If so then add the amount, else create a new entry
-        if (workerLocations.ContainsKey(hexLocationKey))
-            workerLocations[hexLocationKey] += amount;
-        else
-            workerLocations.Add(hexLocationKey, amount);
+
+        //Call the add workers by key method with this newly created key
+        addWorkers(amount, hexLocationKey);
     }
 
+    //Method to add new worker(s) given a specified amount and coordinate string key
+    private void addWorkers(int amount, string key)
+    {
+        //Check if there are already warriors stored at this location
+        //If so then add the amount, else create a new entry
+        if (workerLocations.ContainsKey(key))
+            workerLocations[key] += amount;
+        else
+            workerLocations.Add(key, amount);
+    }
+    
     //Method to remove new worker(s) given a specified amount and a hex
     public void removeWorkers(int amount, Hex h)
     {
         //Create the hex location string to use as a key for the worker location dictionary
         string hexLocationKey = h.x + "." + h.y;
+        //Call the remove workers by key method with this newly created key
+        removeWorkers(amount, hexLocationKey);
+    }
+
+    //Method to remove worker(s) given a specified amount and coordinate string key
+    private void removeWorkers(int amount, string key)
+    {
         //Check if there are workers stored at this location
         //If so then remove the amount
-        if (workerLocations.ContainsKey(hexLocationKey))
+        if (workerLocations.ContainsKey(key))
         {
             //check that >= stored in hex than requested to remove, if so remove them, else show debug log error message
-            if (workerLocations[hexLocationKey] >= amount)
+            if (workerLocations[key] >= amount)
             {
-                workerLocations[hexLocationKey] -= amount;
+                workerLocations[key] -= amount;
                 //If amount on this hex now zero then delete this dictionary key value pair
-                if (workerLocations[hexLocationKey] == 0)
+                if (workerLocations[key] == 0)
                 {
-                    workerLocations.Remove(hexLocationKey);
+                    workerLocations.Remove(key);
                 }
             }
             else
-                Debug.Log("There were only " + workerLocations[hexLocationKey] + " workers at the specified hex, yet " +
+                Debug.Log("There were only " + workerLocations[key] + " workers at the specified hex, yet " +
                     amount + " were requested to be removed. This is therefore not possible and no action has been taken");
 
         }
@@ -124,6 +159,103 @@ public class UnitController : MonoBehaviour {
     public void moveWorkers(int amount, Hex hexFrom, Hex hexTo) {
         removeWorkers(amount, hexFrom);
         addWorkers(amount, hexTo);
+    }
+
+    //Method to move workers using the add remove methods. Removes then adds
+    private void moveWorkers(int amount, string hexFrom, string hexTo)
+    {
+        removeWorkers(amount, hexFrom);
+        addWorkers(amount, hexTo);
+    }
+
+    //Method to move the closest available worker using the add remove methods. Removes then adds
+    public void moveClosestWorker(Hex hexTo)
+    {
+        //Variables of the x and y coordinate of the destination hex
+        int xTo = hexTo.x;
+        int yTo = hexTo.y;
+
+        //Initiliaze current shortest distance high enough that any distance calculated will return as lower than this
+        //Will store the squared distance, however is not a problem since only comparing shorters not working out exact distances.
+        //Therefore will suffice as a comparitive feature
+        int currentShortestDistance = 999999;
+        //Variable to store the key string from the dictionary for the closest available unit.
+        string currentShortestX = null;
+        string currentShortestY = null;
+
+        //For each key in the worker location dict. Parse it's coordinates and work out the distance to destination hex, via pythagoras theorem
+        //If it's closer than the current closest stored then store this instead
+        foreach (string s in workerLocations.Keys)
+        {
+            string[] coords = s.Split('.');
+            int xFrom = System.Int32.Parse(coords[0]);
+            int yFrom = System.Int32.Parse(coords[1]);
+
+            //Note the actual distance is the squareroot of this, however not needed for comparing shortest.
+            //Perform pythagoras to find diagonal distance, c^2 = a^2 + b^2, distance(^2) = (difference in x)^2 + (difference in y)^2
+            int distance = (int)System.Math.Pow(xFrom - xTo, 2) + (int)System.Math.Pow(yFrom - yTo, 2);
+
+            //If closer than current closest recorded, and not 0 distance, aka same hex, then set as new closest.
+            if (distance < currentShortestDistance && distance != 0)
+            {
+                currentShortestDistance = distance;
+                currentShortestX = xFrom.ToString();
+                currentShortestY = yFrom.ToString();
+            }
+        }
+
+        //If a suitable unit/hex was found
+        if (currentShortestX != null)
+        {
+            moveWorkers(1, currentShortestX + "."+currentShortestY, hexTo.x + "." + hexTo.y);
+        }
+        else
+            Debug.Log("No Units avaible to move currently");
+    }
+
+    //Method to move the closest available warrior using the add remove methods. Removes then adds
+    public void moveClosestWarrior(Hex hexTo)
+    {
+        //Variables of the x and y coordinate of the destination hex
+        int xTo = hexTo.x;
+        int yTo = hexTo.y;
+
+        //Initiliaze current shortest distance high enough that any distance calculated will return as lower than this
+        //Will store the squared distance, however is not a problem since only comparing shorters not working out exact distances.
+        //Therefore will suffice as a comparitive feature
+        int currentShortestDistance = 999999;
+        //Variable to store the key string from the dictionary for the closest available unit.
+        string currentShortestX = null;
+        string currentShortestY = null;
+
+        //For each key in the warrior location dict. Parse it's coordinates and work out the distance to destination hex, via pythagoras theorem
+        //If it's closer than the current closest stored then store this instead
+        foreach (string s in warriorLocations.Keys)
+        {
+            string[] coords = s.Split('.');
+            int xFrom = System.Int32.Parse(coords[0]);
+            int yFrom = System.Int32.Parse(coords[1]);
+
+            //Note the actual distance is the squareroot of this, however not needed for comparing shortest.
+            //Perform pythagoras to find diagonal distance, c^2 = a^2 + b^2, distance(^2) = (difference in x)^2 + (difference in y)^2
+            int distance = (int)System.Math.Pow(xFrom - xTo, 2) + (int)System.Math.Pow(yFrom - yTo, 2);
+
+            //If closer than current closest recorded, and not 0 distance, aka same hex, then set as new closest.
+            if (distance < currentShortestDistance && distance != 0)
+            {
+                currentShortestDistance = distance;
+                currentShortestX = xFrom.ToString();
+                currentShortestY = yFrom.ToString();
+            }
+        }
+
+        //If a suitable unit/hex was found
+        if (currentShortestX != null)
+        {
+            moveWarriors(1, currentShortestX + "." + currentShortestY, hexTo.x + "." + hexTo.y);
+        }
+        else
+            Debug.Log("No Units avaible to move currently");
     }
 
     //Method to return total number of warriors

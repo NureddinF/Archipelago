@@ -99,38 +99,38 @@ public class MouseManager : MonoBehaviour {
             GameObject collidedHitInfo = hitInfo.collider.transform.gameObject;
 
             //If left mouse button pressed, only calls once on initial press(e.g not constantly calling on hold)
-            if (Input.GetMouseButtonDown(0)) {
+            if (Input.GetMouseButtonDown(0))
+            {
                 // Check what we clicked on
-				if (collidedHitInfo.GetComponent<Hex> () != null) {
-					Hex hex = collidedHitInfo.GetComponent<Hex> ();
+                if (collidedHitInfo.GetComponent<Hex>() != null)
+                {
+                    Hex hex = collidedHitInfo.GetComponent<Hex>();
                     //clicked on a hex
-                    
+
 
                     // Check if we need to move unit to destination
-                    if (selectedUnit != null) {
-						Vector3 v = hex.transform.position;
-						Debug.Log ("Moving Unit to: x:" + v.x + ", y:" + v.y + ", z:" + v.z);
-						selectedUnit.setDestination (hex.transform.position);
-					} else if (buildUnit){
-						//TODO: remove this condition
-						player.makeUnit (unitPrefabs[unitIndex]);
-					} else {
-						//bring up menu
-						//if(hex.hexOwner2 == player.playerId){
-                            player.GetComponent<HexMenuController>().setSelectedHex(hex);
+                    if (selectedUnit != null)
+                    {
+                        Vector3 v = hex.transform.position;
+                        Debug.Log("Moving Unit to: x:" + v.x + ", y:" + v.y + ", z:" + v.z);
+                        selectedUnit.setDestination(hex.transform.position);
+                    }
+                    else if (buildUnit)
+                    {
+                        //TODO: remove this condition
+                        player.makeUnit(unitPrefabs[unitIndex]);
+                    }
+                    else
+                    {
+                        //bring up menu
+                        //if(hex.hexOwner2 == player.playerId){
+                        player.GetComponent<HexMenuController>().setSelectedHex(hex);
                         //}
 
 
-					}
-				} else if (collidedHitInfo.GetComponent<Unit>() != null){
-					//clicked on a unit
-					Unit clickedUnit = collidedHitInfo.GetComponent<Unit>();
-					if(clickedUnit == selectedUnit) deselectUnit();
-					else selectUnit(clickedUnit);
-					buildUnit = false;
-				}
-
-            }
+                    }
+                }
+            } 
         }
 	}
 
