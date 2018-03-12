@@ -6,8 +6,6 @@ using UnityEngine.UI;
 public class HexMenuController : MonoBehaviour
 {
     public GameObject hexMenu;
-    public GameObject Player;
-
     private Text tileType;
     private Text tileStage; //TODO
     private Text tileIncome;
@@ -92,7 +90,8 @@ public class HexMenuController : MonoBehaviour
     {
         if (selectedHex != null)
         {
-            Player.GetComponent<UnitController>().moveClosestWorker(selectedHex);
+            gameObject.GetComponent<UnitController>().moveClosestWorker(selectedHex);
+            tileWorkerCount.text = gameObject.GetComponent<UnitController>().getWorkerCountByTileCoords(selectedHex.x, selectedHex.y).ToString();
         }
     }
 
@@ -100,7 +99,8 @@ public class HexMenuController : MonoBehaviour
     {
         if (selectedHex != null)
         {
-            Player.GetComponent<UnitController>().moveClosestWarrior(selectedHex);
+            gameObject.GetComponent<UnitController>().moveClosestWarrior(selectedHex);
+            tileWarriorCount.text = gameObject.GetComponent<UnitController>().getWarriorCountByTileCoords(selectedHex.x, selectedHex.y).ToString();
         }
     }
 }
