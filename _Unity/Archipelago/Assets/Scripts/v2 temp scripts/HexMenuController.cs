@@ -8,10 +8,9 @@ public class HexMenuController : MonoBehaviour
     public GameObject hexMenu;
 
     private Text tileType;
-    private string upgradeStatus;
-    private string incomeRate;
-    //TODO: private Sprite tileImage;
-    //TODO: private string status;
+    private Text tileStage; //TODO
+    private Text tileIncome;
+    private Image tileImage;
 
     private List<Image> actionOptions;
 
@@ -23,8 +22,10 @@ public class HexMenuController : MonoBehaviour
     private void Start()
     {
         tileType = hexMenu.transform.Find("TileType").gameObject.GetComponent<Text>();
+        tileStage = hexMenu.transform.Find("TileStage").gameObject.GetComponent<Text>();
+        tileIncome = hexMenu.transform.Find("TileIncome").gameObject.GetComponent<Text>();
+        tileImage = hexMenu.transform.Find("TileImage").gameObject.GetComponent<Image>();
         selectedHex = null;
-        // hexMenu.enabled = false; used if hexMenu is image, however does not hide children
         hideHexMenu();
     }
 
@@ -42,8 +43,27 @@ public class HexMenuController : MonoBehaviour
         else
         {
             selectedHex = h;
-            tileType.text = h.tileType.ToString();
-            //TODO FINISH THIS
+            tileType.text = h.getTileType().ToString();
+            //tileStage.text = h.getTileStage().ToString();
+            float income = h.getTileIncome();
+
+            if (income > 0)
+            {
+                tileIncome.color = Color.green; //TODO IMPROVE COLOUR CHOICES
+                tileIncome.text = "+" + income.ToString() + "/sec";
+            }
+            else if (income < 0)
+            {
+                tileIncome.color = Color.red;
+                tileIncome.text = "-" + income.ToString() + "/sec";
+            }
+            else
+            {
+                tileIncome.color = Color.grey;
+                tileIncome.text = "0/sec";
+            }
+
+            tileImage.sprite = h.GetComponent<SpriteRenderer>().sprite;
 
             hexMenu.SetActive(true);
         }

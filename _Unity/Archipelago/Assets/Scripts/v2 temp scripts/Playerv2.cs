@@ -79,12 +79,12 @@ public class Playerv2 : MonoBehaviour
 
     public void captureTile(CapturableTile tile)
     {
-        totalTileIncome += tile.tileIncome;
+        totalTileIncome += tile.getHex().getTileIncome();
     }
 
     public void removeTile(CapturableTile tile)
     {
-        totalTileIncome -= tile.tileIncome;
+        totalTileIncome -= tile.getHex().getTileIncome();
     }
 
     public void makeUnit(GameObject unitObject)
@@ -181,8 +181,7 @@ public class Playerv2 : MonoBehaviour
         // Can build building
         //Subtract cost of building from player's money
         currentMoney -= buildingInfo.moneyCost;
-        //Update the menu
-        hex.menuOptions = buildingInfo.constructionMenuOptions;
+
         //change the sprite to construction site
         hex.GetComponent<SpriteRenderer>().sprite = buildingInfo.constructionSprite;
         //let hex handle actually building the building

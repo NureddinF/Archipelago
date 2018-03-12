@@ -14,16 +14,22 @@ public class Hex : MonoBehaviour {
 	public Player.PlayerId hexOwner = Player.PlayerId.NEUTRAL;
     public Playerv2.PlayerId hexOwner2 = Playerv2.PlayerId.NEUTRAL;
 
-    public HexGrid.TileType tileType;
+    private HexGrid.TileType tileType;
+    private float tileIncome;
 
     //Set maxY and maxX of a hex, -1 for off by one error
     private int maxY = HexGrid.getGridHeight() - 1;
     private int maxX = HexGrid.getGridWidth() - 1;
 
 
-    // Menu options to display when player clicks on the hex
-    public List<MenuItem> menuOptions = new List<MenuItem>();
 
+    public void setTileIncome(float amount) { this.tileIncome = amount; }
+
+    public float getTileIncome() { return tileIncome; }
+
+    public void setTileType(HexGrid.TileType type) { this.tileType = type; }
+
+    public HexGrid.TileType getTileType() { return tileType; }
 
 
     //Method to return a list of a hex's direct neighbors
@@ -91,6 +97,4 @@ public class Hex : MonoBehaviour {
         
         return neighbors;
     }
-
-
 }

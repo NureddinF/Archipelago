@@ -39,10 +39,10 @@ public class CapturableTile: MonoBehaviour{
 
 	// Information about how much money this tile generates
 	public const float baseTileIncome = 1;
-	public float tileIncome = baseTileIncome;
 
 	//Initializeation
 	public void Start(){
+        thisHex.setTileIncome(baseTileIncome);
 		thisHex = GetComponent<Hex> ();
 		tileSprite = GetComponent<SpriteRenderer> ();
 		captureBoarder = GetComponentInChildren<Image>();
@@ -63,6 +63,11 @@ public class CapturableTile: MonoBehaviour{
 		// progress tile construction each frame
 		progressTileConstruction();
 	}
+
+    public Hex getHex()
+    {
+        return thisHex;
+    }
 
 
 	// Unit calls this when it enters the tile
@@ -217,12 +222,11 @@ public class CapturableTile: MonoBehaviour{
 		// Update sprites/UI
 		captureBoarder.enabled = false;
 		tileSprite.sprite = buildingUnderConstrcution.builtSprite;
-		thisHex.menuOptions = buildingUnderConstrcution.builtMenuOptions;
 
 		//Adjust the player income
 		Player player = getPlayer ();
 		player.removeTile (this);
-		tileIncome += buildingUnderConstrcution.incomeAdjustment;
+        thisHex.setTileIncome(thisHex.getTileIncome() + buildingUnderConstrcution.incomeAdjustment);
 		player.captureTile (this);
 
 		//terminate the construction

@@ -115,37 +115,37 @@ public class HexGrid : MonoBehaviour {
 				switch(mapStructure[y, x]){
 					case 0:{
 						thisHex = (GameObject)Instantiate (tileGrass);
-						thisHex.GetComponent<Hex> ().tileType = TileType.GRASS;
+						thisHex.GetComponent<Hex> ().setTileType(TileType.GRASS);
 						break;
 					}
 					case 1:{
 						thisHex = (GameObject)Instantiate (tilePlayer1Base);
-						thisHex.GetComponent<Hex>().tileType = TileType.BASE;
+						thisHex.GetComponent<Hex>().setTileType(TileType.BASE);
 						break;
 					}
 					case 2:{
 						thisHex = (GameObject)Instantiate (tilePlayer2Base);
-						thisHex.GetComponent<Hex>().tileType = TileType.BASE;
+						thisHex.GetComponent<Hex>().setTileType(TileType.BASE);
 						break;
 					}
 					case 3:{
 						thisHex = (GameObject)Instantiate (tileRocks);
-						thisHex.GetComponent<Hex>().tileType = TileType.ROCK;
+						thisHex.GetComponent<Hex>().setTileType(TileType.ROCK);
 						break;
 					}
 					case 4:{
 						thisHex = (GameObject)Instantiate (tileSand);
-						thisHex.GetComponent<Hex>().tileType = TileType.SAND;
+						thisHex.GetComponent<Hex>().setTileType(TileType.SAND);
 						break;
 					}
 					case 5:{
 						thisHex = (GameObject)Instantiate (tileTrees);
-						thisHex.GetComponent<Hex>().tileType = TileType.TREE;
+						thisHex.GetComponent<Hex>().setTileType(TileType.TREE);
 						break;
 					}
 					default:{
 						thisHex = (GameObject)Instantiate (tileWater);
-						thisHex.GetComponent<Hex>().tileType = TileType.WATER;
+						thisHex.GetComponent<Hex>().setTileType(TileType.WATER);
 						break;
 					}
 				}
