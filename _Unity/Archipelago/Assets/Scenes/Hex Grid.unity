@@ -435,8 +435,8 @@ MonoBehaviour:
   tileSand: {fileID: 1726542138188176, guid: a62c8619dc8b5894d828e14f2f5acfe4, type: 2}
   tileTrees: {fileID: 1786172073235050, guid: 4842d7996c846254ab367560645fde5c, type: 2}
   tileWater: {fileID: 1974426177275934, guid: 1be3cb836ad194140a74ad2b155a9a68, type: 2}
-  yOffsetGap: 0.01
-  xOffsetGap: 0.01
+  yOffsetGap: 0
+  xOffsetGap: 0
 --- !u!4 &463588564
 Transform:
   m_ObjectHideFlags: 0
@@ -1112,7 +1112,7 @@ GameObject:
   - component: {fileID: 977553405}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1129,9 +1129,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerId: 0
-  rateMultiplier: 0
+  rateMultiplier: 1
   baseIncome: 0
-  timeFrame: 0
+  timeFrame: 1
   incomeText: {fileID: 495380234}
   rateText: {fileID: 825571159}
   numOfTilesOwned: {fileID: 130789373}

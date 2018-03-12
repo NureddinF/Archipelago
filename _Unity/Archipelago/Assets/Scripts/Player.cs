@@ -66,20 +66,10 @@ public class Player : MonoBehaviour
         rateText.text = "+ " + increaseAmt + "/" + timeFrame + "secs";
     }
 
-    //@Depricated
-    //Generate income and add to total money each frame
-    public void generateIncomeContinuous()
-    {
-        float translation = Time.deltaTime * rateMultiplier;
-        currentMoney += translation;
-        incomeText.text = "" + Mathf.RoundToInt(currentMoney);
-        rateText.text = "+ " + rateMultiplier + "/sec";
-    }
-
-
     public void captureTile(CapturableTile tile)
     {
         totalTileIncome += tile.getHex().getTileIncome();
+        this.GetComponent<HexMenuController>().refreshUIValues();
     }
 
     public void removeTile(CapturableTile tile)

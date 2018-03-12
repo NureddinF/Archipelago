@@ -49,7 +49,7 @@ public class CapturableTile: MonoBehaviour{
 
 		// Update player income if this tile is spawned with an owner
 		if(thisHex.hexOwner != Player.PlayerId.NEUTRAL){
-			finalizeCapture ();	
+			finalizeCapture ();
 		}
 
 		// This is mostly for testing. Fill Amount should be set to 0 so the tiles starts neutral.

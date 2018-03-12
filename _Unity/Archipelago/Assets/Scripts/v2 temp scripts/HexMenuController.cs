@@ -105,4 +105,16 @@ public class HexMenuController : MonoBehaviour
         else
             Debug.Log("No hex selected to move a warrior unit to");
     }
+
+    public void refreshUIValues()
+    {
+        if(selectedHex != null)
+        {
+            //Store current selected hex, deselect hex then reselect hex. This way on refresh if on same hex the menu wont hide itself
+            Hex h = selectedHex;
+            deselectHex();
+            //"Reselect Hex" to update any changed values
+            setSelectedHex(h);
+        }
+    }
 }
