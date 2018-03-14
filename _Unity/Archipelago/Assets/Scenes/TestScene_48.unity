@@ -148,13 +148,10 @@ MonoBehaviour:
   - {fileID: 1058154063995710, guid: f489d981f1664f84c99e458047159577, type: 2}
   - {fileID: 1359874251730732, guid: 88629505eac65174d931b04a69dd5f6f, type: 2}
   menu: {fileID: 51062365}
-  zoomSpeed: 1
-  shiftSpeed: 10
+  zoomSpeed: 0.03
+  shiftSpeed: 1
   panSpeed: 0.1
-  initPos: {x: 0, y: 0}
-  original: {x: 0, y: 0, z: 0}
-  finalPos: {x: 0, y: 0}
-  border: {fileID: 399114102}
+  clickPos: {x: 0, y: 0}
   centerPoint: {x: 0, y: 0, z: 0}
 --- !u!114 &31710731
 MonoBehaviour:
