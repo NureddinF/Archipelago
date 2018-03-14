@@ -37,13 +37,9 @@ public class CapturableTile: MonoBehaviour{
 	//Hex script associated with this tile
 	private Hex thisHex;
 
-	// Information about how much money this tile generates
-	public const float baseTileIncome = 1;
-
 	//Initializeation
 	public void Start(){
 		thisHex = GetComponent<Hex>();
-        thisHex.setTileIncome(baseTileIncome);
         tileSprite = GetComponent<SpriteRenderer> ();
 		captureBoarder = GetComponentInChildren<Image>();
 
@@ -205,7 +201,7 @@ public class CapturableTile: MonoBehaviour{
 			float newAmountConstructed = constructionProgress + Time.deltaTime * constructionSpeedPerUnit * (playerUnits + passiveConstructionSpeed);
 
 			//check if building is done
-			if(newAmountConstructed > buildingUnderConstrcution.constructionTime){
+			if(newAmountConstructed > buildingUnderConstrcution.getConstructionTime()){
 				//Building completed
 				finalizeConstruction ();
 				return;
@@ -213,7 +209,7 @@ public class CapturableTile: MonoBehaviour{
 
 			// Construction not done, Update progress bar
 			constructionProgress = newAmountConstructed;
-			captureBoarder.fillAmount = Mathf.Abs (constructionProgress / buildingUnderConstrcution.constructionTime);
+			captureBoarder.fillAmount = Mathf.Abs (constructionProgress / buildingUnderConstrcution.getConstructionTime());
 		}
 	}
 
@@ -221,12 +217,12 @@ public class CapturableTile: MonoBehaviour{
 	private void finalizeConstruction(){
 		// Update sprites/UI
 		captureBoarder.enabled = false;
-		tileSprite.sprite = buildingUnderConstrcution.builtSprite;
+		tileSprite.sprite = buildingUnderConstrcution.getBuiltSprite();
 
 		//Adjust the player income
 		Player player = getPlayer ();
 		player.removeTile (this);
-        thisHex.setTileIncome(thisHex.getTileIncome() + buildingUnderConstrcution.incomeAdjustment);
+        thisHex.setTileIncome(buildingUnderConstrcution.getTileIncomeAfterBuild());
 		player.captureTile (this);
 
 		//terminate the construction

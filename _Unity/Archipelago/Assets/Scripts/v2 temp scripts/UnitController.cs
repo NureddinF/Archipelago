@@ -37,7 +37,7 @@ public class UnitController : MonoBehaviour {
     //Method to add new warrior(s) given a specified amount and a hex
     public void addWarriors(int amount, Hex h) {
         //Create the hex location string to use as a key for the warrior location dictionary
-        string hexLocationKey = h.x + "_" + h.y;
+        string hexLocationKey = h.getX() + "_" + h.getY();
         //Call the add warriors by key method with this newly created key
         addWarriors(amount, hexLocationKey);
     }
@@ -61,7 +61,7 @@ public class UnitController : MonoBehaviour {
     public void removeWarriors(int amount, Hex h)
     {
         //Create the hex location string to use as a key for the warrior location dictionary
-        string hexLocationKey = h.x + "_" + h.y;
+        string hexLocationKey = h.getX() + "_" + h.getY();
         //Call the remove warriors by key method with this newly created key
         removeWarriors(amount, hexLocationKey);
     }
@@ -111,7 +111,7 @@ public class UnitController : MonoBehaviour {
     public void addWorkers(int amount, Hex h)
     {
         //Create the hex location string to use as a key for the worker location dictionary
-        string hexLocationKey = h.x + "_" + h.y;
+        string hexLocationKey = h.getX() + "_" + h.getY();
 
         //Call the add workers by key method with this newly created key
         addWorkers(amount, hexLocationKey);
@@ -138,7 +138,7 @@ public class UnitController : MonoBehaviour {
     public void removeWorkers(int amount, Hex h)
     {
         //Create the hex location string to use as a key for the worker location dictionary
-        string hexLocationKey = h.x + "_" + h.y;
+        string hexLocationKey = h.getX() + "_" + h.getY();
         //Call the remove workers by key method with this newly created key
         removeWorkers(amount, hexLocationKey);
     }
@@ -190,8 +190,8 @@ public class UnitController : MonoBehaviour {
     public void moveClosestWorker(Hex hexTo)
     {
         //Variables of the x and y coordinate of the destination hex
-        int xTo = hexTo.x;
-        int yTo = hexTo.y;
+        int xTo = hexTo.getX();
+        int yTo = hexTo.getY();
 
         //Initiliaze current shortest distance high enough that any distance calculated will return as lower than this
         //Will store the squared distance, however is not a problem since only comparing shorters not working out exact distances.
@@ -225,7 +225,7 @@ public class UnitController : MonoBehaviour {
         //If a suitable unit/hex was found
         if (currentShortestX != null)
         {
-            moveWorkers(1, currentShortestX + "_"+currentShortestY, hexTo.x + "_" + hexTo.y);
+            moveWorkers(1, currentShortestX + "_"+currentShortestY, hexTo.getX() + "_" + hexTo.getY());
         }
         else
             Debug.Log("No Units avaible to move currently");
@@ -235,8 +235,8 @@ public class UnitController : MonoBehaviour {
     public void moveClosestWarrior(Hex hexTo)
     {
         //Variables of the x and y coordinate of the destination hex
-        int xTo = hexTo.x;
-        int yTo = hexTo.y;
+        int xTo = hexTo.getX();
+        int yTo = hexTo.getY();
 
         //Initiliaze current shortest distance high enough that any distance calculated will return as lower than this
         //Will store the squared distance, however is not a problem since only comparing shorters not working out exact distances.
@@ -270,7 +270,7 @@ public class UnitController : MonoBehaviour {
         //If a suitable unit/hex was found
         if (currentShortestX != null)
         {
-            moveWarriors(1, currentShortestX + "_" + currentShortestY, hexTo.x + "_" + hexTo.y);
+            moveWarriors(1, currentShortestX + "_" + currentShortestY, hexTo.getX() + "_" + hexTo.getY());
         }
         else
             Debug.Log("No Units avaible to move currently");

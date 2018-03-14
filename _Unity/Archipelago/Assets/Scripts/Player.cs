@@ -152,10 +152,10 @@ public class Player : MonoBehaviour
     public void upgradeTileToBuilding(Hex hex, GameObject buildingObject)
     {
         Building buildingInfo = buildingObject.GetComponent<Building>();
-        if (buildingInfo.moneyCost > this.currentMoney)
+        if (buildingInfo.getCost() > this.currentMoney)
         {
             // Unit costs too much
-            Debug.Log("Can't afford a " + buildingObject.name + " for " + buildingInfo.moneyCost);
+            Debug.Log("Can't afford a " + buildingObject.name + " for " + buildingInfo.getCost());
             return;
         }
         if (hex == null)
@@ -170,10 +170,10 @@ public class Player : MonoBehaviour
         }
         // Can build building
         //Subtract cost of building from player's money
-        currentMoney -= buildingInfo.moneyCost;
+        currentMoney -= buildingInfo.getCost();
 
         //change the sprite to construction site
-        hex.GetComponent<SpriteRenderer>().sprite = buildingInfo.constructionSprite;
+        hex.GetComponent<SpriteRenderer>().sprite = buildingInfo.getConstructionSprite();
         //let hex handle actually building the building
         hex.GetComponent<CapturableTile>().beginConstruction(buildingInfo);
     }

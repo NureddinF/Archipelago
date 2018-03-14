@@ -5,12 +5,32 @@ using UnityEngine;
 public class Building : MonoBehaviour {
 
 	// Building parameters
-	public float moneyCost = 3;
-	public float incomeAdjustment = 1;
-	public float constructionTime = 5; //time to build the building in seconds if all other factors are set to 1
+	private float cost = 3;
+	private float tileIncomeAfterBuild = 1;
+	private float constructionTime = 5; //time to build the building in seconds if all other factors are set to 1
 	
     //Building sprites
-	public Sprite builtSprite;
-	public Sprite constructionSprite;
+	private Sprite builtSprite;
+    private Sprite constructionSprite;
 
+    //Getters & Setters
+    public void setCost(float cost){this.cost = cost;}
+    
+    public void setTileIncomeAfterBuild(float newIncome){this.tileIncomeAfterBuild = newIncome;}
+
+    public void setConstructionTime(float constructionTime) { this.constructionTime = constructionTime;}
+
+    public void setBuiltSprite(Sprite builtSprite) { this.builtSprite = builtSprite; }
+
+    public void setConstructionSprite(Sprite constructionSprite) { this.constructionSprite = constructionSprite; }
+
+    public float getCost() { return cost; }
+
+    public float getTileIncomeAfterBuild() { return tileIncomeAfterBuild; }
+
+    public float getConstructionTime() { return constructionTime; }
+
+    public Sprite getBuiltSprite() { return builtSprite; }
+
+    public Sprite getConstructionSprite() { return constructionSprite; }
 }

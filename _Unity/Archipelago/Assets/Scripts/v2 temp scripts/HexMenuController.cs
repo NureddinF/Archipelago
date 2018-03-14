@@ -67,8 +67,8 @@ public class HexMenuController : MonoBehaviour
             }
 
             tileImage.sprite = h.GetComponent<SpriteRenderer>().sprite;
-            tileWorkerCount.text = gameObject.GetComponent<UnitController>().getWorkerCountByTileCoords(h.x, h.y).ToString();
-            tileWarriorCount.text = gameObject.GetComponent<UnitController>().getWarriorCountByTileCoords(h.x, h.y).ToString();
+            tileWorkerCount.text = gameObject.GetComponent<UnitController>().getWorkerCountByTileCoords(h.getX(), h.getY()).ToString();
+            tileWarriorCount.text = gameObject.GetComponent<UnitController>().getWarriorCountByTileCoords(h.getX(), h.getY()).ToString();
 
             hexMenu.SetActive(true);
         }
@@ -89,7 +89,7 @@ public class HexMenuController : MonoBehaviour
         if (selectedHex != null)
         {
             gameObject.GetComponent<UnitController>().moveClosestWorker(selectedHex);
-            tileWorkerCount.text = gameObject.GetComponent<UnitController>().getWorkerCountByTileCoords(selectedHex.x, selectedHex.y).ToString();
+            tileWorkerCount.text = gameObject.GetComponent<UnitController>().getWorkerCountByTileCoords(selectedHex.getX(), selectedHex.getY()).ToString();
         }
         else
             Debug.Log("No hex selected to move a worker unit to");
@@ -100,7 +100,7 @@ public class HexMenuController : MonoBehaviour
         if (selectedHex != null)
         {
             gameObject.GetComponent<UnitController>().moveClosestWarrior(selectedHex);
-            tileWarriorCount.text = gameObject.GetComponent<UnitController>().getWarriorCountByTileCoords(selectedHex.x, selectedHex.y).ToString();
+            tileWarriorCount.text = gameObject.GetComponent<UnitController>().getWarriorCountByTileCoords(selectedHex.getX(), selectedHex.getY()).ToString();
         }
         else
             Debug.Log("No hex selected to move a warrior unit to");

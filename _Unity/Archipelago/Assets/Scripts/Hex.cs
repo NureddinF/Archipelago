@@ -7,12 +7,11 @@ using UnityEngine.UI;
 public class Hex : MonoBehaviour {
 
     //Stores coordinate in the map
-    public int x;
-    public int y;
+    private int x;
+    private int y;
 
 	//Store who owns the hex
 	public Player.PlayerId hexOwner = Player.PlayerId.NEUTRAL;
-    public Playerv2.PlayerId hexOwner2 = Playerv2.PlayerId.NEUTRAL;
 
     private HexGrid.TileType tileType;
     private float tileIncome;
@@ -21,7 +20,13 @@ public class Hex : MonoBehaviour {
     private int maxY = HexGrid.getGridHeight() - 1;
     private int maxX = HexGrid.getGridWidth() - 1;
 
+    public void setX(int x) { this.x = x; }
 
+    public void setY(int y) { this.y = y; }
+
+    public int getX() { return x; }
+
+    public int getY() { return y; }
 
     public void setTileIncome(float amount) { this.tileIncome = amount; }
 
