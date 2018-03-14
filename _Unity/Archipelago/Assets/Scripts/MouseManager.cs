@@ -21,6 +21,7 @@ public class MouseManager : MonoBehaviour {
 	public float zoomSpeed = 0.07f;
 	public float shiftSpeed = 0.1f;
 	public float panSpeed = 0.07f;
+	public float cameraMovementTolerance = 0.5f;
 
 	public Vector2 clickPos;
 	private bool canPerformSelection = false;
@@ -44,7 +45,7 @@ public class MouseManager : MonoBehaviour {
 	void Update () {
 
 
-		// 
+		// Handle clicking
 		if (Input.touchCount == 0) {
 			//For Debugging on PC
 			if(Input.GetMouseButtonDown(0)){
@@ -136,7 +137,6 @@ public class MouseManager : MonoBehaviour {
 			
 			//Return the gameobject that the ray has collided with
 			GameObject collidedHitInfo = hitInfo.collider.transform.gameObject;
-			Debug.Log ("Raycast hit something! Specifically: " + collidedHitInfo.name);
 			// Check what we clicked on
 			if (collidedHitInfo.GetComponent<Hex> () != null) {
 				Hex hex = collidedHitInfo.GetComponent<Hex> ();
@@ -216,7 +216,9 @@ public class MouseManager : MonoBehaviour {
 		main.transform.position = clampNewCameraPos(newCameraPos);
 
 		//Don't perform selection if camera movement happens
-		canPerformSelection = false;
+		if(deltaCameraPos.magnitude > cameraMovementTolerance){
+			canPerformSelection = false;
+		}
 		return newCameraPos;
 	}
 
@@ -242,7 +244,9 @@ public class MouseManager : MonoBehaviour {
 		halfWidth = halfHeight * Screen.width / Screen.height;
 
 		//Don't perform selection if camera movement happens
-		canPerformSelection = false;
+		if(magnitudeDiff > cameraMovementTolerance){
+			canPerformSelection = false;
+		}
 
 		//Return weather this was a zoom out or in
 		return Mathf.Sign (magnitudeDiff);

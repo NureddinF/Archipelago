@@ -427,7 +427,7 @@ GameObject:
   - component: {fileID: 399114101}
   - component: {fileID: 399114100}
   - component: {fileID: 399114102}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Hex Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -868,6 +868,10 @@ Prefab:
       value: 
       objectReference: {fileID: 1692912300926586, guid: bf218af2d364aa445a493944561de572,
         type: 2}
+    - target: {fileID: 1362166559694040, guid: 2fff18e2d9846b24abc3e699c472c973, type: 2}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2fff18e2d9846b24abc3e699c472c973, type: 2}
   m_IsPrefabParent: 0
