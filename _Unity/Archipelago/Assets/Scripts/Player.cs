@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class Player : MonoBehaviour {
 
+	public static bool isEnabled = false;
 	// Identify who this player is
 	public enum PlayerId {P1,P2, NEUTRAL};
 	public PlayerId playerId;
@@ -23,6 +25,8 @@ public class Player : MonoBehaviour {
 	private float totalTileIncome;
 	private float currentMoney;
 
+	private WinPanel winPanel; //calls on winPanel object
+
 	// Reference to the map so Player can access tiles
 	public HexGrid map;
 
@@ -33,11 +37,35 @@ public class Player : MonoBehaviour {
 		rateText.text = "+ 0/sec";
 		startTime = Time.time;
 	}
+
+	void Awake(){
+
+		winPanel = WinPanel.instance ();
+
+	}
 	
 	// Update is called once per frame
 	void Update () {
 		// Use discrete chunks of income
+		//to pause script
+		if (isEnabled) {
+			return;
+		}
 		generateIncomeDiscrete();
+		if (currentMoney >= 10 ) { //when money threshold reached, and no winner is false
+			rateText.text = "WIN";
+			incomeText.text = "";
+		
+			Time.timeScale = 0f; //pauses game
+			Hex.isEnabled = true;    //Calls on these scripts to disable them, so the game cannot be played when a winner is found
+			Worker.isEnabled = true; //Ref: https://answers.unity.com/questions/930234/stop-script-immediately-from-another-script.html
+			MouseManager.isEnabled = true;
+			Menu.isEnabled = true;
+			isEnabled = true;
+		
+			winPanel.back("You Win!"); //calls on back in winPanel class
+
+		}
 	}
 
 	// Generates income in discrete chunks rather than each frame
@@ -156,5 +184,5 @@ public class Player : MonoBehaviour {
 		hex.GetComponent<SpriteRenderer> ().sprite = buildingInfo.constructionSprite;
 		//let hex handle actually building the building
 		hex.GetComponent<CapturableTile> ().beginConstruction (buildingInfo);
-	}
+	} 
 }

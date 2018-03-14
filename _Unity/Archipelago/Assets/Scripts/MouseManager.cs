@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class MouseManager : MonoBehaviour {
+
+	public static bool isEnabled = false;
 	// human player who is associated with this mouse manager
 	public Player player;
 
@@ -32,6 +34,8 @@ public class MouseManager : MonoBehaviour {
 	private float halfHeight;
 	private float halfWidth;
 	public Vector3 centerPoint;
+		
+
 			
 	void Start() {
 		//https://www.youtube.com/watch?v=fQ2Dvj5-pfc
@@ -43,7 +47,10 @@ public class MouseManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-
+		//to pause script
+		if (isEnabled) {
+			return;
+		}
 
 		// Handle clicking
 		if (Input.touchCount == 0) {

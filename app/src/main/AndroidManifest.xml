@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.xuhongcheng.archipelago">
+    package="com.example.xuhongcheng.archipelago.myapplication">
 
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -11,25 +12,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activitys.LoginActivity">
+        <activity android:name="com.example.xuhongcheng.archipelago.activitys.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activitys.RegisterActivity" />
-        <activity android:name=".activitys.MainActivity" />
-        <activity android:name=".activitys.SettingActivity" />
-        <!--
-               Set to true if your app is Standalone, that is, it does not require the handheld
-               app to run.
-        -->
+        <activity android:name="com.example.xuhongcheng.archipelago.activitys.RegisterActivity" />
+        <activity android:name="com.example.xuhongcheng.archipelago.activitys.MainActivity" />
+        <activity android:name="com.example.xuhongcheng.archipelago.activitys.SettingActivity" />
 
         <activity
-            android:name=".SinglePlayerActivity"
-            android:parentActivityName=".activitys.MainActivity"></activity>
-        <activity android:name=".activitys.ProfileActivity"></activity>
+            android:name="com.example.xuhongcheng.archipelago.activitys.SinglePlayerActivity"
+            android:parentActivityName="com.example.xuhongcheng.archipelago.activitys.MainActivity"></activity>
+        <activity android:name="com.example.xuhongcheng.archipelago.activitys.ProfileActivity"></activity>
     </application>
 
 </manifest>

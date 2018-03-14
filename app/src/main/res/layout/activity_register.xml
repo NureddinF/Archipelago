@@ -24,6 +24,22 @@
         android:inputType="textPassword"
         android:textColorHint="#44ffffff" />
 
+    <EditText
+        android:id="@+id/et_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Please Input Email"
+        android:textColorHint="#44ffffff" />
+
+    <TextView
+        android:id="@+id/tv_tips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:layout_marginTop="2dp"
+        android:text="Password at least one number and uppercase and lowercase letters required, 6-16 digits."
+        android:textColorHint="#44ffffff" />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

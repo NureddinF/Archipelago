@@ -1,14 +1,15 @@
 package com.example.xuhongcheng.archipelago.activitys;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.xuhongcheng.archipelago.R;
+import com.example.xuhongcheng.archipelago.myapplication.R;
+
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -23,11 +24,11 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        logout = findViewById(R.id.logout);
-        btn_setting = findViewById(R.id.setting);
-        userName = findViewById(R.id.username);
-        wins = findViewById(R.id.wins);
-        losses = findViewById(R.id.losses);
+        logout = (Button) findViewById(R.id.logout);
+        btn_setting = (ImageButton) findViewById(R.id.setting);
+        userName = (TextView) findViewById(R.id.username);
+        wins = (TextView) findViewById(R.id.wins);
+        losses = (TextView) findViewById(R.id.losses);
 
         btn_setting.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -18,25 +18,26 @@
         android:textSize="18sp" />
 
     <RadioGroup
-        android:layout_marginTop="10dp"
         android:id="@+id/rg_options"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <RadioButton
-            android:layout_weight="1"
             android:id="@+id/rb_turn_on"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
             android:text="Turn On"
             android:textColor="#ffffff" />
 
         <RadioButton
-            android:layout_weight="1"
             android:id="@+id/rb_turn_off"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Turn Off"
             android:textColor="#ffffff" />
     </RadioGroup>
