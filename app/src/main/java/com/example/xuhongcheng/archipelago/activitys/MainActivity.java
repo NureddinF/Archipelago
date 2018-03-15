@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.example.xuhongcheng.archipelago.myapplication.R;
 import com.example.xuhongcheng.archipelago.utils.SharedPreferenceUtils;
 
+import com.MobileComputingGrp3.UnityPlayerActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,7 +44,9 @@ public class MainActivity extends AppCompatActivity {
         singlePlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent launchIntent = getPackageManager().getLaunchIntentForPackage(getResources().getString(R.string.gamePackageName));
+
+                //Intent launchIntent = getPackageManager().getLaunchIntentForPackage(getResources().getString(R.string.gamePackageName));
+                Intent launchIntent = new Intent(getApplicationContext(), UnityPlayerActivity.class);
                 if (launchIntent != null) {
                     startActivity(launchIntent);
                 } else {
