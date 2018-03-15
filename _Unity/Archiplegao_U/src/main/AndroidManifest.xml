@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.MobileComputingGrp3" xmlns:tools="http://schemas.android.com/tools" android:versionName="1.0" android:versionCode="1" android:installLocation="preferExternal">
   <supports-screens android:smallScreens="true" android:normalScreens="true" android:largeScreens="true" android:xlargeScreens="true" android:anyDensity="true" />
-  <!-- android:theme="@style/UnityThemeSelector"-->
-  <application android:icon="@drawable/app_icon" android:label="@string/app_name" android:isGame="true" android:banner="@drawable/app_banner">
-    <activity android:label="@string/app_name" android:screenOrientation="fullSensor" android:launchMode="singleTask" android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale|layoutDirection" android:name="com.MobileComputingGrp3.UnityPlayerActivity">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
-        <category android:name="android.intent.category.LAUNCHER" />
-        <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
-      </intent-filter>
+  <application android:theme="@style/UnityThemeSelector" android:icon="@drawable/app_icon" android:label="@string/app_name" android:isGame="true" android:banner="@drawable/app_banner">
+    <activity android:label="@string/app_name"
+        android:screenOrientation="fullSensor"
+        android:launchMode="singleTask"
+        android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale|layoutDirection"
+        android:name="com.MobileComputingGrp3.UnityPlayerActivity">
       <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
     </activity>
-    <meta-data android:name="unity.build-id" android:value="27f9d459-ed9e-425d-8553-8565d293115b" />
+    <meta-data android:name="unity.build-id" android:value="ac6a0ee4-53cd-41d5-8209-5d515cd73b5b" />
     <meta-data android:name="unity.splash-mode" android:value="0" />
     <meta-data android:name="unity.splash-enable" android:value="True" />
     <meta-data android:name="android.max_aspect" android:value="2.1" />
