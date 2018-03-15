@@ -1,17 +1,18 @@
 package com.MobileComputingGrp3;
 
-import com.unity3d.player.*;
 import android.app.Activity;
+import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Toast;
+
+import com.unity3d.player.UnityPlayer;
 
 public class UnityPlayerActivity extends Activity
 {
@@ -119,5 +120,11 @@ public class UnityPlayerActivity extends Activity
 
     public  void trigger(){
         Toast.makeText(getApplicationContext(), "Unity Called A.S.", Toast.LENGTH_SHORT).show();
+    }
+
+    public  void win(){
+        Toast.makeText(getApplicationContext(), "You won the game!.", Toast.LENGTH_SHORT).show();
+        //TODO: relay data back to android studio here (e.g. win)
+        finish();
     }
 }
