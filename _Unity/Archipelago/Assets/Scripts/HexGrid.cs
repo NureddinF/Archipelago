@@ -63,6 +63,13 @@ public class HexGrid : MonoBehaviour {
         yOffset = hexHeight * (0.5f + yOffsetGap);
         gridHeight = mapStructure.GetLength(0);
         gridWidth = mapStructure.GetLength(1);
+
+		Vector3 maxMapCoord= calcUnityCoord (new Vector2 (gridWidth-1, gridHeight-1));
+		Debug.Log (maxMapCoord);
+		BoxCollider2D cameraEdge = GetComponent<BoxCollider2D> ();
+		cameraEdge.size = new Vector2(maxMapCoord.x + 2*xOffset,Mathf.Abs(maxMapCoord.y) + 2*yOffset);
+		cameraEdge.offset = new Vector2 (maxMapCoord.x/2, -cameraEdge.size.y / 2 + yOffset);
+		FindObjectOfType<MouseManager> ().setBounds (GetComponent<BoxCollider2D> ());
     }
 
     //This method contains the matrix representation of the map
@@ -83,6 +90,7 @@ public class HexGrid : MonoBehaviour {
         };
 
         mapStructure = map;
+
     }
 
     //Turns a grid position to unity coordinates

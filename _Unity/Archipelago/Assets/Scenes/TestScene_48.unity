@@ -148,21 +148,12 @@ MonoBehaviour:
   - {fileID: 1058154063995710, guid: f489d981f1664f84c99e458047159577, type: 2}
   - {fileID: 1359874251730732, guid: 88629505eac65174d931b04a69dd5f6f, type: 2}
   menu: {fileID: 51062365}
-  zoomSpeed: 1
+  zoomSpeed: 0.03
+  shiftSpeed: 1
   panSpeed: 0.1
-  i: 0
-  rotx: 0
-  roty: 0
-  dir: 0
-  maxX: 0
-  minX: 0
-  maxY: 0
-  minY: 0
-  direction: -1
-  initPos: {x: 0, y: 0}
-  original: {x: 0, y: 0, z: 0}
-  finalPos: {x: 0, y: 0}
-  move: {x: 0, y: 0}
+  cameraMovementTolerance: 0.5
+  clickPos: {x: 0, y: 0}
+  centerPoint: {x: 0, y: 0, z: 0}
 --- !u!114 &31710731
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -255,6 +246,7 @@ GameObject:
   - component: {fileID: 140691162}
   - component: {fileID: 140691161}
   - component: {fileID: 140691160}
+  - component: {fileID: 140691164}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -296,7 +288,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 26.721004
+  orthographic size: 13.13723
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -325,6 +317,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &140691164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 140691159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2144ae7a69f784b158834c1517368e6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  winstatement: {fileID: 1398331722}
+  goBack: {fileID: 607362990}
+  windowObject: {fileID: 1243094972}
 --- !u!1 &142439606
 GameObject:
   m_ObjectHideFlags: 0
@@ -582,7 +588,7 @@ GameObject:
   - component: {fileID: 399114101}
   - component: {fileID: 399114100}
   - component: {fileID: 399114102}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Hex Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -626,20 +632,31 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &399114102
-MonoBehaviour:
+--- !u!61 &399114102
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 399114099}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2144ae7a69f784b158834c1517368e6d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  winstatement: {fileID: 1398331722}
-  goBack: {fileID: 607362990}
-  windowObject: {fileID: 1243094972}
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &470851950
 GameObject:
   m_ObjectHideFlags: 0
@@ -1482,6 +1499,10 @@ Prefab:
       value: 
       objectReference: {fileID: 1692912300926586, guid: bf218af2d364aa445a493944561de572,
         type: 2}
+    - target: {fileID: 1362166559694040, guid: 2fff18e2d9846b24abc3e699c472c973, type: 2}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2fff18e2d9846b24abc3e699c472c973, type: 2}
   m_IsPrefabParent: 0
