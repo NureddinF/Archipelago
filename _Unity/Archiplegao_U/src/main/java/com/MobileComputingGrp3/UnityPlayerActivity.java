@@ -123,7 +123,7 @@ public class UnityPlayerActivity extends Activity
     }
 
     public  void win(){
-        Toast.makeText(getApplicationContext(), "You won the game!.", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "You won the game!", Toast.LENGTH_SHORT).show();
         //TODO: relay data back to android studio here (e.g. win)
         finish();
     }
