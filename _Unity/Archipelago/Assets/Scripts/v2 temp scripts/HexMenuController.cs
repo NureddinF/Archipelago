@@ -58,7 +58,7 @@ public class HexMenuController : MonoBehaviour
             else if (income < 0)
             {
                 tileIncome.color = Color.red;
-                tileIncome.text = "-" + income.ToString() + "/sec";
+                tileIncome.text =  income.ToString() + "/sec";
             }
             else
             {

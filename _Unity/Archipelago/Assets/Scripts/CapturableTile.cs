@@ -95,8 +95,7 @@ public class CapturableTile: MonoBehaviour{
 			numP2UnitsOnHex -= numUnits;
 		}
 	}
-
-
+    
 	// Adnvace state towards capturing the tile
 	private void progressTileCapture(){
 

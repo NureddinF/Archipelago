@@ -112,7 +112,7 @@ public class Hex : MonoBehaviour {
         {
             if (gO.GetComponent<Hex>())
             {
-                if (gO.GetComponent<Hex>().getPlayerId().Equals(Player.PlayerId.P1))
+                if (gO.GetComponent<Hex>().getPlayerId().Equals(Player.PlayerId.P1)) //TODO: Currently softcoded for P1, need to set so works for anyplayer and passed in
                     return true;
             }
         }
