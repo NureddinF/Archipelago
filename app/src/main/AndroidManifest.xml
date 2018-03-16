@@ -29,14 +29,6 @@
             android:name="com.example.xuhongcheng.archipelago.activitys.SinglePlayerActivity"
             android:parentActivityName="com.example.xuhongcheng.archipelago.activitys.MainActivity"/>
         <activity android:name="com.example.xuhongcheng.archipelago.activitys.ProfileActivity"/>
-        <activity android:label="@string/app_name"
-            android:screenOrientation="fullSensor"
-            android:launchMode="singleTask"
-            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale|layoutDirection"
-            android:name="com.MobileComputingGrp3.UnityPlayerActivity"
-            android:parentActivityName="com.example.xuhongcheng.archipelago.activitys.MainActivity">
-            <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
-        </activity>
     </application>
 
 </manifest>
