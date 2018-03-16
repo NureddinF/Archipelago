@@ -100,7 +100,7 @@ public class CapturableTile: MonoBehaviour{
 	// Adnvace state towards capturing the tile
 	private void progressTileCapture(){
 
-		if (thisHex.hexOwner == Player.PlayerId.NEUTRAL && captureBoarder.enabled) {
+		if (thisHex.hexOwner == Player.PlayerId.NEUTRAL && captureBoarder.enabled && thisHex.hasNeighbor()) {
 
 			if(amountCaptured >0){
 				neutralResetSpeed = Mathf.Abs (neutralResetSpeed);

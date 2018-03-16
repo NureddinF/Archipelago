@@ -28,6 +28,8 @@ public class Hex : MonoBehaviour {
 
     public int getY() { return y; }
 
+    public Player.PlayerId getPlayerId() { return hexOwner; }
+
     public void setTileIncome(float amount) { this.tileIncome = amount; }
 
     public float getTileIncome() { return tileIncome; }
@@ -100,5 +102,20 @@ public class Hex : MonoBehaviour {
         }
         
         return neighbors;
+    }
+
+    public bool hasNeighbor()
+    {
+        List<GameObject> neighbors = getNeighbors();
+
+        foreach(GameObject gO in neighbors)
+        {
+            if (gO.GetComponent<Hex>())
+            {
+                if (gO.GetComponent<Hex>().getPlayerId().Equals(Player.PlayerId.P1))
+                    return true;
+            }
+        }
+        return false;
     }
 }
