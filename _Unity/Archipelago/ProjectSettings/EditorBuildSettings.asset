@@ -8,6 +8,9 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/scene1.unity
     guid: c6d2d14e6ebcd24498a6363a774701ba
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TestScene_48.unity
     guid: efa2b26be98c9a14887693eb9fb26e87
+  - enabled: 1
+    path: Assets/Scenes/AdnroidUnityIntegration.unity
+    guid: d4b63ac841cb74f1a92bdd42c8a7af9d
