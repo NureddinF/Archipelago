@@ -208,12 +208,10 @@ MonoBehaviour:
   p1CaptureTile: {fileID: 21300000, guid: c591bc3c4116044bfb42bb2fb451f497, type: 3}
   p2CaptureTile: {fileID: 21300000, guid: 64ef5fd394c33457abdd84a8142bdba8, type: 3}
   captureSpeedPerUnit: 1
-  neutralUnitFactor: 0.25
+  neutralResetSpeed: 0.25
   totalCaptureCost: 10
   constructionSpeedPerUnit: 1
   passiveConstructionSpeed: 0
-  numP1UnitsOnHex: 0
-  numP2UnitsOnHex: 0
   tileIncome: 1
 --- !u!212 &212710428965042312
 SpriteRenderer:
@@ -249,7 +247,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: ba3328085aca109449202a7e78363a05, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e4c920c9ecf9f4960943eaa0bf0471a0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
