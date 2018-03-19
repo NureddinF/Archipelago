@@ -23,6 +23,7 @@
 sysinfo.txt
 # Unity3D generated meta files
 *.pidb.meta
+/_Unity/Archipelago/ProjectSettings/ProjectVersion.txt
 
 ###
 # VS/MD solution and project files
