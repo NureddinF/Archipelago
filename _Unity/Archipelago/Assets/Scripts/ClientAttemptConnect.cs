@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
 using UnityEngine.Networking.Match;
 using UnityEngine.UI;
@@ -36,6 +37,11 @@ public class ClientAttemptConnect : NetworkBehaviour {
 			return;
 		}
 		Debug.Log ("valid Ip address");
+
+		// Save state and load next scene
+		InitialGameState.hostIpAddr = ipText;
+		int lobbyScene = SceneLoader.scenes ["host"];
+		SceneManager.LoadScene (lobbyScene);
 	}
 
 	// https://stackoverflow.com/questions/6219454/efficient-way-to-remove-all-whitespace-from-string

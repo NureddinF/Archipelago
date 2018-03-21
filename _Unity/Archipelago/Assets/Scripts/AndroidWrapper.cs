@@ -2,15 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AndroidWrapper : MonoBehaviour {
-
-	public static int intitalScene = 0;
-
-	private static Dictionary<string, int> scenes = new Dictionary<string, int>{
-		{ "play", 1 },
-		{ "host", 2 },
-		{ "join", 3 }
-	};
+public class AndroidWrapper {
 
 	public static void winAction(){
 		AndroidJavaObject currentActivity = getUnityActivity();
@@ -18,13 +10,11 @@ public class AndroidWrapper : MonoBehaviour {
 		currentActivity.Call("win");
 	}
 
-	public static int getScene(){
+	public static string getAndroidSceneName(){
 
 		AndroidJavaObject currentActivity = getUnityActivity();
 
-		string scene = currentActivity.Call<string>("getScene");
-		intitalScene = scenes [scene];
-		return intitalScene;
+		return currentActivity.Call<string>("getScene");
 	}
 
 
