@@ -2,15 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://C:\Users\cn380531\CSproject\Archipelago.iml" filepath="C:\Users\cn380531\CSproject\Archipelago.iml" />
       <module fileurl="file://$PROJECT_DIR$/_Unity/Archiplegao_U/Archiplegao_U.iml" filepath="$PROJECT_DIR$/_Unity/Archiplegao_U/Archiplegao_U.iml" />
-      <module fileurl="file://C:\Users\cn380531\CSproject\_Unity\Archiplegao_U\Archiplegao_U.iml" filepath="C:\Users\cn380531\CSproject\_Unity\Archiplegao_U\Archiplegao_U.iml" />
-      <module fileurl="file://C:\Users\cn380531\mobile_computing\_Unity\Archiplegao_U\Archiplegao_U.iml" filepath="C:\Users\cn380531\mobile_computing\_Unity\Archiplegao_U\Archiplegao_U.iml" />
-      <module fileurl="file://C:\Users\cn380531\mobile_computing\CSproject.iml" filepath="C:\Users\cn380531\mobile_computing\CSproject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CSCI_proj.iml" filepath="$PROJECT_DIR$/CSCI_proj.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\cn380531\mobile_computing\app\app.iml" filepath="C:\Users\cn380531\mobile_computing\app\app.iml" />
-      <module fileurl="file://C:\Users\cn380531\CSproject\app\app.iml" filepath="C:\Users\cn380531\CSproject\app\app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/mobile_computing.iml" filepath="$PROJECT_DIR$/mobile_computing.iml" />
     </modules>
   </component>
 </project>

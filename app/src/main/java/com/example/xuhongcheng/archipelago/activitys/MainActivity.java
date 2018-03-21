@@ -1,19 +1,18 @@
 package com.example.xuhongcheng.archipelago.activitys;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.MobileComputingGrp3.UnityPlayerActivity;
 import com.example.xuhongcheng.archipelago.myapplication.R;
 import com.example.xuhongcheng.archipelago.utils.SharedPreferenceUtils;
 
-import com.MobileComputingGrp3.UnityPlayerActivity;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     private static final int PLAY_GAME = 600;
 
