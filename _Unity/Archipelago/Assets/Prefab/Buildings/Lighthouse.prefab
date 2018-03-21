@@ -18,8 +18,9 @@ GameObject:
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4220853458775302}
+  - component: {fileID: 224124855976244304}
   - component: {fileID: 114648460054377040}
+  - component: {fileID: 222512701432450820}
   m_Layer: 0
   m_Name: Lighthouse
   m_TagString: Untagged
@@ -27,19 +28,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4220853458775302
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1257516502844256}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 20.025068, y: -17.430214, z: 0.023914587}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &114648460054377040
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -51,11 +39,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f793c2afe2a3b64db9fea45fa2b2fd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moneyCost: 3
-  incomeAdjustment: 30
-  constructionTime: 5
-  builtMenuOptions: []
-  constructionMenuOptions: []
-  type: 0
-  builtSprite: {fileID: 21300000, guid: 274bf5b4ce6c9a342b7ef892e2407b9d, type: 3}
-  constructionSprite: {fileID: 21300000, guid: a73a253afb5804348875cea91ef24140, type: 3}
+--- !u!222 &222512701432450820
+CanvasRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1257516502844256}
+--- !u!224 &224124855976244304
+RectTransform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1257516502844256}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.023914587}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 20.025068, y: -17.430214}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}

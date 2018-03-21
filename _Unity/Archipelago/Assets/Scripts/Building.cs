@@ -8,6 +8,7 @@ public class Building : MonoBehaviour {
 	private float cost = 3;
 	private float tileIncomeAfterBuild = 1;
 	private float constructionTime = 5; //time to build the building in seconds if all other factors are set to 1
+    private string folderPath = "Images/Tiles/";
 	
     //Building sprites
 	private Sprite builtSprite;

@@ -16,6 +16,9 @@ public class Hex : MonoBehaviour {
     private HexGrid.TileType tileType;
     private float tileIncome;
 
+    //Store the building on the hex, null if not one
+    private Building building;
+
     //Set maxY and maxX of a hex, -1 for off by one error
     private int maxY = HexGrid.getGridHeight() - 1;
     private int maxX = HexGrid.getGridWidth() - 1;
@@ -37,6 +40,10 @@ public class Hex : MonoBehaviour {
     public void setTileType(HexGrid.TileType type) { this.tileType = type; }
 
     public HexGrid.TileType getTileType() { return tileType; }
+
+    public void setBuilding(Building b) { this.building = b; }
+
+    public Building getBuilding() { return building; }
     
     //Method to return a list of a hex's direct neighbors
     public List <GameObject> getNeighbors(){
@@ -117,5 +124,10 @@ public class Hex : MonoBehaviour {
             }
         }
         return false;
+    }
+
+    public void changeHexSprite(Sprite s)
+    {
+        this.GetComponent<SpriteRenderer>().sprite = s;
     }
 }

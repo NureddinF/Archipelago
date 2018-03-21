@@ -1115,6 +1115,7 @@ GameObject:
   - component: {fileID: 977553402}
   - component: {fileID: 977553404}
   - component: {fileID: 977553405}
+  - component: {fileID: 977553406}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1185,6 +1186,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hexMenu: {fileID: 1503804420}
+--- !u!114 &977553406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 977553401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7768e1aabe380dd4e9cbd35d0219a84f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingSprites:
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &1030018683
 GameObject:
   m_ObjectHideFlags: 0
