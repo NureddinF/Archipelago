@@ -15,6 +15,7 @@ public class Player : MonoBehaviour {
 	public float rateMultiplier;
 	public int baseIncome;
 	public int timeFrame; // how long between discrete burst of money
+	public float moneyToWin = 100;
 
 	// UI
 	public Text incomeText;
@@ -52,7 +53,7 @@ public class Player : MonoBehaviour {
 			return;
 		}
 		generateIncomeDiscrete();
-		if (currentMoney >= 10 ) { //when money threshold reached, and no winner is false
+		if (currentMoney >= moneyToWin ) { //when money threshold reached, and no winner is false
 			rateText.text = "WIN";
 			incomeText.text = "";
 		

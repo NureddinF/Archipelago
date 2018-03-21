@@ -1,9 +1,5 @@
 *.iml
-.idea
-.idea/workspace.xml
-.idea/tasks.xml
-.idea/datasources.xml
-.idea/dataSources.ids
+.idea/
 .gradle
 /local.properties
 /.idea/workspace.xml
