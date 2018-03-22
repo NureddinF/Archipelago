@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Farm : Building {
+public class Barracks : Building {
 
-    //FARM SPECIFIC METHODS HERE
+    //Needs Code To Spawn Units
 
 }

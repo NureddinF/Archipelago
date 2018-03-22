@@ -14,6 +14,7 @@ public class Building : MonoBehaviour {
     //Building sprites
 	public Sprite builtSprite;
     public Sprite constructionSprite;
+    public Sprite menuIconSprite;
 
     //Getters & Setters
     public float getCost() { return cost; }
@@ -27,4 +28,6 @@ public class Building : MonoBehaviour {
     public Sprite getConstructionSprite() { return constructionSprite; }
 
     public HexGrid.TileType getTileTypeAssociatedWith() { return tileAssociatedWith; }
+
+    public Sprite getMenuIconSprite() { return menuIconSprite; }
 }

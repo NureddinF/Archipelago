@@ -135,26 +135,43 @@ public class HexMenuController : MonoBehaviour
             {
                 List<Building> buildingOptions = gameObject.GetComponent<BuildingController>().getListOfBuildingByTileType(selectedHex.getTileType());
 
-                foreach(Building b in buildingOptions)
+                Vector3[] corners = new Vector3[4];
+                tileActionBox.GetComponent<RectTransform>().GetWorldCorners(corners);
+
+                float parentHeight = corners[2].y - corners[0].y;
+                float parentWidth = corners[2].x - corners[0].x;
+
+                float childWidth = 1f * parentWidth;
+                float childHeight = childWidth;
+
+                //Count number of items iterated through to allow correct vertical displacement
+                int count = 0;
+                
+
+                foreach (Building b in buildingOptions)
                 {
                     GameObject go = new GameObject();
+                    go.transform.parent = tileActionBox.transform;
                     go.name = b.name;
                     go.AddComponent<RectTransform>();
                     go.AddComponent<Image>();
                     go.AddComponent<Button>();
-                    go.transform.parent = tileActionBox.transform;
+                    go.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth, childHeight);
+                    go.GetComponent<RectTransform>().localPosition = new Vector2(0f, -(count * childHeight));
+                    go.GetComponent<RectTransform>().pivot = new Vector2(0f, 1f);
+                    go.GetComponent<RectTransform>().anchorMin = new Vector2(0f, 1f);
+                    go.GetComponent<RectTransform>().anchorMax = new Vector2(0f, 1f);
+                   
 
-                    go.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 1);
-                    go.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 1);
-                    go.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1);
 
-                    go.transform.localPosition = new Vector3(0, -20, 0);
-                    go.GetComponent<RectTransform>().sizeDelta = new Vector2(50, 50);
 
-                    go.GetComponent<Image>().sprite = b.getBuiltSprite();
-
+                    go.GetComponent<Image>().sprite = b.getMenuIconSprite();
                     go.GetComponent<Button>().onClick.AddListener(delegate { tileActionBuild(b); });
+                    count++;
                 }
+            }
+            else {
+                //INSERT CODE TO SHOW MENU DISPLAY FOR BUILDING ON THAT TILE
             }
         }
     }

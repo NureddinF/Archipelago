@@ -108,7 +108,7 @@ public class HexGrid : MonoBehaviour {
 
 		Vector3 maxMapCoord= calcUnityCoord (new Vector2 (gridWidth-1, gridHeight-1));
 		Debug.Log (maxMapCoord);
-		BoxCollider2D cameraEdge = GetComponent<BoxCollider2D> ();
+		BoxCollider2D cameraEdge = GetComponent<BoxCollider2D>();
 		cameraEdge.size = new Vector2(maxMapCoord.x + 2*xOffset,Mathf.Abs(maxMapCoord.y) + 2*yOffset);
 		cameraEdge.offset = new Vector2 (maxMapCoord.x/2, -cameraEdge.size.y / 2 + yOffset);
 		FindObjectOfType<MouseManager> ().setBounds (GetComponent<BoxCollider2D> ());
@@ -136,7 +136,7 @@ public class HexGrid : MonoBehaviour {
         if (gridPos.x % 2 == 1)
             y -= yOffset;
 
-        return new Vector3(x, y, 0);
+        return new Vector3(x, y, -1);
     }
 
     //Method to create the hex grid
