@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuildingController : MonoBehaviour {
+public class BuildingController : MonoBehaviour
+{
 
     private Dictionary<string, Building> constructionLocations;
 
-    public List<Sprite> buildingSprites;
+    public List<Building> allBuildings;
 
     private string hexToString(Hex h)
     {
@@ -62,7 +63,7 @@ public class BuildingController : MonoBehaviour {
 
     private void addConstruction(string s, Building b)
     {
-        constructionLocations.Add(s,b); 
+        constructionLocations.Add(s, b);
     }
 
     public void removeConstruction(Hex h)
@@ -74,5 +75,20 @@ public class BuildingController : MonoBehaviour {
     private void removeConstruction(string s)
     {
         constructionLocations.Remove(s);
+    }
+
+    public List<Building> getListOfBuildingByTileType(HexGrid.TileType type)
+    {
+        List<Building> result = new List<Building>();
+
+        foreach (Building b in allBuildings)
+        {
+            if (b.getTileTypeAssociatedWith().Equals(type))
+            {
+                result.Add(b);
+            }
+        }
+
+        return result;
     }
 }

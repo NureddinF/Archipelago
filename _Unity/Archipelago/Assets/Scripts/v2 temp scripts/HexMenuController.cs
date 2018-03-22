@@ -12,8 +12,8 @@ public class HexMenuController : MonoBehaviour
     private Image tileImage;
     private Text tileWorkerCount;
     private Text tileWarriorCount;
-
-    private List<Image> actionOptions;
+    private Image tileActionBox;
+    private List<Sprite> buildOptions;
 
     private int warriorCount;
     private int workerCount;
@@ -28,6 +28,7 @@ public class HexMenuController : MonoBehaviour
         tileImage = hexMenu.transform.Find("TileImage").gameObject.GetComponent<Image>();
         tileWorkerCount = hexMenu.transform.Find("TileWorkerCount").gameObject.GetComponent<Text>();
         tileWarriorCount = hexMenu.transform.Find("TileWarriorCount").gameObject.GetComponent<Text>();
+        tileActionBox = hexMenu.transform.Find("TileActionBox").gameObject.GetComponent<Image>();
         selectedHex = null;
         hideHexMenu();
     }
@@ -69,6 +70,8 @@ public class HexMenuController : MonoBehaviour
             tileImage.sprite = h.GetComponent<SpriteRenderer>().sprite;
             tileWorkerCount.text = gameObject.GetComponent<UnitController>().getWorkerCountByTileCoords(h.getX(), h.getY()).ToString();
             tileWarriorCount.text = gameObject.GetComponent<UnitController>().getWarriorCountByTileCoords(h.getX(), h.getY()).ToString();
+
+            setTileActions();
 
             hexMenu.SetActive(true);
         }
@@ -116,5 +119,48 @@ public class HexMenuController : MonoBehaviour
             //"Reselect Hex" to update any changed values
             setSelectedHex(h);
         }
+    }
+
+    private void setTileActions()
+    {
+
+        foreach (Transform child in tileActionBox.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+
+        if (selectedHex)
+        {
+            if (!selectedHex.getBuilding())
+            {
+                List<Building> buildingOptions = gameObject.GetComponent<BuildingController>().getListOfBuildingByTileType(selectedHex.getTileType());
+
+                foreach(Building b in buildingOptions)
+                {
+                    GameObject go = new GameObject();
+                    go.name = b.name;
+                    go.AddComponent<RectTransform>();
+                    go.AddComponent<Image>();
+                    go.AddComponent<Button>();
+                    go.transform.parent = tileActionBox.transform;
+
+                    go.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 1);
+                    go.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 1);
+                    go.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1);
+
+                    go.transform.localPosition = new Vector3(0, -20, 0);
+                    go.GetComponent<RectTransform>().sizeDelta = new Vector2(50, 50);
+
+                    go.GetComponent<Image>().sprite = b.getBuiltSprite();
+
+                    go.GetComponent<Button>().onClick.AddListener(delegate { tileActionBuild(b); });
+                }
+            }
+        }
+    }
+
+    void tileActionBuild(Building b)
+    {
+        selectedHex.GetComponent<CapturableTile>().beginConstruction(b);
     }
 }

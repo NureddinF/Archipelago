@@ -175,6 +175,7 @@ public class CapturableTile: MonoBehaviour{
 	// Start process of upgrading tile
 	public void beginConstruction(Building buildingInfo){
 		buildingUnderConstrcution = buildingInfo;
+        thisHex.setBuilding(buildingInfo);
 		constructionProgress = 0;
 		captureBoarder.enabled = true;
 	}
