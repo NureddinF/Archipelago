@@ -139,7 +139,6 @@ public class LoginActivity extends Activity {
 //            Toast.makeText(this, "授权成功！", Toast.LENGTH_SHORT).show();
 			Log.e("XXX", "checkPermission: 已经授权！");
 		}
-
 	}
 
 	@Override

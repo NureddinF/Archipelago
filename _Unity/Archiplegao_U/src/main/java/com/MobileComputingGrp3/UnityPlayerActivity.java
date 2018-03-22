@@ -1,16 +1,12 @@
 package com.MobileComputingGrp3;
 
 import android.app.Activity;
-import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Window;
-import android.widget.Toast;
 
 import com.unity3d.player.UnityPlayer;
 
@@ -18,11 +14,20 @@ public class UnityPlayerActivity extends Activity
 {
     protected UnityPlayer mUnityPlayer; // don't change the name of this variable; referenced from native code
 
+    //scene to load when unity starts
+    private String scene;
+    //IP address of this device
+    private String ipAddr;
+
     // Setup activity layout
     @Override protected void onCreate(Bundle savedInstanceState)
     {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
+
+
+        scene = getIntent().getStringExtra("scene");
+        ipAddr = getIntent().getStringExtra("ipaddr");
 
         mUnityPlayer = new UnityPlayer(this);
         setContentView(mUnityPlayer);
@@ -118,8 +123,12 @@ public class UnityPlayerActivity extends Activity
     /*API12*/ public boolean onGenericMotionEvent(MotionEvent event)  { return mUnityPlayer.injectEvent(event); }
 
 
-    public  void trigger(){
-        Toast.makeText(getApplicationContext(), "Unity Called A.S.", Toast.LENGTH_SHORT).show();
+    public String getScene(){
+        return scene;
+    }
+
+    public String getIpAddr(){
+        return ipAddr;
     }
 
     public  void win(){

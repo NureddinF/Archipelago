@@ -17,6 +17,11 @@ public class AndroidWrapper {
 		return currentActivity.Call<string>("getScene");
 	}
 
+	public static string getIpAddr(){
+		AndroidJavaObject currentActivity = getUnityActivity();
+
+		return currentActivity.Call<string>("getIpAddr");
+	}
 
 	private static AndroidJavaObject getUnityActivity(){
 		AndroidJavaClass jc = new AndroidJavaClass ("com.unity3d.player.UnityPlayer");

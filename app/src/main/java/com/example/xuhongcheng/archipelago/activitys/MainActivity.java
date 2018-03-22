@@ -2,7 +2,9 @@ package com.example.xuhongcheng.archipelago.activitys;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.text.format.Formatter;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -39,18 +41,10 @@ public class MainActivity extends Activity {
             profile.setVisibility(View.INVISIBLE);
         }
 
-        singlePlayer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        singlePlayer.setOnClickListener(new GameLauncher("play"));
+        hostMulti.setOnClickListener(new GameLauncher("host"));
+        joinMulti.setOnClickListener(new GameLauncher("join"));
 
-                Intent launchIntent = new Intent(getApplicationContext(), UnityPlayerActivity.class);
-                if (launchIntent != null) {
-                    startActivityForResult(launchIntent, PLAY_GAME);
-                } else {
-                    Toast.makeText(getApplicationContext(), "Could not find game APK", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,4 +74,33 @@ public class MainActivity extends Activity {
         //Toast.makeText(getApplicationContext(), "Game Closed, returned to menu.", Toast.LENGTH_SHORT).show();
     }
 
+
+
+    private class GameLauncher implements View.OnClickListener {
+
+        private final String scene;
+
+        public GameLauncher(String scene){
+            this.scene = scene;
+        }
+
+        @Override
+        public void onClick(View view) {
+
+            Intent launchIntent = new Intent(getApplicationContext(), UnityPlayerActivity.class);
+            if (launchIntent != null) {
+                launchIntent.putExtra("scene", scene);
+                launchIntent.putExtra("ipaddr", getIpAddr());
+                startActivityForResult(launchIntent, PLAY_GAME);
+            } else {
+                Toast.makeText(getApplicationContext(), "Could not find game APK", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
+    public String getIpAddr(){
+        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+        return Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+    }
 }

@@ -29,7 +29,9 @@ public class SceneLoader : MonoBehaviour {
 			string sceneName = AndroidWrapper.getAndroidSceneName ();
 			if(sceneName.Equals("host")){
 				isHost = true;
+				InitialGameState.hostIpAddr = AndroidWrapper.getIpAddr();
 			}
+			
 			sceneToLoad = scenes [sceneName];
 		}
 
