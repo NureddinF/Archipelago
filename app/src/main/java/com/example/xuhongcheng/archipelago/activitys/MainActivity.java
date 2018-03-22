@@ -1,18 +1,20 @@
 package com.example.xuhongcheng.archipelago.activitys;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.MobileComputingGrp3.UnityPlayerActivity;
 import com.example.xuhongcheng.archipelago.myapplication.R;
 import com.example.xuhongcheng.archipelago.utils.SharedPreferenceUtils;
 
+public class MainActivity extends Activity {
 
-public class MainActivity extends AppCompatActivity {
+    private static final int PLAY_GAME = 600;
 
     public Button singlePlayer;
     public Button hostMulti;
@@ -37,15 +39,13 @@ public class MainActivity extends AppCompatActivity {
             profile.setVisibility(View.INVISIBLE);
         }
 
-
-
-
         singlePlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent launchIntent = getPackageManager().getLaunchIntentForPackage(getResources().getString(R.string.gamePackageName));
+
+                Intent launchIntent = new Intent(getApplicationContext(), UnityPlayerActivity.class);
                 if (launchIntent != null) {
-                    startActivity(launchIntent);
+                    startActivityForResult(launchIntent, PLAY_GAME);
                 } else {
                     Toast.makeText(getApplicationContext(), "Could not find game APK", Toast.LENGTH_SHORT).show();
                 }
@@ -75,5 +75,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        //Toast.makeText(getApplicationContext(), "Game Closed, returned to menu.", Toast.LENGTH_SHORT).show();
+    }
 
 }

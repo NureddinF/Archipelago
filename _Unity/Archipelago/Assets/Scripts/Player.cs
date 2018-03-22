@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class Player : MonoBehaviour
 {
-
+	public static bool isEnabled = false;
     // Identify who this player is
     public enum PlayerId { P1, P2, NEUTRAL };
     public PlayerId playerId;
@@ -14,6 +15,7 @@ public class Player : MonoBehaviour
     public float rateMultiplier;
     public int baseIncome;
     public int timeFrame; // how long between discrete burst of money
+	public float moneyToWin = 100;
 
     // UI
     public Text incomeText;
@@ -29,6 +31,8 @@ public class Player : MonoBehaviour
     private float totalTileIncome;
     private float currentMoney;
     private int totalTilesOwned;
+	
+	private WinPanel winPanel; //calls on winPanel object
 
     // Reference to the map so Player can access tiles
     public HexGrid map;
@@ -46,12 +50,35 @@ public class Player : MonoBehaviour
         startTime = Time.time;
         hexesOwned = new List<Hex>();
     }
+	
+	void Awake(){
+		winPanel = WinPanel.instance ();
+	}
 
     // Update is called once per frame
     void Update()
     {
+		//to pause script
+		if (isEnabled) {
+			return;
+		}
         // Use discrete chunks of income
         generateIncomeDiscrete();
+		
+		if (currentMoney >= moneyToWin ) { //when money threshold reached, and no winner is false
+			rateText.text = "WIN";
+			incomeText.text = "";
+		
+			Time.timeScale = 0f; //pauses game
+			Hex.isEnabled = true;    //Calls on these scripts to disable them, so the game cannot be played when a winner is found
+			Worker.isEnabled = true; //Ref: https://answers.unity.com/questions/930234/stop-script-immediately-from-another-script.html
+			MouseManager.isEnabled = true;
+			Menu.isEnabled = true;
+			isEnabled = true;
+		
+			winPanel.back("You Win!"); //calls on back in winPanel class
+		}
+	
         numOfWarriorsOwned.text = "" + gameObject.GetComponent<UnitController>().getTotalNumberOfWarriors();
         numOfWorkersOwned.text = "" + gameObject.GetComponent<UnitController>().getTotalNumberOfWorkers();
         tilesOwnedText.text = "" + totalTilesOwned;

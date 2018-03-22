@@ -17,7 +17,43 @@ public class HexGrid : MonoBehaviour {
     public float baseRocksIncome = 3f;
     public float baseSandIncome = 0.5f;
     public float baseTreesIncome = 2f;
-    
+
+	public int levelNumber;
+
+	//Game Maps - Represented by a matrix
+	//Level 1 Map
+	int[,] level1 = new int[7, 35]
+	{
+		{6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6},
+		{6,6,6,3,6,6,6,6,6,4,6,4,6,3,6,6,6,4,6,6,6,3,6,4,6,4,6,6,6,6,6,3,6,6,6},
+		{6,4,4,0,4,4,6,4,4,0,4,6,4,6,4,0,0,3,0,0,4,6,4,6,4,0,4,4,6,4,4,0,4,4,6},
+		{6,3,5,1,0,3,4,3,5,3,0,5,0,4,5,5,3,3,3,5,5,4,0,5,0,3,5,3,4,3,0,2,5,3,6},
+		{6,4,5,0,0,4,4,4,5,0,0,6,0,6,5,0,3,3,3,0,5,6,0,6,0,0,5,4,4,4,0,0,5,4,6},
+		{6,6,4,3,4,6,6,6,4,4,4,4,4,3,4,4,0,4,0,4,4,3,4,4,4,4,4,6,6,6,4,3,4,6,6},
+		{6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6}
+
+	};
+
+	//Level 2 Map
+	int[,] level2 = new int[15, 20]
+	{
+		{6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6},
+		{6,4,4,4,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6},
+		{6,6,4,4,4,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6},
+		{6,6,6,4,4,4,6,6,6,6,6,6,6,6,6,6,6,6,6,6},
+		{6,6,6,6,4,4,4,6,6,6,6,6,6,6,6,6,6,6,6,6},
+		{6,6,6,6,6,4,4,4,6,6,6,6,6,6,6,6,6,6,6,6},
+		{6,6,6,6,6,6,4,4,4,4,4,4,6,6,6,6,6,6,6,6},
+		{6,6,6,6,6,6,6,6,6,6,4,4,4,6,6,6,6,6,6,6},
+		{6,6,6,6,6,6,6,6,6,6,6,4,4,4,6,6,6,6,6,6},
+		{6,6,6,6,6,6,6,6,6,6,6,6,4,4,4,6,6,6,6,6},
+		{6,6,6,6,6,6,6,6,6,6,6,6,6,4,4,4,6,6,6,6},
+		{6,6,6,6,6,6,6,6,6,6,6,6,6,6,4,4,4,6,6,6},
+		{6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,4,4,4,6,6},
+		{6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,4,4,4,6},
+		{6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6},
+	};
+
     //Grid dimensions measured by number of hexes
     private static int gridWidth;
     private static int gridHeight;
@@ -69,26 +105,26 @@ public class HexGrid : MonoBehaviour {
         yOffset = hexHeight * (0.5f + yOffsetGap);
         gridHeight = mapStructure.GetLength(0);
         gridWidth = mapStructure.GetLength(1);
+
+		Vector3 maxMapCoord= calcUnityCoord (new Vector2 (gridWidth-1, gridHeight-1));
+		Debug.Log (maxMapCoord);
+		BoxCollider2D cameraEdge = GetComponent<BoxCollider2D> ();
+		cameraEdge.size = new Vector2(maxMapCoord.x + 2*xOffset,Mathf.Abs(maxMapCoord.y) + 2*yOffset);
+		cameraEdge.offset = new Vector2 (maxMapCoord.x/2, -cameraEdge.size.y / 2 + yOffset);
+		FindObjectOfType<MouseManager> ().setBounds (GetComponent<BoxCollider2D> ());
     }
 
-    //This method contains the matrix representation of the map
+    //This method chooses which level map to create
     private void initiateMapStructure()
     {
-        int[,] map = new int[10, 20]
-        {
-            {6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6},
-            {6,4,0,0,0,0,0,0,0,4,6,4,0,0,3,0,0,0,4,6},
-            {6,4,0,3,0,5,0,0,0,4,6,4,0,0,0,0,3,0,4,6},
-            {6,4,0,0,0,5,5,0,0,4,6,4,0,0,0,0,0,0,4,6},
-            {6,4,2,0,0,0,5,0,0,0,4,0,0,0,0,0,0,0,4,6},
-            {6,4,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,1,4,6},
-            {6,4,0,0,0,0,0,0,0,4,6,4,0,0,5,0,0,0,4,6},
-            {6,4,0,0,0,0,3,0,0,4,6,4,0,5,5,0,0,0,4,6},
-            {6,4,0,5,0,0,0,0,0,4,6,4,0,0,0,0,0,0,4,6},
-            {6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6}
-        };
-
-        mapStructure = map;
+		//Level 1 map is used by default or if specifically chosen
+		if (levelNumber == 0 || levelNumber == null || levelNumber == 1) {
+			mapStructure = level1;
+		}
+		//Level 2 map is created
+		else if(levelNumber == 2) {
+			mapStructure = level2;
+		}
     }
 
     //Turns a grid position to unity coordinates

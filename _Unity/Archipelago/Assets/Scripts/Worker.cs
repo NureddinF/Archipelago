@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Worker : MonoBehaviour {
 
+	public static bool isEnabled = false; 
+
 	public HexGrid map;
 	private GameObject hex;
 
@@ -26,6 +28,10 @@ public class Worker : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		//to pause script
+		if (isEnabled) {
+			return;
+		}
 		//Get the hex the unit is standing on
 		GameObject newHex = map.getHex (transform.position);
 		//Check if this is a new hex

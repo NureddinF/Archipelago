@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class Hex : MonoBehaviour {
 
+	public static bool isEnabled = false; 
+
     //Stores coordinate in the map
     private int x;
     private int y;
