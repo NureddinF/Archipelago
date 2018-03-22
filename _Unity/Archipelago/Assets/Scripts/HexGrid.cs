@@ -12,6 +12,12 @@ public class HexGrid : MonoBehaviour {
     public GameObject tileTrees; //5
     public GameObject tileWater; //6
 
+    public float baseGrassIncome = 1f;
+    public float basePlayerBaseIncome = 2f;
+    public float baseRocksIncome = 3f;
+    public float baseSandIncome = 0.5f;
+    public float baseTreesIncome = 2f;
+
 	public int levelNumber;
 
 	//Game Maps - Represented by a matrix
@@ -47,7 +53,6 @@ public class HexGrid : MonoBehaviour {
 		{6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,4,4,4,6},
 		{6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6},
 	};
-
 
     //Grid dimensions measured by number of hexes
     private static int gridWidth;
@@ -103,7 +108,7 @@ public class HexGrid : MonoBehaviour {
 
 		Vector3 maxMapCoord= calcUnityCoord (new Vector2 (gridWidth-1, gridHeight-1));
 		Debug.Log (maxMapCoord);
-		BoxCollider2D cameraEdge = GetComponent<BoxCollider2D> ();
+		BoxCollider2D cameraEdge = GetComponent<BoxCollider2D>();
 		cameraEdge.size = new Vector2(maxMapCoord.x + 2*xOffset,Mathf.Abs(maxMapCoord.y) + 2*yOffset);
 		cameraEdge.offset = new Vector2 (maxMapCoord.x/2, -cameraEdge.size.y / 2 + yOffset);
 		FindObjectOfType<MouseManager> ().setBounds (GetComponent<BoxCollider2D> ());
@@ -131,7 +136,7 @@ public class HexGrid : MonoBehaviour {
         if (gridPos.x % 2 == 1)
             y -= yOffset;
 
-        return new Vector3(x, y, 0);
+        return new Vector3(x, y, -1);
     }
 
     //Method to create the hex grid
@@ -152,37 +157,43 @@ public class HexGrid : MonoBehaviour {
 				switch(mapStructure[y, x]){
 					case 0:{
 						thisHex = (GameObject)Instantiate (tileGrass);
-						thisHex.GetComponent<Hex> ().tileType = TileType.GRASS;
-						break;
+						thisHex.GetComponent<Hex> ().setTileType(TileType.GRASS);
+                        thisHex.GetComponent<Hex>().setTileIncome(baseGrassIncome);
+                        break;
 					}
 					case 1:{
 						thisHex = (GameObject)Instantiate (tilePlayer1Base);
-						thisHex.GetComponent<Hex>().tileType = TileType.BASE;
-						break;
+						thisHex.GetComponent<Hex>().setTileType(TileType.BASE);
+                        thisHex.GetComponent<Hex>().setTileIncome(basePlayerBaseIncome);
+                        break;
 					}
 					case 2:{
 						thisHex = (GameObject)Instantiate (tilePlayer2Base);
-						thisHex.GetComponent<Hex>().tileType = TileType.BASE;
-						break;
+						thisHex.GetComponent<Hex>().setTileType(TileType.BASE);
+                        thisHex.GetComponent<Hex>().setTileIncome(basePlayerBaseIncome);
+                        break;
 					}
 					case 3:{
 						thisHex = (GameObject)Instantiate (tileRocks);
-						thisHex.GetComponent<Hex>().tileType = TileType.ROCK;
-						break;
+						thisHex.GetComponent<Hex>().setTileType(TileType.ROCK);
+                        thisHex.GetComponent<Hex>().setTileIncome(baseRocksIncome);
+                        break;
 					}
 					case 4:{
 						thisHex = (GameObject)Instantiate (tileSand);
-						thisHex.GetComponent<Hex>().tileType = TileType.SAND;
-						break;
+						thisHex.GetComponent<Hex>().setTileType(TileType.SAND);
+                        thisHex.GetComponent<Hex>().setTileIncome(baseSandIncome);
+                        break;
 					}
 					case 5:{
 						thisHex = (GameObject)Instantiate (tileTrees);
-						thisHex.GetComponent<Hex>().tileType = TileType.TREE;
-						break;
+						thisHex.GetComponent<Hex>().setTileType(TileType.TREE);
+                        thisHex.GetComponent<Hex>().setTileIncome(baseTreesIncome);
+                        break;
 					}
 					default:{
 						thisHex = (GameObject)Instantiate (tileWater);
-						thisHex.GetComponent<Hex>().tileType = TileType.WATER;
+						thisHex.GetComponent<Hex>().setTileType(TileType.WATER);
 						break;
 					}
 				}
@@ -192,8 +203,8 @@ public class HexGrid : MonoBehaviour {
                 thisHex.transform.position = calcUnityCoord(gridPos);
                 thisHex.transform.parent = hexGridObject.transform;
                 thisHex.name = "Hex_" + x + "_" + y;
-                thisHex.GetComponent<Hex>().x = x;
-                thisHex.GetComponent<Hex>().y = y;
+                thisHex.GetComponent<Hex>().setX(x);
+                thisHex.GetComponent<Hex>().setY(y);
 
                 //Potential Optimization for hexgrid
                 thisHex.isStatic = true;

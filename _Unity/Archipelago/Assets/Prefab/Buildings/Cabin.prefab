@@ -51,11 +51,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f793c2afe2a3b64db9fea45fa2b2fd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moneyCost: 3
-  incomeAdjustment: 5
+  cost: 3
+  tileIncomeAfterBuild: 1
   constructionTime: 5
-  builtMenuOptions: []
-  constructionMenuOptions: []
-  type: 0
+  tileAssociatedWith: 2
   builtSprite: {fileID: 21300000, guid: 07b07a81a26e6954a8373b06efa51104, type: 3}
   constructionSprite: {fileID: 21300000, guid: a73a253afb5804348875cea91ef24140, type: 3}
+  menuIconSprite: {fileID: 21300000, guid: 07b07a81a26e6954a8373b06efa51104, type: 3}
