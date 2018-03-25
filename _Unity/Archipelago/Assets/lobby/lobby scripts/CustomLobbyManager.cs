@@ -7,17 +7,25 @@ using UnityEngine.Networking;
 
 public class CustomLobbyManager : NetworkLobbyManager {
 
+	//State variables. Need to manually set isDebug/isHost for running from unity editor or PC build as there's no android part
 	public bool isDebug = false;
 	public bool isHost = false;
 	public bool isSinglePlayer = false;
 
+	// UI elements
 	public GameObject searchUi;
 	public GameObject lobbyUi;
-	private Text enteredIpAddress;
+	public Text JoiningText;
+	public Text enteredIpAddress;
+
+	//on failed connection the scene is reloaded so the state needs to be saved
+	string ipStr = "";
+	string joiningStr = "";
+	private NetworkClient netClient = null;
 
 	// Use this for initialization
 	void Start () {
-		enteredIpAddress = searchUi.GetComponentInChildren<InputField>().textComponent;
+		//enteredIpAddress = searchUi.GetComponentInChildren<InputField>().textComponent;
 		Debug.Log ("NetworkLobbyManager: Start");
 
 		if (!isDebug) {
@@ -75,7 +83,7 @@ public class CustomLobbyManager : NetworkLobbyManager {
 	public void attemptConnection(){
 		Debug.Log ("NetworkLobbyManager: attempting connection");
 		// Get the entered string
-		string ipStr = enteredIpAddress.text;
+		ipStr = enteredIpAddress.text;
 		//remove whitespace
 		ipStr = RemoveWhitespace(ipStr);
 		//split string into bytes
@@ -101,7 +109,13 @@ public class CustomLobbyManager : NetworkLobbyManager {
 		// Save state and attempt connection
 		InitialGameState.HostIpAddr = ipStr;
 		networkAddress = ipStr;
-		StartClient ();
+		JoiningText.text = "Joining...";
+
+		if(netClient != null){
+			netClient.Disconnect ();
+		}
+
+		netClient = StartClient ();
 	}
 
 	// https://stackoverflow.com/questions/6219454/efficient-way-to-remove-all-whitespace-from-string
@@ -111,11 +125,19 @@ public class CustomLobbyManager : NetworkLobbyManager {
 
 
 	public string getClientIp(){
-		if(isHost){
-			return InitialGameState.HostIpAddr;
-		} else {
-			return InitialGameState.ClientIpAddr;	
-		}
+		return isHost ? InitialGameState.HostIpAddr : InitialGameState.ClientIpAddr;
+	}
+
+	public override void OnLobbyClientDisconnect (NetworkConnection conn){
+		Debug.Log ("NetworkLobbyManager: OnLobbyClientDisconnect:");
+		joiningStr = "Disconnected From Server";
+		JoiningText.text = joiningStr;
+	}
+
+	public override void OnLobbyClientSceneChanged (NetworkConnection conn)
+	{
+		base.OnLobbyClientSceneChanged (conn);
+		Debug.Log ("NetworkLobbyManager: OnLobbyClientSceneChanged:");
 	}
 
 
@@ -138,6 +160,19 @@ public class CustomLobbyManager : NetworkLobbyManager {
 		} else {
 			Debug.Log ("Debug Mode enabled - not running on android device");
 		}
+	}
+
+
+	public void setLobbyUi(GameObject lobbyUi){
+		this.lobbyUi = lobbyUi;
+	}
+
+	public void setSearchUi(GameObject searchUi){
+		this.searchUi = searchUi;
+		enteredIpAddress = searchUi.transform.Find("InputField").Find("IP_text").GetComponent<Text> ();
+		enteredIpAddress.text = ipStr;
+		JoiningText = searchUi.transform.Find ("JoiningText").GetComponent<Text>();
+		JoiningText.text = joiningStr;
 	}
 
 	// STEPS TO START A GAME:
