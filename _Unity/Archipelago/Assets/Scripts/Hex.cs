@@ -32,12 +32,14 @@ public class Hex : MonoBehaviour {
     private int maxY = HexGrid.getGridHeight() - 1;
     private int maxX = HexGrid.getGridWidth() - 1;
 
+    //Calls once on object creation
     void Start()
     {
         building = null;
         this.GetComponent<SpriteRenderer>().sprite = standard;
     }
 
+    //Getters and setters
     public void setX(int x) { this.x = x; }
 
     public void setY(int y) { this.y = y; }
@@ -128,7 +130,8 @@ public class Hex : MonoBehaviour {
         return neighbors;
     }
 
-    public bool hasNeighbor()
+    //Method to return true if a neighbor is owned by player
+    public bool hasOwnedNeighbor()
     {
         List<GameObject> neighbors = getNeighbors();
 
@@ -143,6 +146,7 @@ public class Hex : MonoBehaviour {
         return false;
     }
 
+    //Method to change the sprite of the hex
     public void changeHexSprite(Sprite s)
     {
         this.GetComponent<SpriteRenderer>().sprite = s;
