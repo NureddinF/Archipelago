@@ -58,6 +58,9 @@ public class CustomLobbyPlayer : NetworkLobbyPlayer {
 			Debug.Log ("CustomLobbyPlayer: initLobbyPlayer: parent: " + correctParent == null ? "NULL" : correctParent.name);
 			playerUI = Instantiate (PlayerUiPrefab, correctParent);
 		}
+		Toggle toggle = playerUI.GetComponentInChildren<Toggle> ();
+		toggle.isOn = readyToBegin;
+
 		Text[] playerUiElements = playerUI.GetComponentsInChildren<Text> ();
 		playerUiElements [0].text = username;
 		playerUiElements [1].text = pid.ToString();
@@ -84,8 +87,7 @@ public class CustomLobbyPlayer : NetworkLobbyPlayer {
 		pid = newPid;
 		Debug.Log ("CustomLobbyPlayer: initLobbyPlayerPid");
 		if (playerUI == null) {
-			playerUI = Instantiate (PlayerUiPrefab, FindObjectOfType<Canvas> ()
-				.GetComponentInChildren<VerticalLayoutGroup> ().transform);
+			initUi ();
 		}
 		Text[] playerUiElements = playerUI.GetComponentsInChildren<Text> ();
 		playerUiElements [1].text = pid.ToString();
@@ -96,8 +98,7 @@ public class CustomLobbyPlayer : NetworkLobbyPlayer {
 		username = newUsername;
 		Debug.Log ("CustomLobbyPlayer: initLobbyPlayerUsername");
 		if (playerUI == null) {
-			playerUI = Instantiate (PlayerUiPrefab, FindObjectOfType<Canvas> ()
-				.GetComponentInChildren<VerticalLayoutGroup> ().transform);
+			initUi ();
 		}
 		Text[] playerUiElements = playerUI.GetComponentsInChildren<Text> ();
 		playerUiElements [0].text = username;
@@ -108,8 +109,7 @@ public class CustomLobbyPlayer : NetworkLobbyPlayer {
 		ipAddress = newIp;
 		Debug.Log ("CustomLobbyPlayer: initLobbyPlayerIp");
 		if (playerUI == null) {
-			playerUI = Instantiate (PlayerUiPrefab, FindObjectOfType<Canvas> ()
-				.GetComponentInChildren<VerticalLayoutGroup> ().transform);
+			initUi ();
 		}
 		Text[] playerUiElements = playerUI.GetComponentsInChildren<Text> ();
 		playerUiElements [2].text = ipAddress;
@@ -117,4 +117,42 @@ public class CustomLobbyPlayer : NetworkLobbyPlayer {
 	}
 
 
+	private void initUi(){
+		if(!isLocalPlayer){
+			return;
+		}
+
+		playerUI = Instantiate (PlayerUiPrefab, FindObjectOfType<Canvas> ()
+			.GetComponentInChildren<VerticalLayoutGroup> ().transform);
+
+		Toggle toggle = playerUI.GetComponentInChildren<Toggle> ();
+		toggle.onValueChanged.AddListener (onReadyChecked);
+		toggle.interactable = true;
+	}
+
+
+	public void onReadyChecked(bool ready){
+		Debug.Log ("CustomLobbyPlayer: onReadyChecked: ready: " + ready);
+
+		if(!isLocalPlayer){
+			return;
+		}
+
+		if (ready) {
+			SendReadyToBeginMessage ();
+		} else {
+			SendNotReadyToBeginMessage ();
+		}
+	}
+
+	public override void OnClientReady (bool clientReady){
+		if (playerUI != null) {
+			Toggle toggle = playerUI.GetComponentInChildren<Toggle> ();
+			toggle.isOn = clientReady;
+		}
+		if(!clientReady){
+			FindObjectOfType<CustomLobbyManager> ().playerUnready ();
+		}
+	}
+		
 }

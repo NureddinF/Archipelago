@@ -117,6 +117,19 @@ public class CustomLobbyManager : NetworkLobbyManager {
 	}
 
 
+	public override void OnLobbyServerPlayersReady (){
+		lobbyUi.GetComponentInChildren<Button> ().interactable = true;
+	}
+
+	public void playerUnready(){
+		lobbyUi.GetComponentInChildren<Button> ().interactable = false;
+	}
+
+	public void onStartGameClicked(){
+		ServerChangeScene (playScene);
+	}
+
+
 	// STEPS TO START A GAME:
 	// 1) First scene loads when unity starts from android studio.
 	//	  Get the option user selected: single player | host | join
