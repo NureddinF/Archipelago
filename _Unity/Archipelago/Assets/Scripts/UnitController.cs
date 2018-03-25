@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class UnitController : MonoBehaviour {
 
+    public GameObject workerPrefab;
+    public GameObject warriorPrefab;
+
     //Parameter to store the initial number of units
     public int initialNumOfWorkers;
     public int initialNumOfWarriors;
@@ -51,6 +54,7 @@ public class UnitController : MonoBehaviour {
             warriorLocations[key] += amount;
         else
             warriorLocations.Add(key, amount);
+
         if (GameObject.Find("Hex_" + key).GetComponent<CapturableTile>() != null)
         {
             GameObject.Find("Hex_" + key).GetComponent<CapturableTile>().addUnits(amount, gameObject.GetComponent<Player>().playerId);
@@ -96,15 +100,30 @@ public class UnitController : MonoBehaviour {
     //Method to move warriors using the add remove methods. Removes then adds
     public void moveWarriors(int amount, Hex hexFrom, Hex hexTo)
     {
-        removeWarriors(amount, hexFrom);
-        addWarriors(amount, hexTo);
+        string hexFromKey = hexFrom.getX() + "_" + hexFrom.getY();
+        string hexToKey = hexTo.getX() + "_" + hexTo.getY();
+
+        moveWarriors(amount, hexFromKey, hexToKey);
     }
 
     //Method to move warriors using the add remove methods. Removes then adds.
     private void moveWarriors(int amount, string hexFrom, string hexTo)
     {
         removeWarriors(amount, hexFrom);
-        addWarriors(amount, hexTo);
+
+        GameObject unitToMove;
+        unitToMove = (GameObject)Instantiate(warriorPrefab);
+
+        //IMPROVE THIS, CURRENTLY IF moveWorkers given a hex then it needs to get key string then uses this to find hex again.
+
+        GameObject from = GameObject.Find("Hex_" + hexFrom);
+        GameObject to = GameObject.Find("Hex_" + hexTo);
+
+        Hex fromHex = from.GetComponent<Hex>();
+        Hex toHex = to.GetComponent<Hex>();
+
+        unitToMove.GetComponent<Unit>().setInitialHex(fromHex);
+        unitToMove.GetComponent<Unit>().setDestinationHex(toHex);
     }
 
     //Method to add new worker(s) given a specified amount and a hex 
@@ -175,15 +194,31 @@ public class UnitController : MonoBehaviour {
 
     //Method to move workers using the add remove methods. Removes then adds
     public void moveWorkers(int amount, Hex hexFrom, Hex hexTo) {
-        removeWorkers(amount, hexFrom);
-        addWorkers(amount, hexTo);
+        string hexFromKey = hexFrom.getX() + "_" + hexFrom.getY();
+        string hexToKey = hexTo.getX() + "_" + hexTo.getY();
+
+        moveWorkers(amount, hexFromKey, hexToKey);
     }
 
     //Method to move workers using the add remove methods. Removes then adds
     private void moveWorkers(int amount, string hexFrom, string hexTo)
     {
         removeWorkers(amount, hexFrom);
-        addWorkers(amount, hexTo);
+
+        GameObject unitToMove;
+        unitToMove = (GameObject)Instantiate(workerPrefab);
+
+
+        //IMPROVE THIS, CURRENTLY IF moveWorkers given a hex then it needs to get key string then uses this to find hex again.
+
+        GameObject from = GameObject.Find("Hex_" + hexFrom);
+        GameObject to = GameObject.Find("Hex_" + hexTo);
+
+        Hex fromHex = from.GetComponent<Hex>();
+        Hex toHex = to.GetComponent<Hex>();
+
+        unitToMove.GetComponent<Unit>().setInitialHex(fromHex);
+        unitToMove.GetComponent<Unit>().setDestinationHex(toHex);
     }
 
     //Method to move the closest available worker using the add remove methods. Removes then adds

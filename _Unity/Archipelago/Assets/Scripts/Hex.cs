@@ -18,12 +18,22 @@ public class Hex : MonoBehaviour {
     private HexGrid.TileType tileType;
     private float tileIncome;
 
+    //Store the hex's sprites
+    public Sprite standard;
+    public Sprite idleUnits;
+
     //Store the building on the hex, null if not one
     private Building building;
 
     //Set maxY and maxX of a hex, -1 for off by one error
     private int maxY = HexGrid.getGridHeight() - 1;
     private int maxX = HexGrid.getGridWidth() - 1;
+
+    private void Start()
+    {
+        building = null;
+        this.GetComponent<SpriteRenderer>().sprite = standard;
+    }
 
     public void setX(int x) { this.x = x; }
 
