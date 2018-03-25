@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 4597605143617352}
   - component: {fileID: 212917502423058686}
   - component: {fileID: 60574093942163774}
-  - component: {fileID: 114305298587922034}
+  - component: {fileID: 114430012806728684}
   - component: {fileID: 114254087845824910}
   m_Layer: 0
   m_Name: tilePlayer1Base_capturable
@@ -131,7 +131,7 @@ MonoBehaviour:
   totalCaptureCost: 10
   constructionSpeedPerUnit: 1
   passiveConstructionSpeed: 0
---- !u!114 &114305298587922034
+--- !u!114 &114430012806728684
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}

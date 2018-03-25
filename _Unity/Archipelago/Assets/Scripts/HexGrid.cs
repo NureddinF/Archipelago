@@ -20,6 +20,8 @@ public class HexGrid : MonoBehaviour {
 
 	public int levelNumber;
 
+    private int player1BaseX;
+    private int player1BaseY;
 	//Game Maps - Represented by a matrix
 	//Level 1 Map
 	int[,] level1 = new int[7, 35]
@@ -62,6 +64,9 @@ public class HexGrid : MonoBehaviour {
     public static int getGridHeight() { return gridHeight; }
     public static int getGridWidth() { return gridWidth;  }
 
+    //Get methods for player1base coordinates
+    public int getPlayer1BaseX() { return player1BaseX; }
+    public int getPlayer1BaseY() { return player1BaseY; }
 
     //Dimensions of individual hex
     private float hexWidth;
@@ -80,6 +85,8 @@ public class HexGrid : MonoBehaviour {
     private int[,] mapStructure;
 	//Matrix of instanciated hexes
 	private GameObject[,] mapHexes;
+
+    private GameObject player;
 
 
 	//Enumerate the different types of tiles
@@ -107,7 +114,6 @@ public class HexGrid : MonoBehaviour {
         gridWidth = mapStructure.GetLength(1);
 
 		Vector3 maxMapCoord= calcUnityCoord (new Vector2 (gridWidth-1, gridHeight-1));
-		Debug.Log (maxMapCoord);
 		BoxCollider2D cameraEdge = GetComponent<BoxCollider2D>();
 		cameraEdge.size = new Vector2(maxMapCoord.x + 2*xOffset,Mathf.Abs(maxMapCoord.y) + 2*yOffset);
 		cameraEdge.offset = new Vector2 (maxMapCoord.x/2, -cameraEdge.size.y / 2 + yOffset);
@@ -165,12 +171,15 @@ public class HexGrid : MonoBehaviour {
 						thisHex = (GameObject)Instantiate (tilePlayer1Base);
 						thisHex.GetComponent<Hex>().setTileType(TileType.BASE);
                         thisHex.GetComponent<Hex>().setTileIncome(basePlayerBaseIncome);
+                        //TODO, make player base tile have a base building on, maybe make it grass tile but    thisHex.GetComponent<Hex>().setBuilding(Player base building);
+                        player1BaseX = x;
+                        player1BaseY = y;
                         break;
 					}
 					case 2:{
 						thisHex = (GameObject)Instantiate (tilePlayer2Base);
 						thisHex.GetComponent<Hex>().setTileType(TileType.BASE);
-                        thisHex.GetComponent<Hex>().setTileIncome(basePlayerBaseIncome);
+                            thisHex.GetComponent<Hex>().setTileIncome(basePlayerBaseIncome);
                         break;
 					}
 					case 3:{
