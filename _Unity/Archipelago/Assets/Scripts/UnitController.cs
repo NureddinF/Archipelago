@@ -40,7 +40,7 @@ public class UnitController : MonoBehaviour {
     //Method to add new warrior(s) given a specified amount and a hex
     public void addWarriors(int amount, Hex h) {
         //Create the hex location string to use as a key for the warrior location dictionary
-        string hexLocationKey = h.name;
+        string hexLocationKey = h.getX() + "_" + h.getY();
         //Call the add warriors by key method with this newly created key
         addWarriors(amount, hexLocationKey);
     }
@@ -54,6 +54,7 @@ public class UnitController : MonoBehaviour {
             warriorLocations[key] += amount;
         else
             warriorLocations.Add(key, amount);
+
         if (GameObject.Find("Hex_" + key).GetComponent<CapturableTile>() != null)
         {
             GameObject.Find("Hex_" + key).GetComponent<CapturableTile>().addUnits(amount, gameObject.GetComponent<Player>().playerId);
@@ -109,7 +110,20 @@ public class UnitController : MonoBehaviour {
     private void moveWarriors(int amount, string hexFrom, string hexTo)
     {
         removeWarriors(amount, hexFrom);
-        addWarriors(amount, hexTo);
+
+        GameObject unitToMove;
+        unitToMove = (GameObject)Instantiate(warriorPrefab);
+
+        //IMPROVE THIS, CURRENTLY IF moveWorkers given a hex then it needs to get key string then uses this to find hex again.
+
+        GameObject from = GameObject.Find("Hex_" + hexFrom);
+        GameObject to = GameObject.Find("Hex_" + hexTo);
+
+        Hex fromHex = from.GetComponent<Hex>();
+        Hex toHex = to.GetComponent<Hex>();
+
+        unitToMove.GetComponent<Unit>().setInitialHex(fromHex);
+        unitToMove.GetComponent<Unit>().setDestinationHex(toHex);
     }
 
     //Method to add new worker(s) given a specified amount and a hex 

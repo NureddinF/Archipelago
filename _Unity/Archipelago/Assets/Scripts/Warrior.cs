@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//Subclass of unity for a worker unit
-public class Worker : Unit
+//Subclass of unity for a warrior unit
+public class Warrior : Unit
 {
     //Every frame
     void Update()
@@ -15,7 +15,7 @@ public class Worker : Unit
         //If reached destination, add it to the hex and remove the gameobject
         if (transform.position.Equals(getDestinationCoord()))
         {
-            GameObject.Find("Player").GetComponent<UnitController>().addWorkers(1, getDestinationHex());
+            GameObject.Find("Player").GetComponent<UnitController>().addWarriors(1, getDestinationHex());
             Destroy(gameObject);
         }
     }

@@ -1375,8 +1375,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72467bbfd3e45ee41abd1c738afd289e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  workerPrefab: {fileID: 1940432781439648, guid: 12fd2b2754f01574685cf5485c3070e0,
-    type: 2}
+  workerPrefab: {fileID: 0}
   warriorPrefab: {fileID: 0}
   initialNumOfWorkers: 2
   initialNumOfWarriors: 2
@@ -1676,6 +1675,52 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1083862737}
+--- !u!1001 &1094046171
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4223928975084746, guid: a1822ac9a34268b499b18513cc5d5c72, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4223928975084746, guid: a1822ac9a34268b499b18513cc5d5c72, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4223928975084746, guid: a1822ac9a34268b499b18513cc5d5c72, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4223928975084746, guid: a1822ac9a34268b499b18513cc5d5c72, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4223928975084746, guid: a1822ac9a34268b499b18513cc5d5c72, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4223928975084746, guid: a1822ac9a34268b499b18513cc5d5c72, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4223928975084746, guid: a1822ac9a34268b499b18513cc5d5c72, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4223928975084746, guid: a1822ac9a34268b499b18513cc5d5c72, type: 2}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1113874209341802, guid: a1822ac9a34268b499b18513cc5d5c72, type: 2}
+      propertyPath: m_Name
+      value: fighterSprite
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: a1822ac9a34268b499b18513cc5d5c72, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &1102144913
 GameObject:
   m_ObjectHideFlags: 0
