@@ -34,7 +34,8 @@ public class CustomLobbyManager : NetworkLobbyManager {
 				}
 				case "join":{
 					isHost = false;
-					break;	
+					InitialGameState.ClientIpAddr = AndroidWrapper.getIpAddr();
+					break;
 				}
 				default:{
 					throw(new System.ArgumentException (
@@ -112,7 +113,7 @@ public class CustomLobbyManager : NetworkLobbyManager {
 		if(isHost){
 			return InitialGameState.HostIpAddr;
 		} else {
-			return client.connection.address;	
+			return InitialGameState.ClientIpAddr;	
 		}
 	}
 
