@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4223928975084746}
   - component: {fileID: 212054307375719252}
+  - component: {fileID: 114471103064798970}
   m_Layer: 0
   m_Name: Warrior
   m_TagString: Untagged
@@ -40,6 +41,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114471103064798970
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1113874209341802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f0caae8e7e89b640b2e800c01c04f35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitSpeed: 1
 --- !u!212 &212054307375719252
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -17,14 +17,16 @@ public class Player : MonoBehaviour
     public int timeFrame; // how long between discrete burst of money
 	public float moneyToWin = 100;
 
+    //The parent gameobject for main UI bar
+    public GameObject stateMenu;
+
     // UI
-    public Text incomeText;
-    public Text rateText;
-    public Text numOfTilesOwned;
-    public Text numOfWorkersOwned;
-    public Text numOfWarriorsOwned;
-    public Text tilesOwnedText;
-    public Image redBarTemp;
+    private Text incomeText;
+    private Text rateText;
+    private Text tilesOwnedText;
+    private Text numOfWorkersOwned;
+    private Text numOfWarriorsOwned;
+    private Image redBarTemp;
 
     // State variables
     private float startTime;
@@ -43,12 +45,23 @@ public class Player : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        //Connect all UI script elements to their gameobjects
+        incomeText = stateMenu.transform.Find("Resource Icon").transform.Find("Total Amount Text").gameObject.GetComponent<Text>();
+        rateText = stateMenu.transform.Find("Resource Icon").transform.Find("Increase Rate Text").gameObject.GetComponent<Text>();
+        tilesOwnedText = stateMenu.transform.Find("Territory Icon").transform.Find("Total Territory Text").gameObject.GetComponent<Text>();
+        numOfWorkersOwned = stateMenu.transform.Find("Worker Button").transform.Find("Worker Count Text").gameObject.GetComponent<Text>();
+        numOfWarriorsOwned = stateMenu.transform.Find("Warrior Button").transform.Find("Warrior Count Text").gameObject.GetComponent<Text>();
+        redBarTemp = stateMenu.transform.Find("TileOwnershipRatioBar").transform.Find("Red Bar").gameObject.GetComponent<Image>();
+
+        //Initialize Variables
         currentMoney = 0;
         incomeText.text = "Hello";
         rateText.text = "+ 0/sec";
         tilesOwnedText.text = "0";
         startTime = Time.time;
         hexesOwned = new List<Hex>();
+        numOfWarriorsOwned.text = gameObject.GetComponent<UnitController>().initialNumOfWarriors.ToString();
+        numOfWorkersOwned.text = gameObject.GetComponent<UnitController>().initialNumOfWorkers.ToString();
     }
 	
 	void Awake(){

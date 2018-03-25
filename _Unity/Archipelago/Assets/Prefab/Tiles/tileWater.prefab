@@ -53,8 +53,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hexOwner: 2
-  standard: {fileID: 0}
-  idleUnits: {fileID: 0}
+  standard: {fileID: 21300000, guid: 8042e7b90506446f8b1c82c3fff1c4cd, type: 3}
+  idleUnits: {fileID: 21300000, guid: 8042e7b90506446f8b1c82c3fff1c4cd, type: 3}
 --- !u!212 &212596613699915722
 SpriteRenderer:
   m_ObjectHideFlags: 1
