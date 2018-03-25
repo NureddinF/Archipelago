@@ -9,6 +9,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.xuhongcheng.archipelago.myapplication.R;
+import com.example.xuhongcheng.archipelago.utils.SharedPreferenceUtils;
 
 
 public class ProfileActivity extends Activity {
@@ -29,6 +30,10 @@ public class ProfileActivity extends Activity {
         userName = (TextView) findViewById(R.id.username);
         wins = (TextView) findViewById(R.id.wins);
         losses = (TextView) findViewById(R.id.losses);
+
+
+        String username = SharedPreferenceUtils.getString(ProfileActivity.this,"username","Player");
+        userName.setText("Username: " + username);
 
         btn_setting.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -22,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.Random;
 
 public class LoginActivity extends Activity {
 
@@ -53,6 +54,8 @@ public class LoginActivity extends Activity {
 		tv_guest_login.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
+				String tempName = "Player" + new Random().nextInt();
+				SharedPreferenceUtils.saveString(LoginActivity.this, "username", tempName);
 				startActivity(new Intent(LoginActivity.this, MainActivity.class));
 			}
 		});
@@ -83,6 +86,7 @@ public class LoginActivity extends Activity {
 				if (name1.equals(name) && pass1.equals(pass)) {
 					Toast.makeText(this, "Login Successfully!", Toast.LENGTH_SHORT).show();
 					SharedPreferenceUtils.saveBoolean(LoginActivity.this, "isLogin", true);
+					SharedPreferenceUtils.saveString(LoginActivity.this, "username", name);
 					startActivity(new Intent(this, MainActivity.class));
 				} else {
 					Toast.makeText(this, "Wrong username or password!", Toast.LENGTH_SHORT).show();

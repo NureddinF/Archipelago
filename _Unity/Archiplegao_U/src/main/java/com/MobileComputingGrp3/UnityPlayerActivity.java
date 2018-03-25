@@ -18,6 +18,8 @@ public class UnityPlayerActivity extends Activity
     private String scene;
     //IP address of this device
     private String ipAddr;
+    //User's username
+    private String username;
 
     // Setup activity layout
     @Override protected void onCreate(Bundle savedInstanceState)
@@ -28,6 +30,7 @@ public class UnityPlayerActivity extends Activity
 
         scene = getIntent().getStringExtra("scene");
         ipAddr = getIntent().getStringExtra("ipaddr");
+        username = getIntent().getStringExtra("username");
 
         mUnityPlayer = new UnityPlayer(this);
         setContentView(mUnityPlayer);
@@ -129,6 +132,10 @@ public class UnityPlayerActivity extends Activity
 
     public String getIpAddr(){
         return ipAddr;
+    }
+
+    public String getUsername(){
+        return username;
     }
 
     public  void win(){

@@ -89,6 +89,8 @@ public class MainActivity extends Activity {
 
             Intent launchIntent = new Intent(getApplicationContext(), UnityPlayerActivity.class);
             if (launchIntent != null) {
+                String username = SharedPreferenceUtils.getString(MainActivity.this,"username","Player");
+                launchIntent.putExtra("username", username);
                 launchIntent.putExtra("scene", scene);
                 launchIntent.putExtra("ipaddr", getIpAddr());
                 startActivityForResult(launchIntent, PLAY_GAME);

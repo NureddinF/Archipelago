@@ -6,7 +6,7 @@
         android:process=":Archipelago_U">
       <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
     </activity>
-    <meta-data android:name="unity.build-id" android:value="bc6f0156-9811-410b-8123-c4550e6c8944" />
+    <meta-data android:name="unity.build-id" android:value="f2bd15b0-6560-450a-8542-39521d8b34a8" />
     <meta-data android:name="unity.splash-mode" android:value="0" />
     <meta-data android:name="unity.splash-enable" android:value="True" />
     <meta-data android:name="android.max_aspect" android:value="2.1" />

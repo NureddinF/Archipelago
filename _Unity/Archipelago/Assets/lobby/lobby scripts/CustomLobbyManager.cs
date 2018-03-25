@@ -22,6 +22,7 @@ public class CustomLobbyManager : NetworkLobbyManager {
 
 		if (!isDebug) {
 			string sceneName = AndroidWrapper.getAndroidSceneName ();
+			InitialGameState.username = AndroidWrapper.getUsername ();
 			switch(sceneName){
 				case "play":{
 					isSinglePlayer = true;

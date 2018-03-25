@@ -23,6 +23,12 @@ public class AndroidWrapper {
 		return currentActivity.Call<string>("getIpAddr");
 	}
 
+	public static string getUsername(){
+		AndroidJavaObject currentActivity = getUnityActivity();
+
+		return currentActivity.Call<string>("getUsername");
+	}
+
 	private static AndroidJavaObject getUnityActivity(){
 		AndroidJavaClass jc = new AndroidJavaClass ("com.unity3d.player.UnityPlayer");
 		AndroidJavaObject currentActivity = jc.GetStatic<AndroidJavaObject>("currentActivity");
