@@ -21,7 +21,7 @@ public class CustomLobbyManager : NetworkLobbyManager {
 				}
 				case "host":{
 					isHost = true;
-					InitialGameState.hostIpAddr = AndroidWrapper.getIpAddr();
+					InitialGameState.HostIpAddr = AndroidWrapper.getIpAddr();
 					break;	
 				}
 				case "join":{
@@ -45,12 +45,14 @@ public class CustomLobbyManager : NetworkLobbyManager {
 
 		if(isHost){
 			Debug.Log ("NetworkLobbyManager: Start: isHost");
-			networkAddress = InitialGameState.hostIpAddr;
+			networkAddress = InitialGameState.HostIpAddr;
+			InitialGameState.ClientIpAddr = InitialGameState.HostIpAddr;
 			StartHost ();
 		} else {
 			Debug.Log ("NetworkLobbyManager: Start: isClient");
-			networkAddress = InitialGameState.hostIpAddr;
-			StartClient ();
+			networkAddress = InitialGameState.HostIpAddr;
+			NetworkClient newClient = StartClient ();
+			InitialGameState.ClientIpAddr = newClient.connection.address;
 		}
 			
 

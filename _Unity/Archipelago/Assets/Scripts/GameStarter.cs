@@ -13,7 +13,7 @@ public class GameStarter : MonoBehaviour {
 	void Start () {
 		//Initialize network manager
 		netMan = FindObjectOfType<NetworkManager> ();
-		netMan.networkAddress = InitialGameState.hostIpAddr;
+		netMan.networkAddress = InitialGameState.HostIpAddr;
 
 		//Start client or host
 		if(InitialGameState.isHost){

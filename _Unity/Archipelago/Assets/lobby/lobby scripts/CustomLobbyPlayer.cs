@@ -21,7 +21,7 @@ public class CustomLobbyPlayer : NetworkLobbyPlayer {
 		Debug.Log("CustomLobbyPlayer: Start");
 		if(isLocalPlayer){
 			Debug.Log ("CustomLobbyPlayer: Start: isLocalPlayer");
-			CmdInitLobbyPlayer ("User " + Random.Range (0, 100), connectionToServer.address);
+			CmdInitLobbyPlayer (InitialGameState.username, InitialGameState.ClientIpAddr);
 			//initLobbyPlayer ("User " + Random.Range(0,100));
 			Debug.Log ("CustomLobbyPlayer: Start: isLocalPlayer: "
 				+ "username: " + username + ", ipAddress: " + ipAddress

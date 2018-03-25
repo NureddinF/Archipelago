@@ -39,7 +39,7 @@ public class ClientAttemptConnect : NetworkBehaviour {
 		Debug.Log ("valid Ip address");
 
 		// Save state and load next scene
-		InitialGameState.hostIpAddr = ipText;
+		InitialGameState.HostIpAddr = ipText;
 		int lobbyScene = SceneLoader.scenes ["host"];
 		SceneManager.LoadScene (lobbyScene);
 	}

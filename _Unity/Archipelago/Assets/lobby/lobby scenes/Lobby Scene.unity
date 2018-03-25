@@ -1038,7 +1038,7 @@ MonoBehaviour:
   m_PlayScene: TestScene_48
   lobbySlots: []
   isDebug: 1
-  isHost: 0
+  isHost: 1
   isSinglePlayer: 0
 --- !u!4 &1896645681
 Transform:
