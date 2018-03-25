@@ -6,7 +6,7 @@ public class InitialGameState {
 
 	public static bool isHost = false; //default to client
 
-	public static string hostIpAddr = "127.0.0.1"; //default to localhost
+	public static string hostIpAddr = "192.168.0.9";//"127.0.0.1"; //default to localhost
 
 	public static string username = "Player"; //local player's username
 
