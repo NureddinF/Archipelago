@@ -29,10 +29,16 @@ public class AndroidWrapper {
 		return currentActivity.Call<string>("getUsername");
 	}
 
+	public static void returnToAndroidMenu(){
+		AndroidJavaObject currentActivity = getUnityActivity();
+		currentActivity.Call("exit");
+	}
+
 	private static AndroidJavaObject getUnityActivity(){
 		AndroidJavaClass jc = new AndroidJavaClass ("com.unity3d.player.UnityPlayer");
 		AndroidJavaObject currentActivity = jc.GetStatic<AndroidJavaObject>("currentActivity");
 
 		return currentActivity;
 	}
+
 }

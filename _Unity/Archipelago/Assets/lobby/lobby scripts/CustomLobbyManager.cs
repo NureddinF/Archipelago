@@ -132,6 +132,14 @@ public class CustomLobbyManager : NetworkLobbyManager {
 	}
 
 
+	public void returnToAndroidmenu(){
+		if (!isDebug) {
+			AndroidWrapper.returnToAndroidMenu ();
+		} else {
+			Debug.Log ("Debug Mode enabled - not running on android device");
+		}
+	}
+
 	// STEPS TO START A GAME:
 	// 1) First scene loads when unity starts from android studio.
 	//	  Get the option user selected: single player | host | join

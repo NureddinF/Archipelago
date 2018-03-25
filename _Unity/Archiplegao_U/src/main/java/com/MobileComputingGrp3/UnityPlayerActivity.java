@@ -143,4 +143,8 @@ public class UnityPlayerActivity extends Activity
         //TODO: relay data back to android studio here (e.g. win)
         finish();
     }
+
+    public void exit(){
+        finish();
+    }
 }
