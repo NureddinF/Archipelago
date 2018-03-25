@@ -12,10 +12,13 @@ public class Hex : MonoBehaviour {
     private int x;
     private int y;
 
-	//Store who owns the hex
-	public Player.PlayerId hexOwner = Player.PlayerId.NEUTRAL;
+    //Store who owns the hex
+    public Player.PlayerId hexOwner;
 
+    //Stores the hex's type
     private HexGrid.TileType tileType;
+
+    //Stores the hex's income
     private float tileIncome;
 
     //Store the hex's sprites
@@ -29,7 +32,7 @@ public class Hex : MonoBehaviour {
     private int maxY = HexGrid.getGridHeight() - 1;
     private int maxX = HexGrid.getGridWidth() - 1;
 
-    private void Start()
+    void Start()
     {
         building = null;
         this.GetComponent<SpriteRenderer>().sprite = standard;
@@ -43,7 +46,9 @@ public class Hex : MonoBehaviour {
 
     public int getY() { return y; }
 
-    public Player.PlayerId getPlayerId() { return hexOwner; }
+    public Player.PlayerId getHexOwner() { return hexOwner; }
+
+    public void setHexOwner(Player.PlayerId pID) { this.hexOwner = pID; }
 
     public void setTileIncome(float amount) { this.tileIncome = amount; }
 
@@ -131,7 +136,7 @@ public class Hex : MonoBehaviour {
         {
             if (gO.GetComponent<Hex>())
             {
-                if (gO.GetComponent<Hex>().getPlayerId().Equals(Player.PlayerId.P1)) //TODO: Currently softcoded for P1, need to set so works for anyplayer and passed in
+                if (gO.GetComponent<Hex>().getHexOwner().Equals(Player.PlayerId.P1)) //TODO: Currently softcoded for P1, need to set so works for anyplayer and passed in
                     return true;
             }
         }

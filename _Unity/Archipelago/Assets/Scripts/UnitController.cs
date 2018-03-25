@@ -10,10 +10,6 @@ public class UnitController : MonoBehaviour {
     //Parameter to store the initial number of units
     public int initialNumOfWorkers;
     public int initialNumOfWarriors;
-
-    //TODO AUTOMATE FINDING INITIAL TERRITORY (would most likely be base location
-    public int initialX;
-    public int initialY;
     
     //Parameters to store locations of the units.
     //The string key will store the current tile in the form (grid x coordinate).(grid y coordinate)
@@ -21,22 +17,26 @@ public class UnitController : MonoBehaviour {
     private Dictionary<string, int> workerLocations;
     private Dictionary<string, int> warriorLocations;
 
-    private void Start()
-    {
+    void Start()
+    {        
         //Initialize the dictionarys
         workerLocations = new Dictionary<string, int>();
         warriorLocations = new Dictionary<string, int>();
+    }
+    
+    public void initializeUnits()
+    {
         //Initialize number of warriors, only if initial amount specified > 0 
         if (initialNumOfWarriors > 0)
             //Add initial location and amount of warriors into the correct dict
-            warriorLocations.Add(initialX + "_" + initialY, initialNumOfWarriors);
+            addWarriors(initialNumOfWarriors, GameObject.Find("Hex Grid").GetComponent<HexGrid>().getPlayer1BaseX() + "_" + GameObject.Find("Hex Grid").GetComponent<HexGrid>().getPlayer1BaseY());
 
         //Initialize number of warriors, only if initial amount specified > 0 
         if (initialNumOfWorkers > 0)
-            //Add initial location and amount of warriors into the correct dict
-            workerLocations.Add(initialX + "_" + initialY, initialNumOfWorkers);
+            //Add initial location and amount of workers into the correct dict
+            addWorkers(initialNumOfWorkers, GameObject.Find("Hex Grid").GetComponent<HexGrid>().getPlayer1BaseX() + "_" + GameObject.Find("Hex Grid").GetComponent<HexGrid>().getPlayer1BaseY());
     }
-
+    
     //Method to add new warrior(s) given a specified amount and a hex
     public void addWarriors(int amount, Hex h) {
         //Create the hex location string to use as a key for the warrior location dictionary
@@ -146,11 +146,10 @@ public class UnitController : MonoBehaviour {
         else
             workerLocations.Add(key, amount);
 
-        if(GameObject.Find("Hex_" + key).GetComponent<CapturableTile>() != null)
+        if (GameObject.Find("Hex_" + key).GetComponent<CapturableTile>() != null)
         {
-             GameObject.Find("Hex_" + key).GetComponent<CapturableTile>().addUnits(amount, gameObject.GetComponent<Player>().playerId);
+            GameObject.Find("Hex_" + key).GetComponent<CapturableTile>().addUnits(amount, gameObject.GetComponent<Player>().playerId);
         }
-       
     }
     
     //Method to remove new worker(s) given a specified amount and a hex

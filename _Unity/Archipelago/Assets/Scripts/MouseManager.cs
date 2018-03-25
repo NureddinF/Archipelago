@@ -148,6 +148,11 @@ public class MouseManager : MonoBehaviour {
         {   
             //Return the gameobject that the ray has collided with
             GameObject collidedHitInfo = hitInfo.collider.transform.gameObject;
+
+            //DEBUGGING, can be removed in final version
+            // // // // // // // 
+            // // // // // // //
+            Debug.Log(collidedHitInfo.name);
          
             //If left mouse button pressed, only calls once on initial press(e.g not constantly calling on hold)
             if (Input.GetMouseButtonDown(0) && (!EventSystem.current.IsPointerOverGameObject()))

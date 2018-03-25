@@ -124,7 +124,7 @@ GameObject:
   - component: {fileID: 130789374}
   - component: {fileID: 130789373}
   m_Layer: 5
-  m_Name: Total Terriory Text
+  m_Name: Total Territory Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -347,6 +347,7 @@ GameObject:
   - component: {fileID: 425231703}
   - component: {fileID: 425231702}
   - component: {fileID: 425231701}
+  - component: {fileID: 425231704}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -399,6 +400,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &425231704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 425231700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 354691a5334a97747adb335e174e1aeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cost: 3
+  tileIncomeAfterBuild: 1
+  constructionTime: 5
+  tileAssociatedWith: 0
+  builtSprite: {fileID: 0}
+  constructionSprite: {fileID: 0}
+  menuIconSprite: {fileID: 0}
 --- !u!1 &463588562
 GameObject:
   m_ObjectHideFlags: 0
@@ -455,7 +474,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &463588565
 BoxCollider2D:
@@ -1356,7 +1375,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &977553404
 MonoBehaviour:
@@ -1373,10 +1392,8 @@ MonoBehaviour:
     type: 2}
   warriorPrefab: {fileID: 1113874209341802, guid: a1822ac9a34268b499b18513cc5d5c72,
     type: 2}
-  initialNumOfWorkers: 2
+  initialNumOfWorkers: 1
   initialNumOfWarriors: 2
-  initialX: 17
-  initialY: 5
 --- !u!114 &977553405
 MonoBehaviour:
   m_ObjectHideFlags: 0

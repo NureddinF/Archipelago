@@ -5,11 +5,11 @@ using UnityEngine.UI;
 public class CapturableTile: MonoBehaviour{
 
 	// Sprites representing progress bar of each player
-	private Image captureBoarder; //this image displays the sprites
+	public Image captureBoarder; //this image displays the sprites
 	public Sprite p1CaptureBorder;
 	public Sprite p2CaptureBorder;
 
-	// SPrites for captured version of tile
+	// Sprites for captured version of tile
 	private SpriteRenderer tileSprite; // this displays the sprites
 	public Sprite p1CaptureTile;
 	public Sprite p2CaptureTile;
@@ -37,16 +37,19 @@ public class CapturableTile: MonoBehaviour{
 	//Hex script associated with this tile
 	private Hex thisHex;
 
-	//Initializeation
+	//Initialization
 	public void Start(){
 		thisHex = GetComponent<Hex>();
         tileSprite = GetComponent<SpriteRenderer> ();
 		captureBoarder = GetComponentInChildren<Image>();
 
 		// Update player income if this tile is spawned with an owner
-		if(thisHex.hexOwner != Player.PlayerId.NEUTRAL){
-			finalizeCapture ();
-		}
+		if(thisHex.getHexOwner() != Player.PlayerId.NEUTRAL){
+			finalizeCapture();
+
+            //This initiliazies units, only works since this only calls once, for the tile that is player base. Wont work in other places since not every start has been done
+            GameObject.Find("Player").GetComponent<UnitController>().initializeUnits();
+        }
 
 		// This is mostly for testing. Fill Amount should be set to 0 so the tiles starts neutral.
 		amountCaptured = captureBoarder.fillAmount * totalCaptureCost;
@@ -79,7 +82,8 @@ public class CapturableTile: MonoBehaviour{
 			border = p2CaptureBorder;
 			captureClockwise = false;
 		}
-		if (!captureBoarder.enabled && thisHex.hexOwner == Player.PlayerId.NEUTRAL) {
+
+        if (thisHex.getHexOwner() == Player.PlayerId.NEUTRAL && !captureBoarder.enabled) {
 			captureBoarder.enabled = true;
 			captureBoarder.sprite = border;
 			captureBoarder.fillClockwise = captureClockwise;
@@ -99,7 +103,7 @@ public class CapturableTile: MonoBehaviour{
 	// Adnvace state towards capturing the tile
 	private void progressTileCapture(){
 
-		if (thisHex.hexOwner == Player.PlayerId.NEUTRAL && captureBoarder.enabled && thisHex.hasNeighbor()) {
+		if (thisHex.getHexOwner() == Player.PlayerId.NEUTRAL && captureBoarder.enabled && thisHex.hasNeighbor()) {
 
 			if(amountCaptured >0){
 				neutralResetSpeed = Mathf.Abs (neutralResetSpeed);
@@ -117,7 +121,7 @@ public class CapturableTile: MonoBehaviour{
 			if (numP1UnitsOnHex > 0) {
 				if(newAmountCaptured > totalCaptureCost){
 					//p1 captured tile
-					thisHex.hexOwner = Player.PlayerId.P1;
+					thisHex.setHexOwner(Player.PlayerId.P1);
 					captureBoarder.enabled = false;
 					tileSprite.sprite = p1CaptureTile;
 					finalizeCapture ();
@@ -129,7 +133,7 @@ public class CapturableTile: MonoBehaviour{
 			} else if (numP2UnitsOnHex > 0) {
 				if(newAmountCaptured < -totalCaptureCost){
 					//p2 captured tile
-					thisHex.hexOwner = Player.PlayerId.P2;
+					thisHex.setHexOwner(Player.PlayerId.P2);
 					captureBoarder.enabled = false;
 					tileSprite.sprite = p2CaptureTile;
 					finalizeCapture();
@@ -165,7 +169,7 @@ public class CapturableTile: MonoBehaviour{
 		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
 		for(int i=0; i<players.Length; i++){
 			Player player = players[i].GetComponentInChildren<Player>();
-			if(player.playerId.Equals(thisHex.hexOwner)){
+			if(player.playerId.Equals(thisHex.getHexOwner())){
 				return player;
 			}
 		}
@@ -184,7 +188,7 @@ public class CapturableTile: MonoBehaviour{
 	// Advance state towards capturing the tile
 	private void progressTileConstruction(){
 
-		if (buildingUnderConstrcution != null && thisHex.hexOwner != Player.PlayerId.NEUTRAL) {
+		if (buildingUnderConstrcution != null && thisHex.getHexOwner() != Player.PlayerId.NEUTRAL) {
 
 			if (numP1UnitsOnHex > 0 && numP2UnitsOnHex > 0) {
 				//TODO: units fight or something
@@ -192,9 +196,9 @@ public class CapturableTile: MonoBehaviour{
 			} 
 			//Figure out construction speed
 			float playerUnits = 0;
-			if(thisHex.hexOwner == Player.PlayerId.P1){
+			if(thisHex.getHexOwner() == Player.PlayerId.P1){
 				playerUnits = numP1UnitsOnHex;
-			} else if (thisHex.hexOwner == Player.PlayerId.P2){
+			} else if (thisHex.getHexOwner() == Player.PlayerId.P2){
 				playerUnits = numP2UnitsOnHex;
 			}
 			// Calculate how much construction is done

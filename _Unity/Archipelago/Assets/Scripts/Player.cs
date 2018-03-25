@@ -46,12 +46,12 @@ public class Player : MonoBehaviour
     void Start()
     {
         //Connect all UI script elements to their gameobjects
-        incomeText = stateMenu.transform.Find("Resource Icon").transform.Find("Total Amount Text").gameObject.GetComponent<Text>();
-        rateText = stateMenu.transform.Find("Resource Icon").transform.Find("Increase Rate Text").gameObject.GetComponent<Text>();
-        tilesOwnedText = stateMenu.transform.Find("Territory Icon").transform.Find("Total Territory Text").gameObject.GetComponent<Text>();
-        numOfWorkersOwned = stateMenu.transform.Find("Worker Button").transform.Find("Worker Count Text").gameObject.GetComponent<Text>();
-        numOfWarriorsOwned = stateMenu.transform.Find("Warrior Button").transform.Find("Warrior Count Text").gameObject.GetComponent<Text>();
-        redBarTemp = stateMenu.transform.Find("TileOwnershipRatioBar").transform.Find("Red Bar").gameObject.GetComponent<Image>();
+        incomeText = stateMenu.transform.Find("Resource Icon/Total Amount Text").gameObject.GetComponent<Text>();
+        rateText = stateMenu.transform.Find("Resource Icon/Increase Rate Text").gameObject.GetComponent<Text>();
+        tilesOwnedText = stateMenu.transform.Find("Territory Icon/Total Territory Text").gameObject.GetComponent<Text>();
+        numOfWorkersOwned = stateMenu.transform.Find("Worker Button/Worker Count Text").gameObject.GetComponent<Text>();
+        numOfWarriorsOwned = stateMenu.transform.Find("Warrior Button/Warrior Count Text").gameObject.GetComponent<Text>();
+        redBarTemp = stateMenu.transform.Find("TileOwnershipRatioBar/Red Bar").gameObject.GetComponent<Image>();
 
         //Initialize Variables
         currentMoney = 0;
@@ -120,10 +120,5 @@ public class Player : MonoBehaviour
     public void removeTile(CapturableTile tile)
     {
         totalTileIncome -= tile.getHex().getTileIncome();
-    }
-
-    public void makeUnit(GameObject unitObject)
-    {
-       //complete method
     }
 }

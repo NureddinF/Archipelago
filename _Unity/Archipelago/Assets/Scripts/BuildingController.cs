@@ -47,7 +47,7 @@ public class BuildingController : MonoBehaviour
 
     public bool canBeginConstructing(Hex h)
     {
-        if (h.getPlayerId().Equals("P1") && h.getBuilding().Equals(null) && !constructionLocations.ContainsKey(hexToString(h)))
+        if (h.getHexOwner().Equals(Player.PlayerId.P1) && h.getBuilding().Equals(null) && !constructionLocations.ContainsKey(hexToString(h)))
         {
             return true;
         }
