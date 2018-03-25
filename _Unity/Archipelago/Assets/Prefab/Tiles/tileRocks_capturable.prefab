@@ -149,12 +149,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6df63fddf43a894f923d1131471aab7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  x: 0
-  y: 0
   hexOwner: 2
-  tileType: 4
-  menuOptions:
-  - {fileID: 114944817540125728, guid: bfbb04b59cd58f248991020c496adbac, type: 2}
+  standard: {fileID: 21300000, guid: 59d75c3323dd44a0cbdecff98a857b06, type: 3}
+  idleUnits: {fileID: 21300000, guid: e4f4886f9a04d4d789aecd0329fb289c, type: 3}
 --- !u!114 &114782294160399594
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -175,7 +172,6 @@ MonoBehaviour:
   totalCaptureCost: 10
   constructionSpeedPerUnit: 1
   passiveConstructionSpeed: 0
-  tileIncome: 1
 --- !u!114 &114790169981768332
 MonoBehaviour:
   m_ObjectHideFlags: 1

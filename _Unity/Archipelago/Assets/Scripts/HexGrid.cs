@@ -136,7 +136,7 @@ public class HexGrid : MonoBehaviour {
         if (gridPos.x % 2 == 1)
             y -= yOffset;
 
-        return new Vector3(x, y, -1);
+        return new Vector3(x, y, 0);
     }
 
     //Method to create the hex grid
