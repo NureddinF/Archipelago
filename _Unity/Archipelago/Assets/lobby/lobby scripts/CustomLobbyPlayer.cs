@@ -21,7 +21,8 @@ public class CustomLobbyPlayer : NetworkLobbyPlayer {
 		Debug.Log("CustomLobbyPlayer: Start");
 		if(isLocalPlayer){
 			Debug.Log ("CustomLobbyPlayer: Start: isLocalPlayer");
-			CmdInitLobbyPlayer (InitialGameState.username, InitialGameState.ClientIpAddr);
+			FindObjectOfType<CustomLobbyManager> ().initLobbyUi ();
+			CmdInitLobbyPlayer (InitialGameState.username, FindObjectOfType<CustomLobbyManager>().getClientIp());
 			//initLobbyPlayer ("User " + Random.Range(0,100));
 			Debug.Log ("CustomLobbyPlayer: Start: isLocalPlayer: "
 				+ "username: " + username + ", ipAddress: " + ipAddress
@@ -51,8 +52,11 @@ public class CustomLobbyPlayer : NetworkLobbyPlayer {
 	private void initLobbyPlayer(){
 		Debug.Log ("CustomLobbyPlayer: initLobbyPlayer");
 		if (playerUI == null) {
-			playerUI = Instantiate (PlayerUiPrefab, FindObjectOfType<Canvas> ()
-				.GetComponentInChildren<VerticalLayoutGroup> ().transform);
+			Canvas c = FindObjectOfType<Canvas> ();
+			Transform lui = c.transform.Find ("LobbyUi");
+			Transform correctParent = lui.Find ("ConnectionStatus");
+			Debug.Log ("CustomLobbyPlayer: initLobbyPlayer: parent: " + correctParent == null ? "NULL" : correctParent.name);
+			playerUI = Instantiate (PlayerUiPrefab, correctParent);
 		}
 		Text[] playerUiElements = playerUI.GetComponentsInChildren<Text> ();
 		playerUiElements [0].text = username;

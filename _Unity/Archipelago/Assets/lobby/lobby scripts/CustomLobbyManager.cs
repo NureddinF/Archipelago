@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Networking;
 
 public class CustomLobbyManager : NetworkLobbyManager {
@@ -9,9 +11,15 @@ public class CustomLobbyManager : NetworkLobbyManager {
 	public bool isHost = false;
 	public bool isSinglePlayer = false;
 
+	public GameObject searchUi;
+	public GameObject lobbyUi;
+	private Text enteredIpAddress;
+
 	// Use this for initialization
 	void Start () {
+		enteredIpAddress = searchUi.GetComponentInChildren<InputField>().textComponent;
 		Debug.Log ("NetworkLobbyManager: Start");
+
 		if (!isDebug) {
 			string sceneName = AndroidWrapper.getAndroidSceneName ();
 			switch(sceneName){
@@ -46,18 +54,68 @@ public class CustomLobbyManager : NetworkLobbyManager {
 		if(isHost){
 			Debug.Log ("NetworkLobbyManager: Start: isHost");
 			networkAddress = InitialGameState.HostIpAddr;
-			InitialGameState.ClientIpAddr = InitialGameState.HostIpAddr;
 			StartHost ();
-		} else {
-			Debug.Log ("NetworkLobbyManager: Start: isClient");
-			networkAddress = InitialGameState.HostIpAddr;
-			NetworkClient newClient = StartClient ();
-			InitialGameState.ClientIpAddr = newClient.connection.address;
 		}
 			
 
 		InitialGameState.isHost = isHost;
 	}
+
+
+	public void initLobbyUi(){
+		Debug.Log ("NetworkLobbyManager: initLobbyUi");
+
+		searchUi.SetActive (false);
+		lobbyUi.SetActive (true);
+
+	}
+
+	public void attemptConnection(){
+		Debug.Log ("NetworkLobbyManager: attempting connection");
+		// Get the entered string
+		string ipStr = enteredIpAddress.text;
+		//remove whitespace
+		ipStr = RemoveWhitespace(ipStr);
+		//split string into bytes
+		string[] ipBytesString = ipStr.Split ('.');
+
+		//make sure the ip address if the correct format for IPv4 (X.X.X.X)
+		if (ipBytesString.Length != 4) {
+			Debug.Log ("bad length ('.' seperators)");
+			return;
+		}
+
+		//make sure the ip addres is valid
+		try{
+			for (int i = 0; i < 4; i++) {
+				byte  b = Byte.Parse(ipBytesString[i]);
+			}
+		} catch (Exception e){
+			Debug.Log ("bad format: ipStr: " + ipStr + e.ToString());
+			return;
+		}
+		Debug.Log ("valid Ip address");
+
+		// Save state and attempt connection
+		InitialGameState.HostIpAddr = ipStr;
+		networkAddress = ipStr;
+		StartClient ();
+	}
+
+	// https://stackoverflow.com/questions/6219454/efficient-way-to-remove-all-whitespace-from-string
+	public static string RemoveWhitespace(string str) {
+		return string.Join("", str.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
+	}
+
+
+	public string getClientIp(){
+		if(isHost){
+			return InitialGameState.HostIpAddr;
+		} else {
+			return client.connection.address;	
+		}
+	}
+
 
 	// STEPS TO START A GAME:
 	// 1) First scene loads when unity starts from android studio.
