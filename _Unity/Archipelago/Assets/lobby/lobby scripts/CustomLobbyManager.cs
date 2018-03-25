@@ -52,19 +52,9 @@ public class CustomLobbyManager : NetworkLobbyManager {
 			networkAddress = InitialGameState.hostIpAddr;
 			StartClient ();
 		}
-
-		if(client != null){
-			client.RegisterHandler(SetParentMessage.SetParent, OnSetParent);
-		}
+			
 
 		InitialGameState.isHost = isHost;
-	}
-
-	private void OnSetParent(NetworkMessage netMsg)
-	{
-		SetParentMessage msg = netMsg.ReadMessage<SetParentMessage>();
-		ClientScene.objects[msg.netId].transform.parent = ClientScene.objects[msg.parentNetId].transform;
-		ClientScene.objects [msg.netId].transform.localScale = new Vector3(1,1,1);
 	}
 
 	// STEPS TO START A GAME:

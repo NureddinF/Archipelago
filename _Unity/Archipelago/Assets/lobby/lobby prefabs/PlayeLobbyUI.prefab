@@ -88,7 +88,6 @@ GameObject:
   m_Component:
   - component: {fileID: 224580568627358950}
   - component: {fileID: 114208955999713120}
-  - component: {fileID: 114891830263623460}
   m_Layer: 5
   m_Name: PlayeLobbyUI
   m_TagString: Untagged
@@ -349,38 +348,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114891830263623460
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1623393845467610}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 372142912, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SceneId:
-    m_Value: 0
-  m_AssetId:
-    i0: 205
-    i1: 202
-    i2: 45
-    i3: 168
-    i4: 96
-    i5: 23
-    i6: 116
-    i7: 242
-    i8: 105
-    i9: 46
-    i10: 215
-    i11: 154
-    i12: 99
-    i13: 36
-    i14: 10
-    i15: 128
-  m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
 --- !u!222 &222042910219245604
 CanvasRenderer:
   m_ObjectHideFlags: 1

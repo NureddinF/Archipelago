@@ -430,7 +430,7 @@ RectTransform:
   m_GameObject: {fileID: 527498008}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.999868, y: 0.999868, z: 0.999868}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2096453623}
   m_RootOrder: 3
@@ -661,7 +661,7 @@ RectTransform:
   m_GameObject: {fileID: 1316757741}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.9997331, y: 0.9997331, z: 0.9997331}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2096453623}
   m_RootOrder: 2
@@ -722,7 +722,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1403091918}
   - component: {fileID: 1403091919}
-  - component: {fileID: 1403091920}
   m_Layer: 5
   m_Name: Connection Status
   m_TagString: Untagged
@@ -748,7 +747,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -109.09001, y: 188.97}
-  m_SizeDelta: {x: 500, y: 100}
+  m_SizeDelta: {x: 600, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1403091919
 MonoBehaviour:
@@ -768,43 +767,11 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
-  m_Spacing: 0
+  m_Spacing: 80
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
---- !u!114 &1403091920
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1403091917}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 372142912, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SceneId:
-    m_Value: 0
-  m_AssetId:
-    i0: 0
-    i1: 0
-    i2: 0
-    i3: 0
-    i4: 0
-    i5: 0
-    i6: 0
-    i7: 0
-    i8: 0
-    i9: 0
-    i10: 0
-    i11: 0
-    i12: 0
-    i13: 0
-    i14: 0
-    i15: 0
-  m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
 --- !u!1 &1457477351
 GameObject:
   m_ObjectHideFlags: 0
@@ -1003,7 +970,7 @@ MonoBehaviour:
   m_OfflineScene: Lobby Scene
   m_OnlineScene: 
   m_SpawnPrefabs:
-  - {fileID: 1623393845467610, guid: cdca2da8601774f2692ed79a63240a80, type: 2}
+  - {fileID: 0}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -1071,7 +1038,7 @@ MonoBehaviour:
   m_PlayScene: TestScene_48
   lobbySlots: []
   isDebug: 1
-  isHost: 1
+  isHost: 0
   isSinglePlayer: 0
 --- !u!4 &1896645681
 Transform:
@@ -1110,7 +1077,7 @@ RectTransform:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2096453622}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1142,7 +1109,7 @@ MonoBehaviour:
     m_Left: 20
     m_Right: 20
     m_Top: 0
-    m_Bottom: 40
+    m_Bottom: 0
   m_ChildAlignment: 4
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
@@ -1176,7 +1143,7 @@ RectTransform:
   m_GameObject: {fileID: 2132761746}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.9997331, y: 0.9997331, z: 0.9997331}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2096453623}
   m_RootOrder: 1
