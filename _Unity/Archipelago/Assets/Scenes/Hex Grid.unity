@@ -1375,6 +1375,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72467bbfd3e45ee41abd1c738afd289e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  workerPrefab: {fileID: 1940432781439648, guid: 12fd2b2754f01574685cf5485c3070e0,
+    type: 2}
+  warriorPrefab: {fileID: 0}
   initialNumOfWorkers: 2
   initialNumOfWarriors: 2
   initialX: 17
