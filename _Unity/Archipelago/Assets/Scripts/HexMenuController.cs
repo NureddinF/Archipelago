@@ -15,6 +15,7 @@ public class HexMenuController : MonoBehaviour
     private Text tileWorkerCount;
     private Text tileWarriorCount;
     private Image tileActionBox;
+    
 
     //Parameter to store the current hex that the menu is displaying for.
     private Hex selectedHex;
@@ -74,8 +75,8 @@ public class HexMenuController : MonoBehaviour
             }
 
             tileImage.sprite = h.GetComponent<SpriteRenderer>().sprite;
-            tileWorkerCount.text = gameObject.GetComponent<UnitController>().getWorkerCountByTileCoords(h.getX(), h.getY()).ToString();
-            tileWarriorCount.text = gameObject.GetComponent<UnitController>().getWarriorCountByTileCoords(h.getX(), h.getY()).ToString();
+            tileWorkerCount.text = h.getNumOfWorkersOnHex().ToString();
+            tileWarriorCount.text = h.getNumOfWarriorsOnHex().ToString();
 
             setTileActions();
 
@@ -99,8 +100,8 @@ public class HexMenuController : MonoBehaviour
     {
         if (selectedHex != null)
         {
-            gameObject.GetComponent<UnitController>().moveClosestWorker(selectedHex);
-            tileWorkerCount.text = gameObject.GetComponent<UnitController>().getWorkerCountByTileCoords(selectedHex.getX(), selectedHex.getY()).ToString();
+            gameObject.GetComponent<UnitController>().moveClosestAvailableWorker(selectedHex);
+            tileWorkerCount.text = selectedHex.getNumOfWorkersOnHex().ToString();
         }
         else
             Debug.Log("No hex selected to move a worker unit to");
@@ -111,8 +112,8 @@ public class HexMenuController : MonoBehaviour
     {
         if (selectedHex != null)
         {
-            gameObject.GetComponent<UnitController>().moveClosestWarrior(selectedHex);
-            tileWarriorCount.text = gameObject.GetComponent<UnitController>().getWarriorCountByTileCoords(selectedHex.getX(), selectedHex.getY()).ToString();
+            gameObject.GetComponent<UnitController>().moveClosestAvailableWarrior(selectedHex);
+            tileWarriorCount.text = selectedHex.getNumOfWarriorsOnHex().ToString();
         }
         else
             Debug.Log("No hex selected to move a warrior unit to");
@@ -139,38 +140,38 @@ public class HexMenuController : MonoBehaviour
         {
             GameObject.Destroy(child.gameObject);
         }
-
+        
         //If hex is selected
         if (selectedHex)
         {
+            //Array of vectors that store the corner world positions of the parent, tile action box
+            Vector3[] corners = new Vector3[4];
+            tileActionBox.GetComponent<RectTransform>().GetWorldCorners(corners);
+
+
+            //Work out the action box's height and width, have to do it this way since rect transform has weird properties
+            float parentHeight = corners[2].y - corners[0].y;
+            float parentWidth = corners[2].x - corners[0].x;
+
+            //Float to store the percentage width for the child objects. Height if needed also
+            float percentageWidth = 0.7f;
+            //float percentageHeight = percentageWidth;
+
+            //Floats to store the height and width of the child object, if equal 1:1 ratio
+            float childWidth = percentageWidth * parentWidth;
+            float childHeight = childWidth;
+
+            // The distance between each menu items as well as the initial offset from top of action box
+            float yOffset = 10f;
             //If the selected hex does not have a building
-            if (!selectedHex.getBuilding())
+            if (selectedHex.getBuilding() == null)
             {
                 //Get a list of possible building types that can be built on this hex
                 List<Building> buildingOptions = gameObject.GetComponent<BuildingController>().getListOfBuildingByTileType(selectedHex.getTileType());
 
-                //Array of vectors that store the corner world positions of the parent, tile action box
-                Vector3[] corners = new Vector3[4];
-                tileActionBox.GetComponent<RectTransform>().GetWorldCorners(corners);
-
-                //Work out the action box's height and width, have to do it this way since rect transform has weird properties
-                float parentHeight = corners[2].y - corners[0].y;
-                float parentWidth = corners[2].x - corners[0].x;
-
-                //Float to store the percentage width for the child objects. Height if needed also
-                float percentageWidth = 0.7f;
-                //float percentageHeight = percentageWidth;
-
-                //Floats to store the height and width of the child object, if equal 1:1 ratio
-                float childWidth = percentageWidth * parentWidth;
-                float childHeight = childWidth;
-
-                // The distance between each menu items as well as the initial offset from top of action box
-                float yOffset = 10f; 
-
                 //Count number of items iterated through to allow correct vertical displacement
                 int count = 0;
-                
+
                 //For each building option
                 foreach (Building b in buildingOptions)
                 {
@@ -194,13 +195,10 @@ public class HexMenuController : MonoBehaviour
                     //Set its displayed sprite
                     go.GetComponent<Image>().sprite = b.getMenuIconSprite();
                     //Set its click function
-                    go.GetComponent<Button>().onClick.AddListener(delegate { tileActionBuild(b); });
+                    go.GetComponent<Button>().onClick.AddListener(() => { tileActionBuild(b); });
                     //Increment count
                     count++;
                 }
-            }
-            else {
-                //INSERT CODE TO SHOW MENU DISPLAY FOR BUILDING ON THAT TILE
             }
         }
     }
@@ -208,6 +206,7 @@ public class HexMenuController : MonoBehaviour
     //Method for the tileaction, when selecting a building
     void tileActionBuild(Building b)
     {
-        selectedHex.GetComponent<CapturableTile>().beginConstruction(b);
+        selectedHex.setBuilding(b);
+        refreshUIValues();
     }
 }
