@@ -5,29 +5,11 @@ using UnityEngine;
 public class BuildingController : MonoBehaviour
 {
 
-    private Dictionary<string, Building> constructionLocations;
-
-    public List<Building> allBuildings;
+    public List<Building> allConstructableBuildings;
 
     private string hexToString(Hex h)
     {
         return h.getX() + "_" + h.getY();
-    }
-
-    public Building getConstructionByHex(Hex h)
-    {
-        string coords = hexToString(h);
-        return getConstructionByString(coords);
-    }
-
-    private Building getConstructionByString(string s)
-    {
-        if (constructionLocations.ContainsKey(s))
-        {
-            return constructionLocations[s];
-        }
-
-        return null;
     }
 
     public Building getBuildingByHex(Hex h)
@@ -47,7 +29,7 @@ public class BuildingController : MonoBehaviour
 
     public bool canBeginConstructing(Hex h)
     {
-        if (h.getHexOwner().Equals(Player.PlayerId.P1) && h.getBuilding().Equals(null) && !constructionLocations.ContainsKey(hexToString(h)))
+        if (h.getHexOwner().Equals(Player.PlayerId.P1) && h.getBuilding().Equals(null))
         {
             return true;
         }
@@ -55,35 +37,14 @@ public class BuildingController : MonoBehaviour
         return false;
     }
 
-    public void addConstruction(Hex h, Building b)
-    {
-        string coords = hexToString(h);
-        addConstruction(coords, b);
-    }
-
-    private void addConstruction(string s, Building b)
-    {
-        constructionLocations.Add(s, b);
-    }
-
-    public void removeConstruction(Hex h)
-    {
-        string coords = hexToString(h);
-        removeConstruction(coords);
-    }
-
-    private void removeConstruction(string s)
-    {
-        constructionLocations.Remove(s);
-    }
-
     public List<Building> getListOfBuildingByTileType(HexGrid.TileType type)
     {
         List<Building> result = new List<Building>();
 
-        foreach (Building b in allBuildings)
+        foreach (Building b in allConstructableBuildings)
         {
-            if (b.getTileTypeAssociatedWith().Equals(type))
+            List<HexGrid.TileType> tilesTypesAssociatedWith = b.getTileTypesAssociatedWith();
+            if (tilesTypesAssociatedWith.Contains(type))
             {
                 result.Add(b);
             }
