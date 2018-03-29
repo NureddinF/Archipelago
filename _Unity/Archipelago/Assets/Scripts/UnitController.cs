@@ -369,6 +369,7 @@ public class UnitController : MonoBehaviour {
 		Building buildOnHex = playerOn.getBuilding ();
 		if (buildOnHex != null) {
 			if (buildOnHex.getTileTypeAssociatedWith ().Equals (HexGrid.TileType.ALL)) {
+				
 				return true;
 			}
 		}
@@ -376,7 +377,8 @@ public class UnitController : MonoBehaviour {
 		return false;
 	}
 
-	public void killWarrior(Warrior w){
+	public IEnumerator killWarrior(Warrior w){
+		yield return new WaitForSeconds (1);
 		w.gameObject.SetActive (false);
 	}
 }

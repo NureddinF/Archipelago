@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4615767887175638}
-  - component: {fileID: 114682635894927612}
+  - component: {fileID: 114542372765660012}
   m_Layer: 0
   m_Name: Trap
   m_TagString: Untagged
@@ -40,7 +40,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114682635894927612
+--- !u!114 &114542372765660012
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -48,13 +48,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1177303127815186}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f793c2afe2a3b64db9fea45fa2b2fd1, type: 3}
+  m_Script: {fileID: 11500000, guid: 76a0a9898439a4113a33622c0b2376be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cost: 3
   tileIncomeAfterBuild: 1
   constructionTime: 5
-  tileAssociatedWith: 2
-  builtSprite: {fileID: 21300000, guid: 07b07a81a26e6954a8373b06efa51104, type: 3}
+  tileAssociatedWith: 6
+  builtSprite: {fileID: 21300000, guid: cc92ddfc1ccea09489c73fcd86605303, type: 3}
   constructionSprite: {fileID: 21300000, guid: a73a253afb5804348875cea91ef24140, type: 3}
-  menuIconSprite: {fileID: 21300000, guid: 07b07a81a26e6954a8373b06efa51104, type: 3}
+  menuIconSprite: {fileID: 21300000, guid: cc92ddfc1ccea09489c73fcd86605303, type: 3}
