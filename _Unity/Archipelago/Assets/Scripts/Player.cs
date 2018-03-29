@@ -39,9 +39,6 @@ public class Player : MonoBehaviour
     // Reference to the map so Player can access tiles
     public HexGrid map;
 
-    // List of owned hexes
-    private List<Hex> hexesOwned;
-
     // Use this for initialization
     void Start()
     {
@@ -59,7 +56,6 @@ public class Player : MonoBehaviour
         rateText.text = "+ 0/sec";
         tilesOwnedText.text = "0";
         startTime = Time.time;
-        hexesOwned = new List<Hex>();
         numOfWarriorsOwned.text = gameObject.GetComponent<UnitController>().initialNumOfWarriors.ToString();
         numOfWorkersOwned.text = gameObject.GetComponent<UnitController>().initialNumOfWorkers.ToString();
     }
@@ -96,6 +92,11 @@ public class Player : MonoBehaviour
         redBarTemp.transform.localScale = new Vector3((float)totalTilesOwned/((float)totalTilesOwned+1), 1, 1);
     }
 
+    //Getters/Setters
+    public float getCurrentMoney() { return currentMoney; }
+
+    public void removeMoney(float amount) { currentMoney -= amount; }
+
     // Generates income in discrete chunks rather than each frame
     public void generateIncomeDiscrete()
     {
@@ -120,5 +121,6 @@ public class Player : MonoBehaviour
     public void removeTile(CapturableTile tile)
     {
         totalTileIncome -= tile.getHex().getTileIncome();
+        totalTilesOwned -= 1;
     }
 }

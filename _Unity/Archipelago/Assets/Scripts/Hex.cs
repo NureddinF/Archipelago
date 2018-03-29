@@ -23,7 +23,6 @@ public class Hex : MonoBehaviour {
 
     //Store the hex's sprites
     public Sprite standard;
-    public Sprite idleUnits;
 
     //Store the building on the hex, null if not one
     private Building building;
@@ -32,12 +31,23 @@ public class Hex : MonoBehaviour {
     private int maxY = HexGrid.getGridHeight() - 1;
     private int maxX = HexGrid.getGridWidth() - 1;
 
+    private int numOfWorkersOnHex;
+    private int numOfWarriorsOnHex;
+
+    //Calls once on object creation
     void Start()
     {
         building = null;
-        this.GetComponent<SpriteRenderer>().sprite = standard;
+
+        //Initialize ints to store the units on the tile
+        numOfWorkersOnHex = 0;
+        numOfWarriorsOnHex = 0;
+
+        //Set it's current sprite to the standard hex sprite
+        changeHexSprite(standard);
     }
 
+    //Getters and setters
     public void setX(int x) { this.x = x; }
 
     public void setY(int y) { this.y = y; }
@@ -58,10 +68,48 @@ public class Hex : MonoBehaviour {
 
     public HexGrid.TileType getTileType() { return tileType; }
 
-    public void setBuilding(Building b) { this.building = b; }
+    public void setBuilding(Building b) {
+        this.building = b;
+        b.setHexAssociatedWith(this);
+    }
 
     public Building getBuilding() { return building; }
     
+    public int getNumOfWorkersOnHex() { return numOfWorkersOnHex; }
+
+    public int getNumOfWarriorsOnHex() { return numOfWarriorsOnHex; }
+
+    public void addWorkersToHex(int amount) {
+        numOfWorkersOnHex += amount;
+    }
+
+    public void addWarriorsToHex(int amount) {
+        numOfWarriorsOnHex += amount;
+    }
+
+    public void removeWorkersFromHex(int amount)
+    {
+        if(numOfWorkersOnHex >= amount)
+        {
+            numOfWorkersOnHex -= amount;
+        }
+        else
+        {
+            Debug.Log("Can't remove workers from hex since requested " + amount + " to be removed, and only " + numOfWorkersOnHex + " recorded to be located on this hex: " + this.name);
+        }
+    }
+
+    public void removeWarriorsFromHex(int amount)
+    {
+        if (numOfWarriorsOnHex >= amount)
+        {
+            numOfWarriorsOnHex -= amount;
+        }
+        else
+        {
+            Debug.Log("Can't remove warriors from hex since requested " + amount + " to be removed, and only " + numOfWarriorsOnHex + " recorded to be located on this hex: " + this.name);
+        }
+    }
     //Method to return a list of a hex's direct neighbors
     public List <GameObject> getNeighbors(){
         List<GameObject> neighbors = new List<GameObject>();
@@ -128,7 +176,8 @@ public class Hex : MonoBehaviour {
         return neighbors;
     }
 
-    public bool hasNeighbor()
+    //Method to return true if a neighbor is owned by player
+    public bool hasOwnedNeighbor()
     {
         List<GameObject> neighbors = getNeighbors();
 
@@ -143,6 +192,7 @@ public class Hex : MonoBehaviour {
         return false;
     }
 
+    //Method to change the sprite of the hex
     public void changeHexSprite(Sprite s)
     {
         this.GetComponent<SpriteRenderer>().sprite = s;

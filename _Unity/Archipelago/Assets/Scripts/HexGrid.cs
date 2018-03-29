@@ -20,8 +20,7 @@ public class HexGrid : MonoBehaviour {
 
 	public int levelNumber;
 
-    private int player1BaseX;
-    private int player1BaseY;
+    private Hex player1Base;
 	//Game Maps - Represented by a matrix
 	//Level 1 Map
 	int[,] level1 = new int[7, 35]
@@ -65,8 +64,7 @@ public class HexGrid : MonoBehaviour {
     public static int getGridWidth() { return gridWidth;  }
 
     //Get methods for player1base coordinates
-    public int getPlayer1BaseX() { return player1BaseX; }
-    public int getPlayer1BaseY() { return player1BaseY; }
+    public Hex getPlayer1Base() { return player1Base; }
 
     //Dimensions of individual hex
     private float hexWidth;
@@ -171,15 +169,15 @@ public class HexGrid : MonoBehaviour {
 						thisHex = (GameObject)Instantiate (tilePlayer1Base);
 						thisHex.GetComponent<Hex>().setTileType(TileType.BASE);
                         thisHex.GetComponent<Hex>().setTileIncome(basePlayerBaseIncome);
-                        //TODO, make player base tile have a base building on, maybe make it grass tile but    thisHex.GetComponent<Hex>().setBuilding(Player base building);
-                        player1BaseX = x;
-                        player1BaseY = y;
+                        thisHex.GetComponent<Hex>().setHexOwner(Player.PlayerId.P1);
+                        player1Base = thisHex.GetComponent<Hex>();
                         break;
 					}
 					case 2:{
 						thisHex = (GameObject)Instantiate (tilePlayer2Base);
 						thisHex.GetComponent<Hex>().setTileType(TileType.BASE);
-                            thisHex.GetComponent<Hex>().setTileIncome(basePlayerBaseIncome);
+                        thisHex.GetComponent<Hex>().setTileIncome(basePlayerBaseIncome);
+                        thisHex.GetComponent<Hex>().setHexOwner(Player.PlayerId.P2);
                         break;
 					}
 					case 3:{
@@ -223,7 +221,8 @@ public class HexGrid : MonoBehaviour {
 
         }
     }
-		
+	
+    //Method to get the hex, given a unity coordinate  TODO: PERHAPS UNUSED METHOD, need to check
 	public GameObject getHex(Vector3 unityCoord){
 		// Perform inver operation used to generate map
 		float X = (unityCoord.x / (hexWidth - xOffset / 2));
@@ -235,7 +234,7 @@ public class HexGrid : MonoBehaviour {
 		if (x % 2 == 1) {
 			unityCoord.y += yOffset;
 		}
-		float Y =(-unityCoord.y / hexHeight);
+		float Y = (-unityCoord.y / hexHeight);
 		int y = (int)Y;
 		if(Y%1.0f > roundingFactor){
 			y++;
