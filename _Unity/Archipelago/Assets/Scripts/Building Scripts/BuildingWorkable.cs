@@ -7,10 +7,6 @@ public class BuildingWorkable : Building {
     public int maxNumberOfAssignedWorkers = 5;
     public float increasedIncomePerWorker = 0.5f;
 
-    void Start() {
-        setCurrentTileIncome(getTileIncomeAfterBuild());
-    }
-
     public int getNuberAssignedWorkers() { return numberAssignedWorkers; }
 
     public float getIncreasedIncomePerWorker() { return increasedIncomePerWorker; }
@@ -20,7 +16,7 @@ public class BuildingWorkable : Building {
         if (numberAssignedWorkers < maxNumberOfAssignedWorkers)
         {
             numberAssignedWorkers += 1;
-            setCurrentTileIncome(getCurrentTileIncome() + increasedIncomePerWorker);
+            getHexAssociatedWith().setTileIncome(getHexAssociatedWith().getTileIncome() + increasedIncomePerWorker);
         }
         else
             Debug.Log("Can't assign worker since currently there are the maximum amount possible assigned to this building");
@@ -31,7 +27,7 @@ public class BuildingWorkable : Building {
         if (numberAssignedWorkers > 0)
         {
             numberAssignedWorkers -= 1;
-            setCurrentTileIncome(getCurrentTileIncome() - increasedIncomePerWorker);
+            getHexAssociatedWith().setTileIncome(getHexAssociatedWith().getTileIncome() - increasedIncomePerWorker);
         }
         else
             Debug.Log("Can't deallocate worker since currently there are none assigned to this building");
