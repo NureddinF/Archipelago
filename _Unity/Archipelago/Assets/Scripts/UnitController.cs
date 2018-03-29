@@ -376,7 +376,7 @@ public class UnitController : MonoBehaviour {
 		return false;
 	}
 
-	public bool killWarriro(Warrior w){
-
+	public void killWarrior(Warrior w){
+		w.gameObject.SetActive (false);
 	}
 }
