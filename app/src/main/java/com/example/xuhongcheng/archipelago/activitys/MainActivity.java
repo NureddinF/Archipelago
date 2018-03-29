@@ -1,11 +1,11 @@
 package com.example.xuhongcheng.archipelago.activitys;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,8 +17,9 @@ import com.MobileComputingGrp3.UnityPlayerActivity;
 import com.example.xuhongcheng.archipelago.myapplication.R;
 import com.example.xuhongcheng.archipelago.utils.SharedPreferenceUtils;
 
+public class MainActivity extends Activity {
 
-public class MainActivity extends AppCompatActivity {
+    private static final int PLAY_GAME = 600;
 
     public Button singlePlayer;
     public Button hostMulti;
@@ -28,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     public ImageButton btn_settings;
     private SoundPool soundPool;
     private int  soundId;
-
 
     private static final int PLAY_GAME = 600;
 
@@ -44,16 +44,16 @@ public class MainActivity extends AppCompatActivity {
         btn_settings = (ImageButton) findViewById(R.id.setting);
         profile = (Button) findViewById(R.id.profile);
         //https://stackoverflow.com/questions/6173400/how-to-hide-a-button-programmatically
-        boolean isLogin = SharedPreferenceUtils.getBoolean(MainActivity.this, "isLogin", false);
-        if (!isLogin) {
+
+        boolean isLogin = SharedPreferenceUtils.getBoolean(MainActivity.this,"isLogin",false);
+        if(!isLogin){
             profile.setVisibility(View.INVISIBLE);
         }
-
 
         singlePlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                soundPool.play(soundId,1,1,0,0,1);
                 Intent launchIntent = new Intent(getApplicationContext(), UnityPlayerActivity.class);
                 if (launchIntent != null) {
                     startActivityForResult(launchIntent, PLAY_GAME);
@@ -103,4 +103,10 @@ public class MainActivity extends AppCompatActivity {
             setContentView(R.layout.activity_main);
         }
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        //Toast.makeText(getApplicationContext(), "Game Closed, returned to menu.", Toast.LENGTH_SHORT).show();
+    }
+
 }
