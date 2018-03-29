@@ -47,14 +47,6 @@ public class Hex : MonoBehaviour {
         changeHexSprite(standard);
     }
 
-    void Update()
-    {
-        if(building != null)
-        {
-            building.progressConstruction();
-        }
-    }
-
     //Getters and setters
     public void setX(int x) { this.x = x; }
 
