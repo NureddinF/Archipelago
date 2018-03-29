@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.MobileComputingGrp3.UnityPlayerActivity;
+
 import com.example.xuhongcheng.archipelago.myapplication.R;
 import com.example.xuhongcheng.archipelago.utils.SharedPreferenceUtils;
 
@@ -27,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     private SoundPool soundPool;
     private int  soundId;
 
+
+    private static final int PLAY_GAME = 600;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +53,10 @@ public class MainActivity extends AppCompatActivity {
         singlePlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                soundPool.play(soundId,1,1,0,0,1);
-                Intent launchIntent = getPackageManager().getLaunchIntentForPackage(getResources().getString(R.string.gamePackageName));
+
+                Intent launchIntent = new Intent(getApplicationContext(), UnityPlayerActivity.class);
                 if (launchIntent != null) {
-                    startActivity(launchIntent);
+                    startActivityForResult(launchIntent, PLAY_GAME);
                 } else {
                     Toast.makeText(getApplicationContext(), "Could not find game APK", Toast.LENGTH_SHORT).show();
                 }
