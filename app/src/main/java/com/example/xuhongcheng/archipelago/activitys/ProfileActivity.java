@@ -2,6 +2,8 @@ package com.example.xuhongcheng.archipelago.activitys;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +20,9 @@ public class ProfileActivity extends Activity {
     public TextView userName;
     public TextView wins;
     public TextView losses;
+    private SoundPool soundPool;
+    private int  soundId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +45,12 @@ public class ProfileActivity extends Activity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                soundPool.play(soundId,1,1,0,0,1);
                 startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
             }
         });
+
+        soundPool = new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);
+        soundId = soundPool.load(this,R.raw.doink,1);
     }
 }
