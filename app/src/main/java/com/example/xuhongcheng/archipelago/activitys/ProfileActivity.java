@@ -1,10 +1,10 @@
 package com.example.xuhongcheng.archipelago.activitys;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.example.xuhongcheng.archipelago.myapplication.R;
 
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends Activity {
 
     public Button logout;
     public ImageButton btn_setting;

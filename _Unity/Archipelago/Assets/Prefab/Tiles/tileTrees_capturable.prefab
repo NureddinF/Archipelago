@@ -164,13 +164,10 @@ MonoBehaviour:
   p1CaptureTile: {fileID: 21300000, guid: 3f3b981c39a2a46c581a2101f5b54a3e, type: 3}
   p2CaptureTile: {fileID: 21300000, guid: 9634679c331c14c788b3e5b19762ad5e, type: 3}
   captureSpeedPerUnit: 1
-  neutralUnitFactor: 0.25
+  neutralResetSpeed: 0.25
   totalCaptureCost: 10
   constructionSpeedPerUnit: 1
   passiveConstructionSpeed: 0
-  numP1UnitsOnHex: 0
-  numP2UnitsOnHex: 0
-  tileIncome: 1
 --- !u!114 &114543144990837934
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -209,12 +206,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6df63fddf43a894f923d1131471aab7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  x: 0
-  y: 0
   hexOwner: 2
-  tileType: 2
-  menuOptions:
-  - {fileID: 114592137397769502, guid: 67d83359745ea8148a650403c72f4278, type: 2}
+  standard: {fileID: 21300000, guid: cecd8d34106cb41bc8927b9dfe02fefc, type: 3}
+  idleUnits: {fileID: 21300000, guid: cecd8d34106cb41bc8927b9dfe02fefc, type: 3}
 --- !u!212 &212867527482442266
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -249,7 +243,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: b3f568f9fbac08a4c982d17c29528057, type: 3}
+  m_Sprite: {fileID: 21300000, guid: cecd8d34106cb41bc8927b9dfe02fefc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

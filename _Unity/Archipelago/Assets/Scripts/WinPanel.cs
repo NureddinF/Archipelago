@@ -29,12 +29,11 @@ public class WinPanel : MonoBehaviour {
 	public void back(string statement){ //takes in the statement to be displayed, and the backbutton action
 		windowObject.SetActive (true);  //sets window to true
 		goBack.onClick.RemoveAllListeners (); //removes any previouse listeners
+		backToMenu = new UnityAction (winAction); //calls on backAction function when clicked
 		goBack.onClick.AddListener (backToMenu); //creates a listener to the back button
 
 		this.winstatement.text = statement;  //sets the statement to the statment to bo displayes
 		goBack.gameObject.SetActive (true); //makes the backbutton active
-
-		backToMenu = new UnityAction (backAction); //calls on backAction function when clicked
 	}
 		
 	public void backAction(){ //envokes the action when button clicked
@@ -42,4 +41,9 @@ public class WinPanel : MonoBehaviour {
 		Application.Quit();
 	}
 
+	//
+	public void winAction(){
+		//Close application through java code
+		AndroidWrapper.winAction();
+	}
 }
