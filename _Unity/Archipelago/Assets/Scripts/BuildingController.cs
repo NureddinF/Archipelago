@@ -83,10 +83,15 @@ public class BuildingController : MonoBehaviour
 
         foreach (Building b in allBuildings)
         {
+			Debug.Log (b);
+			Debug.Log (b.getTileTypeAssociatedWith ());
             if (b.getTileTypeAssociatedWith().Equals(type))
             {
                 result.Add(b);
             }
+			if (b.getTileTypeAssociatedWith ().Equals (HexGrid.TileType.ALL) && type != HexGrid.TileType.WATER && type != HexGrid.TileType.BASE) {
+				result.Add (b);
+			}
         }
 
         return result;

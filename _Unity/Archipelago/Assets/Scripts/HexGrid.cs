@@ -90,7 +90,7 @@ public class HexGrid : MonoBehaviour {
 
 
 	//Enumerate the different types of tiles
-	public enum TileType {GRASS, BASE, TREE, SAND, ROCK, WATER }
+	public enum TileType {GRASS, BASE, TREE, SAND, ROCK, WATER, ALL }
 
     // Initialization
     void Start()
