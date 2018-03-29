@@ -2,12 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://C:\Users\cn380531\CSproject\Archipelago.iml" filepath="C:\Users\cn380531\CSproject\Archipelago.iml" />
-      <module fileurl="file://$PROJECT_DIR$/_Unity/Archiplegao_U/Archiplegao_U.iml" filepath="$PROJECT_DIR$/_Unity/Archiplegao_U/Archiplegao_U.iml" />
-      <module fileurl="file://C:\Users\cn380531\CSproject\_Unity\Archiplegao_U\Archiplegao_U.iml" filepath="C:\Users\cn380531\CSproject\_Unity\Archiplegao_U\Archiplegao_U.iml" />
-      <module fileurl="file://$PROJECT_DIR$/CSproject.iml" filepath="$PROJECT_DIR$/CSproject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Archipelago.iml" filepath="$PROJECT_DIR$/Archipelago.iml" />
+      <module fileurl="file://$PROJECT_DIR$/_Unity/archiplegao_u/Archiplegao_U.iml" filepath="$PROJECT_DIR$/_Unity/archiplegao_u/Archiplegao_U.iml" />
+      <module fileurl="file://$PROJECT_DIR$/_Unity/archiplegao_u/Archiplegao_U.iml" filepath="$PROJECT_DIR$/_Unity/archiplegao_u/Archiplegao_U.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\cn380531\CSproject\app\app.iml" filepath="C:\Users\cn380531\CSproject\app\app.iml" />
     </modules>
   </component>
 </project>
