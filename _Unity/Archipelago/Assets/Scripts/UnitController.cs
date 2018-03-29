@@ -261,40 +261,11 @@ public class UnitController : MonoBehaviour {
         return total;
     }
 
-<<<<<<< HEAD
-    //Given an x and a y coordinate for a tile, return the number of workers on that tile
-    public int getWorkerCountByTileCoords(int x, int y)
-    {
-        string tileString = x + "_" + y;
-        //Check if there are workers stored at this location
-        //If so then return the amount, else return 0
-        if (workerLocations.ContainsKey(tileString))
-        {
-            return workerLocations[tileString];
-        }
-        else
-            return 0;
-    }
-
-    //Given an x and a y coordinate for a tile, return the number of warriors on that tile
-    public int getWarriorCountByTileCoords(int x, int y)
-    {
-        string tileString = x + "_" + y;
-        //Check if there are warriors stored at this location
-        //If so then return the amount, else return 0
-        if (warriorLocations.ContainsKey(tileString))
-        {
-            return warriorLocations[tileString];
-        }
-        else
-            return 0;
-    }
-
 	public bool checkTrap(GameObject hex){
 		Hex playerOn = hex.GetComponentInChildren<Hex> ();
 		Building buildOnHex = playerOn.getBuilding ();
 		if (buildOnHex != null) {
-			if (buildOnHex.getTileTypeAssociatedWith ().Equals (HexGrid.TileType.ALL)) {
+			if (buildOnHex.getTileTypesAssociatedWith(). Equals(HexGrid.TileType.ALL)) {
 				
 				return true;
 			}
@@ -303,10 +274,7 @@ public class UnitController : MonoBehaviour {
 		return false;
 	}
 
-	public IEnumerator killWarrior(Warrior w){
-		yield return new WaitForSeconds (1);
+	public void killWarrior(Warrior w){
 		w.gameObject.SetActive (false);
 	}
-=======
->>>>>>> master
 }
