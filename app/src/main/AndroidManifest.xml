@@ -20,13 +20,15 @@
             </intent-filter>
         </activity>
         <activity android:name="com.example.xuhongcheng.archipelago.activitys.RegisterActivity" />
-        <activity android:name="com.example.xuhongcheng.archipelago.activitys.MainActivity" />
+        <activity android:name="com.example.xuhongcheng.archipelago.activitys.MainActivity" android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity android:name="com.example.xuhongcheng.archipelago.activitys.SettingActivity" />
 
         <activity
             android:name="com.example.xuhongcheng.archipelago.activitys.SinglePlayerActivity"
             android:parentActivityName="com.example.xuhongcheng.archipelago.activitys.MainActivity"></activity>
         <activity android:name="com.example.xuhongcheng.archipelago.activitys.ProfileActivity"></activity>
+
+        <service android:name="com.example.xuhongcheng.archipelago.activitys.MusicService" />
     </application>
 
 </manifest>

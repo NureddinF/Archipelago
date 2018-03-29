@@ -1,6 +1,8 @@
 package com.example.xuhongcheng.archipelago.activitys;
 
 import android.app.Activity;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -19,6 +21,9 @@ public class RegisterActivity extends Activity {
 	EditText et_name;
 	EditText et_pass;
 	EditText et_email;
+	private SoundPool soundPool;
+	private int  soundId;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,10 +33,14 @@ public class RegisterActivity extends Activity {
 		et_name = (EditText) findViewById(R.id.et_name);
 		et_pass = (EditText) findViewById(R.id.et_pass);
 		et_email = (EditText) findViewById(R.id.et_email);
+
+		soundPool = new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);
+		soundId = soundPool.load(this,R.raw.doink,1);
 	}
 
 
 	public void setAccount(View v) {
+		soundPool.play(soundId,1,1,0,0,1);
 		//Store username and password
 		//1Get the username and password
 		String name = et_name.getText().toString().trim();
@@ -55,14 +64,14 @@ public class RegisterActivity extends Activity {
 //			Toast.makeText(this, "Invalid Username！!", Toast.LENGTH_SHORT).show();
 //			return;
 //		}
-		if (!pass.matches(passRegex)) {
-			Toast.makeText(this, "Invalid Password！!", Toast.LENGTH_SHORT).show();
-			return;
-		}
-		if (!email.matches(emailRegex)) {
-			Toast.makeText(this, "Invalid Email！!", Toast.LENGTH_SHORT).show();
-			return;
-		}
+//		if (!pass.matches(passRegex)) {
+//			Toast.makeText(this, "Invalid Password！!", Toast.LENGTH_SHORT).show();
+//			return;
+//		}
+//		if (!email.matches(emailRegex)) {
+//			Toast.makeText(this, "Invalid Email！!", Toast.LENGTH_SHORT).show();
+//			return;
+//		}
 
 		//2Write the username and password to the file
 //    		File file = new File(getFilesDir(), "/info.txt");

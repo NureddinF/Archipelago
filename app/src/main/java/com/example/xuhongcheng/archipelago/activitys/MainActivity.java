@@ -1,8 +1,12 @@
 package com.example.xuhongcheng.archipelago.activitys;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -20,10 +24,14 @@ public class MainActivity extends AppCompatActivity {
     public Button logout;
     public Button profile;
     public ImageButton btn_settings;
+    private SoundPool soundPool;
+    private int  soundId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i("onCreate","-----");
         setContentView(R.layout.activity_main);
         singlePlayer = (Button) findViewById(R.id.singlePlayer);
         hostMulti = (Button) findViewById(R.id.host);
@@ -31,18 +39,17 @@ public class MainActivity extends AppCompatActivity {
         logout = (Button) findViewById(R.id.logout);
         btn_settings = (ImageButton) findViewById(R.id.setting);
         profile = (Button) findViewById(R.id.profile);
-
-        boolean isLogin = SharedPreferenceUtils.getBoolean(MainActivity.this,"isLogin",false);
-        if(!isLogin){
+        //https://stackoverflow.com/questions/6173400/how-to-hide-a-button-programmatically
+        boolean isLogin = SharedPreferenceUtils.getBoolean(MainActivity.this, "isLogin", false);
+        if (!isLogin) {
             profile.setVisibility(View.INVISIBLE);
         }
-
-
 
 
         singlePlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                soundPool.play(soundId,1,1,0,0,1);
                 Intent launchIntent = getPackageManager().getLaunchIntentForPackage(getResources().getString(R.string.gamePackageName));
                 if (launchIntent != null) {
                     startActivity(launchIntent);
@@ -55,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                soundPool.play(soundId,1,1,0,0,1);
                 SharedPreferenceUtils.saveBoolean(MainActivity.this, "isSaved", false);
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
             }
@@ -63,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         btn_settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                soundPool.play(soundId,1,1,0,0,1);
                 startActivity(new Intent(MainActivity.this, SettingActivity.class));
             }
         });
@@ -70,10 +79,24 @@ public class MainActivity extends AppCompatActivity {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                soundPool.play(soundId,1,1,0,0,1);
                 startActivity(new Intent(MainActivity.this, ProfileActivity.class));
             }
         });
+
+        soundPool = new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);
+        soundId = soundPool.load(this,R.raw.doink,1);
     }
 
-
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Log.i("aaaaa","ORIENTATION_LANDSCAPE");
+            setContentView(R.layout.activity_main_land);
+        } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Log.i("aaaaa","ORIENTATION_PORTRAIT");
+            setContentView(R.layout.activity_main);
+        }
+    }
 }
