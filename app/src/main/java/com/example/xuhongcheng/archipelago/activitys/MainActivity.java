@@ -30,8 +30,6 @@ public class MainActivity extends Activity {
     private SoundPool soundPool;
     private int  soundId;
 
-    private static final int PLAY_GAME = 600;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
