@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.MobileComputingGrp3.UnityPlayerActivity;
+
 import com.example.xuhongcheng.archipelago.myapplication.R;
 import com.example.xuhongcheng.archipelago.utils.SharedPreferenceUtils;
 
@@ -28,6 +29,8 @@ public class MainActivity extends Activity {
     public ImageButton btn_settings;
     private SoundPool soundPool;
     private int  soundId;
+
+    private static final int PLAY_GAME = 600;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
