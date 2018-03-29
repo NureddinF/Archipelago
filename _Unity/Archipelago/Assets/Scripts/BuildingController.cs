@@ -83,8 +83,6 @@ public class BuildingController : MonoBehaviour
 
         foreach (Building b in allBuildings)
         {
-			Debug.Log (b);
-			Debug.Log (b.getTileTypeAssociatedWith ());
             if (b.getTileTypeAssociatedWith().Equals(type))
             {
                 result.Add(b);

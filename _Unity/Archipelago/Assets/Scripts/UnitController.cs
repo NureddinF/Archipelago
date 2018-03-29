@@ -363,4 +363,20 @@ public class UnitController : MonoBehaviour {
         else
             return 0;
     }
+
+	public bool checkTrap(GameObject hex){
+		Hex playerOn = hex.GetComponentInChildren<Hex> ();
+		Building buildOnHex = playerOn.getBuilding ();
+		if (buildOnHex != null) {
+			if (buildOnHex.getTileTypeAssociatedWith ().Equals (HexGrid.TileType.ALL)) {
+				return true;
+			}
+		}
+		Debug.Log ("Player on: "+playerOn);
+		return false;
+	}
+
+	public bool killWarriro(Warrior w){
+
+	}
 }
