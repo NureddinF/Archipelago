@@ -264,8 +264,10 @@ public class UnitController : MonoBehaviour {
 	public bool checkTrap(GameObject hex){
 		Hex playerOn = hex.GetComponentInChildren<Hex> ();
 		Building buildOnHex = playerOn.getBuilding ();
+		Debug.Log ("Build On Hex: "+buildOnHex);
 		if (buildOnHex != null) {
-			if (buildOnHex.getTileTypesAssociatedWith ().Equals (HexGrid.TileType.ALL)) {
+			List<HexGrid.TileType> tileTypes = buildOnHex.getTileTypesAssociatedWith ();
+			if (tileTypes.Contains(HexGrid.TileType.ALL)) {
 				return true;
 			}
 		}
