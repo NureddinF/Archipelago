@@ -265,8 +265,7 @@ public class UnitController : MonoBehaviour {
 		Hex playerOn = hex.GetComponentInChildren<Hex> ();
 		Building buildOnHex = playerOn.getBuilding ();
 		if (buildOnHex != null) {
-			if (buildOnHex.getTileTypesAssociatedWith(). Equals(HexGrid.TileType.ALL)) {
-				
+			if (buildOnHex.getTileTypeAssociatedWith ().Equals (HexGrid.TileType.ALL)) {
 				return true;
 			}
 		}
