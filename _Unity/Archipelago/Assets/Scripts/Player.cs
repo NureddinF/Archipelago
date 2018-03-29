@@ -26,7 +26,6 @@ public class Player : MonoBehaviour
     private Text tilesOwnedText;
     private Text numOfWorkersOwned;
     private Text numOfWarriorsOwned;
-    private Image redBarTemp;
 
     // State variables
     private float startTime;
@@ -48,8 +47,7 @@ public class Player : MonoBehaviour
         tilesOwnedText = stateMenu.transform.Find("Territory Icon/Total Territory Text").gameObject.GetComponent<Text>();
         numOfWorkersOwned = stateMenu.transform.Find("Worker Button/Worker Count Text").gameObject.GetComponent<Text>();
         numOfWarriorsOwned = stateMenu.transform.Find("Warrior Button/Warrior Count Text").gameObject.GetComponent<Text>();
-        redBarTemp = stateMenu.transform.Find("TileOwnershipRatioBar/Red Bar").gameObject.GetComponent<Image>();
-
+   
         //Initialize Variables
         currentMoney = 0;
         incomeText.text = "Hello";
@@ -89,7 +87,6 @@ public class Player : MonoBehaviour
         numOfWarriorsOwned.text = "" + gameObject.GetComponent<UnitController>().getTotalNumberOfWarriors();
         numOfWorkersOwned.text = "" + gameObject.GetComponent<UnitController>().getTotalNumberOfWorkers();
         tilesOwnedText.text = "" + totalTilesOwned;
-        redBarTemp.transform.localScale = new Vector3((float)totalTilesOwned/((float)totalTilesOwned+1), 1, 1);
     }
 
     //Getters/Setters

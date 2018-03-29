@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4173346898743638}
-  - component: {fileID: 114166864194491410}
+  - component: {fileID: 114719849965502370}
   m_Layer: 0
   m_Name: Farm
   m_TagString: Untagged
@@ -40,7 +40,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114166864194491410
+--- !u!114 &114719849965502370
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -52,11 +52,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cost: 3
-  tileIncomeAfterBuild: 1
-  constructionTime: 5
+  tileIncomeAfterBuild: 4
   tilesAssociatedWith: 00000000
-  totalBuildTime: 10
-  buildSpeedPerWorker: 1
+  constructionTime: 5
+  buildSpeedPerWorker: 0.5
   menuIconSprite: {fileID: 21300000, guid: 48fdf0ff7e3824d1ea601485b8152bd2, type: 3}
   buildingSprite: {fileID: 21300000, guid: 48fdf0ff7e3824d1ea601485b8152bd2, type: 3}
   constructionSprite: {fileID: 21300000, guid: a73a253afb5804348875cea91ef24140, type: 3}
