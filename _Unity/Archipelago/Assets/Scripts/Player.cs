@@ -4,186 +4,123 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
-public class Player : MonoBehaviour {
+public class Player : MonoBehaviour
+{
+	public static bool isEnabled = true;
+    // Identify who this player is
+    public enum PlayerId { P1, P2, NEUTRAL };
+    public PlayerId playerId;
 
-	public static bool isEnabled = false;
-	// Identify who this player is
-	public enum PlayerId {P1,P2, NEUTRAL};
-	public PlayerId playerId;
-
-	// Player parameters
-	public float rateMultiplier;
-	public int baseIncome;
-	public int timeFrame; // how long between discrete burst of money
+    // Player parameters
+    public float rateMultiplier;
+    public int baseIncome;
+    public int timeFrame; // how long between discrete burst of money
 	public float moneyToWin = 100;
 
-	// UI
-	public Text incomeText;
-	public Text rateText;
+    //The parent gameobject for main UI bar
+    public GameObject stateMenu;
 
-	// State variables
-	private float startTime;
-	private float totalTileIncome;
-	private float currentMoney;
+    // UI
+    private Text incomeText;
+    private Text rateText;
+    private Text tilesOwnedText;
+    private Text numOfWorkersOwned;
+    private Text numOfWarriorsOwned;
+    private Image redBarTemp;
 
+    // State variables
+    private float startTime;
+    private float totalTileIncome;
+    private float currentMoney;
+    private int totalTilesOwned;
+	
 	private WinPanel winPanel; //calls on winPanel object
 
-	// Reference to the map so Player can access tiles
-	public HexGrid map;
+    // Reference to the map so Player can access tiles
+    public HexGrid map;
 
-	// Use this for initialization
-	void Start () {
-		currentMoney = 0;
-		incomeText.text = "Hello";
-		rateText.text = "+ 0/sec";
-		startTime = Time.time;
-	}
+    // Use this for initialization
+    void Start()
+    {
+        //Connect all UI script elements to their gameobjects
+        incomeText = stateMenu.transform.Find("Resource Icon/Total Amount Text").gameObject.GetComponent<Text>();
+        rateText = stateMenu.transform.Find("Resource Icon/Increase Rate Text").gameObject.GetComponent<Text>();
+        tilesOwnedText = stateMenu.transform.Find("Territory Icon/Total Territory Text").gameObject.GetComponent<Text>();
+        numOfWorkersOwned = stateMenu.transform.Find("Worker Button/Worker Count Text").gameObject.GetComponent<Text>();
+        numOfWarriorsOwned = stateMenu.transform.Find("Warrior Button/Warrior Count Text").gameObject.GetComponent<Text>();
+        redBarTemp = stateMenu.transform.Find("TileOwnershipRatioBar/Red Bar").gameObject.GetComponent<Image>();
 
-	void Awake(){
-
-		winPanel = WinPanel.instance ();
-
-	}
+        //Initialize Variables
+        currentMoney = 0;
+        incomeText.text = "Hello";
+        rateText.text = "+ 0/sec";
+        tilesOwnedText.text = "0";
+        startTime = Time.time;
+        numOfWarriorsOwned.text = gameObject.GetComponent<UnitController>().initialNumOfWarriors.ToString();
+        numOfWorkersOwned.text = gameObject.GetComponent<UnitController>().initialNumOfWorkers.ToString();
+    }
 	
-	// Update is called once per frame
-	void Update () {
-		// Use discrete chunks of income
+	void Awake(){
+		winPanel = WinPanel.instance ();
+	}
+
+    // Update is called once per frame
+    void Update()
+    {
 		//to pause script
 		if (isEnabled) {
 			return;
 		}
-		generateIncomeDiscrete();
+        // Use discrete chunks of income
+        generateIncomeDiscrete();
+		
 		if (currentMoney >= moneyToWin ) { //when money threshold reached, and no winner is false
 			rateText.text = "WIN";
 			incomeText.text = "";
 		
 			Time.timeScale = 0f; //pauses game
 			Hex.isEnabled = true;    //Calls on these scripts to disable them, so the game cannot be played when a winner is found
-			Worker.isEnabled = true; //Ref: https://answers.unity.com/questions/930234/stop-script-immediately-from-another-script.html
 			MouseManager.isEnabled = true;
-			Menu.isEnabled = true;
 			isEnabled = true;
 		
 			winPanel.back("You Win!"); //calls on back in winPanel class
+		}
+	
+        numOfWarriorsOwned.text = "" + gameObject.GetComponent<UnitController>().getTotalNumberOfWarriors();
+        numOfWorkersOwned.text = "" + gameObject.GetComponent<UnitController>().getTotalNumberOfWorkers();
+        tilesOwnedText.text = "" + totalTilesOwned;
+        redBarTemp.transform.localScale = new Vector3((float)totalTilesOwned/((float)totalTilesOwned+1), 1, 1);
+    }
 
-		}
-	}
+    //Getters/Setters
+    public float getCurrentMoney() { return currentMoney; }
 
-	// Generates income in discrete chunks rather than each frame
-	public void generateIncomeDiscrete(){
-		float increaseAmt = (baseIncome + totalTileIncome) * rateMultiplier;
-		if(Time.time > timeFrame + startTime) {
-			// timeframe has passed
-			currentMoney += increaseAmt;
-			startTime = Time.time;
-		}
-		incomeText.text = "" + currentMoney;
-		rateText.text = "+ " + increaseAmt + "/" + timeFrame + "secs";
-	}
+    public void removeMoney(float amount) { currentMoney -= amount; }
 
-	//@Depricated
-	//Generate income and add to total money each frame
-	public void generateIncomeContinuous(){
-		float translation = Time.deltaTime * rateMultiplier;
-		currentMoney += translation;
-		incomeText.text = "" + Mathf.RoundToInt(currentMoney);
-		rateText.text = "+ " + rateMultiplier + "/sec";
-	}
+    // Generates income in discrete chunks rather than each frame
+    public void generateIncomeDiscrete()
+    {
+        float increaseAmt = (baseIncome + totalTileIncome) * rateMultiplier;
+        if (Time.time > timeFrame + startTime)
+        {
+            // timeframe has passed
+            currentMoney += increaseAmt;
+            startTime = Time.time;
+        }
+        incomeText.text = "" + currentMoney;
+        rateText.text = "+ " + increaseAmt + "/" + timeFrame + "secs";
+    }
 
+    public void captureTile(CapturableTile tile)
+    {
+        totalTileIncome += tile.getHex().getTileIncome();
+        totalTilesOwned += 1;
+        this.GetComponent<HexMenuController>().refreshUIValues();
+    }
 
-	public void captureTile(CapturableTile tile){
-		totalTileIncome += tile.tileIncome;
-	}
-
-	public void removeTile(CapturableTile tile){
-		totalTileIncome -= tile.tileIncome;
-	}
-
-	public void makeUnit(GameObject unitObject){
-		Unit unitInfo = unitObject.GetComponent<Unit> ();
-		if(unitInfo.cost > this.currentMoney){
-			// Unit costs too much
-			Debug.Log("Can't afford a " + unitObject.name + " for " + unitInfo.cost);
-			return;
-		}
-		Vector3 proposedUnitPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-		GameObject hexObject = map.getHex (proposedUnitPosition);
-		if(hexObject == null){
-			Debug.Log ("Did not place unit on map");
-		}
-		Hex hex = hexObject.GetComponent<Hex> ();
-		if(hex == null){
-			Debug.Log ("Can't place unit on something that's not a hex");
-			return;
-		}
-		if(hex.hexOwner != playerId){
-			Debug.Log ("Can't place unit on tile you don't own");
-			return;
-		}
-		currentMoney -= unitInfo.cost;
-		GameObject newUnit = Instantiate(unitObject);
-		newUnit.GetComponent<Unit> ().unitOwner = Player.PlayerId.P1;
-		proposedUnitPosition = hex.transform.position;
-		proposedUnitPosition.z = -5;
-		newUnit.transform.position = proposedUnitPosition;
-	}
-
-
-	public void makeUnit(GameObject unitObject, Vector3 proposedUnitPosition){
-		Unit unitInfo = unitObject.GetComponent<Unit> ();
-		if(unitInfo.cost > this.currentMoney){
-			// Unit costs too much
-			Debug.Log("Can't afford a " + unitObject.name + " for " + unitInfo.cost);
-			return;
-		}
-		GameObject hexObject = map.getHex (proposedUnitPosition);
-		if(hexObject == null){
-			Debug.Log ("Did not place unit on map");
-		}
-		Hex hex = hexObject.GetComponent<Hex> ();
-		if(hex == null){
-			Debug.Log ("Can't place unit on something that's not a hex");
-			return;
-		}
-		if(hex.hexOwner != playerId){
-			Debug.Log ("Can't place unit on tile you don't own");
-			return;
-		}
-		//Can build the unit
-		//remove money from player
-		currentMoney -= unitInfo.cost;
-		//Instanciate unit in world at the correct position
-		GameObject newUnit = Instantiate(unitObject);
-		newUnit.GetComponent<Unit> ().unitOwner = Player.PlayerId.P1;
-		proposedUnitPosition = hex.transform.position;
-		proposedUnitPosition.z = -5;
-		newUnit.transform.position = proposedUnitPosition;
-	}
-
-	// Called when Player wants to upgrade a hex to a building
-	public void upgradeTileToBuilding(Hex hex, GameObject buildingObject){
-		Building buildingInfo = buildingObject.GetComponent<Building> ();
-		if(buildingInfo.moneyCost > this.currentMoney){
-			// Unit costs too much
-			Debug.Log("Can't afford a " + buildingObject.name + " for " + buildingInfo.moneyCost);
-			return;
-		}
-		if(hex == null){
-			Debug.Log ("Can't place buildings on something that's not a hex");
-			return;
-		}
-		if(hex.hexOwner != playerId){
-			Debug.Log ("Can't place buildings on tile you don't own");
-			return;
-		}
-		// Can build building
-		//Subtract cost of building from player's money
-		currentMoney -= buildingInfo.moneyCost;
-		//Update the menu
-		hex.menuOptions = buildingInfo.constructionMenuOptions;
-		//change the sprite to construction site
-		hex.GetComponent<SpriteRenderer> ().sprite = buildingInfo.constructionSprite;
-		//let hex handle actually building the building
-		hex.GetComponent<CapturableTile> ().beginConstruction (buildingInfo);
-	} 
+    public void removeTile(CapturableTile tile)
+    {
+        totalTileIncome -= tile.getHex().getTileIncome();
+        totalTilesOwned -= 1;
+    }
 }

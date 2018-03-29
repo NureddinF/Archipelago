@@ -12,8 +12,15 @@ public class HexGrid : MonoBehaviour {
     public GameObject tileTrees; //5
     public GameObject tileWater; //6
 
+    public float baseGrassIncome = 1f;
+    public float basePlayerBaseIncome = 2f;
+    public float baseRocksIncome = 3f;
+    public float baseSandIncome = 0.5f;
+    public float baseTreesIncome = 2f;
+
 	public int levelNumber;
 
+    private Hex player1Base;
 	//Game Maps - Represented by a matrix
 	//Level 1 Map
 	int[,] level1 = new int[7, 35]
@@ -48,7 +55,6 @@ public class HexGrid : MonoBehaviour {
 		{6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6},
 	};
 
-
     //Grid dimensions measured by number of hexes
     private static int gridWidth;
     private static int gridHeight;
@@ -57,6 +63,8 @@ public class HexGrid : MonoBehaviour {
     public static int getGridHeight() { return gridHeight; }
     public static int getGridWidth() { return gridWidth;  }
 
+    //Get methods for player1base coordinates
+    public Hex getPlayer1Base() { return player1Base; }
 
     //Dimensions of individual hex
     private float hexWidth;
@@ -75,6 +83,8 @@ public class HexGrid : MonoBehaviour {
     private int[,] mapStructure;
 	//Matrix of instanciated hexes
 	private GameObject[,] mapHexes;
+
+    private GameObject player;
 
 
 	//Enumerate the different types of tiles
@@ -102,8 +112,7 @@ public class HexGrid : MonoBehaviour {
         gridWidth = mapStructure.GetLength(1);
 
 		Vector3 maxMapCoord= calcUnityCoord (new Vector2 (gridWidth-1, gridHeight-1));
-		Debug.Log (maxMapCoord);
-		BoxCollider2D cameraEdge = GetComponent<BoxCollider2D> ();
+		BoxCollider2D cameraEdge = GetComponent<BoxCollider2D>();
 		cameraEdge.size = new Vector2(maxMapCoord.x + 2*xOffset,Mathf.Abs(maxMapCoord.y) + 2*yOffset);
 		cameraEdge.offset = new Vector2 (maxMapCoord.x/2, -cameraEdge.size.y / 2 + yOffset);
 		FindObjectOfType<MouseManager> ().setBounds (GetComponent<BoxCollider2D> ());
@@ -152,37 +161,46 @@ public class HexGrid : MonoBehaviour {
 				switch(mapStructure[y, x]){
 					case 0:{
 						thisHex = (GameObject)Instantiate (tileGrass);
-						thisHex.GetComponent<Hex> ().tileType = TileType.GRASS;
-						break;
+						thisHex.GetComponent<Hex> ().setTileType(TileType.GRASS);
+                        thisHex.GetComponent<Hex>().setTileIncome(baseGrassIncome);
+                        break;
 					}
 					case 1:{
 						thisHex = (GameObject)Instantiate (tilePlayer1Base);
-						thisHex.GetComponent<Hex>().tileType = TileType.BASE;
-						break;
+						thisHex.GetComponent<Hex>().setTileType(TileType.BASE);
+                        thisHex.GetComponent<Hex>().setTileIncome(basePlayerBaseIncome);
+                        thisHex.GetComponent<Hex>().setHexOwner(Player.PlayerId.P1);
+                        player1Base = thisHex.GetComponent<Hex>();
+                        break;
 					}
 					case 2:{
 						thisHex = (GameObject)Instantiate (tilePlayer2Base);
-						thisHex.GetComponent<Hex>().tileType = TileType.BASE;
-						break;
+						thisHex.GetComponent<Hex>().setTileType(TileType.BASE);
+                        thisHex.GetComponent<Hex>().setTileIncome(basePlayerBaseIncome);
+                        thisHex.GetComponent<Hex>().setHexOwner(Player.PlayerId.P2);
+                        break;
 					}
 					case 3:{
 						thisHex = (GameObject)Instantiate (tileRocks);
-						thisHex.GetComponent<Hex>().tileType = TileType.ROCK;
-						break;
+						thisHex.GetComponent<Hex>().setTileType(TileType.ROCK);
+                        thisHex.GetComponent<Hex>().setTileIncome(baseRocksIncome);
+                        break;
 					}
 					case 4:{
 						thisHex = (GameObject)Instantiate (tileSand);
-						thisHex.GetComponent<Hex>().tileType = TileType.SAND;
-						break;
+						thisHex.GetComponent<Hex>().setTileType(TileType.SAND);
+                        thisHex.GetComponent<Hex>().setTileIncome(baseSandIncome);
+                        break;
 					}
 					case 5:{
 						thisHex = (GameObject)Instantiate (tileTrees);
-						thisHex.GetComponent<Hex>().tileType = TileType.TREE;
-						break;
+						thisHex.GetComponent<Hex>().setTileType(TileType.TREE);
+                        thisHex.GetComponent<Hex>().setTileIncome(baseTreesIncome);
+                        break;
 					}
 					default:{
 						thisHex = (GameObject)Instantiate (tileWater);
-						thisHex.GetComponent<Hex>().tileType = TileType.WATER;
+						thisHex.GetComponent<Hex>().setTileType(TileType.WATER);
 						break;
 					}
 				}
@@ -192,8 +210,8 @@ public class HexGrid : MonoBehaviour {
                 thisHex.transform.position = calcUnityCoord(gridPos);
                 thisHex.transform.parent = hexGridObject.transform;
                 thisHex.name = "Hex_" + x + "_" + y;
-                thisHex.GetComponent<Hex>().x = x;
-                thisHex.GetComponent<Hex>().y = y;
+                thisHex.GetComponent<Hex>().setX(x);
+                thisHex.GetComponent<Hex>().setY(y);
 
                 //Potential Optimization for hexgrid
                 thisHex.isStatic = true;
@@ -203,7 +221,8 @@ public class HexGrid : MonoBehaviour {
 
         }
     }
-		
+	
+    //Method to get the hex, given a unity coordinate  TODO: PERHAPS UNUSED METHOD, need to check
 	public GameObject getHex(Vector3 unityCoord){
 		// Perform inver operation used to generate map
 		float X = (unityCoord.x / (hexWidth - xOffset / 2));
@@ -215,7 +234,7 @@ public class HexGrid : MonoBehaviour {
 		if (x % 2 == 1) {
 			unityCoord.y += yOffset;
 		}
-		float Y =(-unityCoord.y / hexHeight);
+		float Y = (-unityCoord.y / hexHeight);
 		int y = (int)Y;
 		if(Y%1.0f > roundingFactor){
 			y++;
