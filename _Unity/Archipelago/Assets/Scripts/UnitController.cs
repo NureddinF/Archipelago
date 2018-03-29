@@ -113,6 +113,8 @@ public class UnitController : MonoBehaviour {
 
         GameObject unitToMove;
         unitToMove = (GameObject)Instantiate(warriorPrefab);
+		unitToMove.GetComponent<Unit> ().setPlayerId ();
+		Debug.Log(unitToMove.GetComponent<Unit> ().getPlayerId ());
 
         //IMPROVE THIS, CURRENTLY IF moveWorkers given a hex then it needs to get key string then uses this to find hex again.
 
