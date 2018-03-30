@@ -1,8 +1,10 @@
 package com.MobileComputingGrp3;
 
+import com.unity3d.player.*;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -15,7 +17,7 @@ public class UnityPlayerActivity extends Activity
     protected UnityPlayer mUnityPlayer; // don't change the name of this variable; referenced from native code
 
     //scene to load when unity starts
-    private String scene;
+    private String startCommand;
     //IP address of this device
     private String ipAddr;
     //User's username
@@ -26,11 +28,10 @@ public class UnityPlayerActivity extends Activity
     {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-
-
-        scene = getIntent().getStringExtra("scene");
+        startCommand = getIntent().getStringExtra("startCommand");
         ipAddr = getIntent().getStringExtra("ipaddr");
         username = getIntent().getStringExtra("username");
+        getWindow().setFormat(PixelFormat.RGBX_8888); // <--- This makes xperia play happy
 
         mUnityPlayer = new UnityPlayer(this);
         setContentView(mUnityPlayer);
@@ -125,9 +126,10 @@ public class UnityPlayerActivity extends Activity
     @Override public boolean onTouchEvent(MotionEvent event)          { return mUnityPlayer.injectEvent(event); }
     /*API12*/ public boolean onGenericMotionEvent(MotionEvent event)  { return mUnityPlayer.injectEvent(event); }
 
+    //Native methods
 
-    public String getScene(){
-        return scene;
+    public String getStartCommand(){
+        return startCommand;
     }
 
     public String getIpAddr(){
@@ -138,9 +140,7 @@ public class UnityPlayerActivity extends Activity
         return username;
     }
 
-    public  void win(){
-        //Toast.makeText(getApplicationContext(), "You won the game!", Toast.LENGTH_SHORT).show();
-        //TODO: relay data back to android studio here (e.g. win)
+    public void win() {
         finish();
     }
 
@@ -148,3 +148,5 @@ public class UnityPlayerActivity extends Activity
         finish();
     }
 }
+
+

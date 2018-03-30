@@ -14,7 +14,7 @@ public class AndroidWrapper {
 
 		AndroidJavaObject currentActivity = getUnityActivity();
 
-		return currentActivity.Call<string>("getScene");
+		return currentActivity.Call<string>("getStartCommand");
 	}
 
 	public static string getIpAddr(){

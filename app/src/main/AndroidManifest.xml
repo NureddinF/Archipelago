@@ -14,22 +14,23 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true">
-        <activity android:name="com.example.xuhongcheng.archipelago.activitys.LoginActivity"
-            android:launchMode="singleTask">
+        <activity android:name="com.example.xuhongcheng.archipelago.activitys.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name="com.example.xuhongcheng.archipelago.activitys.RegisterActivity" />
-        <activity android:name="com.example.xuhongcheng.archipelago.activitys.MainActivity"
-            android:launchMode="singleTask"/>
+        <activity android:name="com.example.xuhongcheng.archipelago.activitys.MainActivity" android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity android:name="com.example.xuhongcheng.archipelago.activitys.SettingActivity" />
 
         <activity
             android:name="com.example.xuhongcheng.archipelago.activitys.SinglePlayerActivity"
-            android:parentActivityName="com.example.xuhongcheng.archipelago.activitys.MainActivity"/>
-        <activity android:name="com.example.xuhongcheng.archipelago.activitys.ProfileActivity"/>
+            android:parentActivityName="com.example.xuhongcheng.archipelago.activitys.MainActivity"></activity>
+        <activity android:name="com.example.xuhongcheng.archipelago.activitys.ProfileActivity"></activity>
+
+        <service android:name="com.example.xuhongcheng.archipelago.activitys.MusicService" />
     </application>
 
 </manifest>
