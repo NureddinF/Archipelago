@@ -272,6 +272,7 @@ public class UnitController : MonoBehaviour {
 			}
 		}
 		Debug.Log ("Player on: "+playerOn);
+//		&& !w.getPlayerId().Equals(playerOn.getHexOwner())
 
 	}
 
@@ -280,7 +281,8 @@ public class UnitController : MonoBehaviour {
 //		Destroy (w.gameObject);
 		Debug.Log (h.getTileType ());
 		h.changeHexSprite (h.getSprite ());
-		Building trap = h.getBuilding ();
+		h.setBuilding (null);
+//		Building trap = h.getBuilding ();
 //		trap.GetComponent<BuildingController> ().removeBuilding (h);
 
 	}
