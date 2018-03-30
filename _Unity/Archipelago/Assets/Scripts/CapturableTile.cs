@@ -35,14 +35,6 @@ public class CapturableTile: MonoBehaviour{
         tileSprite = GetComponent<SpriteRenderer> ();
 		captureBorder = GetComponentInChildren<Image>();
 
-		// Update player income if this tile is spawned with an owner
-		if(thisHex.getHexOwner() != Player.PlayerId.NEUTRAL){
-			finalizeCapture();
-
-            //This initiliazies units, only works since this only calls once, for the tile that is player base. Wont work in other places since not every start has been done
-            GameObject.Find("Player").GetComponent<UnitController>().initializeUnits();            
-        }
-
 		// This is mostly for testing. Fill Amount should be set to 0 so the tiles starts neutral.
 		amountCaptured = captureBorder.fillAmount * totalCaptureCost;
 	}
@@ -147,7 +139,7 @@ public class CapturableTile: MonoBehaviour{
 	}
 
 	// Increase income of player once tile is captured
-	private void finalizeCapture(){
+	public void finalizeCapture(){
 		Player player = getPlayer ();
 		if(player != null){
 			player.captureTile (this);

@@ -23,6 +23,10 @@ public class CustomLobbyManager : NetworkLobbyManager {
 	string joiningStr = "";
 	private NetworkClient netClient = null;
 
+	// Player Objects
+	CustomLobbyPlayer lobbyPlayerScript;
+	PlayerConnectionScript gamePlayerScript;
+
 	// Use this for initialization
 	void Start () {
 		Debug.Log ("NetworkLobbyManager: Start");
@@ -143,10 +147,11 @@ public class CustomLobbyManager : NetworkLobbyManager {
 		JoiningText.text = joiningStr;
 	}
 
-	public override void OnLobbyClientSceneChanged (NetworkConnection conn)
-	{
+	public override void OnLobbyClientSceneChanged (NetworkConnection conn){
 		base.OnLobbyClientSceneChanged (conn);
 		Debug.Log ("NetworkLobbyManager: OnLobbyClientSceneChanged:");
+
+		gamePlayerScript.initGameplayerPlayer ();
 	}
 
 
@@ -200,31 +205,12 @@ public class CustomLobbyManager : NetworkLobbyManager {
 	// Called when gameplay scene is loaded. Used to initialize Player Gameplayobject with parameters from the lobby
 	public override bool OnLobbyServerSceneLoadedForPlayer(GameObject lobbyPlayer, GameObject gamePlayer){
 		Debug.Log ("NetworkLobbyManager: OnLobbyServerSceneLoadedForPlayer");
+		gamePlayerScript = gamePlayer.GetComponent<PlayerConnectionScript> ();
+		lobbyPlayerScript = lobbyPlayer.GetComponent<CustomLobbyPlayer> ();
+
+		gamePlayerScript.pid = lobbyPlayerScript.pid;
+
 		return base.OnLobbyServerSceneLoadedForPlayer (lobbyPlayer, gamePlayer);
 	}
-
-	// STEPS TO START A GAME:
-	// 1) First scene loads when unity starts from android studio.
-	//	  Get the option user selected: single player | host | join
-
-	//    single player) Automatically jump through steps of starting a game as host with only 1 player
-	//					 Don't have to display host screen but could if its easier
-
-
-	//	  host) start host. This should load the lobby scene and display first player
-	//			When second player joins display their information.
-	//			When both players hit ready button enable start game button on host
-	//			When host hits start game, start the game for all players
-	//			Host should have option to disband lobby which returns everyone to android menu
-
-
-	//	  Join) load connection menu (unique scene?). Player enters host ip and hits connect
-	//			If player IP is valid attempt connection else give error message
-	//			If connected load lobby scene and display both players info.
-	//			If connection fails give error message and let user try again.
-	//			While trying to connect give indication that this is happening
-	//			Allow user to cancel connecting up to the point where they load
-	//			Allow user to leave lobby once they've connected returning them to android menu
-	//			Allow user to return to android menu from the screen where they enter IP address
 	
 }

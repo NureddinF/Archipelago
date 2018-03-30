@@ -20,8 +20,9 @@ public class HexMenuController : MonoBehaviour
     //Parameter to store the current hex that the menu is displaying for.
     private Hex selectedHex;
 
-    private void Start()
-    {
+    private void Start(){
+
+		hexMenu = GameObject.Find("Canvas").transform.Find("HexMenuBar").gameObject;
         //Use the hexMenu gameobject to find all it's individual UI elements.
         tileType = hexMenu.transform.Find("TileType").gameObject.GetComponent<Text>();
         tileStage = hexMenu.transform.Find("TileStage").gameObject.GetComponent<Text>();

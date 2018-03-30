@@ -9,7 +9,8 @@ public class MouseManager : MonoBehaviour {
     //Needed to detect clicks on UI, and thus prevent the raycast from interacting with items below the menu
     
 
-	public static bool isEnabled = true;
+	public static bool isDisabled = false;
+
 	// human player who is associated with this mouse manager
 	public Player player;
 

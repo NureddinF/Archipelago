@@ -8,7 +8,7 @@ public class CustomLobbyPlayer : NetworkLobbyPlayer {
 
 	public GameObject PlayerUiPrefab; //prefab of lobby UI for player info
 	private GameObject playerUI; //reference to spawned version of player UI
-	[SyncVar (hook = "initLobbyPlayerPid")] private Player.PlayerId pid;
+	[SyncVar (hook = "initLobbyPlayerPid")] public Player.PlayerId pid;
 	[SyncVar (hook = "initLobbyPlayerUsername")] private string username;
 	[SyncVar (hook = "initLobbyPlayerIp")] private string ipAddress;
 

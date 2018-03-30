@@ -4,6 +4,12 @@ using System.Collections;
 
 public class PlayerConnectionScript : NetworkBehaviour{
 
+	public Player.PlayerId pid = Player.PlayerId.NEUTRAL;
+
+	public GameObject gameplayPlayerPrefab;
+
+	private GameObject gameplayPlayer;
+
 	// Use this for initialization
 	void Start (){
 		Debug.Log("Started player connection script");
@@ -13,6 +19,15 @@ public class PlayerConnectionScript : NetworkBehaviour{
 	void Update (){
 	
 	}
+
+
+	//////////////////// Custom Methods ///////////////////////////////////////////
+	public void initGameplayerPlayer(){
+		if (isLocalPlayer) {
+			CmdInitGameplayObject ();
+		}
+	}
+
 
 
 	/////////////////// CLIENT SIDE METHODS ////////////////////////////////////// 
@@ -47,5 +62,20 @@ public class PlayerConnectionScript : NetworkBehaviour{
 		Debug.Log("PlayerConnectionScript: Player disconnected");
 	}
 
+	/////////////////////////// Commands ////////////////////////////////////// 
+
+	[Command]
+	private void CmdInitGameplayObject (){
+		// Instanceiate an instace of the gameplay player prefab
+		gameplayPlayer = Instantiate (gameplayPlayerPrefab, transform);
+
+		//Spawn the object on the network
+		NetworkServer.SpawnWithClientAuthority (gameplayPlayer, connectionToClient);
+
+		// Initialize the gameplay player object
+		Player player = gameplayPlayer.GetComponent<Player> ();
+		player.CmdSetPlayerId(pid);
+		player.RpcStartWithAuthority ();
+	}
 }
 

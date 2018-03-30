@@ -84,15 +84,20 @@ public class HexGrid : MonoBehaviour {
 	//Matrix of instanciated hexes
 	private GameObject[,] mapHexes;
 
-    private GameObject player;
-
+	// List of Hexes each player starts with. Created dynamicly based on map layout
+	private Dictionary<Player.PlayerId,List<CapturableTile>> startingHexes;
 
 	//Enumerate the different types of tiles
 	public enum TileType {GRASS, BASE, TREE, SAND, ROCK, WATER }
 
     // Initialization
-    void Start()
-    {   
+    void Start(){
+		//initialize data structure for storing starting hexes
+		startingHexes = new Dictionary<Player.PlayerId, List<CapturableTile>>();
+		for(Player.PlayerId playId = Player.PlayerId.P1; playId != Player.PlayerId.NEUTRAL ;playId++){
+			startingHexes.Add(playId, new List<CapturableTile>());
+		}
+
         //Initialize map, and sizes
         initiateMapStructure();
         initializeSizes();
@@ -102,8 +107,7 @@ public class HexGrid : MonoBehaviour {
     }
 
     //Method to store the sizes of grid/hexes/offsets
-    private void initializeSizes()
-    {
+    private void initializeSizes(){
         hexHeight = tileGrass.GetComponent<SpriteRenderer>().bounds.size.y;
         hexWidth = tileGrass.GetComponent<SpriteRenderer>().bounds.size.x;
         xOffset = hexWidth * (0.5f - xOffsetGap);
@@ -119,8 +123,7 @@ public class HexGrid : MonoBehaviour {
     }
 
     //This method chooses which level map to create
-    private void initiateMapStructure()
-    {
+    private void initiateMapStructure(){
 		//Level 1 map is used by default or if specifically chosen
 		if (levelNumber == 0 || levelNumber == null || levelNumber == 1) {
 			mapStructure = level1;
@@ -149,7 +152,7 @@ public class HexGrid : MonoBehaviour {
 
         GameObject hexGridObject = new GameObject("HexGrid");
         //Makes sure all generated game objects are under a parent. Allows tidier scene management
-        hexGridObject.transform.parent = this.transform;
+		hexGridObject.transform.SetParent(transform);
 
         //Incrementing through the two dimensional map array, row by row.
         for (int y = 0; y < gridHeight; y++)
@@ -170,6 +173,7 @@ public class HexGrid : MonoBehaviour {
 						thisHex.GetComponent<Hex>().setTileType(TileType.BASE);
                         thisHex.GetComponent<Hex>().setTileIncome(basePlayerBaseIncome);
                         thisHex.GetComponent<Hex>().setHexOwner(Player.PlayerId.P1);
+						Debug.Log ("HexGrid: createHexGrid: creating player 1 base with pid=" + thisHex.GetComponent<Hex>().getHexOwner());
                         player1Base = thisHex.GetComponent<Hex>();
                         break;
 					}
@@ -178,6 +182,7 @@ public class HexGrid : MonoBehaviour {
 						thisHex.GetComponent<Hex>().setTileType(TileType.BASE);
                         thisHex.GetComponent<Hex>().setTileIncome(basePlayerBaseIncome);
                         thisHex.GetComponent<Hex>().setHexOwner(Player.PlayerId.P2);
+						Debug.Log ("HexGrid: createHexGrid: creating player 2 base with pid=" + thisHex.GetComponent<Hex>().getHexOwner());
                         break;
 					}
 					case 3:{
@@ -205,10 +210,16 @@ public class HexGrid : MonoBehaviour {
 					}
 				}
 
+				Player.PlayerId playId = thisHex.GetComponent<Hex>().getHexOwner();
+				if(playId != Player.PlayerId.NEUTRAL){
+					Debug.Log ("HexGrid: createHexGrid: adding starting tile for " + playId);
+					startingHexes [playId].Add (thisHex.GetComponent<CapturableTile>());
+				}
+
                 //Set it's position, tranformation, name and other variables attached to the hex. 0 0 is top left corner
                 Vector2 gridPos = new Vector2(x, y);
                 thisHex.transform.position = calcUnityCoord(gridPos);
-                thisHex.transform.parent = hexGridObject.transform;
+				thisHex.transform.SetParent(hexGridObject.transform);
                 thisHex.name = "Hex_" + x + "_" + y;
                 thisHex.GetComponent<Hex>().setX(x);
                 thisHex.GetComponent<Hex>().setY(y);
@@ -245,5 +256,14 @@ public class HexGrid : MonoBehaviour {
 			hex = mapHexes [y, x];
 		}
 		return hex;
+	}
+
+	// Add income for each starting tile to the coresponding player
+	public void initPlayerTiles(Player.PlayerId pid){
+		List<CapturableTile> playerStartingTiles = startingHexes [pid];
+		Debug.Log ("HexGrid: initPlayerTiles: pid="+pid + ", startingTiles=" + playerStartingTiles.Count	);
+		foreach (CapturableTile tile in playerStartingTiles) {
+			tile.finalizeCapture ();
+		}
 	}
 }

@@ -22,6 +22,8 @@ public class UnitController : MonoBehaviour {
         //Initialize the dictionarys
         workerLocations = new List<Hex>();
         warriorLocations = new List<Hex>();
+
+		initializeUnits ();
     }
     
     public void initializeUnits()
