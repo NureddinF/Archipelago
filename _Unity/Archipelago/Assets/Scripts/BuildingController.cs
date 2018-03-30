@@ -49,6 +49,7 @@ public class BuildingController : MonoBehaviour
                 result.Add(b);
             }
 			if (tilesTypesAssociatedWith.Contains(HexGrid.TileType.ALL) && type != HexGrid.TileType.WATER && type != HexGrid.TileType.BASE) {
+
 				result.Add (b);
 			}
         }

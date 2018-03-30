@@ -14,9 +14,8 @@ public class Warrior : Unit
         transform.position = Vector3.MoveTowards(transform.position, getDestinationCoord(), step);
         //If reached destination, add it to the hex and remove the gameobject
 		GameObject h = FindObjectOfType<HexGrid>().getHex(transform.position);
-		if (GameObject.Find ("Player").GetComponent<UnitController> ().checkTrap (h)) {
-			GameObject.Find ("Player").GetComponent<UnitController> ().killWarrior (this);
-		}
+		GameObject.Find ("Player").GetComponent<UnitController> ().checkTrap (h, this);
+
         if (transform.position.Equals(getDestinationCoord()))
         {
             GameObject.Find("Player").GetComponent<UnitController>().addWarriors(1, getDestinationHex());

@@ -261,21 +261,27 @@ public class UnitController : MonoBehaviour {
         return total;
     }
 
-	public bool checkTrap(GameObject hex){
+	public void checkTrap(GameObject hex, Warrior w){
 		Hex playerOn = hex.GetComponentInChildren<Hex> ();
 		Building buildOnHex = playerOn.getBuilding ();
 		Debug.Log ("Build On Hex: "+buildOnHex);
 		if (buildOnHex != null) {
 			List<HexGrid.TileType> tileTypes = buildOnHex.getTileTypesAssociatedWith ();
 			if (tileTypes.Contains(HexGrid.TileType.ALL)) {
-				return true;
+				killWarrior (w, playerOn);
 			}
 		}
 		Debug.Log ("Player on: "+playerOn);
-		return false;
+
 	}
 
-	public void killWarrior(Warrior w){
+	public void killWarrior(Warrior w, Hex h){
 		w.gameObject.SetActive (false);
+//		Destroy (w.gameObject);
+		Debug.Log (h.getTileType ());
+		h.changeHexSprite (h.getSprite ());
+		Building trap = h.getBuilding ();
+//		trap.GetComponent<BuildingController> ().removeBuilding (h);
+
 	}
 }
