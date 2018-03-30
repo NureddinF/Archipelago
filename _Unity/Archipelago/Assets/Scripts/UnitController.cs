@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class UnitController : MonoBehaviour {
 
+	public GameObject redWarrior;
+	public GameObject redWorker;
+	public GameObject blueWarrior;
+	public GameObject blueWorker;
     public GameObject workerPrefab;
     public GameObject warriorPrefab;
 
@@ -24,17 +28,34 @@ public class UnitController : MonoBehaviour {
         warriorLocations = new List<Hex>();
     }
     
+	//Adds units to the player's base at the start of the game
     public void initializeUnits()
     {
-        //Initialize number of warriors, only if initial amount specified > 0 
-        if (initialNumOfWarriors > 0)
-            //Add initial location and amount of warriors into the correct dict
-            addWarriors(initialNumOfWarriors, GameObject.Find("Hex Grid").GetComponent<HexGrid>().getPlayer1Base());
+		Player.PlayerId pid = GetComponent<Player> ().playerId;
+		//If Player 1
+		if(Player.PlayerId.P1 == pid){
+			//Initialize number of warriors, only if initial amount specified > 0 
+			if (initialNumOfWarriors > 0)
+				//Add initial location and amount of warriors into the correct dict
+				addWarriors(initialNumOfWarriors, GameObject.Find("Hex Grid").GetComponent<HexGrid>().getPlayer1Base());
 
-        //Initialize number of warriors, only if initial amount specified > 0 
-        if (initialNumOfWorkers > 0)
-            //Add initial location and amount of workers into the correct dict
-            addWorkers(initialNumOfWorkers, GameObject.Find("Hex Grid").GetComponent<HexGrid>().getPlayer1Base());
+			//Initialize number of warriors, only if initial amount specified > 0 
+			if (initialNumOfWorkers > 0)
+				//Add initial location and amount of workers into the correct dict
+				addWorkers(initialNumOfWorkers, GameObject.Find("Hex Grid").GetComponent<HexGrid>().getPlayer1Base());
+		}
+		//If Player 2
+		else if(Player.PlayerId.P2 == pid) {
+			//Initialize number of warriors, only if initial amount specified > 0 
+			if (initialNumOfWarriors > 0)
+				//Add initial location and amount of warriors into the correct dict
+				addWarriors(initialNumOfWarriors, GameObject.Find("Hex Grid").GetComponent<HexGrid>().getPlayer2Base());
+
+			//Initialize number of warriors, only if initial amount specified > 0 
+			if (initialNumOfWorkers > 0)
+				//Add initial location and amount of workers into the correct dict
+				addWorkers(initialNumOfWorkers, GameObject.Find("Hex Grid").GetComponent<HexGrid>().getPlayer2Base());
+		}
     }
     
     //Method to add new warrior(s) given a specified amount and a hex

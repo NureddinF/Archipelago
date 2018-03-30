@@ -21,6 +21,7 @@ public class HexGrid : MonoBehaviour {
 	public int levelNumber;
 
     private Hex player1Base;
+	private Hex player2Base;
 	//Game Maps - Represented by a matrix
 	//Level 1 Map
 	int[,] level1 = new int[7, 35]
@@ -59,12 +60,24 @@ public class HexGrid : MonoBehaviour {
     private static int gridWidth;
     private static int gridHeight;
 
-    //Get methods for grid dimensions
-    public static int getGridHeight() { return gridHeight; }
-    public static int getGridWidth() { return gridWidth;  }
+    //Get Grid Height
+    public static int getGridHeight() { 
+		return gridHeight; 
+	}
+	//Get Grid Width
+    public static int getGridWidth() { 
+		return gridWidth;  
+	}
 
-    //Get methods for player1base coordinates
-    public Hex getPlayer1Base() { return player1Base; }
+    //Returns coordinates for Player 1's Base
+    public Hex getPlayer1Base() { 
+		return player1Base; 
+	}
+
+	//Returns coordinates for Player 2's Base
+	public Hex getPlayer2Base() {
+		return player2Base;
+	}
 
     //Dimensions of individual hex
     private float hexWidth;
@@ -178,6 +191,7 @@ public class HexGrid : MonoBehaviour {
 						thisHex.GetComponent<Hex>().setTileType(TileType.BASE);
                         thisHex.GetComponent<Hex>().setTileIncome(basePlayerBaseIncome);
                         thisHex.GetComponent<Hex>().setHexOwner(Player.PlayerId.P2);
+						player2Base = thisHex.GetComponent<Hex>();
                         break;
 					}
 					case 3:{

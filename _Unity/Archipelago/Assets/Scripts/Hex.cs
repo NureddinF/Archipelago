@@ -31,7 +31,13 @@ public class Hex : MonoBehaviour {
     private int maxY = HexGrid.getGridHeight() - 1;
     private int maxX = HexGrid.getGridWidth() - 1;
 
-    private int numOfWorkersOnHex;
+	//Store Amount of Player 1 (Red) and Player 2 (Blue) Units
+	private int redWarriors;
+	private int redWorkers;
+	private int blueWarriors;
+	private int blueWorkers;
+
+	private int numOfWorkersOnHex;
     private int numOfWarriorsOnHex;
 
     //Calls once on object creation
@@ -42,51 +48,98 @@ public class Hex : MonoBehaviour {
         //Initialize ints to store the units on the tile
         numOfWorkersOnHex = 0;
         numOfWarriorsOnHex = 0;
+		redWarriors = 0;
+		redWorkers = 0;
+		blueWarriors = 0;
+		blueWorkers = 0;
 
         //Set it's current sprite to the standard hex sprite
         changeHexSprite(standard);
     }
 
     //Getters and setters
-    public void setX(int x) { this.x = x; }
+	//Set X
+    public void setX(int x) { 
+		this.x = x; 
+	}
 
-    public void setY(int y) { this.y = y; }
+	//Set Y
+    public void setY(int y) { 
+		this.y = y; 
+	}
 
-    public int getX() { return x; }
+	//Get X
+    public int getX() { 
+		return x; 
+	}
 
-    public int getY() { return y; }
+	//Get Y
+    public int getY() { 
+		return y; 
+	}
 
-    public Player.PlayerId getHexOwner() { return hexOwner; }
+	//Get Hex Owner
+    public Player.PlayerId getHexOwner() { 
+		return hexOwner;
+	}
 
-    public void setHexOwner(Player.PlayerId pID) { this.hexOwner = pID; }
+	//Set Hex Owner
+    public void setHexOwner(Player.PlayerId pID) { 
+		this.hexOwner = pID; 
+	}
 
-    public void setTileIncome(float amount) { this.tileIncome = amount; }
+	//Set Tile Income
+    public void setTileIncome(float amount) { 
+		this.tileIncome = amount;
+	}
 
-    public float getTileIncome() { return tileIncome; }
+	//Get Tile Income
+    public float getTileIncome() { 
+		return tileIncome;
+	}
 
-    public void setTileType(HexGrid.TileType type) { this.tileType = type; }
+	//Set Tile Type
+    public void setTileType(HexGrid.TileType type) { 
+		this.tileType = type; 
+	}
 
-    public HexGrid.TileType getTileType() { return tileType; }
+	//Get Tile Type
+    public HexGrid.TileType getTileType() { 
+		return tileType; 
+	}
 
+	//Set Building
     public void setBuilding(Building b) {
         this.building = b;
         b.setHexAssociatedWith(this);
     }
 
-    public Building getBuilding() { return building; }
+	//Get Building
+    public Building getBuilding() { 
+		return building;
+	}
     
-    public int getNumOfWorkersOnHex() { return numOfWorkersOnHex; }
+	//Get Number of Workers on Hex
+    public int getNumOfWorkersOnHex() { 
+		return numOfWorkersOnHex; 
+	}
 
-    public int getNumOfWarriorsOnHex() { return numOfWarriorsOnHex; }
+	//Get Number of Warriors on Hex
+    public int getNumOfWarriorsOnHex() { 
+		return numOfWarriorsOnHex; 
+	}
 
+	//Add Number of Workers to Hex
     public void addWorkersToHex(int amount) {
         numOfWorkersOnHex += amount;
     }
 
+	//Add Number of Workers to Hex
     public void addWarriorsToHex(int amount) {
         numOfWarriorsOnHex += amount;
     }
 
+	//Remove Workers from Hex
     public void removeWorkersFromHex(int amount)
     {
         if(numOfWorkersOnHex >= amount)
@@ -99,6 +152,7 @@ public class Hex : MonoBehaviour {
         }
     }
 
+	//Remove Warriors from Hex
     public void removeWarriorsFromHex(int amount)
     {
         if (numOfWarriorsOnHex >= amount)
@@ -110,6 +164,7 @@ public class Hex : MonoBehaviour {
             Debug.Log("Can't remove warriors from hex since requested " + amount + " to be removed, and only " + numOfWarriorsOnHex + " recorded to be located on this hex: " + this.name);
         }
     }
+
     //Method to return a list of a hex's direct neighbors
     public List <GameObject> getNeighbors(){
         List<GameObject> neighbors = new List<GameObject>();
