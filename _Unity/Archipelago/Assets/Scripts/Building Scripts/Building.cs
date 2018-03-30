@@ -4,16 +4,19 @@ using UnityEngine;
 
 public class Building : MonoBehaviour
 {
+
     // Building parameters
     public float cost = 3;
-    public float tileIncomeAfterBuild = 4;
+    public float tileIncomeAfterBuild = 1;
+    private float currentTileIncome;
+    public float constructionTime = 5;
     public List<HexGrid.TileType> tilesAssociatedWith;
 
     //Construction parameters
-    private float currentConstructionProgress = 0;
-    public float constructionTime = 5;
+    private float currentBuildTime;
+    public float totalBuildTime;
     public float buildSpeedPerWorker;
-    private bool isConstructed = false;
+    private bool isConstructed;
 
     private Hex hexAssociatedWith;
 
@@ -22,6 +25,18 @@ public class Building : MonoBehaviour
     public Sprite buildingSprite;
     public Sprite constructionSprite;
 
+    void Start()
+    {
+        currentBuildTime = 0;
+    }
+
+    void Update()
+    {
+        if (!isConstructed)
+        {
+            progressConstruction();
+        } 
+    }
     public Hex getHexAssociatedWith() { return hexAssociatedWith; }
 
     public void setHexAssociatedWith(Hex h) {
@@ -38,10 +53,18 @@ public class Building : MonoBehaviour
 
     public Sprite getBuildingSprite() { return buildingSprite; }
 
+    public void setBuildingSprite(Sprite s) { buildingSprite = s; }
+
+
+
     //Getters & Setters
     public float getCost() { return cost; }
 
     public float getTileIncomeAfterBuild() { return tileIncomeAfterBuild; }
+
+    public float getCurrentTileIncome() { return currentTileIncome; }
+
+    public void setCurrentTileIncome(float currentTileIncome) { this.currentTileIncome = currentTileIncome; }
 
     public float getConstructionTime() { return constructionTime; }
 
@@ -53,18 +76,13 @@ public class Building : MonoBehaviour
 
     public bool getIsConstructed() { return isConstructed; }
 
-    public void progressConstruction()
+    private void progressConstruction()
     {
-        Debug.Log("Progress construction");
-        if (!isConstructed)
-        {
-            currentConstructionProgress += Time.deltaTime * (float) hexAssociatedWith.getNumOfWorkersOnHex() * buildSpeedPerWorker;
-            Debug.Log("ConstructionProgress: " + currentConstructionProgress);
+        currentBuildTime += Time.deltaTime * hexAssociatedWith.getNumOfWorkersOnHex() * buildSpeedPerWorker;
 
-            if (currentConstructionProgress >= constructionTime)
-            {
-                finalizeConstruction();
-            }
+        if(currentBuildTime >= totalBuildTime)
+        {
+            finalizeConstruction();
         }
     }
 
@@ -72,6 +90,5 @@ public class Building : MonoBehaviour
     {
         isConstructed = true;
         hexAssociatedWith.changeHexSprite(buildingSprite);
-        hexAssociatedWith.setTileIncome(tileIncomeAfterBuild);
     }
 }

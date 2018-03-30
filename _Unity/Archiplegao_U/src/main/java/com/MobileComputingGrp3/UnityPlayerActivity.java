@@ -1,16 +1,14 @@
 package com.MobileComputingGrp3;
 
+import com.unity3d.player.*;
 import android.app.Activity;
-import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Window;
-import android.widget.Toast;
 
 import com.unity3d.player.UnityPlayer;
 
@@ -18,11 +16,22 @@ public class UnityPlayerActivity extends Activity
 {
     protected UnityPlayer mUnityPlayer; // don't change the name of this variable; referenced from native code
 
+    //scene to load when unity starts
+    private String startCommand;
+    //IP address of this device
+    private String ipAddr;
+    //User's username
+    private String username;
+
     // Setup activity layout
     @Override protected void onCreate(Bundle savedInstanceState)
     {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
+        startCommand = getIntent().getStringExtra("startCommand");
+        ipAddr = getIntent().getStringExtra("ipaddr");
+        username = getIntent().getStringExtra("username");
+        getWindow().setFormat(PixelFormat.RGBX_8888); // <--- This makes xperia play happy
 
         mUnityPlayer = new UnityPlayer(this);
         setContentView(mUnityPlayer);
@@ -117,14 +126,27 @@ public class UnityPlayerActivity extends Activity
     @Override public boolean onTouchEvent(MotionEvent event)          { return mUnityPlayer.injectEvent(event); }
     /*API12*/ public boolean onGenericMotionEvent(MotionEvent event)  { return mUnityPlayer.injectEvent(event); }
 
+    //Native methods
 
-    public  void trigger(){
-        Toast.makeText(getApplicationContext(), "Unity Called A.S.", Toast.LENGTH_SHORT).show();
+    public String getStartCommand(){
+        return startCommand;
     }
 
-    public  void win(){
-        //Toast.makeText(getApplicationContext(), "You won the game!", Toast.LENGTH_SHORT).show();
-        //TODO: relay data back to android studio here (e.g. win)
+    public String getIpAddr(){
+        return ipAddr;
+    }
+
+    public String getUsername(){
+        return username;
+    }
+
+    public void win() {
+        finish();
+    }
+
+    public void exit(){
         finish();
     }
 }
+
+

@@ -1,22 +1,27 @@
 package com.example.xuhongcheng.archipelago.activitys;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.MobileComputingGrp3.UnityPlayerActivity;
+
 import com.example.xuhongcheng.archipelago.myapplication.R;
 import com.example.xuhongcheng.archipelago.utils.SharedPreferenceUtils;
 
+public class MainActivity extends Activity {
 
-public class MainActivity extends AppCompatActivity {
+    private static final int PLAY_GAME = 600;
 
     public Button singlePlayer;
     public Button hostMulti;
@@ -26,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
     public ImageButton btn_settings;
     private SoundPool soundPool;
     private int  soundId;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,24 +44,15 @@ public class MainActivity extends AppCompatActivity {
         btn_settings = (ImageButton) findViewById(R.id.setting);
         profile = (Button) findViewById(R.id.profile);
         //https://stackoverflow.com/questions/6173400/how-to-hide-a-button-programmatically
-        boolean isLogin = SharedPreferenceUtils.getBoolean(MainActivity.this, "isLogin", false);
-        if (!isLogin) {
+
+        boolean isLogin = SharedPreferenceUtils.getBoolean(MainActivity.this,"isLogin",false);
+        if(!isLogin){
             profile.setVisibility(View.INVISIBLE);
         }
 
-
-        singlePlayer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                soundPool.play(soundId,1,1,0,0,1);
-                Intent launchIntent = getPackageManager().getLaunchIntentForPackage(getResources().getString(R.string.gamePackageName));
-                if (launchIntent != null) {
-                    startActivity(launchIntent);
-                } else {
-                    Toast.makeText(getApplicationContext(), "Could not find game APK", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        singlePlayer.setOnClickListener(new GameLauncher("play"));
+        hostMulti.setOnClickListener(new GameLauncher("host"));
+        joinMulti.setOnClickListener(new GameLauncher("join"));
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,5 +93,41 @@ public class MainActivity extends AppCompatActivity {
             Log.i("aaaaa","ORIENTATION_PORTRAIT");
             setContentView(R.layout.activity_main);
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        //Toast.makeText(getApplicationContext(), "Game Closed, returned to menu.", Toast.LENGTH_SHORT).show();
+    }
+
+
+    private class GameLauncher implements View.OnClickListener {
+
+        private final String startCommand;
+
+        public GameLauncher(String startCommand){
+            this.startCommand = startCommand;
+        }
+
+        @Override
+        public void onClick(View view) {
+            soundPool.play(soundId,1,1,0,0,1);
+            Intent launchIntent = new Intent(getApplicationContext(), UnityPlayerActivity.class);
+            if (launchIntent != null) {
+                String username = SharedPreferenceUtils.getString(MainActivity.this,"username","Player");
+                launchIntent.putExtra("username", username);
+                launchIntent.putExtra("startCommand", startCommand);
+                launchIntent.putExtra("ipaddr", getIpAddr());
+                startActivityForResult(launchIntent, PLAY_GAME);
+            } else {
+                Toast.makeText(getApplicationContext(), "Could not find game APK", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
+    public String getIpAddr(){
+        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+        return Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
     }
 }
