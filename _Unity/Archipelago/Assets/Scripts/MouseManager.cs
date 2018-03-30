@@ -68,6 +68,7 @@ public class MouseManager : MonoBehaviour {
 				canPerformSelection = false;
 				doSelection ();
 			}
+			Debug.Log (halfHeight + "," + halfWidth);
 		}
 		//panning
 		else if (Input.touchCount == 1) { //one touch on screen
@@ -132,30 +133,34 @@ public class MouseManager : MonoBehaviour {
 
 	// Check if player clicked on something
 	private void doSelection(){
+		Debug.Log ("Called");
         // mouse location, provides coordinates relative to screen pixels
-        Vector3 mousePos = Input.mousePosition;
-        mousePos.z = 0;
-
+        
+        
         //Screen pos is relative to camera location in unity coordinates
-        Vector3 screenPos = Camera.main.ScreenToWorldPoint(mousePos);
-
+		Vector3 screenPos = Camera.main.ScreenToWorldPoint(clickPos);
+		Debug.Log (screenPos);
         //Information regarding the object the ray collides with
         //Returns true or false but also provides information of object collider coliided with
         RaycastHit2D hitInfo = Physics2D.Raycast(screenPos, Vector2.zero);
-
+		string debugLog = hitInfo == null ? "NULL" : "Not null";
+		Debug.Log (debugLog);
         //If ray collides with an object
-        if (hitInfo)
+        if (hitInfo != null)
         {   
             //Return the gameobject that the ray has collided with
-            GameObject collidedHitInfo = hitInfo.collider.transform.gameObject;
-         
+            GameObject collidedHitInfo = hitInfo
+				.collider
+				.transform.gameObject;
+			Debug.Log (collidedHitInfo);
             //If left mouse button pressed, only calls once on initial press(e.g not constantly calling on hold)
-            if (Input.GetMouseButtonDown(0) && (!EventSystem.current.IsPointerOverGameObject()))
-            {
+            if (!EventSystem.current.IsPointerOverGameObject()){
+				
                 // Check what we clicked on
                 if (collidedHitInfo.GetComponent<Hex>() != null)
                 {
                     Hex hex = collidedHitInfo.GetComponent<Hex>();
+					Debug.Log (hex.getTileType());
                     //clicked on a hex
                     //bring up menu
                     //if(hex.hexOwner2 == player.playerId){
@@ -201,7 +206,7 @@ public class MouseManager : MonoBehaviour {
 
 		//Zoom camera
 		Camera.main.orthographicSize += magnitudeDiff * zoomSpeed * 2f; //sets magnitude with zoomspeed to orthographicSize
-		float cameraMaxZoom = 15f;//Mathf.Min(Mathf.Abs(maxBounds.y), Mathf.Abs(maxBounds.x))/2;
+		float cameraMaxZoom = 13.44791f;//Mathf.Min(Mathf.Abs(maxBounds.y), Mathf.Abs(maxBounds.x))/2;
 		Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, 5f, cameraMaxZoom); //sets the zoomout max size 
 
 		//Update screen size vars
