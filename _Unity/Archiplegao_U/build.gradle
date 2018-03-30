@@ -2,11 +2,10 @@
 buildscript {
 	repositories {
 		jcenter()
-        google()
-    }
+	}
 
 	dependencies {
-		classpath 'com.android.tools.build:gradle:2.1.0'
+		classpath 'com.android.tools.build:gradle:2.3.0'
 	}
 }
 
@@ -49,10 +48,10 @@ android {
   			jniDebuggable true
   		}
   		release {
- 			minifyEnabled true
- 			useProguard true
+ 			minifyEnabled false
+ 			useProguard false
   			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-unity.txt'
-  			
+  			signingConfig signingConfigs.debug
   		}
 	}
 

@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -48,18 +50,9 @@ public class MainActivity extends Activity {
             profile.setVisibility(View.INVISIBLE);
         }
 
-        singlePlayer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                soundPool.play(soundId,1,1,0,0,1);
-                Intent launchIntent = new Intent(getApplicationContext(), UnityPlayerActivity.class);
-                if (launchIntent != null) {
-                    startActivityForResult(launchIntent, PLAY_GAME);
-                } else {
-                    Toast.makeText(getApplicationContext(), "Could not find game APK", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        singlePlayer.setOnClickListener(new GameLauncher("play"));
+        hostMulti.setOnClickListener(new GameLauncher("host"));
+        joinMulti.setOnClickListener(new GameLauncher("join"));
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,4 +100,34 @@ public class MainActivity extends Activity {
         //Toast.makeText(getApplicationContext(), "Game Closed, returned to menu.", Toast.LENGTH_SHORT).show();
     }
 
+
+    private class GameLauncher implements View.OnClickListener {
+
+        private final String startCommand;
+
+        public GameLauncher(String startCommand){
+            this.startCommand = startCommand;
+        }
+
+        @Override
+        public void onClick(View view) {
+            soundPool.play(soundId,1,1,0,0,1);
+            Intent launchIntent = new Intent(getApplicationContext(), UnityPlayerActivity.class);
+            if (launchIntent != null) {
+                String username = SharedPreferenceUtils.getString(MainActivity.this,"username","Player");
+                launchIntent.putExtra("username", username);
+                launchIntent.putExtra("startCommand", startCommand);
+                launchIntent.putExtra("ipaddr", getIpAddr());
+                startActivityForResult(launchIntent, PLAY_GAME);
+            } else {
+                Toast.makeText(getApplicationContext(), "Could not find game APK", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
+    public String getIpAddr(){
+        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+        return Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+    }
 }
