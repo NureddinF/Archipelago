@@ -261,11 +261,11 @@ public class UnitController : MonoBehaviour {
 
         return total;
     }
-	//Checks if a trap is placed on the hex where a warrior is standing
+	//Checks if a trap is placed on the hex where a gameobject is standing
 	public void checkTrap(GameObject hex, GameObject player){
 		Warrior warrior = null;
 		Worker worker = null;
-		//The hex the warrior is on
+		//The hex the gameobject is on
 		Hex playerOn = hex.GetComponentInChildren<Hex> ();
 		//Gets the building thats on the hex
 		Building buildOnHex = playerOn.getBuilding ();
@@ -274,16 +274,21 @@ public class UnitController : MonoBehaviour {
 
 		if (buildOnHex != null) {
 			List<HexGrid.TileType> tileTypes = buildOnHex.getTileTypesAssociatedWith ();
-			//Checks in the buildingis associated to ALL, which is a trap building, and the player ids of the hex and player do not match
 			Debug.Log(player.name);
+			//Checks if its a warrior
 			if (player.name == "Warrior(Clone)") {
+				//gets warrior
 				warrior = player.GetComponent<Warrior> ();
+				//Checks in the buildingis associated to ALL, which is a trap building, and the player ids of the hex and player do not match
 				if (tileTypes.Contains(HexGrid.TileType.ALL) && !warrior.getPlayerId().Equals(playerOn.getHexOwner())) {
 					//calls in the kill warrior method
 					killUnit (warrior.gameObject, playerOn);
 				}
+				//other wise its a worker
 			} else {
+				//gets the worker
 				worker = player.GetComponent<Worker> ();
+				//Checks in the buildingis associated to ALL, which is a trap building, and the player ids of the hex and player do not match
 				if (tileTypes.Contains(HexGrid.TileType.ALL) && !worker.getPlayerId().Equals(playerOn.getHexOwner())) {
 					//calls in the kill warrior method
 					killUnit (worker.gameObject, playerOn);
@@ -294,7 +299,7 @@ public class UnitController : MonoBehaviour {
 
 
 	}
-	//Takes in the warrior and the hex it is standing on
+	//Takes in the gameobject and the hex it is standing on
 	public void killUnit(GameObject unit, Hex h){
 		//sets the sprite to unactive
 		unit.SetActive (false);

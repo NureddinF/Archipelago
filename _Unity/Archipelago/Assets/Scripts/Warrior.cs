@@ -12,10 +12,13 @@ public class Warrior : Unit
         float step = unitSpeed * Time.deltaTime;
         //Move it's position by amount worked out above
         transform.position = Vector3.MoveTowards(transform.position, getDestinationCoord(), step);
-        //If reached destination, add it to the hex and remove the gameobject
+
+		//the hex the warrior is standing on
 		GameObject h = FindObjectOfType<HexGrid>().getHex(transform.position);
+		//Call to check if there is a trap on the Hex
 		GameObject.Find ("Player").GetComponent<UnitController> ().checkTrap (h, this.gameObject);
 
+		//If reached destination, add it to the hex and remove the gameobject
         if (transform.position.Equals(getDestinationCoord()))
         {
             GameObject.Find("Player").GetComponent<UnitController>().addWarriors(1, getDestinationHex());
