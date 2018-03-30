@@ -82,7 +82,6 @@ public class UnitController : MonoBehaviour {
         GameObject unitToMove;
         unitToMove = (GameObject)Instantiate(warriorPrefab);
 		unitToMove.GetComponent<Unit> ().setPlayerId (GetComponent<Player> ().playerId);
-//		Debug.Log(unitToMove.GetComponent<Unit> ().getPlayerId());
 
         unitToMove.GetComponent<Unit>().setInitialHex(from);
         unitToMove.GetComponent<Unit>().setDestinationHex(to);
@@ -269,8 +268,6 @@ public class UnitController : MonoBehaviour {
 		Hex playerOn = hex.GetComponentInChildren<Hex> ();
 		//Gets the building thats on the hex
 		Building buildOnHex = playerOn.getBuilding ();
-		Debug.Log ("Build On Hex: "+buildOnHex);
-
 
 		if (buildOnHex != null) {
 			List<HexGrid.TileType> tileTypes = buildOnHex.getTileTypesAssociatedWith ();
@@ -295,8 +292,6 @@ public class UnitController : MonoBehaviour {
 				}
 			}
 		}
-		Debug.Log ("Player on: "+playerOn);
-
 
 	}
 	//Takes in the gameobject and the hex it is standing on
