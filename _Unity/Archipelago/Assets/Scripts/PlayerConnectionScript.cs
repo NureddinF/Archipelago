@@ -2,8 +2,7 @@
 using UnityEngine.Networking;
 using System.Collections;
 
-public class PlayerConnectionScript : NetworkBehaviour
-{
+public class PlayerConnectionScript : NetworkBehaviour{
 
 	// Use this for initialization
 	void Start (){
@@ -18,39 +17,34 @@ public class PlayerConnectionScript : NetworkBehaviour
 
 	/////////////////// CLIENT SIDE METHODS ////////////////////////////////////// 
 	public override void OnStartClient() {
-		Debug.Log("Started client.");
-		Debug.Log (" My IP: "+ NetworkManager.singleton.networkAddress);
-		FindObjectOfType<LobbyScreen> ().CmdConnectPlayer (
-			InitialGameState.username,
-			NetworkManager.singleton.networkAddress,
-			InitialGameState.isHost);
+		Debug.Log("PlayerConnectionScript: Started client.");
 	}
 
 	public void OnConnectedToServer() {
-		Debug.Log("Connected to server");
+		Debug.Log("PlayerConnectionScript: Connected to server");
 	}
 
 
 	public void OnFailedToConnect(){
-		Debug.Log("Failed to connect to server");
+		Debug.Log("PlayerConnectionScript: Failed to connect to server");
 	}
 
 	public void OnDisconnectedFromServer(){
-		Debug.Log("Disconnected from server");
+		Debug.Log("PlayerConnectionScript: Disconnected from server");
 	}
 
 	/////////////////// SERVER SIDE METHODS ////////////////////////////////////// 
 	public override  void OnStartServer() {
-		Debug.Log("Started server");
+		Debug.Log("PlayerConnectionScript: Started server");
 	}
 
 	public void OnPlayerConnected(){
-		Debug.Log("Player connected");
+		Debug.Log("PlayerConnectionScript: Player connected");
 	}
 
 
 	public void OnPlayerDisconnected(){
-		Debug.Log("Player disconnected");
+		Debug.Log("PlayerConnectionScript: Player disconnected");
 	}
 
 }

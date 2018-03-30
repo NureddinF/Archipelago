@@ -16,18 +16,31 @@ public class CustomLobbyPlayer : NetworkLobbyPlayer {
 
 	//////////////////////////////////////Monobehaviour Methods//////////////////////////////////////////////
 
+	void Awake(){
+		// Need to keep this object around when scene changes from lobby to gameplay to spawn the gameplayer player object
+		DontDestroyOnLoad (gameObject);
+	}
+
 	// Use this for initialization
 	void Start () {
 		Debug.Log("CustomLobbyPlayer: Start");
 		if(isLocalPlayer){
+			//This is the player object for the local client, initialize it
 			Debug.Log ("CustomLobbyPlayer: Start: isLocalPlayer");
 			FindObjectOfType<CustomLobbyManager> ().initLobbyUi ();
+			//sync UI across all clients
 			CmdInitLobbyPlayer (InitialGameState.username, FindObjectOfType<CustomLobbyManager>().getClientIp());
-			//initLobbyPlayer ("User " + Random.Range(0,100));
+			Debug.Log ("CustomLobbyPlayer: isSinglePlayer=" + FindObjectOfType<CustomLobbyManager> ().isSinglePlayer);
+			if (FindObjectOfType<CustomLobbyManager> ().isSinglePlayer) {
+				// For single player game there's no need for the lobby
+				SendReadyToBeginMessage ();
+			}
 			Debug.Log ("CustomLobbyPlayer: Start: isLocalPlayer: "
 				+ "username: " + username + ", ipAddress: " + ipAddress
 				+ "player: " + pid.ToString());
+
 		} else {
+			//Not the local player, set up UI Object it to display data from the other client
 			Debug.Log ("CustomLobbyPlayer: Start: NOT isLocalPlayer: "
 				+ "username: " + username + ", ipAddress: " + ipAddress
 				+ "player: " + pid.ToString());
@@ -38,9 +51,11 @@ public class CustomLobbyPlayer : NetworkLobbyPlayer {
 
 	public void OnDestroy(){
 		Debug.Log ("CustomLobbyPlayer: Destroy");
+		//Player lobby object being destryed (player DC'd), remove UI object for that player
 		if (playerUI != null) {
 			Destroy (playerUI);	
 		}
+		//Reset next player ID next player that joins get assigned ID correctly
 		nextPid = pid;
 	}
 
@@ -50,6 +65,7 @@ public class CustomLobbyPlayer : NetworkLobbyPlayer {
 	//////////////////////////////////////Custom Methods//////////////////////////////////////////////
 
 	private void initLobbyPlayer(){
+		// Set up Lobby UI for client when it connects
 		Debug.Log ("CustomLobbyPlayer: initLobbyPlayer");
 		if (playerUI == null) {
 			Canvas c = FindObjectOfType<Canvas> ();
@@ -72,6 +88,7 @@ public class CustomLobbyPlayer : NetworkLobbyPlayer {
 
 	[Command]
 	public void CmdInitLobbyPlayer(string username, string ipAddress){
+		// Syncronize player parameters on the server
 		pid = nextPid;
 		nextPid++;
 		this.ipAddress = ipAddress;
@@ -83,8 +100,12 @@ public class CustomLobbyPlayer : NetworkLobbyPlayer {
 
 	//////////////////////////////////////SyncVar hooks//////////////////////////////////////////////
 
+	// Sync UI for player ID
 	private void initLobbyPlayerPid(Player.PlayerId newPid){
 		pid = newPid;
+		if(FindObjectOfType<CustomLobbyManager>().isSinglePlayer){
+			return;
+		}
 		Debug.Log ("CustomLobbyPlayer: initLobbyPlayerPid");
 		if (playerUI == null) {
 			initUi ();
@@ -94,8 +115,12 @@ public class CustomLobbyPlayer : NetworkLobbyPlayer {
 
 	}
 
+	// Sync UI for player username
 	private void initLobbyPlayerUsername(string newUsername){
 		username = newUsername;
+		if(FindObjectOfType<CustomLobbyManager>().isSinglePlayer){
+			return;
+		}
 		Debug.Log ("CustomLobbyPlayer: initLobbyPlayerUsername");
 		if (playerUI == null) {
 			initUi ();
@@ -105,8 +130,12 @@ public class CustomLobbyPlayer : NetworkLobbyPlayer {
 
 	}
 
+	// Sync UI for player IP address
 	private void initLobbyPlayerIp(string newIp){
 		ipAddress = newIp;
+		if(FindObjectOfType<CustomLobbyManager>().isSinglePlayer){
+			return;
+		}
 		Debug.Log ("CustomLobbyPlayer: initLobbyPlayerIp");
 		if (playerUI == null) {
 			initUi ();
@@ -116,16 +145,25 @@ public class CustomLobbyPlayer : NetworkLobbyPlayer {
 
 	}
 
-
+	// If a player UI isn't initialized when the parameters get updated create one
 	private void initUi(){
 		if(!isLocalPlayer){
+			//return;
+		}
+
+
+		Canvas canvas = FindObjectOfType<Canvas> ();
+		if(canvas == null){
 			return;
 		}
 
-		playerUI = Instantiate (PlayerUiPrefab, FindObjectOfType<Canvas> ()
-			.GetComponentInChildren<VerticalLayoutGroup> ().transform);
-
-		Toggle toggle = playerUI.GetComponentInChildren<Toggle> ();
+		VerticalLayoutGroup lobbyPlayerUI = canvas.GetComponentInChildren<VerticalLayoutGroup> ();
+		if (lobbyPlayerUI == null) {
+			return;
+		}
+		playerUI = Instantiate (PlayerUiPrefab, lobbyPlayerUI.transform);
+		
+		Toggle toggle = playerUI.GetComponentInChildren<Toggle>();
 		toggle.onValueChanged.AddListener (onReadyChecked);
 		toggle.interactable = true;
 	}
@@ -135,21 +173,27 @@ public class CustomLobbyPlayer : NetworkLobbyPlayer {
 		Debug.Log ("CustomLobbyPlayer: onReadyChecked: ready: " + ready);
 
 		if(!isLocalPlayer){
+			// Don't let people unready others
 			return;
 		}
 
+		// Let server know this player is ready to start the game
 		if (ready) {
 			SendReadyToBeginMessage ();
 		} else {
 			SendNotReadyToBeginMessage ();
 		}
 	}
-
+		
+	// Client toggled if they were ready
 	public override void OnClientReady (bool clientReady){
 		if (playerUI != null) {
+			// Sync checkmark for players readying across clients
 			Toggle toggle = playerUI.GetComponentInChildren<Toggle> ();
 			toggle.isOn = clientReady;
 		}
+
+		//Make sure start game button disalbes on host if player isn't ready
 		if(!clientReady){
 			FindObjectOfType<CustomLobbyManager> ().playerUnready ();
 		}

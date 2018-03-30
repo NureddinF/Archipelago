@@ -10,7 +10,7 @@ public class AndroidWrapper {
 		currentActivity.Call("win");
 	}
 
-	public static string getAndroidSceneName(){
+	public static string getAndroidStartCommand(){
 
 		AndroidJavaObject currentActivity = getUnityActivity();
 

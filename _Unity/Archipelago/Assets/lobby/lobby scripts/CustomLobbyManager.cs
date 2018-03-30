@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 
 public class CustomLobbyManager : NetworkLobbyManager {
 
-	//State variables. Need to manually set isDebug/isHost for running from unity editor or PC build as there's no android part
+	//State variables. Need to manually set isDebug for running from unity editor or PC build as there's no android part
 	public bool isDebug = false;
 	public bool isHost = false;
 	public bool isSinglePlayer = false;
@@ -25,13 +25,14 @@ public class CustomLobbyManager : NetworkLobbyManager {
 
 	// Use this for initialization
 	void Start () {
-		//enteredIpAddress = searchUi.GetComponentInChildren<InputField>().textComponent;
 		Debug.Log ("NetworkLobbyManager: Start");
 
+		//Don't make calls to android native code if testing in unity editor
 		if (!isDebug) {
-			string sceneName = AndroidWrapper.getAndroidSceneName ();
+			//Running on android device, get needed parameters from android activity
+			string startCommand = AndroidWrapper.getAndroidStartCommand ();
 			InitialGameState.username = AndroidWrapper.getUsername ();
-			switch(sceneName){
+			switch(startCommand){
 				case "play":{
 					isSinglePlayer = true;
 					break;	
@@ -53,33 +54,40 @@ public class CustomLobbyManager : NetworkLobbyManager {
 			}
 		}
 
-
+		//Configure parameters to automatically start gameplay if game is started as single players
 		if (isSinglePlayer){
 			Debug.Log ("NetworkLobbyManager: Start: isSinglePlayer");
+			minPlayers = 1;
 			maxPlayers = 1;
 			isHost = true;
 		}
 
 
+		InitialGameState.isHost = isHost;
+
+		//Start lobby screen as host
 		if(isHost){
 			Debug.Log ("NetworkLobbyManager: Start: isHost");
 			networkAddress = InitialGameState.HostIpAddr;
 			StartHost ();
 		}
-			
-
-		InitialGameState.isHost = isHost;
 	}
 
-
+	//Load the UI when the game starts
 	public void initLobbyUi(){
 		Debug.Log ("NetworkLobbyManager: initLobbyUi");
-
-		searchUi.SetActive (false);
-		lobbyUi.SetActive (true);
-
+		if (isSinglePlayer) {
+			//don't load lobby UI, instead just start the game
+			searchUi.SetActive (false);
+			lobbyUi.SetActive (false);
+		} else {
+			searchUi.SetActive (false);
+			lobbyUi.SetActive (true);
+		}
 	}
 
+
+	// Callback for "connect" button after user enters hosts ip address when trying to join a game
 	public void attemptConnection(){
 		Debug.Log ("NetworkLobbyManager: attempting connection");
 		// Get the entered string
@@ -111,6 +119,7 @@ public class CustomLobbyManager : NetworkLobbyManager {
 		networkAddress = ipStr;
 		JoiningText.text = "Joining...";
 
+		//if there is a connection in progress cancel it before starting new one
 		if(netClient != null){
 			netClient.Disconnect ();
 		}
@@ -142,18 +151,29 @@ public class CustomLobbyManager : NetworkLobbyManager {
 
 
 	public override void OnLobbyServerPlayersReady (){
-		lobbyUi.GetComponentInChildren<Button> ().interactable = true;
+		Debug.Log ("OnLobbyServerPlayersReady");
+		//All players are ready to start
+		//Check if this is a single player or multiplayer game
+		if (isSinglePlayer) {
+			//start game imediately
+			onStartGameClicked ();
+		} else {
+			//enable button to let host start game
+			lobbyUi.GetComponentInChildren<Button> ().interactable = true;
+		}
 	}
 
 	public void playerUnready(){
+		//disable start game button if someone unreadies
 		lobbyUi.GetComponentInChildren<Button> ().interactable = false;
 	}
 
 	public void onStartGameClicked(){
+		//When start game button is clicked load the gameplay scene on all clients
 		ServerChangeScene (playScene);
 	}
 
-
+	// back button clicked
 	public void returnToAndroidmenu(){
 		if (!isDebug) {
 			AndroidWrapper.returnToAndroidMenu ();
@@ -162,17 +182,25 @@ public class CustomLobbyManager : NetworkLobbyManager {
 		}
 	}
 
-
+	// When scene loads hook up UI components (lobby screen)
 	public void setLobbyUi(GameObject lobbyUi){
 		this.lobbyUi = lobbyUi;
 	}
 
+	// When scene loads hook up UI components (join game screen)
 	public void setSearchUi(GameObject searchUi){
 		this.searchUi = searchUi;
 		enteredIpAddress = searchUi.transform.Find("InputField").Find("IP_text").GetComponent<Text> ();
 		enteredIpAddress.text = ipStr;
 		JoiningText = searchUi.transform.Find ("JoiningText").GetComponent<Text>();
 		JoiningText.text = joiningStr;
+	}
+
+
+	// Called when gameplay scene is loaded. Used to initialize Player Gameplayobject with parameters from the lobby
+	public override bool OnLobbyServerSceneLoadedForPlayer(GameObject lobbyPlayer, GameObject gamePlayer){
+		Debug.Log ("NetworkLobbyManager: OnLobbyServerSceneLoadedForPlayer");
+		return base.OnLobbyServerSceneLoadedForPlayer (lobbyPlayer, gamePlayer);
 	}
 
 	// STEPS TO START A GAME:
