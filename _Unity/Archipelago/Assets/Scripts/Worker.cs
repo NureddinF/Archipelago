@@ -13,7 +13,11 @@ public class Worker : Unit
         //Move it's position by amount worked out above
         transform.position = Vector3.MoveTowards(transform.position, getDestinationCoord(), step);
         //If reached destination, add it to the hex and remove the gameobject
-        if (transform.position.Equals(getDestinationCoord()))
+		GameObject h = FindObjectOfType<HexGrid>().getHex(transform.position);
+		GameObject.Find ("Player").GetComponent<UnitController> ().checkTrap (h, this.gameObject);
+
+
+		if (transform.position.Equals(getDestinationCoord()))
         {
             GameObject.Find("Player").GetComponent<UnitController>().addWorkers(1, getDestinationHex());
             Destroy(gameObject);
