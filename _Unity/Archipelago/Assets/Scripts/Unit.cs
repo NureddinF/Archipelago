@@ -20,6 +20,7 @@ public class Unit : MonoBehaviour {
 	}
 
     //Getters/Setters
+<<<<<<< HEAD
 	//Set Initial Hex (Starting Point of Unit Travel)
     public void setInitialHex(Hex h) { 
 		initialHex = h; 
@@ -42,6 +43,15 @@ public class Unit : MonoBehaviour {
 	}
 
 	//Get Player ID
+=======
+    public void setInitialHex(Hex h) { initialHex = h; }
+    public void setDestinationHex(Hex h) { destinationHex = h; }
+    public Hex getDestinationHex() { return destinationHex; }
+    public Vector3 getDestinationCoord() { return destinationCoord; }
+	public void setPlayerId(Player.PlayerId id){
+		this.id = id;
+	}
+>>>>>>> master
 	public Player.PlayerId getPlayerId(){
 		return id;
 	}
