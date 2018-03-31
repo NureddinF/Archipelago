@@ -11,6 +11,7 @@ public class Unit : MonoBehaviour {
     private Hex initialHex;
     private Vector3 currentCoord;
     private Vector3 destinationCoord;
+	public Player.PlayerId id;
 
 	//Player who owns this unit
 	public UnitController unitController;
@@ -26,6 +27,13 @@ public class Unit : MonoBehaviour {
     public void setDestinationHex(Hex h) { destinationHex = h; }
     public Hex getDestinationHex() { return destinationHex; }
     public Vector3 getDestinationCoord() { return destinationCoord; }
+	public void setPlayerId(Player.PlayerId id){
+		this.id = id;
+	}
+	//Get Player ID
+	public Player.PlayerId getPlayerId(){
+		return id;
+	}
 }
 
 

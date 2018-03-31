@@ -31,8 +31,11 @@ public class Hex : MonoBehaviour {
     private int maxY = HexGrid.getGridHeight() - 1;
     private int maxX = HexGrid.getGridWidth() - 1;
 
-    private int numOfWorkersOnHex;
-    private int numOfWarriorsOnHex;
+	//Store Amount of Player 1 (Red) and Player 2 (Blue) Units
+	private int redWarriors;
+	private int redWorkers;
+	private int blueWarriors;
+	private int blueWorkers;
 
     //Calls once on object creation
     void Start()
@@ -40,76 +43,177 @@ public class Hex : MonoBehaviour {
         building = null;
 
         //Initialize ints to store the units on the tile
-        numOfWorkersOnHex = 0;
-        numOfWarriorsOnHex = 0;
+		redWarriors = 0;
+		redWorkers = 0;
+		blueWarriors = 0;
+		blueWorkers = 0;
 
         //Set it's current sprite to the standard hex sprite
         changeHexSprite(standard);
     }
 
     //Getters and setters
-    public void setX(int x) { this.x = x; }
+	//Set X
+    public void setX(int x) { 
+		this.x = x; 
+	}
 
-    public void setY(int y) { this.y = y; }
+	//Set Y
+    public void setY(int y) { 
+		this.y = y; 
+	}
 
-    public int getX() { return x; }
+	//Get X
+    public int getX() { 
+		return x; 
+	}
 
-    public int getY() { return y; }
+	//Get Y
+    public int getY() { 
+		return y; 
+	}
 
-    public Player.PlayerId getHexOwner() { return hexOwner; }
+	//Get Hex Owner
+    public Player.PlayerId getHexOwner() { 
+		return hexOwner;
+	}
 
-    public void setHexOwner(Player.PlayerId pID) { this.hexOwner = pID; }
+	//Set Hex Owner
+    public void setHexOwner(Player.PlayerId pID) { 
+		this.hexOwner = pID; 
+	}
 
-    public void setTileIncome(float amount) { this.tileIncome = amount; }
+	//Set Tile Income
+    public void setTileIncome(float amount) { 
+		this.tileIncome = amount;
+	}
 
-    public float getTileIncome() { return tileIncome; }
+	//Get Tile Income
+    public float getTileIncome() { 
+		return tileIncome;
+	}
 
-    public void setTileType(HexGrid.TileType type) { this.tileType = type; }
+	//Set Tile Type
+    public void setTileType(HexGrid.TileType type) { 
+		this.tileType = type; 
+	}
 
-    public HexGrid.TileType getTileType() { return tileType; }
+	//Get Tile Type
+    public HexGrid.TileType getTileType() { 
+		return tileType; 
+	}
 
+	//Set Building
     public void setBuilding(Building b) {
         this.building = b;
         b.setHexAssociatedWith(this);
     }
 
-    public Building getBuilding() { return building; }
+	//Get Building
+    public Building getBuilding() { 
+		return building;
+	}
     
-    public int getNumOfWorkersOnHex() { return numOfWorkersOnHex; }
+	//Get Number of Workers on Hex
+	public int getNumOfWorkersOnHex(Player.PlayerId player) {
+		int result = 0;
+		//If Player 1, get number of redWorkers
+		if (player == Player.PlayerId.P1) {
+			result = redWorkers;
+		} 
+		//If Player 2, get number of blueWorkers
+		else if (player == Player.PlayerId.P2) {
+			result = blueWorkers;
+		}
+		return result; 
+	}
 
-    public int getNumOfWarriorsOnHex() { return numOfWarriorsOnHex; }
+	//Get Number of Warriors on Hex
+	public int getNumOfWarriorsOnHex(Player.PlayerId player) { 
+		int result = 0;
+		//If Player 1, get number of redWarriors
+		if (player == Player.PlayerId.P1) {
+			result = redWarriors;
+		} 
+		//If Player 2, get number of blueWarriors
+		else if (player == Player.PlayerId.P2) {
+			result = blueWarriors;
+		}
+		return result;  
+	}
 
-    public void addWorkersToHex(int amount) {
-        numOfWorkersOnHex += amount;
+	//Add Number of Workers to Hex
+	public void addWorkersToHex(int amount, Player.PlayerId player) {
+		//If Player 1, add to redWorkers
+		if (player == Player.PlayerId.P1) {
+			redWorkers += amount;
+		} 
+		//If Player 2, add to blueWorkers
+		else if (player == Player.PlayerId.P2) {
+			blueWorkers += amount;
+		}
     }
 
-    public void addWarriorsToHex(int amount) {
-        numOfWarriorsOnHex += amount;
+	//Add Number of Warriors to Hex
+	public void addWarriorsToHex(int amount, Player.PlayerId player) {
+		//If Player 1, add to redWarriors
+		if (player == Player.PlayerId.P1) {
+			redWarriors += amount;
+		} 
+		//If Player 2, add to blueWarriors
+		else if (player == Player.PlayerId.P2) {
+			blueWarriors += amount;
+		}
     }
 
-    public void removeWorkersFromHex(int amount)
-    {
-        if(numOfWorkersOnHex >= amount)
-        {
-            numOfWorkersOnHex -= amount;
-        }
-        else
-        {
-            Debug.Log("Can't remove workers from hex since requested " + amount + " to be removed, and only " + numOfWorkersOnHex + " recorded to be located on this hex: " + this.name);
-        }
+	//Remove Workers from Hex
+	public void removeWorkersFromHex(int amount, Player.PlayerId player) {
+		//If Player 1, remove redWorkers
+		if (player == Player.PlayerId.P1) {
+			if(redWorkers >= amount) {
+				redWorkers -= amount;
+			}
+			else
+			{
+				Debug.Log("Can't remove workers from hex since requested " + amount + " to be removed, and only " + redWorkers + " recorded to be located on this hex: " + this.name);
+			}
+		} 
+		//If Player 2, remove blueWorkers
+		else if (player == Player.PlayerId.P2) {
+			if(blueWorkers >= amount) {
+				blueWorkers -= amount;
+			}
+			else
+			{
+				Debug.Log("Can't remove workers from hex since requested " + amount + " to be removed, and only " + blueWorkers + " recorded to be located on this hex: " + this.name);
+			}
+		}
     }
 
-    public void removeWarriorsFromHex(int amount)
-    {
-        if (numOfWarriorsOnHex >= amount)
-        {
-            numOfWarriorsOnHex -= amount;
-        }
-        else
-        {
-            Debug.Log("Can't remove warriors from hex since requested " + amount + " to be removed, and only " + numOfWarriorsOnHex + " recorded to be located on this hex: " + this.name);
-        }
+	//Remove Warriors from Hex
+	public void removeWarriorsFromHex(int amount, Player.PlayerId player) {
+		//If Player 1, remove redWorkers
+		if (player == Player.PlayerId.P1) {
+			if(redWarriors >= amount) {
+				redWarriors -= amount;
+			}
+			else
+			{
+				Debug.Log("Can't remove workers from hex since requested " + amount + " to be removed, and only " + redWarriors + " recorded to be located on this hex: " + this.name);
+			}
+		} 
+		//If Player 2, remove blueWorkers
+		else if (player == Player.PlayerId.P2) {
+			if(blueWarriors >= amount) {
+				blueWarriors -= amount;
+			}
+			else
+			{
+				Debug.Log("Can't remove workers from hex since requested " + amount + " to be removed, and only " + blueWarriors + " recorded to be located on this hex: " + this.name);
+			}
+		}
     }
+
     //Method to return a list of a hex's direct neighbors
     public List <GameObject> getNeighbors(){
         List<GameObject> neighbors = new List<GameObject>();
@@ -177,7 +281,7 @@ public class Hex : MonoBehaviour {
     }
 
     //Method to return true if a neighbor is owned by player
-    public bool hasOwnedNeighbor()
+	public bool hasOwnedNeighbor(Player.PlayerId player)
     {
         List<GameObject> neighbors = getNeighbors();
 
@@ -185,7 +289,7 @@ public class Hex : MonoBehaviour {
         {
             if (gO.GetComponent<Hex>())
             {
-                if (gO.GetComponent<Hex>().getHexOwner().Equals(Player.PlayerId.P1)) //TODO: Currently softcoded for P1, need to set so works for anyplayer and passed in
+				if (gO.GetComponent<Hex>().getHexOwner().Equals(player)) 
                     return true;
             }
         }
@@ -193,8 +297,13 @@ public class Hex : MonoBehaviour {
     }
 
     //Method to change the sprite of the hex
-    public void changeHexSprite(Sprite s)
+    
+	public void changeHexSprite(Sprite s)
     {
         this.GetComponent<SpriteRenderer>().sprite = s;
     }
+
+	public Sprite getSprite(){
+		return standard;
+	}
 }

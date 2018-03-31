@@ -121,8 +121,8 @@ public class Player : NetworkBehaviour{
         }
     }
 
-
 	//TODO: Multiplayer
+	//Capture a Tile
     public void captureTile(CapturableTile tile){
         totalTileIncome += tile.getHex().getTileIncome();
         totalTilesOwned += 1;
@@ -130,6 +130,7 @@ public class Player : NetworkBehaviour{
     }
 
 	//TODO: Multiplayer
+	//Lose a Tile
     public void removeTile(CapturableTile tile)
     {
         totalTileIncome -= tile.getHex().getTileIncome();

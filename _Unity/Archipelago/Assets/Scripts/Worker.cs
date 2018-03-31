@@ -12,8 +12,14 @@ public class Worker : Unit
         float step = unitSpeed * Time.deltaTime;
         //Move it's position by amount worked out above
         transform.position = Vector3.MoveTowards(transform.position, getDestinationCoord(), step);
-        //If reached destination, add it to the hex and remove the gameobject
-        if (transform.position.Equals(getDestinationCoord())){
+
+		//The hex the worker is standing on
+		GameObject h = FindObjectOfType<HexGrid>().getHex(transform.position);
+		//Calls to check if a trap is on the hex
+		unitController.checkTrap (h, this.gameObject);
+
+		//If reached destination, add it to the hex and remove the gameobject
+		if (transform.position.Equals(getDestinationCoord())) {
 			unitController.addWorkers(1, getDestinationHex());
             Destroy(gameObject);
         }

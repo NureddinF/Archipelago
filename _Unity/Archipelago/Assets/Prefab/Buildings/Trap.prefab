@@ -9,30 +9,30 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1992719766369958}
+  m_RootGameObject: {fileID: 1083414442182258}
   m_IsPrefabParent: 1
---- !u!1 &1992719766369958
+--- !u!1 &1083414442182258
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4173346898743638}
-  - component: {fileID: 114166864194491410}
+  - component: {fileID: 4813204213354252}
+  - component: {fileID: 114031241436927896}
   m_Layer: 0
-  m_Name: Farm
+  m_Name: Trap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4173346898743638
+  m_IsActive: 0
+--- !u!4 &4813204213354252
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1992719766369958}
+  m_GameObject: {fileID: 1083414442182258}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -40,12 +40,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114166864194491410
+--- !u!114 &114031241436927896
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1992719766369958}
+  m_GameObject: {fileID: 1083414442182258}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f19a68ac1239bc140af55bcc27ff86c2, type: 3}
@@ -53,12 +53,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cost: 3
   tileIncomeAfterBuild: 1
+  tilesAssociatedWith: 06000000
   constructionTime: 5
-  tilesAssociatedWith: 00000000
-  totalBuildTime: 10
   buildSpeedPerWorker: 1
-  menuIconSprite: {fileID: 21300000, guid: 21ae4043538274b0ab7d1749d3df52ef, type: 3}
-  buildingSprite: {fileID: 21300000, guid: e4dff83303b374637a28515bfa2ccd60, type: 3}
-  constructionSprite: {fileID: 21300000, guid: f0253c74e9daf4c39ac382cea00659ac, type: 3}
+  menuIconSprite: {fileID: 21300000, guid: 8a56a9276cbe1486e85f7f404ec42e3f, type: 3}
+  buildingSprite: {fileID: 21300000, guid: 8a56a9276cbe1486e85f7f404ec42e3f, type: 3}
+  constructionSprite: {fileID: 21300000, guid: a73a253afb5804348875cea91ef24140, type: 3}
   maxNumberOfAssignedWorkers: 5
   increasedIncomePerWorker: 0.5

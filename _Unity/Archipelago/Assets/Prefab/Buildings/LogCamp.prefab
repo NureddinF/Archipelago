@@ -57,8 +57,8 @@ MonoBehaviour:
   tilesAssociatedWith: 02000000
   totalBuildTime: 10
   buildSpeedPerWorker: 1
-  menuIconSprite: {fileID: 21300000, guid: 5777f63745de54024adfe5533251d539, type: 3}
-  buildingSprite: {fileID: 21300000, guid: 5777f63745de54024adfe5533251d539, type: 3}
-  constructionSprite: {fileID: 21300000, guid: a73a253afb5804348875cea91ef24140, type: 3}
+  menuIconSprite: {fileID: 21300000, guid: 21ae4043538274b0ab7d1749d3df52ef, type: 3}
+  buildingSprite: {fileID: 21300000, guid: cb75bfbf44f78473ab3603321c4c52f4, type: 3}
+  constructionSprite: {fileID: 21300000, guid: f0253c74e9daf4c39ac382cea00659ac, type: 3}
   maxNumberOfAssignedWorkers: 5
   increasedIncomePerWorker: 0.5

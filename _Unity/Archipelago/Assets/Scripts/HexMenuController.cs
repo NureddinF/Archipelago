@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 
 //Class to control the hex menu
-public class HexMenuController : MonoBehaviour
-{
+public class HexMenuController : MonoBehaviour {
     //Parameters, 
     public GameObject hexMenu;
     private Text tileType;
@@ -23,6 +22,7 @@ public class HexMenuController : MonoBehaviour
     private void Start(){
 
 		hexMenu = GameObject.Find("Canvas").transform.Find("HexMenuBar").gameObject;
+
         //Use the hexMenu gameobject to find all it's individual UI elements.
         tileType = hexMenu.transform.Find("TileType").gameObject.GetComponent<Text>();
         tileStage = hexMenu.transform.Find("TileStage").gameObject.GetComponent<Text>();
@@ -36,22 +36,20 @@ public class HexMenuController : MonoBehaviour
     }
 
     //Method to return the currently selected hex
-    public Hex getSelectedHex()
-    {
+    public Hex getSelectedHex() {
         return selectedHex;
     }
 
     //Method to set the currently selected hex
-    public void setSelectedHex(Hex h)
-    {
+    public void setSelectedHex(Hex h) {
+		//Get the id of the player
+		Player.PlayerId pid = GetComponent<Player> ().playerId;
         //If the currently selected hex is same as clicked on, deselect the hex
-        if (selectedHex != null && selectedHex.Equals(h))
-        {
+        if (selectedHex != null && selectedHex.Equals(h)) {
             deselectHex();
         }
         //Else select the hex
-        else
-        {
+        else {
             selectedHex = h;
             //Set the hex menu parameteres to the hex's values 
             tileType.text = h.getTileType().ToString();
@@ -76,8 +74,8 @@ public class HexMenuController : MonoBehaviour
             }
 
             tileImage.sprite = h.GetComponent<SpriteRenderer>().sprite;
-            tileWorkerCount.text = h.getNumOfWorkersOnHex().ToString();
-            tileWarriorCount.text = h.getNumOfWarriorsOnHex().ToString();
+			tileWorkerCount.text = h.getNumOfWorkersOnHex(pid).ToString();
+            tileWarriorCount.text = h.getNumOfWarriorsOnHex(pid).ToString();
 
             setTileActions();
 
@@ -86,8 +84,7 @@ public class HexMenuController : MonoBehaviour
     }
 
     //Method to deselect a hex
-    public void deselectHex()
-    {
+    public void deselectHex() {
         hideHexMenu();
         selectedHex = null;
     }
@@ -97,32 +94,31 @@ public class HexMenuController : MonoBehaviour
     }
 
     //Method to move a worker to the selected hex
-    public void moveWorkerToSelectedHex()
-    {
-        if (selectedHex != null)
-        {
+    public void moveWorkerToSelectedHex() {
+		//Get the id of the player
+		Player.PlayerId pid = GetComponent<Player> ().playerId;
+        if (selectedHex != null) {
             gameObject.GetComponent<UnitController>().moveClosestAvailableWorker(selectedHex);
-            tileWorkerCount.text = selectedHex.getNumOfWorkersOnHex().ToString();
+            tileWorkerCount.text = selectedHex.getNumOfWorkersOnHex(pid).ToString();
         }
         else
             Debug.Log("No hex selected to move a worker unit to");
     }
 
     //Method to move a warrior to the selected hex
-    public void moveWarriorToSelectedHex()
-    {
-        if (selectedHex != null)
-        {
+    public void moveWarriorToSelectedHex() {
+		//Get the id of the player
+		Player.PlayerId pid = GetComponent<Player> ().playerId;
+        if (selectedHex != null) {
             gameObject.GetComponent<UnitController>().moveClosestAvailableWarrior(selectedHex);
-            tileWarriorCount.text = selectedHex.getNumOfWarriorsOnHex().ToString();
+            tileWarriorCount.text = selectedHex.getNumOfWarriorsOnHex(pid).ToString();
         }
         else
             Debug.Log("No hex selected to move a warrior unit to");
     }
 
     //Refresh the ui values, useful for when the hex is still selected but changed values, e.g moved unit there, built something etc.
-    public void refreshUIValues()
-    {
+    public void refreshUIValues() {
         if(selectedHex != null)
         {
             //Store current selected hex, deselect hex then reselect hex. This way on refresh if on same hex the menu wont hide itself
@@ -134,8 +130,7 @@ public class HexMenuController : MonoBehaviour
     }
 
     //Set the tile actions part of the hex menu
-    private void setTileActions()
-    {
+    private void setTileActions() {
         //Get rid of any exisitng items for the action box
         foreach (Transform child in tileActionBox.transform)
         {
