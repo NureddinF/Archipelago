@@ -24,6 +24,13 @@ public class Hex : MonoBehaviour {
     //Store the hex's sprites
     public Sprite standard;
 
+    //Store the Image component of the hex status icon
+    private Image hexStatusIcon;
+
+    //Store the Image components of the hex construction progress bar
+    private Image hexConstructionBarBG;
+    private Image hexConstructionBarFill;
+
     //Store the building on the hex, null if not one
     private Building building;
 
@@ -48,12 +55,61 @@ public class Hex : MonoBehaviour {
 		blueWarriors = 0;
 		blueWorkers = 0;
 
+        //If not a water tile, since doesn't hold the canvas object or have interactibility
+        if (this.getTileType() != HexGrid.TileType.WATER)
+        {
+            //Connect the respective image parameters to their child hex 'Image' components
+            hexStatusIcon = gameObject.transform.Find("Canvas/tileStatusIcon").GetComponent<Image>();
+            hexConstructionBarBG = gameObject.transform.Find("Canvas/tileConstructionBar").GetComponent<Image>();
+            hexConstructionBarFill = gameObject.transform.Find("Canvas/tileConstructionBar/Fill").GetComponent<Image>();
+        }
+
         //Set it's current sprite to the standard hex sprite
         changeHexSprite(standard);
     }
 
+    //Calls once on every frame
+    void Update()
+    {   
+        //If there is a building on the hex and it isn't yet constructed
+        if (building != null && !building.getIsConstructed())
+        {
+            //Progress the buildings construction
+            building.progressConstruction();
+            hexConstructionBarFill.GetComponent<RectTransform>().localScale = new Vector2(building.getCurrentBuildTime() / building.getTotalBuildTime(), 1);
+        }
+        
+    }
+
+    public void enableConstructionBar()
+    {
+        hexConstructionBarBG.enabled = true;
+        hexConstructionBarFill.enabled = true;
+    }
+
+    public void disableConstructionBar()
+    {
+        hexConstructionBarBG.enabled = false;
+        hexConstructionBarFill.enabled = false;
+    }
+
+    public void enableStatusIcon()
+    {
+        hexStatusIcon.enabled = true;
+    }
+
+    public void disableStatusIcon()
+    {
+        hexStatusIcon.enabled = false;
+    }
+
+    public void setStatusIcon(Sprite s)
+    {
+        hexStatusIcon.sprite = s;
+    }
+
     //Getters and setters
-	//Set X
+    //Set X
     public void setX(int x) { 
 		this.x = x; 
 	}
@@ -106,6 +162,7 @@ public class Hex : MonoBehaviour {
 	//Set Building
     public void setBuilding(Building b) {
         this.building = b;
+        //Associate this hex with the building
         b.setHexAssociatedWith(this);
     }
 

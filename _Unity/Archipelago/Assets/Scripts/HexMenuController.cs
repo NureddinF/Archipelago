@@ -74,7 +74,7 @@ public class HexMenuController : MonoBehaviour {
 			tileWorkerCount.text = h.getNumOfWorkersOnHex(pid).ToString();
             tileWarriorCount.text = h.getNumOfWarriorsOnHex(pid).ToString();
 
-            setTileActions();
+            setTileActions();            
 
             hexMenu.SetActive(true);
         }
@@ -152,13 +152,12 @@ public class HexMenuController : MonoBehaviour {
 
             //Floats to store the height and width of the child object, if equal 1:1 ratio
             float childWidth = percentageWidth * parentWidth;
-            float childHeight = childWidth;
+            float childHeight = 0.65f * childWidth;
 
             // The distance between each menu items as well as the initial offset from top of action box
             float yOffset = 10f;
-            //If the selected hex does not have a building
-            if (selectedHex.getBuilding() == null)
-            {
+            //If the selected hex does not have a building and player owns the hex, then display build options
+            if (selectedHex.getBuilding() == null &&selectedHex.getHexOwner().Equals(GetComponent<Player>().playerId)){
                 //Get a list of possible building types that can be built on this hex
                 List<Building> buildingOptions = gameObject.GetComponent<BuildingController>().getListOfBuildingByTileType(selectedHex.getTileType());
 
@@ -183,6 +182,7 @@ public class HexMenuController : MonoBehaviour {
                     go.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
                     go.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 1f);
                     go.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 1f);
+                    
                     go.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth, childHeight);
                     go.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -count * childHeight * go.GetComponent<RectTransform>().localScale.x - yOffset);
                     //Set its displayed sprite
@@ -199,7 +199,12 @@ public class HexMenuController : MonoBehaviour {
     //Method for the tileaction, when selecting a building
     void tileActionBuild(Building b)
     {
-        selectedHex.setBuilding(b);
+        //Instantiate a new Building object for the building.
+        //Allows it to hold it's own values, rather than statically for all buildings of same type
+        Building newBuilding = (Building)Instantiate(b);
+        //Set the hex's building as this new building
+        selectedHex.setBuilding(newBuilding);
+        //Refresh hex menu's values to display these changes
         refreshUIValues();
     }
 }

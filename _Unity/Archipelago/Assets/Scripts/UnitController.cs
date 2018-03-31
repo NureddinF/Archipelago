@@ -35,24 +35,24 @@ public class UnitController : MonoBehaviour {
 		if(Player.PlayerId.P1 == pid){
 			//Initialize number of warriors, only if initial amount specified > 0 
 			if (initialNumOfWarriors > 0)
-				//Add initial location and amount of warriors into the correct dict
+				//Add initial location and amount of warriors into the correct list
 				addWarriors(initialNumOfWarriors, GameObject.Find("Hex Grid").GetComponent<HexGrid>().getPlayer1Base());
 
 			//Initialize number of warriors, only if initial amount specified > 0 
 			if (initialNumOfWorkers > 0)
-				//Add initial location and amount of workers into the correct dict
+				//Add initial location and amount of workers into the correct list
 				addWorkers(initialNumOfWorkers, GameObject.Find("Hex Grid").GetComponent<HexGrid>().getPlayer1Base());
 		}
 		//If Player 2
 		else if(Player.PlayerId.P2 == pid) {
 			//Initialize number of warriors, only if initial amount specified > 0 
 			if (initialNumOfWarriors > 0)
-				//Add initial location and amount of warriors into the correct dict
+				//Add initial location and amount of warriors into the correct list
 				addWarriors(initialNumOfWarriors, GameObject.Find("Hex Grid").GetComponent<HexGrid>().getPlayer2Base());
 
 			//Initialize number of warriors, only if initial amount specified > 0 
 			if (initialNumOfWorkers > 0)
-				//Add initial location and amount of workers into the correct dict
+				//Add initial location and amount of workers into the correct list
 				addWorkers(initialNumOfWorkers, GameObject.Find("Hex Grid").GetComponent<HexGrid>().getPlayer2Base());
 		}
     }
@@ -66,7 +66,7 @@ public class UnitController : MonoBehaviour {
         if (!warriorLocations.Contains(h))
             warriorLocations.Add(h);
 		//get component of player to access id
-        h.gameObject.GetComponent<CapturableTile>().addUnits(amount, pid); //Hard coded P1 -- TODO --
+        h.gameObject.GetComponent<CapturableTile>().addUnits(amount, pid);
     }
 
     //Method to remove warrior(s) given a specified amount and a hex
@@ -317,7 +317,7 @@ public class UnitController : MonoBehaviour {
 	public void killUnit(GameObject unit, Hex h){
 		//sets the sprite to unactive
 		unit.SetActive (false);
-//		Destroy (w.gameObject);
+        //Destroy (w.gameObject);
 		//changes the hex sprite back to the original sprite thats under the trap(removes the trap)
 		h.changeHexSprite (h.getSprite ());
 		//removes the building(trap)
