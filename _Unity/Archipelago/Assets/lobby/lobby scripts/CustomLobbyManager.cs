@@ -11,6 +11,8 @@ public class CustomLobbyManager : NetworkLobbyManager {
 	public bool isDebug = false;
 	public bool isHost = false;
 	public bool isSinglePlayer = false;
+	private bool sceneLoadedForLocalPlayer = false;
+	private bool gameplayerPlayerObjectInitialised = false;
 
 	// UI elements
 	public GameObject searchUi;
@@ -22,10 +24,6 @@ public class CustomLobbyManager : NetworkLobbyManager {
 	string ipStr = "";
 	string joiningStr = "";
 	private NetworkClient netClient = null;
-
-	// Player Objects
-	CustomLobbyPlayer lobbyPlayerScript;
-	PlayerConnectionScript gamePlayerScript;
 
 	// Use this for initialization
 	void Start () {
@@ -149,11 +147,29 @@ public class CustomLobbyManager : NetworkLobbyManager {
 
 	public override void OnLobbyClientSceneChanged (NetworkConnection conn){
 		base.OnLobbyClientSceneChanged (conn);
-		Debug.Log ("NetworkLobbyManager: OnLobbyClientSceneChanged:");
-
-		gamePlayerScript.initGameplayerPlayer ();
+		Debug.Log ("NetworkLobbyManager: OnLobbyClientSceneChanged");
+		sceneLoadedForLocalPlayer = true;
+		initGameplayPlayerObject ();
 	}
 
+	public void initGameplayPlayerObject(){
+		if (!sceneLoadedForLocalPlayer || gameplayerPlayerObjectInitialised) {
+			// scene hasn't loaded yet, wiat for that OR
+			// already spawned player object for the local player, don't do it again
+			return;
+		}
+
+		// Cycle through player objects until we find the local player
+		PlayerConnectionScript[] playerConnectionObjects = FindObjectsOfType<PlayerConnectionScript>();
+		foreach (PlayerConnectionScript playerConnectionObject in playerConnectionObjects) {
+			if (playerConnectionObject.isLocalPlayer) {
+				// Found local player, spawn gameplay player object
+				gameplayerPlayerObjectInitialised = true;
+				playerConnectionObject.initGameplayerPlayer ();
+				return;
+			}
+		}
+	}
 
 	public override void OnLobbyServerPlayersReady (){
 		Debug.Log ("OnLobbyServerPlayersReady");
@@ -204,13 +220,14 @@ public class CustomLobbyManager : NetworkLobbyManager {
 
 	// Called when gameplay scene is loaded. Used to initialize Player Gameplayobject with parameters from the lobby
 	public override bool OnLobbyServerSceneLoadedForPlayer(GameObject lobbyPlayer, GameObject gamePlayer){
+		bool baseRet = base.OnLobbyServerSceneLoadedForPlayer (lobbyPlayer, gamePlayer);
 		Debug.Log ("NetworkLobbyManager: OnLobbyServerSceneLoadedForPlayer");
-		gamePlayerScript = gamePlayer.GetComponent<PlayerConnectionScript> ();
-		lobbyPlayerScript = lobbyPlayer.GetComponent<CustomLobbyPlayer> ();
+		PlayerConnectionScript gamePlayerScript = gamePlayer.GetComponent<PlayerConnectionScript> ();
+		CustomLobbyPlayer lobbyPlayerScript = lobbyPlayer.GetComponent<CustomLobbyPlayer> ();
 
 		gamePlayerScript.pid = lobbyPlayerScript.pid;
 
-		return base.OnLobbyServerSceneLoadedForPlayer (lobbyPlayer, gamePlayer);
+		return baseRet;
 	}
 	
 }

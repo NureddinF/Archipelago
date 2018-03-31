@@ -71,7 +71,6 @@ public class CustomLobbyPlayer : NetworkLobbyPlayer {
 			Canvas c = FindObjectOfType<Canvas> ();
 			Transform lui = c.transform.Find ("LobbyUi");
 			Transform correctParent = lui.Find ("ConnectionStatus");
-			Debug.Log ("CustomLobbyPlayer: initLobbyPlayer: parent: " + correctParent == null ? "NULL" : correctParent.name);
 			playerUI = Instantiate (PlayerUiPrefab, correctParent);
 		}
 		Toggle toggle = playerUI.GetComponentInChildren<Toggle> ();
@@ -110,8 +109,10 @@ public class CustomLobbyPlayer : NetworkLobbyPlayer {
 		if (playerUI == null) {
 			initUi ();
 		}
-		Text[] playerUiElements = playerUI.GetComponentsInChildren<Text> ();
-		playerUiElements [1].text = pid.ToString();
+		if (playerUI != null){
+			Text[] playerUiElements = playerUI.GetComponentsInChildren<Text> ();
+			playerUiElements [1].text = pid.ToString();
+		}
 
 	}
 
@@ -125,9 +126,10 @@ public class CustomLobbyPlayer : NetworkLobbyPlayer {
 		if (playerUI == null) {
 			initUi ();
 		}
-		Text[] playerUiElements = playerUI.GetComponentsInChildren<Text> ();
-		playerUiElements [0].text = username;
-
+		if (playerUI != null) {
+			Text[] playerUiElements = playerUI.GetComponentsInChildren<Text> ();
+			playerUiElements [0].text = username;
+		}
 	}
 
 	// Sync UI for player IP address
@@ -140,17 +142,14 @@ public class CustomLobbyPlayer : NetworkLobbyPlayer {
 		if (playerUI == null) {
 			initUi ();
 		}
-		Text[] playerUiElements = playerUI.GetComponentsInChildren<Text> ();
-		playerUiElements [2].text = ipAddress;
-
+		if (playerUI != null) {
+			Text[] playerUiElements = playerUI.GetComponentsInChildren<Text> ();
+			playerUiElements [2].text = ipAddress;
+		}
 	}
 
 	// If a player UI isn't initialized when the parameters get updated create one
 	private void initUi(){
-		if(!isLocalPlayer){
-			//return;
-		}
-
 
 		Canvas canvas = FindObjectOfType<Canvas> ();
 		if(canvas == null){
@@ -162,10 +161,12 @@ public class CustomLobbyPlayer : NetworkLobbyPlayer {
 			return;
 		}
 		playerUI = Instantiate (PlayerUiPrefab, lobbyPlayerUI.transform);
-		
-		Toggle toggle = playerUI.GetComponentInChildren<Toggle>();
-		toggle.onValueChanged.AddListener (onReadyChecked);
-		toggle.interactable = true;
+
+		if (isLocalPlayer) {
+			Toggle toggle = playerUI.GetComponentInChildren<Toggle> ();
+			toggle.onValueChanged.AddListener (onReadyChecked);
+			toggle.interactable = true;
+		}
 	}
 
 

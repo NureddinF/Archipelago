@@ -1959,7 +1959,7 @@ MonoBehaviour:
   lobbySlots: []
   isDebug: 1
   isHost: 1
-  isSinglePlayer: 1
+  isSinglePlayer: 0
   searchUi: {fileID: 0}
   lobbyUi: {fileID: 0}
   JoiningText: {fileID: 0}

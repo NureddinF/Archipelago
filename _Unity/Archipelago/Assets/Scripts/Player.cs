@@ -10,12 +10,12 @@ public class Player : NetworkBehaviour{
 	public static bool isDisabled = false;
     // Identify who this player is
     public enum PlayerId { P1, P2, NEUTRAL };
-    public PlayerId playerId;
+	[SyncVar] public PlayerId playerId;
 
     // Player parameters
-    public float rateMultiplier;
-    public int baseIncome;
-    public int timeFrame; // how long between discrete burst of money
+	public float rateMultiplier;
+	public int baseIncome;
+	public int timeFrame; // how long between discrete burst of money
 	public float moneyToWin = 100;
 
     //The parent gameobject for main UI bar
@@ -33,18 +33,14 @@ public class Player : NetworkBehaviour{
     private float startTime;
     private float totalTileIncome;
     private float currentMoney;
-    private int totalTilesOwned;
+	[SyncVar] private int totalTilesOwned;
 	private bool endedGame = false;
 	private bool isInitialised = false;
 	
 	private WinPanel winPanel; //calls on winPanel object
 
-	// Reference to the map so Player can access tiles
-    public HexGrid map;
-
     // Use this for initialization
     void Start(){
-
         //Initialize Variables
         currentMoney = 0;
         startTime = Time.time;
@@ -155,13 +151,11 @@ public class Player : NetworkBehaviour{
 	//initialize the player ID and starting income
 	[Command]
 	public void CmdSetPlayerId(PlayerId pid){
+		Debug.Log ("Player: CmdSetPlayerId");
 		this.playerId = pid;
 
-		// Find components in scene
-		map = FindObjectOfType<HexGrid> ();
-
 		// Make sure income from tiles owned at start of game is properly accounted for
-		map.initPlayerTiles(pid);
+		FindObjectOfType<HexGrid> ().initPlayerTiles(pid);
 	}
 
 	//////////////////////////////////// RPCs ///////////////////////////////////////
@@ -169,8 +163,9 @@ public class Player : NetworkBehaviour{
 	// Use this to initialize UI things after object is spawned on network
 	[ClientRpc]
 	public void RpcStartWithAuthority(){
+		Debug.Log ("Player: RpcStartWithAuthority");
 		if (!hasAuthority) {
-			Debug.Log ("Player: No authority");
+			Debug.Log ("Player: RpcStartWithAuthority: No authority");
 			return;
 		}
 
@@ -186,7 +181,7 @@ public class Player : NetworkBehaviour{
 
 		// Initalize UI values
 		incomeText.text = "Hello";
-		rateText.text = "+ 0/sec";
+		rateText.text = "+ 0/sec";	
 		tilesOwnedText.text = "0";
 		numOfWarriorsOwned.text = gameObject.GetComponent<UnitController>().initialNumOfWarriors.ToString();
 		numOfWorkersOwned.text = gameObject.GetComponent<UnitController>().initialNumOfWorkers.ToString();

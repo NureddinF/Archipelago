@@ -12,6 +12,10 @@ public class PlayerConnectionScript : NetworkBehaviour{
 
 	// Use this for initialization
 	void Start (){
+		CustomLobbyManager netMan = FindObjectOfType<CustomLobbyManager> ();
+		if (isLocalPlayer) {
+			netMan.initGameplayPlayerObject ();
+		}
 		Debug.Log("Started player connection script");
 	}
 	
@@ -23,7 +27,10 @@ public class PlayerConnectionScript : NetworkBehaviour{
 
 	//////////////////// Custom Methods ///////////////////////////////////////////
 	public void initGameplayerPlayer(){
+		// wrap CmdInitGameplayObject to only allow public acces for local player
+		Debug.Log("PlayerConnectionScript: initGameplayerPlayer");
 		if (isLocalPlayer) {
+			Debug.Log("PlayerConnectionScript: initGameplayerPlayer: isLocalPlayer");
 			CmdInitGameplayObject ();
 		}
 	}

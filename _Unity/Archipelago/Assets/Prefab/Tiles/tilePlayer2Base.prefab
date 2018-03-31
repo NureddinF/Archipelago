@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 212218913899025482}
   - component: {fileID: 60861945205530046}
   - component: {fileID: 114313403547215550}
+  - component: {fileID: 114968679376804122}
   m_Layer: 0
   m_Name: tilePlayer2Base
   m_TagString: Untagged
@@ -87,7 +88,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hexOwner: 1
   standard: {fileID: 21300000, guid: ab5bed865f6914ff6848f6c9ac9c623b, type: 3}
-  idleUnits: {fileID: 21300000, guid: ab5bed865f6914ff6848f6c9ac9c623b, type: 3}
+--- !u!114 &114968679376804122
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1308510330598628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09f9e496d46bc76408dd2806fc7ab1a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  p1CaptureBorder: {fileID: 0}
+  p2CaptureBorder: {fileID: 0}
+  p1CaptureTile: {fileID: 0}
+  p2CaptureTile: {fileID: 0}
+  captureSpeedPerUnit: 1
+  neutralResetSpeed: 0.25
+  totalCaptureCost: 10
 --- !u!212 &212218913899025482
 SpriteRenderer:
   m_ObjectHideFlags: 1
