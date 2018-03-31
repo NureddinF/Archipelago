@@ -11,6 +11,7 @@ public class Unit : MonoBehaviour {
     private Hex initialHex;
     private Vector3 currentCoord;
     private Vector3 destinationCoord;
+	public Player.PlayerId id;
 
     //On script start, set it's position and destination vector
 	void Start () {
@@ -23,6 +24,12 @@ public class Unit : MonoBehaviour {
     public void setDestinationHex(Hex h) { destinationHex = h; }
     public Hex getDestinationHex() { return destinationHex; }
     public Vector3 getDestinationCoord() { return destinationCoord; }
+	public void setPlayerId(Player.PlayerId id){
+		this.id = id;
+	}
+	public Player.PlayerId getPlayerId(){
+		return id;
+	}
 }
 
 

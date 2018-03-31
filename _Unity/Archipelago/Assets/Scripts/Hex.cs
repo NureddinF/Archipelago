@@ -193,8 +193,13 @@ public class Hex : MonoBehaviour {
     }
 
     //Method to change the sprite of the hex
-    public void changeHexSprite(Sprite s)
+    
+	public void changeHexSprite(Sprite s)
     {
         this.GetComponent<SpriteRenderer>().sprite = s;
     }
+
+	public Sprite getSprite(){
+		return standard;
+	}
 }

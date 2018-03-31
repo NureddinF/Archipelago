@@ -81,6 +81,7 @@ public class UnitController : MonoBehaviour {
 
         GameObject unitToMove;
         unitToMove = (GameObject)Instantiate(warriorPrefab);
+		unitToMove.GetComponent<Unit> ().setPlayerId (GetComponent<Player> ().playerId);
 
         unitToMove.GetComponent<Unit>().setInitialHex(from);
         unitToMove.GetComponent<Unit>().setDestinationHex(to);
@@ -129,8 +130,9 @@ public class UnitController : MonoBehaviour {
 
         GameObject unitToMove;
         unitToMove = (GameObject)Instantiate(workerPrefab);
-
-        unitToMove.GetComponent<Unit>().setInitialHex(from);
+		unitToMove.GetComponent<Unit> ().setPlayerId (GetComponent<Player> ().playerId);
+       
+		unitToMove.GetComponent<Unit>().setInitialHex(from);
         unitToMove.GetComponent<Unit>().setDestinationHex(to);
     }
 
@@ -258,5 +260,49 @@ public class UnitController : MonoBehaviour {
 
         return total;
     }
+	//Checks if a trap is placed on the hex where a gameobject is standing
+	public void checkTrap(GameObject hex, GameObject player){
+		Warrior warrior = null;
+		Worker worker = null;
+		//The hex the gameobject is on
+		Hex playerOn = hex.GetComponentInChildren<Hex> ();
+		//Gets the building thats on the hex
+		Building buildOnHex = playerOn.getBuilding ();
 
+		if (buildOnHex != null) {
+			List<HexGrid.TileType> tileTypes = buildOnHex.getTileTypesAssociatedWith ();
+			Debug.Log(player.name);
+			//Checks if its a warrior
+			if (player.name == "Warrior(Clone)") {
+				//gets warrior
+				warrior = player.GetComponent<Warrior> ();
+				//Checks in the buildingis associated to ALL, which is a trap building, and the player ids of the hex and player do not match
+				if (tileTypes.Contains(HexGrid.TileType.ALL) && !warrior.getPlayerId().Equals(playerOn.getHexOwner())) {
+					//calls in the kill warrior method
+					killUnit (warrior.gameObject, playerOn);
+				}
+				//other wise its a worker
+			} else {
+				//gets the worker
+				worker = player.GetComponent<Worker> ();
+				//Checks in the buildingis associated to ALL, which is a trap building, and the player ids of the hex and player do not match
+				if (tileTypes.Contains(HexGrid.TileType.ALL) && !worker.getPlayerId().Equals(playerOn.getHexOwner())) {
+					//calls in the kill warrior method
+					killUnit (worker.gameObject, playerOn);
+				}
+			}
+		}
+
+	}
+	//Takes in the gameobject and the hex it is standing on
+	public void killUnit(GameObject unit, Hex h){
+		//sets the sprite to unactive
+		unit.SetActive (false);
+//		Destroy (w.gameObject);
+		//changes the hex sprite back to the original sprite thats under the trap(removes the trap)
+		h.changeHexSprite (h.getSprite ());
+		//removes the building(trap)
+		h.setBuilding (null);
+
+	}
 }
