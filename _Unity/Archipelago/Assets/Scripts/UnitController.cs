@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class UnitController : MonoBehaviour {
 
+	public GameObject redWarrior;
+	public GameObject redWorker;
+	public GameObject blueWarrior;
+	public GameObject blueWorker;
     public GameObject workerPrefab;
     public GameObject warriorPrefab;
 
@@ -17,54 +21,72 @@ public class UnitController : MonoBehaviour {
     private List<Hex> workerLocations;
     private List<Hex> warriorLocations;
 
-    void Start()
-    {        
+    void Start() {        
         //Initialize the dictionarys
         workerLocations = new List<Hex>();
         warriorLocations = new List<Hex>();
     }
     
-    public void initializeUnits()
-    {
-        //Initialize number of warriors, only if initial amount specified > 0 
-        if (initialNumOfWarriors > 0)
-            //Add initial location and amount of warriors into the correct dict
-            addWarriors(initialNumOfWarriors, GameObject.Find("Hex Grid").GetComponent<HexGrid>().getPlayer1Base());
+	//Adds units to the player's base at the start of the game
+    public void initializeUnits() {
+		//Get the id of the player
+		Player.PlayerId pid = GetComponent<Player> ().playerId;
+		//If Player 1
+		if(Player.PlayerId.P1 == pid){
+			//Initialize number of warriors, only if initial amount specified > 0 
+			if (initialNumOfWarriors > 0)
+				//Add initial location and amount of warriors into the correct dict
+				addWarriors(initialNumOfWarriors, GameObject.Find("Hex Grid").GetComponent<HexGrid>().getPlayer1Base());
 
-        //Initialize number of warriors, only if initial amount specified > 0 
-        if (initialNumOfWorkers > 0)
-            //Add initial location and amount of workers into the correct dict
-            addWorkers(initialNumOfWorkers, GameObject.Find("Hex Grid").GetComponent<HexGrid>().getPlayer1Base());
+			//Initialize number of warriors, only if initial amount specified > 0 
+			if (initialNumOfWorkers > 0)
+				//Add initial location and amount of workers into the correct dict
+				addWorkers(initialNumOfWorkers, GameObject.Find("Hex Grid").GetComponent<HexGrid>().getPlayer1Base());
+		}
+		//If Player 2
+		else if(Player.PlayerId.P2 == pid) {
+			//Initialize number of warriors, only if initial amount specified > 0 
+			if (initialNumOfWarriors > 0)
+				//Add initial location and amount of warriors into the correct dict
+				addWarriors(initialNumOfWarriors, GameObject.Find("Hex Grid").GetComponent<HexGrid>().getPlayer2Base());
+
+			//Initialize number of warriors, only if initial amount specified > 0 
+			if (initialNumOfWorkers > 0)
+				//Add initial location and amount of workers into the correct dict
+				addWorkers(initialNumOfWorkers, GameObject.Find("Hex Grid").GetComponent<HexGrid>().getPlayer2Base());
+		}
     }
     
     //Method to add new warrior(s) given a specified amount and a hex
     public void addWarriors(int amount, Hex h) {
-
-        h.addWarriorsToHex(amount);
+		//Get the id of the player
+		Player.PlayerId pid = GetComponent<Player> ().playerId;
+        h.addWarriorsToHex(amount, pid);
 
         if (!warriorLocations.Contains(h))
             warriorLocations.Add(h);
-
-        h.gameObject.GetComponent<CapturableTile>().addUnits(amount, Player.PlayerId.P1); //Hard coded P1 -- TODO --
+		//get component of player to access id
+        h.gameObject.GetComponent<CapturableTile>().addUnits(amount, pid); //Hard coded P1 -- TODO --
     }
 
     //Method to remove warrior(s) given a specified amount and a hex
-    public void removeWarriors(int amount, Hex h)
-    {        
+    public void removeWarriors(int amount, Hex h) {
+		//Get the id of the player
+		Player.PlayerId pid = GetComponent<Player> ().playerId;
         if (warriorLocations.Contains(h))
         {
-            int numOfWarriorsOnHex = h.getNumOfWarriorsOnHex();
+			int numOfWarriorsOnHex = h.getNumOfWarriorsOnHex(pid);
 
             if (numOfWarriorsOnHex > amount)
             {
-                h.removeWarriorsFromHex(amount);
-                h.gameObject.GetComponent<CapturableTile>().removeUnits(amount, Player.PlayerId.P1); //Hard coded P1 -- TODO --
+				h.removeWarriorsFromHex(amount, pid);
+                h.gameObject.GetComponent<CapturableTile>().removeUnits(amount, pid); 
             }
             else if(numOfWarriorsOnHex == amount)
             {
-                h.removeWarriorsFromHex(amount);
+                h.removeWarriorsFromHex(amount, pid);
                 warriorLocations.Remove(h);
-                h.gameObject.GetComponent<CapturableTile>().removeUnits(amount, Player.PlayerId.P1); //Hard coded P1 -- TODO --
+				h.gameObject.GetComponent<CapturableTile>().removeUnits(amount, pid);
             }            
             else
                 Debug.Log("There were only " + numOfWarriorsOnHex + " warriors at the specified hex, yet " +
@@ -75,8 +97,7 @@ public class UnitController : MonoBehaviour {
     }
 
     //Method to move warrior(s) using the add remove methods. Removes then adds
-    public void moveWarriors(int amount, Hex from, Hex to)
-    {
+    public void moveWarriors(int amount, Hex from, Hex to) {
         removeWarriors(amount, from);
 
         GameObject unitToMove;
@@ -88,32 +109,31 @@ public class UnitController : MonoBehaviour {
     }
 
     //Method to add new worker(s) given a specified amount and a hex
-    public void addWorkers(int amount, Hex h)
-    {
-        h.addWorkersToHex(amount);
+    public void addWorkers(int amount, Hex h) {
+		//Get the id of the player
+		Player.PlayerId pid = GetComponent<Player> ().playerId;
+		h.addWorkersToHex(amount, pid);
 
         if (!workerLocations.Contains(h))
             workerLocations.Add(h);
-            h.gameObject.GetComponent<CapturableTile>().addUnits(amount, Player.PlayerId.P1); //Hard coded P1 -- TODO --
+            h.gameObject.GetComponent<CapturableTile>().addUnits(amount, pid); 
     }
 
     //Method to remove worker(s) given a specified amount and a hex
-    public void removeWorkers(int amount, Hex h)
-    {
-        if (workerLocations.Contains(h))
-        {
-            int numOfWorkersOnHex = h.getNumOfWorkersOnHex();
+    public void removeWorkers(int amount, Hex h) {
+		//Get the id of the player
+		Player.PlayerId pid = GetComponent<Player> ().playerId;
+        if (workerLocations.Contains(h)) {
+            int numOfWorkersOnHex = h.getNumOfWorkersOnHex(pid);
 
-            if (numOfWorkersOnHex > amount)
-            {
-                h.removeWorkersFromHex(amount);
-                h.gameObject.GetComponent<CapturableTile>().removeUnits(amount, Player.PlayerId.P1); //Hard coded P1 -- TODO --
+            if (numOfWorkersOnHex > amount) {
+				h.removeWorkersFromHex(amount, pid);
+				h.gameObject.GetComponent<CapturableTile>().removeUnits(amount, pid);
             }
-            else if (numOfWorkersOnHex == amount)
-            {
-                h.removeWorkersFromHex(amount);
+            else if (numOfWorkersOnHex == amount) {
+				h.removeWorkersFromHex(amount, pid);
                 workerLocations.Remove(h);
-                h.gameObject.GetComponent<CapturableTile>().removeUnits(amount, Player.PlayerId.P1); //Hard coded P1 -- TODO --
+				h.gameObject.GetComponent<CapturableTile>().removeUnits(amount, pid); 
             }
             else
                 Debug.Log("There were only " + numOfWorkersOnHex + " workers at the specified hex, yet " +
@@ -124,8 +144,7 @@ public class UnitController : MonoBehaviour {
     }
 
     //Method to move worker(s) using the add remove methods. Removes then adds
-    public void moveWorkers(int amount, Hex from, Hex to)
-    {
+    public void moveWorkers(int amount, Hex from, Hex to) {
         removeWorkers(amount, from);
 
         GameObject unitToMove;
@@ -137,8 +156,7 @@ public class UnitController : MonoBehaviour {
     }
 
     //Method to move the closest available worker using the add remove methods. Removes then adds
-    public void moveClosestAvailableWorker(Hex hexTo)
-    {
+    public void moveClosestAvailableWorker(Hex hexTo) {
         //Variables of the x and y coordinate of the destination hex
         int xTo = hexTo.getX();
         int yTo = hexTo.getY();
@@ -188,8 +206,7 @@ public class UnitController : MonoBehaviour {
     }
 
     //Method to move the closest available warrior using the add remove methods. Removes then adds
-    public void moveClosestAvailableWarrior(Hex hexTo)
-    {
+    public void moveClosestAvailableWarrior(Hex hexTo) {
         //Variables of the x and y coordinate of the destination hex
         int xTo = hexTo.getX();
         int yTo = hexTo.getY();
@@ -238,25 +255,27 @@ public class UnitController : MonoBehaviour {
     }
 
     //Method to return total number of warriors
-    public int getTotalNumberOfWarriors()
-    {
+    public int getTotalNumberOfWarriors() {
+		//Get the id of the player
+		Player.PlayerId pid = GetComponent<Player> ().playerId;
         //Int to track running total
         int total = 0;
         //Iterate through the warrior locations and add up all the counts
         foreach (Hex h in warriorLocations)
-            total += h.getNumOfWarriorsOnHex();
+			total += h.getNumOfWarriorsOnHex(pid);
 
         return total;
     }
 
     //Method to return total number of workers
-    public int getTotalNumberOfWorkers()
-    {
+    public int getTotalNumberOfWorkers() {
+		//Get the id of the player
+		Player.PlayerId pid = GetComponent<Player> ().playerId;
         //Int to track running total
         int total = 0;
         //Iterate through the worker locations and add up all the counts
         foreach (Hex h in workerLocations)
-            total += h.getNumOfWorkersOnHex();
+			total += h.getNumOfWorkersOnHex(pid);
 
         return total;
     }

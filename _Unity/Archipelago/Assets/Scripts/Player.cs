@@ -111,6 +111,7 @@ public class Player : MonoBehaviour
         rateText.text = "+ " + increaseAmt + "/" + timeFrame + "secs";
     }
 
+	//Capture a Tile
     public void captureTile(CapturableTile tile)
     {
         totalTileIncome += tile.getHex().getTileIncome();
@@ -118,6 +119,7 @@ public class Player : MonoBehaviour
         this.GetComponent<HexMenuController>().refreshUIValues();
     }
 
+	//Lose a Tile
     public void removeTile(CapturableTile tile)
     {
         totalTileIncome -= tile.getHex().getTileIncome();

@@ -37,7 +37,9 @@ public class Building : MonoBehaviour
             progressConstruction();
         } 
     }
-    public Hex getHexAssociatedWith() { return hexAssociatedWith; }
+    public Hex getHexAssociatedWith() { 
+		return hexAssociatedWith; 
+	}
 
     public void setHexAssociatedWith(Hex h) {
         this.hexAssociatedWith = h;
@@ -51,34 +53,58 @@ public class Building : MonoBehaviour
         }
     }
 
-    public Sprite getBuildingSprite() { return buildingSprite; }
+    public Sprite getBuildingSprite() { 
+		return buildingSprite; 
+	}
 
-    public void setBuildingSprite(Sprite s) { buildingSprite = s; }
+    public void setBuildingSprite(Sprite s) { 
+		buildingSprite = s; 
+	}
 
 
 
     //Getters & Setters
-    public float getCost() { return cost; }
+    public float getCost() { 
+		return cost; 
+	}
 
-    public float getTileIncomeAfterBuild() { return tileIncomeAfterBuild; }
+    public float getTileIncomeAfterBuild() { 
+		return tileIncomeAfterBuild; 
+	}
 
-    public float getCurrentTileIncome() { return currentTileIncome; }
+    public float getCurrentTileIncome() { 
+		return currentTileIncome; 
+	}
 
-    public void setCurrentTileIncome(float currentTileIncome) { this.currentTileIncome = currentTileIncome; }
+    public void setCurrentTileIncome(float currentTileIncome) { 
+		this.currentTileIncome = currentTileIncome; 
+	}
 
-    public float getConstructionTime() { return constructionTime; }
+    public float getConstructionTime() { 
+		return constructionTime; 
+	}
 
-    public Sprite getConstructionSprite() { return constructionSprite; }
+    public Sprite getConstructionSprite() { 
+		return constructionSprite; 
+	}
 
-    public List<HexGrid.TileType> getTileTypesAssociatedWith() { return tilesAssociatedWith; }
+    public List<HexGrid.TileType> getTileTypesAssociatedWith() { 
+		return tilesAssociatedWith; 
+	}
 
-    public Sprite getMenuIconSprite() { return menuIconSprite; }
+    public Sprite getMenuIconSprite() { 
+		return menuIconSprite; 
+	}
 
-    public bool getIsConstructed() { return isConstructed; }
+    public bool getIsConstructed() { 
+		return isConstructed; 
+	}
 
-    private void progressConstruction()
-    {
-        currentBuildTime += Time.deltaTime * hexAssociatedWith.getNumOfWorkersOnHex() * buildSpeedPerWorker;
+    private void progressConstruction() {
+		//Get the id of the player
+		Player.PlayerId pid = GetComponent<Player> ().playerId;
+		//Calculate Current Build Time
+        currentBuildTime += Time.deltaTime * hexAssociatedWith.getNumOfWorkersOnHex(pid) * buildSpeedPerWorker;
 
         if(currentBuildTime >= totalBuildTime)
         {
