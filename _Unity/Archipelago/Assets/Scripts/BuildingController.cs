@@ -37,8 +37,7 @@ public class BuildingController : MonoBehaviour
         return false;
     }
 
-    public List<Building> getListOfBuildingByTileType(HexGrid.TileType type)
-    {
+    public List<Building> getListOfBuildingByTileType(HexGrid.TileType type){
         List<Building> result = new List<Building>();
 
         foreach (Building b in allConstructableBuildings)

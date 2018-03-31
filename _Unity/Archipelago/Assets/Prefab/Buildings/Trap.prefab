@@ -53,11 +53,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cost: 3
   tileIncomeAfterBuild: 1
-  tilesAssociatedWith: 06000000
   constructionTime: 5
+  tilesAssociatedWith: 06000000
+  totalBuildTime: 0
   buildSpeedPerWorker: 1
-  menuIconSprite: {fileID: 21300000, guid: 8a56a9276cbe1486e85f7f404ec42e3f, type: 3}
-  buildingSprite: {fileID: 21300000, guid: 8a56a9276cbe1486e85f7f404ec42e3f, type: 3}
-  constructionSprite: {fileID: 21300000, guid: a73a253afb5804348875cea91ef24140, type: 3}
+  menuIconSprite: {fileID: 21300000, guid: 976dd8f8eaa60462ba6a65e4af292957, type: 3}
+  buildingSprite: {fileID: 21300000, guid: bb9802ed0ca1845fc9393267c508c252, type: 3}
+  constructionSprite: {fileID: 21300000, guid: f0253c74e9daf4c39ac382cea00659ac, type: 3}
   maxNumberOfAssignedWorkers: 5
   increasedIncomePerWorker: 0.5
