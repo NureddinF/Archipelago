@@ -12,6 +12,9 @@ public class Unit : MonoBehaviour {
     private Vector3 currentCoord;
     private Vector3 destinationCoord;
 
+	//Player who owns this unit
+	public UnitController unitController;
+
     //On script start, set it's position and destination vector
 	void Start () {
         transform.position = new Vector3(initialHex.transform.position.x, initialHex.transform.position.y, -5);

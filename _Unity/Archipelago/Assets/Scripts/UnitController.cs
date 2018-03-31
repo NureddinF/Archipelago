@@ -17,8 +17,8 @@ public class UnitController : MonoBehaviour {
     private List<Hex> workerLocations;
     private List<Hex> warriorLocations;
 
-    void Start()
-    {        
+    void Start(){
+		
         //Initialize the dictionarys
         workerLocations = new List<Hex>();
         warriorLocations = new List<Hex>();
@@ -77,13 +77,13 @@ public class UnitController : MonoBehaviour {
     }
 
     //Method to move warrior(s) using the add remove methods. Removes then adds
-    public void moveWarriors(int amount, Hex from, Hex to)
-    {
+    public void moveWarriors(int amount, Hex from, Hex to){
         removeWarriors(amount, from);
 
         GameObject unitToMove;
         unitToMove = (GameObject)Instantiate(warriorPrefab);
 
+		unitToMove.GetComponent<Unit> ().unitController = this;
         unitToMove.GetComponent<Unit>().setInitialHex(from);
         unitToMove.GetComponent<Unit>().setDestinationHex(to);
     }
@@ -132,6 +132,7 @@ public class UnitController : MonoBehaviour {
         GameObject unitToMove;
         unitToMove = (GameObject)Instantiate(workerPrefab);
 
+		unitToMove.GetComponent<Unit> ().unitController = this;
         unitToMove.GetComponent<Unit>().setInitialHex(from);
         unitToMove.GetComponent<Unit>().setDestinationHex(to);
     }

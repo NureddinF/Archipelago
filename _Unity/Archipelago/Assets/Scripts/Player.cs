@@ -179,6 +179,11 @@ public class Player : NetworkBehaviour{
 		numOfWarriorsOwned = stateMenu.transform.Find("Warrior Button/Warrior Count Text").gameObject.GetComponent<Text>();
 		redBarTemp = stateMenu.transform.Find("TileOwnershipRatioBar/Red Bar").gameObject.GetComponent<Image>();
 
+		Button workerButton = stateMenu.transform.Find ("Worker Button").GetComponent<Button> ();
+		workerButton.onClick.AddListener(GetComponent<HexMenuController>().moveWorkerToSelectedHex);
+		Button warriorButton = stateMenu.transform.Find ("Warrior Button").GetComponent<Button> ();
+		warriorButton.onClick.AddListener(GetComponent<HexMenuController>().moveWarriorToSelectedHex);
+
 		// Initalize UI values
 		incomeText.text = "Hello";
 		rateText.text = "+ 0/sec";	
