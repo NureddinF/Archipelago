@@ -319,9 +319,8 @@ public class UnitController : MonoBehaviour {
 		unit.SetActive (false);
         //Destroy (w.gameObject);
 		//changes the hex sprite back to the original sprite thats under the trap(removes the trap)
-		h.changeHexSprite (h.getSprite ());
+		h.disableStatusIcon();
 		//removes the building(trap)
 		h.setBuilding (null);
-
 	}
 }
