@@ -132,19 +132,14 @@ public class MouseManager : MonoBehaviour {
 	}
 
 	// Check if player clicked on something
-	private void doSelection(){
-		Debug.Log ("Called");
-        // mouse location, provides coordinates relative to screen pixels
-        
-        
+	private void doSelection(){        
         //Screen pos is relative to camera location in unity coordinates
 		Vector3 screenPos = Camera.main.ScreenToWorldPoint(clickPos);
 		Debug.Log (screenPos);
         //Information regarding the object the ray collides with
         //Returns true or false but also provides information of object collider coliided with
         RaycastHit2D hitInfo = Physics2D.Raycast(screenPos, Vector2.zero);
-		string debugLog = hitInfo == null ? "NULL" : "Not null";
-		Debug.Log (debugLog);
+//		string debugLog = hitInfo == null ? "NULL" : "Not null";
         //If ray collides with an object
         if (hitInfo != null)
         {   
@@ -152,7 +147,7 @@ public class MouseManager : MonoBehaviour {
             GameObject collidedHitInfo = hitInfo
 				.collider
 				.transform.gameObject;
-			Debug.Log (collidedHitInfo);
+//			Debug.Log (collidedHitInfo);
             //If left mouse button pressed, only calls once on initial press(e.g not constantly calling on hold)
             if (!EventSystem.current.IsPointerOverGameObject()){
 				
