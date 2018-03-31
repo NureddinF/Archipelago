@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class UnitController : MonoBehaviour {
+public class UnitController : NetworkBehaviour {
 
 	public GameObject redWarrior;
 	public GameObject redWorker;
@@ -26,11 +27,19 @@ public class UnitController : MonoBehaviour {
         workerLocations = new List<Hex>();
         warriorLocations = new List<Hex>();
 
+		// Only want game state to run on server
+		if (!isServer) {
+			return;
+		}
 		initializeUnits ();
     }
     
 	//Adds units to the player's base at the start of the game
     public void initializeUnits() {
+		if (!isServer) {
+			//server keeps track of game state
+		}
+
 		//Get the id of the player
 		Player.PlayerId pid = GetComponent<Player> ().playerId;
 		//If Player 1
@@ -38,41 +47,45 @@ public class UnitController : MonoBehaviour {
 			//Initialize number of warriors, only if initial amount specified > 0 
 			if (initialNumOfWarriors > 0)
 				//Add initial location and amount of warriors into the correct dict
-				addWarriors(initialNumOfWarriors, GameObject.Find("Hex Grid").GetComponent<HexGrid>().getPlayer1Base());
+				CmdAddWarriors(initialNumOfWarriors, FindObjectOfType<HexGrid>().getPlayer1Base().gameObject);
 
 			//Initialize number of warriors, only if initial amount specified > 0 
 			if (initialNumOfWorkers > 0)
 				//Add initial location and amount of workers into the correct dict
-				addWorkers(initialNumOfWorkers, GameObject.Find("Hex Grid").GetComponent<HexGrid>().getPlayer1Base());
+				CmdAddWorkers(initialNumOfWorkers, FindObjectOfType<HexGrid>().getPlayer1Base().gameObject);
 		}
 		//If Player 2
 		else if(Player.PlayerId.P2 == pid) {
 			//Initialize number of warriors, only if initial amount specified > 0 
 			if (initialNumOfWarriors > 0)
 				//Add initial location and amount of warriors into the correct dict
-				addWarriors(initialNumOfWarriors, GameObject.Find("Hex Grid").GetComponent<HexGrid>().getPlayer2Base());
+				CmdAddWarriors(initialNumOfWarriors, FindObjectOfType<HexGrid>().getPlayer2Base().gameObject);
 
 			//Initialize number of warriors, only if initial amount specified > 0 
 			if (initialNumOfWorkers > 0)
 				//Add initial location and amount of workers into the correct dict
-				addWorkers(initialNumOfWorkers, GameObject.Find("Hex Grid").GetComponent<HexGrid>().getPlayer2Base());
+				CmdAddWorkers(initialNumOfWorkers, FindObjectOfType<HexGrid>().getPlayer2Base().gameObject);
 		}
     }
     
     //Method to add new warrior(s) given a specified amount and a hex
-    public void addWarriors(int amount, Hex h) {
+	[Command]
+	public void CmdAddWarriors(int amount, GameObject hex) {
+		Hex h = hex.GetComponent<Hex> ();
 		//Get the id of the player
 		Player.PlayerId pid = GetComponent<Player> ().playerId;
         h.addWarriorsToHex(amount, pid);
 
         if (!warriorLocations.Contains(h))
             warriorLocations.Add(h);
-		//get component of player to access id
-        h.gameObject.GetComponent<CapturableTile>().addUnits(amount, pid); //Hard coded P1 -- TODO --
+		
+        h.gameObject.GetComponent<CapturableTile>().addUnits(amount, pid);
     }
 
     //Method to remove warrior(s) given a specified amount and a hex
-    public void removeWarriors(int amount, Hex h) {
+	[Command]
+	public void CmdRemoveWarriors(int amount, GameObject hex) {
+		Hex h = hex.GetComponent<Hex> ();
 		//Get the id of the player
 		Player.PlayerId pid = GetComponent<Player> ().playerId;
         if (warriorLocations.Contains(h))
@@ -99,9 +112,11 @@ public class UnitController : MonoBehaviour {
     }
 
     //Method to move warrior(s) using the add remove methods. Removes then adds
-    public void moveWarriors(int amount, Hex from, Hex to) {
-
-        removeWarriors(amount, from);
+	[Command]
+	public void CmdMoveWarriors(int amount, GameObject fromHex, GameObject toHex) {
+		Hex from = fromHex.GetComponent<Hex> ();
+		Hex to = toHex.GetComponent<Hex> ();
+		CmdRemoveWarriors(amount, from.gameObject);
 
         GameObject unitToMove;
         unitToMove = (GameObject)Instantiate(warriorPrefab);
@@ -113,7 +128,9 @@ public class UnitController : MonoBehaviour {
     }
 
     //Method to add new worker(s) given a specified amount and a hex
-    public void addWorkers(int amount, Hex h) {
+	[Command]
+	public void CmdAddWorkers(int amount, GameObject hex) {
+		Hex h = hex.GetComponent<Hex> ();
 		//Get the id of the player
 		Player.PlayerId pid = GetComponent<Player> ().playerId;
 		h.addWorkersToHex(amount, pid);
@@ -124,7 +141,9 @@ public class UnitController : MonoBehaviour {
     }
 
     //Method to remove worker(s) given a specified amount and a hex
-    public void removeWorkers(int amount, Hex h) {
+	[Command]
+	public void CmdRemoveWorkers(int amount, GameObject hex) {
+		Hex h = hex.GetComponent<Hex> ();
 		//Get the id of the player
 		Player.PlayerId pid = GetComponent<Player> ().playerId;
         if (workerLocations.Contains(h)) {
@@ -148,8 +167,11 @@ public class UnitController : MonoBehaviour {
     }
 
     //Method to move worker(s) using the add remove methods. Removes then adds
-    public void moveWorkers(int amount, Hex from, Hex to) {
-        removeWorkers(amount, from);
+	[Command]
+	public void CmdMoveWorkers(int amount, GameObject fromHex, GameObject toHex) {
+		Hex from = fromHex.GetComponent<Hex> ();
+		Hex to = toHex.GetComponent<Hex> ();
+		CmdRemoveWorkers(amount, from.gameObject);
 
         GameObject unitToMove;
         unitToMove = (GameObject)Instantiate(workerPrefab);
@@ -161,7 +183,9 @@ public class UnitController : MonoBehaviour {
     }
 
     //Method to move the closest available worker using the add remove methods. Removes then adds
-    public void moveClosestAvailableWorker(Hex hexTo) {
+	[Command]
+	public void CmdMoveClosestAvailableWorker(GameObject hex) {
+		Hex hexTo = hex.GetComponent<Hex> ();
         //Variables of the x and y coordinate of the destination hex
         int xTo = hexTo.getX();
         int yTo = hexTo.getY();
@@ -202,7 +226,7 @@ public class UnitController : MonoBehaviour {
         //If a suitable unit/hex was found
         if (currentClosestHex != null)
         {
-            moveWorkers(1, currentClosestHex, hexTo);
+			CmdMoveWorkers(1, currentClosestHex.gameObject, hexTo.gameObject);
         }
         else
         {
@@ -211,7 +235,9 @@ public class UnitController : MonoBehaviour {
     }
 
     //Method to move the closest available warrior using the add remove methods. Removes then adds
-    public void moveClosestAvailableWarrior(Hex hexTo) {
+	[Command]
+	public void CmdMoveClosestAvailableWarrior(GameObject hex) {
+		Hex hexTo = hex.GetComponent<Hex> ();
         //Variables of the x and y coordinate of the destination hex
         int xTo = hexTo.getX();
         int yTo = hexTo.getY();
@@ -251,7 +277,7 @@ public class UnitController : MonoBehaviour {
         //If a suitable unit/hex was found
         if (currentClosestHex != null)
         {
-            moveWarriors(1, currentClosestHex, hexTo);
+			CmdMoveWarriors(1, currentClosestHex.gameObject, hexTo.gameObject);
         }
         else
         {
@@ -285,9 +311,12 @@ public class UnitController : MonoBehaviour {
         return total;
     }
 	//Checks if a trap is placed on the hex where a gameobject is standing
-	public void checkTrap(GameObject hex, GameObject player){
+	[Command]
+	public void CmdCheckTrap(Vector3 unitPosition, GameObject unit){
 		Warrior warrior = null;
 		Worker worker = null;
+		//the hex the warrior is standing on
+		GameObject hex = FindObjectOfType<HexGrid>().getHex(unitPosition);
 		//The hex the gameobject is on
 		Hex playerOn = hex.GetComponentInChildren<Hex> ();
 		//Gets the building thats on the hex
@@ -295,11 +324,11 @@ public class UnitController : MonoBehaviour {
 
 		if (buildOnHex != null) {
 			List<HexGrid.TileType> tileTypes = buildOnHex.getTileTypesAssociatedWith ();
-			Debug.Log(player.name);
+			Debug.Log(unit.name);
 			//Checks if its a warrior
-			if (player.name == "Warrior(Clone)") {
+			if (unit.name == "Warrior(Clone)") {
 				//gets warrior
-				warrior = player.GetComponent<Warrior> ();
+				warrior = unit.GetComponent<Warrior> ();
 				//Checks in the buildingis associated to ALL, which is a trap building, and the player ids of the hex and player do not match
 				if (tileTypes.Contains(HexGrid.TileType.ALL) && !warrior.getPlayerId().Equals(playerOn.getHexOwner())) {
 					//calls in the kill warrior method
@@ -308,7 +337,7 @@ public class UnitController : MonoBehaviour {
 				//other wise its a worker
 			} else {
 				//gets the worker
-				worker = player.GetComponent<Worker> ();
+				worker = unit.GetComponent<Worker> ();
 				//Checks in the buildingis associated to ALL, which is a trap building, and the player ids of the hex and player do not match
 				if (tileTypes.Contains(HexGrid.TileType.ALL) && !worker.getPlayerId().Equals(playerOn.getHexOwner())) {
 					//calls in the kill warrior method
@@ -320,10 +349,15 @@ public class UnitController : MonoBehaviour {
 	}
 	//Takes in the gameobject and the hex it is standing on
 	public void killUnit(GameObject unit, Hex h){
+		if (!isServer) {
+			//only server can change game state
+			return;
+		}
 		//sets the sprite to unactive
 		unit.SetActive (false);
 //		Destroy (w.gameObject);
 		//changes the hex sprite back to the original sprite thats under the trap(removes the trap)
+		//TODO: network the sprite change
 		h.changeHexSprite (h.getSprite ());
 		//removes the building(trap)
 		h.setBuilding (null);

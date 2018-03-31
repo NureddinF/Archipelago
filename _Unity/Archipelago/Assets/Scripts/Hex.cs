@@ -103,6 +103,7 @@ public class Hex : MonoBehaviour {
 		return tileType; 
 	}
 
+	//TODO: multiplayer
 	//Set Building
     public void setBuilding(Building b) {
         this.building = b;

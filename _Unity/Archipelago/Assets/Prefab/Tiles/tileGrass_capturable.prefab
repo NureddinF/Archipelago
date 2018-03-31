@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 114628911011787824}
   - component: {fileID: 222481212659619638}
   - component: {fileID: 114343744093654976}
+  - component: {fileID: 114100238276040968}
   m_Layer: 0
   m_Name: tileGrass_capturable
   m_TagString: Untagged
@@ -98,6 +99,38 @@ PolygonCollider2D:
       - {x: 1.9399999, y: -0.08}
       - {x: 1.9399999, y: 0.02}
       - {x: 1.02, y: 1.9399999}
+--- !u!114 &114100238276040968
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1104672884267244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 97
+    i1: 139
+    i2: 241
+    i3: 209
+    i4: 82
+    i5: 2
+    i6: 135
+    i7: 36
+    i8: 104
+    i9: 75
+    i10: 167
+    i11: 47
+    i12: 112
+    i13: 1
+    i14: 199
+    i15: 203
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!114 &114329468498139986
 MonoBehaviour:
   m_ObjectHideFlags: 1

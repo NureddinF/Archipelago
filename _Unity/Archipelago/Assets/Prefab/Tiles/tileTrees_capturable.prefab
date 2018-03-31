@@ -58,6 +58,7 @@ GameObject:
   - component: {fileID: 60191556260403974}
   - component: {fileID: 114645757862322074}
   - component: {fileID: 114493557662846788}
+  - component: {fileID: 114886739572351278}
   m_Layer: 0
   m_Name: tileTrees_capturable
   m_TagString: Untagged
@@ -206,6 +207,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hexOwner: 2
   standard: {fileID: 21300000, guid: 7aa8c9df3300e42609c97fc88b831878, type: 3}
+--- !u!114 &114886739572351278
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1786172073235050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 72
+    i1: 66
+    i2: 215
+    i3: 153
+    i4: 108
+    i5: 132
+    i6: 98
+    i7: 84
+    i8: 171
+    i9: 54
+    i10: 117
+    i11: 96
+    i12: 100
+    i13: 95
+    i14: 222
+    i15: 92
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!212 &212867527482442266
 SpriteRenderer:
   m_ObjectHideFlags: 1

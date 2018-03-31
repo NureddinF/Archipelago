@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 60861945205530046}
   - component: {fileID: 114313403547215550}
   - component: {fileID: 114276762634537666}
+  - component: {fileID: 114623216080703210}
   m_Layer: 0
   m_Name: tilePlayer2Base
   m_TagString: Untagged
@@ -206,6 +207,38 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+--- !u!114 &114623216080703210
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1308510330598628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 4
+    i1: 36
+    i2: 31
+    i3: 183
+    i4: 69
+    i5: 102
+    i6: 78
+    i7: 132
+    i8: 74
+    i9: 94
+    i10: 167
+    i11: 85
+    i12: 53
+    i13: 185
+    i14: 43
+    i15: 149
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!212 &212218913899025482
 SpriteRenderer:
   m_ObjectHideFlags: 1

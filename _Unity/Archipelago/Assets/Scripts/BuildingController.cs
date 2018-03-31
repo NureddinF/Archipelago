@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuildingController : MonoBehaviour
-{
+public class BuildingController : MonoBehaviour{
 
     public List<Building> allConstructableBuildings;
 
@@ -17,11 +16,13 @@ public class BuildingController : MonoBehaviour
         return h.getBuilding();
     }
 
+	//TODO: Remove this? its not used
     public void addBuilding(Hex h, Building b)
     {
         h.setBuilding(b);
     }
 
+	//TODO: Remove this? its not used
     public void removeBuilding(Hex h) //TODO: Implement better building losing mechanics.
     {
         h.setBuilding(null);
@@ -55,4 +56,15 @@ public class BuildingController : MonoBehaviour
 
         return result;
     }
+
+	// Get Building object from Building ID
+	public Building getBuildingFromType(Building.BuildingType buildingId){
+		foreach (Building b in allConstructableBuildings){
+			if(b.buildingId.Equals(buildingId)){
+				return b;
+			}
+		}
+
+		return null;
+	}
 }

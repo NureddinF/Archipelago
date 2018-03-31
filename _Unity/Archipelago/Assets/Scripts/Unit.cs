@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 //Superclass for units, warrior and worker inherits from this class
-public class Unit : MonoBehaviour {
+public class Unit : NetworkBehaviour {
 
     //Parameters
     public float unitSpeed = 2f;

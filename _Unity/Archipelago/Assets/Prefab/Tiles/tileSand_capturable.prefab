@@ -58,6 +58,7 @@ GameObject:
   - component: {fileID: 60281095604364860}
   - component: {fileID: 114662774691672690}
   - component: {fileID: 114724202225294298}
+  - component: {fileID: 114256386227154368}
   m_Layer: 0
   m_Name: tileSand_capturable
   m_TagString: Untagged
@@ -127,6 +128,38 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &114256386227154368
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1726542138188176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 166
+    i1: 44
+    i2: 134
+    i3: 25
+    i4: 220
+    i5: 139
+    i6: 88
+    i7: 148
+    i8: 216
+    i9: 40
+    i10: 225
+    i11: 79
+    i12: 47
+    i13: 90
+    i14: 207
+    i15: 228
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!114 &114301997034774180
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -1,10 +1,11 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 //Class to control the hex menu
-public class HexMenuController : MonoBehaviour {
+public class HexMenuController : NetworkBehaviour {
     //Parameters, 
     public GameObject hexMenu;
     private Text tileType;
@@ -20,6 +21,11 @@ public class HexMenuController : MonoBehaviour {
     private Hex selectedHex;
 
     private void Start(){
+
+		if(hasAuthority){
+			//Only let local player update/access UI
+			return;
+		}
 
 		hexMenu = GameObject.Find("Canvas").transform.Find("HexMenuBar").gameObject;
 
@@ -41,6 +47,7 @@ public class HexMenuController : MonoBehaviour {
     }
 
     //Method to set the currently selected hex
+	//Updates local players UI
     public void setSelectedHex(Hex h) {
 		//Get the id of the player
 		Player.PlayerId pid = GetComponent<Player> ().playerId;
@@ -93,33 +100,39 @@ public class HexMenuController : MonoBehaviour {
         hexMenu.SetActive(false);
     }
 
+	//TODO: Multiplayer
     //Method to move a worker to the selected hex
     public void moveWorkerToSelectedHex() {
 		//Get the id of the player
 		Player.PlayerId pid = GetComponent<Player> ().playerId;
+		Debug.Log ("HexMenuController: moveWorkerToSelectedHex: moving worker for " + pid);
         if (selectedHex != null) {
-            gameObject.GetComponent<UnitController>().moveClosestAvailableWorker(selectedHex);
+			gameObject.GetComponent<UnitController>().CmdMoveClosestAvailableWorker(selectedHex.gameObject);
             tileWorkerCount.text = selectedHex.getNumOfWorkersOnHex(pid).ToString();
         }
         else
             Debug.Log("No hex selected to move a worker unit to");
     }
 
+	//TODO: Multiplayer
     //Method to move a warrior to the selected hex
     public void moveWarriorToSelectedHex() {
 		//Get the id of the player
 		Player.PlayerId pid = GetComponent<Player> ().playerId;
+		Debug.Log ("HexMenuController: moveWarriorToSelectedHex: moving warrior for " + pid);
         if (selectedHex != null) {
-            gameObject.GetComponent<UnitController>().moveClosestAvailableWarrior(selectedHex);
+			gameObject.GetComponent<UnitController>().CmdMoveClosestAvailableWarrior(selectedHex.gameObject);
             tileWarriorCount.text = selectedHex.getNumOfWarriorsOnHex(pid).ToString();
         }
         else
             Debug.Log("No hex selected to move a warrior unit to");
     }
 
+	//TODO: Multiplayer: make sure this is called from server
     //Refresh the ui values, useful for when the hex is still selected but changed values, e.g moved unit there, built something etc.
-    public void refreshUIValues() {
-        if(selectedHex != null)
+	[ClientRpc]
+    public void RpcRefreshUIValues() {
+		if(selectedHex != null && hasAuthority)
         {
             //Store current selected hex, deselect hex then reselect hex. This way on refresh if on same hex the menu wont hide itself
             Hex h = selectedHex;
@@ -191,7 +204,7 @@ public class HexMenuController : MonoBehaviour {
                     //Set its displayed sprite
                     go.GetComponent<Image>().sprite = b.getMenuIconSprite();
                     //Set its click function
-                    go.GetComponent<Button>().onClick.AddListener(() => { tileActionBuild(b); });
+					go.GetComponent<Button>().onClick.AddListener(() => { CmdTileActionBuild(b.buildingId); });
                     //Increment count
                     count++;
                 }
@@ -199,10 +212,12 @@ public class HexMenuController : MonoBehaviour {
         }
     }
 
+	//TODO: Multiplayer: need to pass an enum here istead of a non networked gameobject and turn this into a command
     //Method for the tileaction, when selecting a building
-    void tileActionBuild(Building b)
-    {
-        selectedHex.setBuilding(b);
-        refreshUIValues();
+	[Command]
+	void CmdTileActionBuild(Building.BuildingType buildingId){
+		Building building = GetComponent<BuildingController> ().getBuildingFromType (buildingId);
+		selectedHex.setBuilding(building);
+        RpcRefreshUIValues();
     }
 }

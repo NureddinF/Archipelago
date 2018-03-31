@@ -58,6 +58,7 @@ GameObject:
   - component: {fileID: 60574093942163774}
   - component: {fileID: 114430012806728684}
   - component: {fileID: 114254087845824910}
+  - component: {fileID: 114615426241366484}
   m_Layer: 0
   m_Name: tilePlayer1Base_capturable
   m_TagString: Untagged
@@ -163,6 +164,38 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+--- !u!114 &114615426241366484
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1692912300926586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 191
+    i1: 33
+    i2: 138
+    i3: 242
+    i4: 211
+    i5: 100
+    i6: 170
+    i7: 68
+    i8: 90
+    i9: 73
+    i10: 57
+    i11: 68
+    i12: 86
+    i13: 29
+    i14: 229
+    i15: 114
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!114 &114628792237098050
 MonoBehaviour:
   m_ObjectHideFlags: 1

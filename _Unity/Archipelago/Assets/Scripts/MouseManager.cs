@@ -69,7 +69,6 @@ public class MouseManager : MonoBehaviour {
 				canPerformSelection = false;
 				doSelection ();
 			}
-			Debug.Log (halfHeight + "," + halfWidth);
 		}
 		//panning
 		else if (Input.touchCount == 1) { //one touch on screen
@@ -142,28 +141,23 @@ public class MouseManager : MonoBehaviour {
         RaycastHit2D hitInfo = Physics2D.Raycast(screenPos, Vector2.zero);
 //		string debugLog = hitInfo == null ? "NULL" : "Not null";
         //If ray collides with an object
-        if (hitInfo != null)
-        {   
+		if ((hitInfo != null) && (hitInfo.transform != null) && (!EventSystem.current.IsPointerOverGameObject())){
+			Transform t = hitInfo.transform.GetComponent<Transform> ();
+			string debug_t = t == null ? "NULL" : t.name;
+			Debug.LogWarning ("MouseManager: doSelection: hitinfo=" + debug_t);
             //Return the gameobject that the ray has collided with
             GameObject collidedHitInfo = hitInfo
 				.collider
 				.transform.gameObject;
-//			Debug.Log (collidedHitInfo);
-            //If left mouse button pressed, only calls once on initial press(e.g not constantly calling on hold)
-            if (!EventSystem.current.IsPointerOverGameObject()){
 				
-                // Check what we clicked on
-                if (collidedHitInfo.GetComponent<Hex>() != null)
-                {
-                    Hex hex = collidedHitInfo.GetComponent<Hex>();
-					Debug.Log (hex.getTileType());
-                    //clicked on a hex
-                    //bring up menu
-                    //if(hex.hexOwner2 == player.playerId){
-                        player.GetComponent<HexMenuController>().setSelectedHex(hex);
-                    //}                   
-                }
-            } 
+            // Check what we clicked on
+            if (collidedHitInfo.GetComponent<Hex>() != null) {
+                Hex hex = collidedHitInfo.GetComponent<Hex>();
+				Debug.Log (hex.getTileType());
+                //clicked on a hex
+                //bring up menu
+                player.GetComponent<HexMenuController>().setSelectedHex(hex);
+            }
         }
 	}
 

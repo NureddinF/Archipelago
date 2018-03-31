@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 60894704645331896}
   - component: {fileID: 114411951604593144}
   - component: {fileID: 114782294160399594}
+  - component: {fileID: 114173939438505296}
   m_Layer: 0
   m_Name: tileRocks_capturable
   m_TagString: Untagged
@@ -111,6 +112,38 @@ PolygonCollider2D:
       - {x: 1.9399999, y: -0.08}
       - {x: 1.9399999, y: 0.02}
       - {x: 1.02, y: 1.9399999}
+--- !u!114 &114173939438505296
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1524050681234130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 96
+    i1: 147
+    i2: 106
+    i3: 66
+    i4: 45
+    i5: 98
+    i6: 89
+    i7: 100
+    i8: 248
+    i9: 35
+    i10: 3
+    i11: 207
+    i12: 135
+    i13: 89
+    i14: 94
+    i15: 246
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!114 &114183752978563924
 MonoBehaviour:
   m_ObjectHideFlags: 1

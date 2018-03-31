@@ -126,13 +126,12 @@ public class Player : NetworkBehaviour{
     public void captureTile(CapturableTile tile){
         totalTileIncome += tile.getHex().getTileIncome();
         totalTilesOwned += 1;
-        this.GetComponent<HexMenuController>().refreshUIValues();
+        this.GetComponent<HexMenuController>().RpcRefreshUIValues();
     }
 
 	//TODO: Multiplayer
 	//Lose a Tile
-    public void removeTile(CapturableTile tile)
-    {
+    public void removeTile(CapturableTile tile){
         totalTileIncome -= tile.getHex().getTileIncome();
         totalTilesOwned -= 1;
     }
@@ -167,6 +166,14 @@ public class Player : NetworkBehaviour{
 		Debug.Log ("Player: RpcStartWithAuthority");
 		if (!hasAuthority) {
 			Debug.Log ("Player: RpcStartWithAuthority: No authority");
+			if (!isServer) {
+				// Disable UI things for non-local-player objects
+				// Keep them active on server to update state if needed
+				GetComponent<HexMenuController> ().gameObject.SetActive (false);
+				GetComponent<UnitController> ().gameObject.SetActive (false);
+				GetComponent<BuildingController> ().gameObject.SetActive (false);
+			}
+			
 			return;
 		}
 
@@ -184,6 +191,9 @@ public class Player : NetworkBehaviour{
 		workerButton.onClick.AddListener(GetComponent<HexMenuController>().moveWorkerToSelectedHex);
 		Button warriorButton = stateMenu.transform.Find ("Warrior Button").GetComponent<Button> ();
 		warriorButton.onClick.AddListener(GetComponent<HexMenuController>().moveWarriorToSelectedHex);
+
+
+		Debug.Log ("Player: RpcStartWithAuthority: workerBtn=" + workerButton.name + ", warriorBtn="+warriorButton.name);
 
 		// Initalize UI values
 		incomeText.text = "Hello";
