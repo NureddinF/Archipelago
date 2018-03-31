@@ -155,7 +155,7 @@ public class HexMenuController : MonoBehaviour {
             float childHeight = 0.65f * childWidth;
 
             // The distance between each menu items as well as the initial offset from top of action box
-            float yOffset = 10f;
+            float yOffset = 35f;
             //If the selected hex does not have a building and player owns the hex, then display build options
             if (selectedHex.getBuilding() == null &&selectedHex.getHexOwner().Equals(GetComponent<Player>().playerId)){
                 //Get a list of possible building types that can be built on this hex

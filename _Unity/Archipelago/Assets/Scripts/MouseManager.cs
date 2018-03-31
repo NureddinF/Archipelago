@@ -137,9 +137,8 @@ public class MouseManager : MonoBehaviour {
         //Information regarding the object the ray collides with
         //Returns true or false but also provides information of object collider coliided with
         RaycastHit2D hitInfo = Physics2D.Raycast(screenPos, Vector2.zero);
-//		string debugLog = hitInfo == null ? "NULL" : "Not null";
         //If ray collides with an object
-        if (hitInfo != null)
+        if (hitInfo)
         {   
             //Return the gameobject that the ray has collided with
             GameObject collidedHitInfo = hitInfo

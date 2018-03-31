@@ -271,6 +271,26 @@ public class Hex : MonoBehaviour {
 		}
     }
 
+    public bool hasEnemyWarriors(Player.PlayerId player)
+    {
+        if (player == Player.PlayerId.P1)
+        {
+            if (blueWarriors > 0)
+            {
+                return true;
+            }
+        }
+        else
+        {
+            if (redWarriors > 0)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     //Method to return a list of a hex's direct neighbors
     public List <GameObject> getNeighbors(){
         List<GameObject> neighbors = new List<GameObject>();
