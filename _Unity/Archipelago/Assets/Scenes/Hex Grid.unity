@@ -411,8 +411,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 354691a5334a97747adb335e174e1aeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingSprite: {fileID: 0}
-  workerCost: 0
 --- !u!1 &463588562
 GameObject:
   m_ObjectHideFlags: 0
@@ -851,7 +849,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 42.56649
+  orthographic size: 13.44791
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
