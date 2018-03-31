@@ -207,7 +207,7 @@ public class HexMenuController : NetworkBehaviour {
                     //Set its displayed sprite
                     go.GetComponent<Image>().sprite = b.getMenuIconSprite();
                     //Set its click function
-					go.GetComponent<Button>().onClick.AddListener(() => { CmdTileActionBuild(b.buildingId); });
+					go.GetComponent<Button>().onClick.AddListener(() => { tileActionBuild(b.buildingId); });
                     //Increment count
                     count++;
                 }
@@ -216,9 +216,14 @@ public class HexMenuController : NetworkBehaviour {
     }
 		
     //Method for the tileaction, when selecting a building
+	void tileActionBuild(Building.BuildingType buildingId){
+		CmdTileActionBuild (selectedHex.gameObject, buildingId);
+	}
+
+
 	[Command]
-	void CmdTileActionBuild(Building.BuildingType buildingId){
-		selectedHex.CmdSetBuilding(buildingId);
+	void CmdTileActionBuild(GameObject tile, Building.BuildingType buildingId){
+		tile.GetComponent<Hex>().CmdSetBuilding(buildingId);
         RpcRefreshUIValues();
     }
 }
