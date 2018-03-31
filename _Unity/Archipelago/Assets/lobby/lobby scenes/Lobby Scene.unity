@@ -1968,7 +1968,7 @@ MonoBehaviour:
   m_PlayScene: Hex Grid
   lobbySlots: []
   isDebug: 1
-  isHost: 1
+  isHost: 0
   isSinglePlayer: 0
   searchUi: {fileID: 0}
   lobbyUi: {fileID: 0}

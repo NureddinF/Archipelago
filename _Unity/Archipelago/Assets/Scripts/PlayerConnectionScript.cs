@@ -82,7 +82,7 @@ public class PlayerConnectionScript : NetworkBehaviour{
 		// Initialize the gameplay player object
 		Player player = gameplayPlayer.GetComponent<Player> ();
 		player.CmdSetPlayerId(pid);
-		player.RpcStartWithAuthority ();
+		player.RpcStartWithAuthority(pid);
 	}
 }
 

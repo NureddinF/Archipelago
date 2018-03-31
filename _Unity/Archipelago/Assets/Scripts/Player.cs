@@ -98,10 +98,21 @@ public class Player : NetworkBehaviour{
 			// make sure this code is only run on the client with authority
 			return;
 		}
-		numOfWarriorsOwned.text = "" + gameObject.GetComponent<UnitController>().getTotalNumberOfWarriors();
-		numOfWorkersOwned.text = "" + gameObject.GetComponent<UnitController>().getTotalNumberOfWorkers();
+
 		tilesOwnedText.text = "" + totalTilesOwned;
 		redBarTemp.transform.localScale = new Vector3((float)totalTilesOwned/((float)totalTilesOwned+1), 1, 1);
+	}
+
+	//Update unit UI
+	public void updateAvailableWorkerUI(int availableWorkers){
+		if (numOfWorkersOwned != null) {
+			numOfWorkersOwned.text = "" + availableWorkers;
+		}
+	}
+	public void updateAvailableWarriorUI(int availableWarriors){
+		if(numOfWarriorsOwned != null){
+			numOfWarriorsOwned.text = "" + availableWarriors;
+		}
 	}
 
     //Getters/Setters
@@ -161,8 +172,9 @@ public class Player : NetworkBehaviour{
 	//////////////////////////////////// RPCs ///////////////////////////////////////
 
 	// Use this to initialize UI things after object is spawned on network
+	// Need to pass pid despite it being a syncvar because the syncvar may not have updated before this is called
 	[ClientRpc]
-	public void RpcStartWithAuthority(){
+	public void RpcStartWithAuthority(PlayerId pid){
 		Debug.Log ("Player: RpcStartWithAuthority");
 		if (!hasAuthority) {
 			Debug.Log ("Player: RpcStartWithAuthority: No authority");
@@ -187,6 +199,16 @@ public class Player : NetworkBehaviour{
 		numOfWarriorsOwned = stateMenu.transform.Find("Warrior Button/Warrior Count Text").gameObject.GetComponent<Text>();
 		redBarTemp = stateMenu.transform.Find("TileOwnershipRatioBar/Red Bar").gameObject.GetComponent<Image>();
 
+		// Move camera to show players base
+		Vector3 cameraStartingPos = Camera.main.transform.position;
+		if (pid == PlayerId.P1) {
+			//TODO: Find a dynamic way to set camera position that accounts for map edges and panning limits
+			cameraStartingPos = new Vector3 (16,-16,-10);
+		} else if (pid == PlayerId.P2){
+			cameraStartingPos = new Vector3 (86,-16,-10);
+		}
+		Camera.main.transform.position = cameraStartingPos;
+
 		Button workerButton = stateMenu.transform.Find ("Worker Button").GetComponent<Button> ();
 		workerButton.onClick.AddListener(GetComponent<HexMenuController>().moveWorkerToSelectedHex);
 		Button warriorButton = stateMenu.transform.Find ("Warrior Button").GetComponent<Button> ();
@@ -199,8 +221,8 @@ public class Player : NetworkBehaviour{
 		incomeText.text = "Hello";
 		rateText.text = "+ 0/sec";	
 		tilesOwnedText.text = "0";
-		numOfWarriorsOwned.text = gameObject.GetComponent<UnitController>().initialNumOfWarriors.ToString();
-		numOfWorkersOwned.text = gameObject.GetComponent<UnitController>().initialNumOfWorkers.ToString();
+		numOfWarriorsOwned.text = "" + gameObject.GetComponent<UnitController>().getTotalNumberOfWarriors();
+		numOfWorkersOwned.text = "" + gameObject.GetComponent<UnitController>().getTotalNumberOfWorkers();
 
 		GetComponent<HexMenuController> ().startWithAuthority ();
 

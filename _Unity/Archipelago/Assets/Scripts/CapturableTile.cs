@@ -45,8 +45,7 @@ public class CapturableTile: MonoBehaviour{
 		progressTileCapture ();
 	}
 
-    public Hex getHex()
-    {
+    public Hex getHex(){
 		return GetComponent<Hex>();
     }
 

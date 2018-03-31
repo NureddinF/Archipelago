@@ -15,6 +15,10 @@ public class UnitController : NetworkBehaviour {
     //Parameter to store the initial number of units
     public int initialNumOfWorkers;
     public int initialNumOfWarriors;
+
+	// store current number of availableunits
+	[SyncVar(hook = "updateAvailableWorkerUI")] private int availableWorkers = 0;
+	[SyncVar(hook = "updateAvailableWarriorUI")] private int availableWarriors = 0;
     
     //Parameters to store locations of the units.
     //The string key will store the current tile in the form (grid x coordinate).(grid y coordinate)
@@ -75,6 +79,7 @@ public class UnitController : NetworkBehaviour {
 		//Get the id of the player
 		Player.PlayerId pid = GetComponent<Player> ().playerId;
         h.addWarriorsToHex(amount, pid);
+		availableWarriors += amount;
 
         if (!warriorLocations.Contains(h))
             warriorLocations.Add(h);
@@ -95,11 +100,13 @@ public class UnitController : NetworkBehaviour {
             if (numOfWarriorsOnHex > amount)
             {
 				h.removeWarriorsFromHex(amount, pid);
+				availableWarriors -= amount;
                 h.gameObject.GetComponent<CapturableTile>().removeUnits(amount, pid); 
             }
             else if(numOfWarriorsOnHex == amount)
             {
                 h.removeWarriorsFromHex(amount, pid);
+				availableWarriors -= amount;
                 warriorLocations.Remove(h);
 				h.gameObject.GetComponent<CapturableTile>().removeUnits(amount, pid);
             }            
@@ -140,6 +147,7 @@ public class UnitController : NetworkBehaviour {
 		//Get the id of the player
 		Player.PlayerId pid = GetComponent<Player> ().playerId;
 		h.addWorkersToHex(amount, pid);
+		availableWorkers += amount;
 
         if (!workerLocations.Contains(h))
             workerLocations.Add(h);
@@ -157,10 +165,12 @@ public class UnitController : NetworkBehaviour {
 
             if (numOfWorkersOnHex > amount) {
 				h.removeWorkersFromHex(amount, pid);
+				availableWorkers -= amount;
 				h.gameObject.GetComponent<CapturableTile>().removeUnits(amount, pid);
             }
             else if (numOfWorkersOnHex == amount) {
 				h.removeWorkersFromHex(amount, pid);
+				availableWorkers -= amount;
                 workerLocations.Remove(h);
 				h.gameObject.GetComponent<CapturableTile>().removeUnits(amount, pid); 
             }
@@ -297,29 +307,14 @@ public class UnitController : NetworkBehaviour {
 
     //Method to return total number of warriors
     public int getTotalNumberOfWarriors() {
-		//Get the id of the player
-		Player.PlayerId pid = GetComponent<Player> ().playerId;
-        //Int to track running total
-        int total = 0;
-        //Iterate through the warrior locations and add up all the counts
-        foreach (Hex h in warriorLocations)
-			total += h.getNumOfWarriorsOnHex(pid);
-
-        return total;
+		return availableWarriors;
     }
 
     //Method to return total number of workers
     public int getTotalNumberOfWorkers() {
-		//Get the id of the player
-		Player.PlayerId pid = GetComponent<Player> ().playerId;
-        //Int to track running total
-        int total = 0;
-        //Iterate through the worker locations and add up all the counts
-        foreach (Hex h in workerLocations)
-			total += h.getNumOfWorkersOnHex(pid);
-
-        return total;
+		return availableWorkers;
     }
+		
 	//Checks if a trap is placed on the hex where a gameobject is standing
 	[Command]
 	public void CmdCheckTrap(Vector3 unitPosition, GameObject unit){
@@ -370,5 +365,17 @@ public class UnitController : NetworkBehaviour {
 		//removes the building(trap)
 		h.CmdSetBuilding (Building.BuildingType.None);
 
+	}
+
+	private void updateAvailableWorkerUI(int newAvailableWorkers){
+		Debug.Log ("UnitController: updateAvailableWorkerUI: newAvailableWorkers=" + newAvailableWorkers);
+		availableWorkers = newAvailableWorkers;
+		GetComponent<Player> ().updateAvailableWorkerUI(availableWorkers);
+	}
+
+	private void updateAvailableWarriorUI(int newAvailableWarriors){
+		Debug.Log ("UnitController: updateAvailableWarriorUI: newAvailableWarriors=" + newAvailableWarriors);
+		availableWarriors = newAvailableWarriors;
+		GetComponent<Player> ().updateAvailableWarriorUI(availableWarriors);
 	}
 }
