@@ -187,8 +187,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hexOwner: 2
-  standard: {fileID: 21300000, guid: e4c920c9ecf9f4960943eaa0bf0471a0, type: 3}
-  idleUnits: {fileID: 21300000, guid: e4c920c9ecf9f4960943eaa0bf0471a0, type: 3}
+  standard: {fileID: 21300000, guid: f679af6ad88b04f1b81b0dab0a68de66, type: 3}
 --- !u!114 &114724202225294298
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -202,13 +201,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   p1CaptureBorder: {fileID: 21300000, guid: eb596e8a4953a954ab476be3c13c99e7, type: 3}
   p2CaptureBorder: {fileID: 21300000, guid: cc92ddfc1ccea09489c73fcd86605303, type: 3}
-  p1CaptureTile: {fileID: 21300000, guid: c591bc3c4116044bfb42bb2fb451f497, type: 3}
-  p2CaptureTile: {fileID: 21300000, guid: 64ef5fd394c33457abdd84a8142bdba8, type: 3}
+  p1CaptureTile: {fileID: 21300000, guid: 4c63002c452a546fab09e6c87138a5de, type: 3}
+  p2CaptureTile: {fileID: 21300000, guid: b416057149cab4178b2674478bfb5dc8, type: 3}
   captureSpeedPerUnit: 1
   neutralResetSpeed: 0.25
   totalCaptureCost: 10
-  constructionSpeedPerUnit: 1
-  passiveConstructionSpeed: 0
 --- !u!212 &212710428965042312
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -243,7 +240,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: e4c920c9ecf9f4960943eaa0bf0471a0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f679af6ad88b04f1b81b0dab0a68de66, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
