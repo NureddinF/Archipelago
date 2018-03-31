@@ -202,6 +202,8 @@ public class Player : NetworkBehaviour{
 		numOfWarriorsOwned.text = gameObject.GetComponent<UnitController>().initialNumOfWarriors.ToString();
 		numOfWorkersOwned.text = gameObject.GetComponent<UnitController>().initialNumOfWorkers.ToString();
 
+		GetComponent<HexMenuController> ().startWithAuthority ();
+
 		isInitialised = true;
 	}
 

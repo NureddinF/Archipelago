@@ -6,11 +6,14 @@ public class BuildingController : MonoBehaviour{
 
     public List<Building> allConstructableBuildings;
 
+
+	//TODO: Remove this? its not used
     private string hexToString(Hex h)
     {
         return h.getX() + "_" + h.getY();
     }
 
+	//TODO: Remove this? its not used
     public Building getBuildingByHex(Hex h)
     {
         return h.getBuilding();
@@ -19,15 +22,16 @@ public class BuildingController : MonoBehaviour{
 	//TODO: Remove this? its not used
     public void addBuilding(Hex h, Building b)
     {
-        h.setBuilding(b);
+        //h.setBuilding(b);
     }
 
 	//TODO: Remove this? its not used
     public void removeBuilding(Hex h) //TODO: Implement better building losing mechanics.
     {
-        h.setBuilding(null);
+        //h.setBuilding(null);
     }
 
+	//TODO: Remove this? its not used
     public bool canBeginConstructing(Hex h)
     {
         if (h.getHexOwner().Equals(Player.PlayerId.P1) && h.getBuilding().Equals(null))

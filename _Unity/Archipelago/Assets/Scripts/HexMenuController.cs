@@ -22,24 +22,27 @@ public class HexMenuController : NetworkBehaviour {
 
     private void Start(){
 
-		if(hasAuthority){
+    }
+
+	public void startWithAuthority(){
+		if(!hasAuthority){
 			//Only let local player update/access UI
 			return;
 		}
 
 		hexMenu = GameObject.Find("Canvas").transform.Find("HexMenuBar").gameObject;
 
-        //Use the hexMenu gameobject to find all it's individual UI elements.
-        tileType = hexMenu.transform.Find("TileType").gameObject.GetComponent<Text>();
-        tileStage = hexMenu.transform.Find("TileStage").gameObject.GetComponent<Text>();
-        tileIncome = hexMenu.transform.Find("TileIncome").gameObject.GetComponent<Text>();
-        tileImage = hexMenu.transform.Find("TileImage").gameObject.GetComponent<Image>();
-        tileWorkerCount = hexMenu.transform.Find("TileWorkerCount").gameObject.GetComponent<Text>();
-        tileWarriorCount = hexMenu.transform.Find("TileWarriorCount").gameObject.GetComponent<Text>();
-        tileActionBox = hexMenu.transform.Find("TileActionBox").gameObject.GetComponent<Image>();
-        selectedHex = null;
-        hideHexMenu();
-    }
+		//Use the hexMenu gameobject to find all it's individual UI elements.
+		tileType = hexMenu.transform.Find("TileType").gameObject.GetComponent<Text>();
+		tileStage = hexMenu.transform.Find("TileStage").gameObject.GetComponent<Text>();
+		tileIncome = hexMenu.transform.Find("TileIncome").gameObject.GetComponent<Text>();
+		tileImage = hexMenu.transform.Find("TileImage").gameObject.GetComponent<Image>();
+		tileWorkerCount = hexMenu.transform.Find("TileWorkerCount").gameObject.GetComponent<Text>();
+		tileWarriorCount = hexMenu.transform.Find("TileWarriorCount").gameObject.GetComponent<Text>();
+		tileActionBox = hexMenu.transform.Find("TileActionBox").gameObject.GetComponent<Image>();
+		selectedHex = null;
+		hideHexMenu();
+	}
 
     //Method to return the currently selected hex
     public Hex getSelectedHex() {
@@ -211,13 +214,11 @@ public class HexMenuController : NetworkBehaviour {
             }
         }
     }
-
-	//TODO: Multiplayer: need to pass an enum here istead of a non networked gameobject and turn this into a command
+		
     //Method for the tileaction, when selecting a building
 	[Command]
 	void CmdTileActionBuild(Building.BuildingType buildingId){
-		Building building = GetComponent<BuildingController> ().getBuildingFromType (buildingId);
-		selectedHex.setBuilding(building);
+		selectedHex.CmdSetBuilding(buildingId);
         RpcRefreshUIValues();
     }
 }

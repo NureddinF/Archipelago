@@ -55,6 +55,7 @@ MonoBehaviour:
   tileIncomeAfterBuild: 1
   constructionTime: 5
   tilesAssociatedWith: 04000000
+  buildingId: 3
   totalBuildTime: 10
   buildSpeedPerWorker: 1
   menuIconSprite: {fileID: 21300000, guid: 21ae4043538274b0ab7d1749d3df52ef, type: 3}

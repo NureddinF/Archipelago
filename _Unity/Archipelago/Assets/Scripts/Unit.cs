@@ -8,8 +8,8 @@ public class Unit : NetworkBehaviour {
 
     //Parameters
     public float unitSpeed = 2f;
-    private Hex destinationHex;
-    private Hex initialHex;
+    public Hex destinationHex;
+    public Hex initialHex;
     private Vector3 currentCoord;
     private Vector3 destinationCoord;
 	public Player.PlayerId id;
@@ -19,13 +19,18 @@ public class Unit : NetworkBehaviour {
 
     //On script start, set it's position and destination vector
 	void Start () {
-        transform.position = new Vector3(initialHex.transform.position.x, initialHex.transform.position.y, -5);
-        destinationCoord = new Vector3(destinationHex.transform.position.x, destinationHex.transform.position.y, -5);
+        
 	}
 
     //Getters/Setters
-    public void setInitialHex(Hex h) { initialHex = h; }
-    public void setDestinationHex(Hex h) { destinationHex = h; }
+    public void setInitialHex(Hex h) { 
+		initialHex = h;
+		transform.position = new Vector3(initialHex.transform.position.x, initialHex.transform.position.y, -5);
+	}
+    public void setDestinationHex(Hex h) { 
+		destinationHex = h; 
+		destinationCoord = new Vector3(destinationHex.transform.position.x, destinationHex.transform.position.y, -5);
+	}
     public Hex getDestinationHex() { return destinationHex; }
     public Vector3 getDestinationCoord() { return destinationCoord; }
 	public void setPlayerId(Player.PlayerId id){
@@ -34,6 +39,24 @@ public class Unit : NetworkBehaviour {
 	//Get Player ID
 	public Player.PlayerId getPlayerId(){
 		return id;
+	}
+
+	[Command]
+	public void CmdInitUnit(GameObject unitControllerObject, GameObject fromHex, GameObject toHex, Player.PlayerId id){
+		initUnit(unitControllerObject, fromHex, toHex, id);
+		RpcInitUnit(unitControllerObject, fromHex, toHex, id);
+	}
+
+	[ClientRpc]
+	private void RpcInitUnit(GameObject unitControllerObject, GameObject fromHex, GameObject toHex, Player.PlayerId id){
+		initUnit(unitControllerObject, fromHex, toHex, id);
+	}
+
+	private void initUnit(GameObject unitControllerObject, GameObject fromHex, GameObject toHex, Player.PlayerId id){
+		unitController = unitControllerObject.GetComponent<UnitController> ();
+		setDestinationHex (toHex.GetComponent<Hex> ());
+		setInitialHex (fromHex.GetComponent<Hex> ());
+		setPlayerId (id);
 	}
 }
 

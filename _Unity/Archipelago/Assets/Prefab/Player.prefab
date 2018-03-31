@@ -108,7 +108,7 @@ MonoBehaviour:
   rateMultiplier: 1
   baseIncome: 0
   timeFrame: 1
-  moneyToWin: 100
+  moneyToWin: 500
   stateMenu: {fileID: 0}
 --- !u!114 &114901735811757312
 MonoBehaviour:

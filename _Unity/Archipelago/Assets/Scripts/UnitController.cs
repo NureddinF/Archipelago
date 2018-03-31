@@ -118,13 +118,19 @@ public class UnitController : NetworkBehaviour {
 		Hex to = toHex.GetComponent<Hex> ();
 		CmdRemoveWarriors(amount, from.gameObject);
 
-        GameObject unitToMove;
-        unitToMove = (GameObject)Instantiate(warriorPrefab);
-		unitToMove.GetComponent<Unit> ().setPlayerId (GetComponent<Player> ().playerId);
+        GameObject unitToMove = Instantiate(warriorPrefab);
+		NetworkServer.Spawn(unitToMove);
+		unitToMove.GetComponent<Unit> ().CmdInitUnit (gameObject, 
+													  fromHex, 
+													  toHex, 
+													  GetComponent<Player> ().playerId);
 
+		/*unitToMove.GetComponent<Unit> ().setPlayerId (GetComponent<Player> ().playerId);
 		unitToMove.GetComponent<Unit> ().unitController = this;
         unitToMove.GetComponent<Unit>().setInitialHex(from);
-        unitToMove.GetComponent<Unit>().setDestinationHex(to);
+        unitToMove.GetComponent<Unit>().setDestinationHex(to);*/
+
+
     }
 
     //Method to add new worker(s) given a specified amount and a hex
@@ -173,13 +179,19 @@ public class UnitController : NetworkBehaviour {
 		Hex to = toHex.GetComponent<Hex> ();
 		CmdRemoveWorkers(amount, from.gameObject);
 
-        GameObject unitToMove;
-        unitToMove = (GameObject)Instantiate(workerPrefab);
+		GameObject unitToMove = Instantiate(workerPrefab);
+		NetworkServer.Spawn(unitToMove);
+		unitToMove.GetComponent<Unit> ().CmdInitUnit (gameObject, 
+													  fromHex, 
+													  toHex, 
+													  GetComponent<Player> ().playerId);
 
-		unitToMove.GetComponent<Unit> ().unitController = this;
+		/*unitToMove.GetComponent<Unit> ().unitController = this;
         unitToMove.GetComponent<Unit>().setInitialHex(from);
 		unitToMove.GetComponent<Unit> ().setPlayerId (GetComponent<Player> ().playerId);
-        unitToMove.GetComponent<Unit>().setDestinationHex(to);
+        unitToMove.GetComponent<Unit>().setDestinationHex(to);*/
+
+
     }
 
     //Method to move the closest available worker using the add remove methods. Removes then adds
@@ -203,8 +215,7 @@ public class UnitController : NetworkBehaviour {
         {
             //If hex is already captured, and if there is a building that it isn't under construction, then the workers can be assumed to be free
             //and can be a candidate for the closest available worker
-            if (h.hexOwner.Equals(Player.PlayerId.P1) && !(h.getBuilding() != null && !h.getBuilding().getIsConstructed()))
-            {     //TODO - HARD CODED PLAYER, NEEDS TO BE ADAPTED FOR MULTIPLAYER
+			if (h.hexOwner.Equals(GetComponent<Player>().playerId) && !(h.getBuilding() != null && !h.getBuilding().getIsConstructed())){
 
                 //Get its x/y value
                 int xFrom = h.getX();
@@ -254,8 +265,7 @@ public class UnitController : NetworkBehaviour {
         foreach (Hex h in warriorLocations)
         {
             //If hex is already captured, then workers assumed to be free, //////////////////// TODO: When fighting added etc. needs to check if enemy units are present on this hex, if so then they shouldn't be classed as available
-            if (h.hexOwner.Equals(Player.PlayerId.P1))
-            {     //TODO - HARD CODED PLAYER, NEEDS TO BE ADAPTED FOR MULTIPLAYER
+			if (h.hexOwner.Equals(GetComponent<Player>().playerId)){
 
                 //Get its x/y value
                 int xFrom = h.getX();
@@ -332,7 +342,7 @@ public class UnitController : NetworkBehaviour {
 				//Checks in the buildingis associated to ALL, which is a trap building, and the player ids of the hex and player do not match
 				if (tileTypes.Contains(HexGrid.TileType.ALL) && !warrior.getPlayerId().Equals(playerOn.getHexOwner())) {
 					//calls in the kill warrior method
-					killUnit (warrior.gameObject, playerOn);
+					killUnitWithTrap (warrior.gameObject, playerOn);
 				}
 				//other wise its a worker
 			} else {
@@ -341,26 +351,24 @@ public class UnitController : NetworkBehaviour {
 				//Checks in the buildingis associated to ALL, which is a trap building, and the player ids of the hex and player do not match
 				if (tileTypes.Contains(HexGrid.TileType.ALL) && !worker.getPlayerId().Equals(playerOn.getHexOwner())) {
 					//calls in the kill warrior method
-					killUnit (worker.gameObject, playerOn);
+					killUnitWithTrap (worker.gameObject, playerOn);
 				}
 			}
 		}
 
 	}
 	//Takes in the gameobject and the hex it is standing on
-	public void killUnit(GameObject unit, Hex h){
+	public void killUnitWithTrap(GameObject unit, Hex h){
 		if (!isServer) {
 			//only server can change game state
 			return;
 		}
 		//sets the sprite to unactive
 		unit.SetActive (false);
-//		Destroy (w.gameObject);
 		//changes the hex sprite back to the original sprite thats under the trap(removes the trap)
-		//TODO: network the sprite change
-		h.changeHexSprite (h.getSprite ());
+		h.RpcResetSprite();
 		//removes the building(trap)
-		h.setBuilding (null);
+		h.CmdSetBuilding (Building.BuildingType.None);
 
 	}
 }

@@ -4,11 +4,9 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 //Subclass of unity for a worker unit
-public class Worker : Unit
-{
+public class Worker : Unit {
     //Every frame
-    void Update()
-    {
+    void Update() {
         //Float for how much it should move, based of time passed and it's speed variable
         float step = unitSpeed * Time.deltaTime;
         //Move it's position by amount worked out above

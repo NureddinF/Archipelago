@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
+using UnityEngine.Networking.NetworkSystem;
 
-public class HexGrid : MonoBehaviour {
+public class HexGrid : NetworkBehaviour {
     //Tile variant prefab gameobjects for building the map
     public GameObject tileGrass; //0
     public GameObject tilePlayer1Base; //1
@@ -11,6 +13,7 @@ public class HexGrid : MonoBehaviour {
     public GameObject tileSand; //4
     public GameObject tileTrees; //5
     public GameObject tileWater; //6
+	public GameObject parentMapObjectPrefab; // parent object of all hexes
 
     public float baseGrassIncome = 1f;
     public float basePlayerBaseIncome = 2f;
@@ -105,19 +108,39 @@ public class HexGrid : MonoBehaviour {
 
     // Initialization
     void Start(){
+		Debug.Log ("HexGrid: Start");
+		if (!isServer) {
+			// Only let the server actually create the map
+			return;
+		}
+
+       
+    }
+
+	public override  void OnStartServer() {
+		Debug.Log("HexGrid: OnStartServer");
+		OnStartClient (); // manually make this call to ensure everthings initialised
+		//Create the hex grid
+		createHexGrid();
+	}
+
+	private bool clientInitialised = false;
+	public override void OnStartClient() {
+		Debug.Log("HexGrid: OnStartClient");
+		if (clientInitialised) {
+			return;
+		}
 		//initialize data structure for storing starting hexes
 		startingHexes = new Dictionary<Player.PlayerId, List<CapturableTile>>();
 		for(Player.PlayerId playId = Player.PlayerId.P1; playId != Player.PlayerId.NEUTRAL ;playId++){
 			startingHexes.Add(playId, new List<CapturableTile>());
 		}
 
-        //Initialize map, and sizes
-        initiateMapStructure();
-        initializeSizes();
-
-        //Create the hex grid
-        createHexGrid();
-    }
+		//Initialize map, and sizes
+		initiateMapStructure();
+		initializeSizes();
+		clientInitialised = true;
+	}
 
     //Method to store the sizes of grid/hexes/offsets
     private void initializeSizes(){
@@ -138,7 +161,7 @@ public class HexGrid : MonoBehaviour {
     //This method chooses which level map to create
     private void initiateMapStructure(){
 		//Level 1 map is used by default or if specifically chosen
-		if (levelNumber == 0 || levelNumber == null || levelNumber == 1) {
+		if (levelNumber == 0 || levelNumber == 1) {
 			mapStructure = level1;
 		}
 		//Level 2 map is created
@@ -148,7 +171,7 @@ public class HexGrid : MonoBehaviour {
     }
 
     //Turns a grid position to unity coordinates
-    public Vector3 calcUnityCoord(Vector2 gridPos)
+    private Vector3 calcUnityCoord(Vector2 gridPos)
     {
         float x = gridPos.x * (hexWidth - xOffset/2);
         float y = -gridPos.y * hexHeight;
@@ -160,12 +183,13 @@ public class HexGrid : MonoBehaviour {
     }
 
     //Method to create the hex grid
-    void createHexGrid() {
+    private void createHexGrid() {
 		mapHexes = new GameObject[gridHeight,gridWidth];
 
-        GameObject hexGridObject = new GameObject("HexGrid");
+		GameObject hexGridObject = Instantiate(parentMapObjectPrefab,transform);
         //Makes sure all generated game objects are under a parent. Allows tidier scene management
 		hexGridObject.transform.SetParent(transform);
+		NetworkServer.Spawn (hexGridObject);
 
         //Incrementing through the two dimensional map array, row by row.
         for (int y = 0; y < gridHeight; y++)
@@ -241,7 +265,11 @@ public class HexGrid : MonoBehaviour {
                 //Potential Optimization for hexgrid
                 thisHex.isStatic = true;
 
+				NetworkServer.Spawn (thisHex);
+
 				mapHexes [y, x] = thisHex;
+
+				RpcSetMap (thisHex, y, x);
             }
 
         }
@@ -274,10 +302,22 @@ public class HexGrid : MonoBehaviour {
 
 	// Add income for each starting tile to the coresponding player
 	public void initPlayerTiles(Player.PlayerId pid){
+		if (!isServer) {
+			return;
+		}
 		List<CapturableTile> playerStartingTiles = startingHexes [pid];
 		Debug.Log ("HexGrid: initPlayerTiles: pid="+pid + ", startingTiles=" + playerStartingTiles.Count	);
 		foreach (CapturableTile tile in playerStartingTiles) {
 			tile.finalizeCapture ();
 		}
+	}
+
+
+	[ClientRpc]
+	private void RpcSetMap(GameObject hex, int y, int x){
+		if(mapHexes == null){
+			mapHexes = new GameObject[gridHeight,gridWidth];
+		}
+		mapHexes [y, x] = hex;
 	}
 }

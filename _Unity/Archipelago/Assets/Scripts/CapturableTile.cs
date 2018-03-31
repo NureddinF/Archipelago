@@ -47,7 +47,7 @@ public class CapturableTile: MonoBehaviour{
 
     public Hex getHex()
     {
-        return thisHex;
+		return GetComponent<Hex>();
     }
 
 
@@ -65,7 +65,7 @@ public class CapturableTile: MonoBehaviour{
 			captureClockwise = false;
 		}
 
-        if (thisHex.getHexOwner() == Player.PlayerId.NEUTRAL && !captureBorder.enabled) {
+		if (GetComponent<Hex>().getHexOwner() == Player.PlayerId.NEUTRAL && !captureBorder.enabled) {
 			captureBorder.enabled = true;
 			captureBorder.sprite = border;
 			captureBorder.fillClockwise = captureClockwise;
@@ -161,7 +161,7 @@ public class CapturableTile: MonoBehaviour{
 		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
 		for(int i=0; i<players.Length; i++){
 			Player player = players[i].GetComponentInChildren<Player>();
-			if(player.playerId.Equals(thisHex.getHexOwner())){
+			if(player.playerId.Equals(GetComponent<Hex>().getHexOwner())){
 				return player;
 			}
 		}
