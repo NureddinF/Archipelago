@@ -6,7 +6,6 @@ public class BuildingController : MonoBehaviour{
 
     public List<Building> allConstructableBuildings;
 
-
 	//TODO: Remove this? its not used
     private string hexToString(Hex h)
     {

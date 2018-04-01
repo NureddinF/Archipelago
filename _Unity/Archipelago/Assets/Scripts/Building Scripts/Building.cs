@@ -12,7 +12,7 @@ public class Building : MonoBehaviour
     public List<HexGrid.TileType> tilesAssociatedWith;
 
 	//Id for each type of building that can be passed over the network
-	public enum BuildingType{None, Farm, Fishing, LogCabbin, Mine, Trap};
+	public enum BuildingType{None, Farm, Fishing, LogCabbin, Mine, Trap, Barracks};
 	public BuildingType buildingId;
 
     //Construction parameters
