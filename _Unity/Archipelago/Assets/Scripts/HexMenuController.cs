@@ -157,49 +157,69 @@ public class HexMenuController : MonoBehaviour {
             // The distance between each menu items as well as the initial offset from top of action box
             float yOffset = 10f;
             //If the selected hex does not have a building
-            if (selectedHex.getBuilding() == null)
-            {
-                //Get a list of possible building types that can be built on this hex
-                List<Building> buildingOptions = gameObject.GetComponent<BuildingController>().getListOfBuildingByTileType(selectedHex.getTileType());
 
-                //Count number of items iterated through to allow correct vertical displacement
-                int count = 0;
+			if (selectedHex.getBuilding () == null) {
+				Debug.Log (selectedHex.getTileType ());
+				//Get a list of possible building types that can be built on this hex
+				List<Building> buildingOptions = gameObject.GetComponent<BuildingController> ().getListOfBuildingByTileType (selectedHex.getTileType ());
 
-                //For each building option
-                foreach (Building b in buildingOptions)
-                {
-                    //New gameobject
-                    GameObject go = new GameObject();
-                    //Set its parent
-                    go.transform.parent = tileActionBox.transform;
-                    //Set its name
-                    go.name = b.name;
-                    //Add appropriate components
-                    go.AddComponent<RectTransform>();
-                    go.AddComponent<Image>();
-                    go.AddComponent<Button>();
+				//Count number of items iterated through to allow correct vertical displacement
+				int count = 0;
 
-                    //Set its rect transform properties
-                    go.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
-                    go.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 1f);
-                    go.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 1f);
-                    go.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth, childHeight);
-                    go.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -count * childHeight * go.GetComponent<RectTransform>().localScale.x - yOffset);
-                    //Set its displayed sprite
-                    go.GetComponent<Image>().sprite = b.getMenuIconSprite();
-                    //Set its click function
-                    go.GetComponent<Button>().onClick.AddListener(() => { tileActionBuild(b); });
-                    //Increment count
-                    count++;
-                }
-            }
+				//For each building option
+				foreach (Building b in buildingOptions) {
+					//New gameobject
+					GameObject go = new GameObject ();
+					//Set its parent
+					go.transform.parent = tileActionBox.transform;
+					//Set its name
+					go.name = b.name;
+					//Add appropriate components
+					go.AddComponent<RectTransform> ();
+					go.AddComponent<Image> ();
+					go.AddComponent<Button> ();
+
+					//Set its rect transform properties
+					go.GetComponent<RectTransform> ().pivot = new Vector2 (0.5f, 1f);
+					go.GetComponent<RectTransform> ().anchorMin = new Vector2 (0.5f, 1f);
+					go.GetComponent<RectTransform> ().anchorMax = new Vector2 (0.5f, 1f);
+					go.GetComponent<RectTransform> ().sizeDelta = new Vector2 (childWidth, childHeight);
+					go.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0f, -count * childHeight * go.GetComponent<RectTransform> ().localScale.x - yOffset);
+					//Set its displayed sprite
+					go.GetComponent<Image> ().sprite = b.getMenuIconSprite ();
+					//Set its click function
+					Debug.Log(b.getTileTypesAssociatedWith()+"sssss");
+
+					if (selectedHex.getTileType().Equals(HexGrid.TileType.BASE)) {
+						Debug.Log ("IFFFFF");
+						go.GetComponent<Button> ().onClick.AddListener (() => {
+							purchaseWarrior (selectedHex);
+						});
+					
+					} else {
+							
+						go.GetComponent<Button> ().onClick.AddListener (() => {
+							tileActionBuild (b);
+						});
+					}
+					//Increment count
+					count++;
+				}
+			} 
         }
     }
 
     //Method for the tileaction, when selecting a building
     void tileActionBuild(Building b)
     {
-        selectedHex.setBuilding(b);
+		selectedHex.setBuilding(b);
         refreshUIValues();
     }
+
+	void purchaseWarrior(Hex barracksHex){
+		Debug.Log ("Warrior added");
+//		GetComponent<Player> ().removeMoney (warriorAmount);
+		GetComponent<UnitController> ().addWarriors (1, barracksHex);
+		refreshUIValues ();
+	}
 }

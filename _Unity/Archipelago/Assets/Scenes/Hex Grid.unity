@@ -88,6 +88,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaDirect: 0.5
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
+    m_ShowResolutionOverlay: 1
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -859,6 +860,7 @@ Camera:
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
@@ -1418,6 +1420,7 @@ MonoBehaviour:
   - {fileID: 114107314746249068, guid: 23e1f30b7964a2c43a8e3e1c1d98270f, type: 2}
   - {fileID: 114508294377568670, guid: 1f2da6618e2d46b4aa1aaf903e2fe9b7, type: 2}
   - {fileID: 114031241436927896, guid: 2368aeeccd7f44120b342287e2c74281, type: 2}
+  - {fileID: 114023970804748398, guid: 86255eab5207049aea60918b5c671299, type: 2}
 --- !u!1 &1030018683
 GameObject:
   m_ObjectHideFlags: 0

@@ -59,6 +59,7 @@ public class UnitController : MonoBehaviour {
     
     //Method to add new warrior(s) given a specified amount and a hex
     public void addWarriors(int amount, Hex h) {
+		Debug.Log ("add warriros");
 		//Get the id of the player
 		Player.PlayerId pid = GetComponent<Player> ().playerId;
         h.addWarriorsToHex(amount, pid);

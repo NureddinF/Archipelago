@@ -7,6 +7,7 @@ public class BuildingController : MonoBehaviour
 
     public List<Building> allConstructableBuildings;
 
+
     private string hexToString(Hex h)
     {
         return h.getX() + "_" + h.getY();

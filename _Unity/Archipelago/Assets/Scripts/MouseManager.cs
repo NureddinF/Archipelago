@@ -155,7 +155,6 @@ public class MouseManager : MonoBehaviour {
                 if (collidedHitInfo.GetComponent<Hex>() != null)
                 {
                     Hex hex = collidedHitInfo.GetComponent<Hex>();
-					Debug.Log (hex.getTileType());
                     //clicked on a hex
                     //bring up menu
                     //if(hex.hexOwner2 == player.playerId){
