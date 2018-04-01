@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4960441084648174}
   - component: {fileID: 114191343730758046}
+  - component: {fileID: 114808505774650556}
   m_Layer: 0
   m_Name: FishingHut
   m_TagString: Untagged
@@ -63,3 +64,35 @@ MonoBehaviour:
     type: 3}
   maxNumberOfAssignedWorkers: 5
   increasedIncomePerWorker: 0.5
+--- !u!114 &114808505774650556
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1871097737981454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 223
+    i1: 244
+    i2: 14
+    i3: 62
+    i4: 81
+    i5: 31
+    i6: 44
+    i7: 52
+    i8: 235
+    i9: 119
+    i10: 1
+    i11: 149
+    i12: 207
+    i13: 136
+    i14: 137
+    i15: 69
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0

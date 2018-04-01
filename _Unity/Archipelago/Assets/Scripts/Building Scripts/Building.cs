@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class Building : MonoBehaviour
-{
+public class Building : NetworkBehaviour{
 
     // Building parameters
     public float cost = 3;
@@ -16,10 +16,10 @@ public class Building : MonoBehaviour
 	public BuildingType buildingId;
 
     //Construction parameters
-    private float currentBuildTime;
+	[SyncVar] private float currentBuildTime;
     public float totalBuildTime;
     public float buildSpeedPerWorker;
-    private bool isConstructed;
+	[SyncVar] private bool isConstructed;
 
     private Hex hexAssociatedWith;
 
@@ -28,40 +28,19 @@ public class Building : MonoBehaviour
     public Sprite buildingSprite;
     public Sprite constructionIconSprite;
 
-    void Start()
-    {
+
+	////////////////////////// Monobehaviour methods //////////////////////////////////////////
+
+    void Start(){
         currentBuildTime = 0;
     }
+
+	////////////////////////// Getters & Setters //////////////////////////////////////////
 
     public Hex getHexAssociatedWith() { 
 		return hexAssociatedWith; 
 	}
-
-    public void setHexAssociatedWith(Hex h) {
-        this.hexAssociatedWith = h;
-        if (!isConstructed)
-        {
-            h.enableConstructionBar();
-            h.enableStatusIcon();
-            h.setStatusIcon(constructionIconSprite);
-        }
-        else
-        {
-            if (this.buildingId != Building.BuildingType.Trap)
-            {
-                h.changeHexSprite(buildingSprite);
-                h.disableStatusIcon();
-                h.disableConstructionBar();
-            }
-            else
-            {
-                h.enableConstructionBar();
-                h.setStatusIcon(buildingSprite);
-            }
-            
-        }
-    }
-
+		
     public Sprite getBuildingSprite() { 
 		return buildingSprite; 
 	}
@@ -71,8 +50,6 @@ public class Building : MonoBehaviour
 	}
 
 
-
-    //Getters & Setters
     public float getCost() { 
 		return cost; 
 	}
@@ -114,29 +91,57 @@ public class Building : MonoBehaviour
 		return isConstructed; 
 	}
 
-    public void progressConstruction() {
+
+
+	////////////////////////// Custom Methods ///////////////////////////////////////////
+
+	////////////////////////// Commands and Server Methods ///////////////////////////////////////////
+	[Command]
+	public void CmdSetHexAssociatedWith(GameObject hex) {
+		Hex h = hex.GetComponent<Hex> ();
+		this.hexAssociatedWith = h;
+		if (!isConstructed) {
+			h.RpcEnableConstructionBar();
+			h.RpcEnableStatusIcon();
+		}
+		else {
+			if (this.buildingId != Building.BuildingType.Trap) {
+				h.RpcDisplayBuildingSprite();
+				h.RpcDisableConstructionBar();
+				h.RpcDisableStatusIcon();
+			}
+			else {
+				h.RpcEnableConstructionBar();
+			}
+		}
+	}
+
+	// Progresss the construction time towards completion if there are workers on the hex
+	public void progressConstruction() {
 		//Calculate Current Build Time
-        currentBuildTime += Time.deltaTime * hexAssociatedWith.getNumOfWorkersOnHex(hexAssociatedWith.getHexOwner()) * buildSpeedPerWorker;
+		currentBuildTime += Time.deltaTime * hexAssociatedWith.getNumOfWorkersOnHex(hexAssociatedWith.getHexOwner()) * buildSpeedPerWorker;
 
-        Debug.Log("% Constructed: " + currentBuildTime / totalBuildTime * 100);
-        if(currentBuildTime >= totalBuildTime)
-        {
-            finalizeConstruction();
-        }
-    }
+		Debug.Log("% Constructed: " + currentBuildTime / totalBuildTime * 100);
+		if(currentBuildTime >= totalBuildTime){
+			finalizeConstruction();
+		}
+	}
 
-    private void finalizeConstruction()
-    {
-        isConstructed = true;
-        hexAssociatedWith.disableConstructionBar();
-        if (this.buildingId != Building.BuildingType.Trap)
-        {
-            hexAssociatedWith.disableStatusIcon();
-            hexAssociatedWith.changeHexSprite(buildingSprite);
-        }
-        else
-        {
-            hexAssociatedWith.setStatusIcon(buildingSprite);
-        }
-    }
+	private void finalizeConstruction(){
+		isConstructed = true;
+		hexAssociatedWith.RpcDisableConstructionBar();
+		if (this.buildingId != Building.BuildingType.Trap) {
+			hexAssociatedWith.RpcDisableStatusIcon();
+			hexAssociatedWith.RpcDisplayBuildingSprite();
+		}
+		else {
+			hexAssociatedWith.RpcDisplayTrap ();
+		}
+	}
+
+	////////////////////////// RPCs ///////////////////////////////////////////
+	[ClientRpc]
+	private void RpcSetHexAssociatedWith(GameObject hex){
+		
+	}
 }

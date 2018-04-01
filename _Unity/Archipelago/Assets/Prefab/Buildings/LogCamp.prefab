@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4428720969927636}
   - component: {fileID: 114107314746249068}
+  - component: {fileID: 114410230233072626}
   m_Layer: 0
   m_Name: LogCamp
   m_TagString: Untagged
@@ -63,3 +64,35 @@ MonoBehaviour:
     type: 3}
   maxNumberOfAssignedWorkers: 5
   increasedIncomePerWorker: 0.5
+--- !u!114 &114410230233072626
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1283247700040868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 35
+    i1: 225
+    i2: 243
+    i3: 11
+    i4: 121
+    i5: 100
+    i6: 162
+    i7: 196
+    i8: 58
+    i9: 142
+    i10: 62
+    i11: 28
+    i12: 29
+    i13: 152
+    i14: 39
+    i15: 15
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0

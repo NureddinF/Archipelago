@@ -37,7 +37,6 @@ public class CapturableTile: NetworkBehaviour{
 
 	// State of tile
 	[SyncVar] private bool isCapturing = false;
-	private bool isConstructing = false;
 
 	//////////////////////////////// MonoBehaviour Methods /////////////////////////////////////////////
 
@@ -157,7 +156,7 @@ public class CapturableTile: NetworkBehaviour{
 		Hex currentHex = gameObject.GetComponent<Hex>();
 		//If a new timeframe hasnt begun start one
 		if(!timeFrameStart) {
-			currentHex.enableCombatBar();
+			currentHex.RpcEnableCombatBar();
 			timePeriod = Time.time;
 			timeFrameStart = true;
 		}

@@ -36,6 +36,7 @@ public class Hex : NetworkBehaviour {
 
     //Store the building on the hex, null if not one
     private Building building;
+	[SyncVar(hook = "setBuilding")]private GameObject buildingObject; //need gameobject version for networking
 
     //Set maxY and maxX of a hex, -1 for off by one error
     private int maxY = HexGrid.getGridHeight() - 1;
@@ -50,9 +51,11 @@ public class Hex : NetworkBehaviour {
     private int warriorHealth = 6;
 
 
+
+	//////////////////////////////// MonoBehaviour Methods ////////////////////////////////////////
+
     //Calls once on object creation
-    void Start()
-    {
+    void Start(){
         building = null;
 
         //Initialize ints to store the units on the tile
@@ -80,80 +83,135 @@ public class Hex : NetworkBehaviour {
         }
 
         //Set it's current sprite to the standard hex sprite
-        changeHexSprite(standard);
+		GetComponent<SpriteRenderer>().sprite = standard;
     }
 
     //Calls once on every frame
-    void Update()
-    {   
-        //If there is a building on the hex and it isn't yet constructed
-        if (building != null && !building.getIsConstructed())
-        {
-            //Progress the buildings construction
-            building.progressConstruction();
-            hexConstructionBarFill.GetComponent<RectTransform>().localScale = new Vector2(building.getCurrentBuildTime() / building.getTotalBuildTime(), 1);
-        }
+    void Update(){
+
+		if (isServer) {
+			serverUpdate ();
+		}
+		if(isClient){
+			clientUpdate ();
+		}
         
     }
 
+
+	//////////////////////////////// Commands and Server Methods ////////////////////////////////////////
+
+	//update game stae
+	private void serverUpdate(){
+		//If there is a building on the hex and it isn't yet constructed
+		if (building != null && !building.getIsConstructed()){
+			//Progress the buildings construction
+			building.progressConstruction();
+		}
+	}
+		
+	[Command]
+	public void CmdSetBuilding(Building.BuildingType buildingId) {
+		GameObject buildingPrefab = FindObjectOfType<BuildingController>().getBuildingFromType(buildingId);
+		//Instantiate a new Building object for the building.
+		//Allows it to hold it's own values, rather than statically for all buildings of same type
+		GameObject buildingObjectInstance = Instantiate(buildingPrefab,transform);
+		NetworkServer.Spawn (buildingObjectInstance);
+		buildingObject = buildingObjectInstance;
+		building = buildingObject.GetComponent<Building> ();
+
+		//Associate this hex with the building
+		building.CmdSetHexAssociatedWith(gameObject);
+	}
+
+	//////////////////////////////// RPCs and Client Methods //////////////////////////////////////////
+
+	private void clientUpdate (){
+		//If there is a building on the hex and it isn't yet constructed
+		if (building != null && !building.getIsConstructed()){
+			// Update Construction UI
+			hexConstructionBarFill.GetComponent<RectTransform>().localScale = new Vector2(building.getCurrentBuildTime() / building.getTotalBuildTime(), 1);
+		}
+	}
+
     //Method to enable the combat bar and icon for this hex
-    public void enableCombatBar()
-    {
+	[ClientRpc]
+    public void RpcEnableCombatBar(){
         hexFightingBarBlue.enabled = true;
         hexFightingBarRed.enabled = true;
         hexFightingIcon.enabled = true;
     }
 
     //Method to disable the combat bar and icon for this hex
-    public void disableCombatBar()
-    {
+	[ClientRpc]
+    public void RpcDisableCombatBar(){
         hexFightingBarBlue.enabled = false;
         hexFightingBarRed.enabled  = false;
         hexFightingIcon.enabled = false;
     }
 
+
+	//Method to enable the construction bar for this hex
+	[ClientRpc]
+	public void RpcEnableConstructionBar(){
+		hexConstructionBarBG.enabled = true;
+		hexConstructionBarFill.enabled = true;
+	}
+
+	//Method to disable the construction bar for this hex
+	[ClientRpc]
+	public void RpcDisableConstructionBar(){
+		hexConstructionBarBG.enabled = false;
+		hexConstructionBarFill.enabled = false;
+	}
+
+	//Method to enable the status icon for this hex
+	[ClientRpc]
+	public void RpcEnableStatusIcon(){
+		hexStatusIcon.enabled = true;
+	}
+
+	//Method to disable the status icon for this hex
+	[ClientRpc]
+	public void RpcDisableStatusIcon(){
+		hexStatusIcon.enabled = false;
+	}
+
+	// Method to change the sprite of the hex to the build
+	[ClientRpc]
+	public void RpcDisplayBuildingSprite(){
+		GetComponent<SpriteRenderer> ().sprite = building.getBuildingSprite ();
+	}
+
+
+	// Method to change the sprite of the hex to the build
+	[ClientRpc]
+	public void RpcDisplayTrap(){
+		setStatusIcon(building.getBuildingSprite());
+	}
+
     //Method to update the combat bar for this hex
-    public void updateCombatBar()
-    {
+    public void updateCombatBar(){
         int totalWarriors = redWarriors + blueWarriors;
         hexFightingBarBlue.GetComponent<RectTransform>().localScale = new Vector2((float)blueWarriors / (float)totalWarriors, 1);
         hexFightingBarRed.GetComponent<RectTransform>().localScale = new Vector2((float)redWarriors / (float)totalWarriors, 1);
     }
+		
 
-    //Method to enable the construction bar for this hex
-    public void enableConstructionBar()
-    {
-        hexConstructionBarBG.enabled = true;
-        hexConstructionBarFill.enabled = true;
-    }
 
-    //Method to disable the construction bar for this hex
-    public void disableConstructionBar()
-    {
-        hexConstructionBarBG.enabled = false;
-        hexConstructionBarFill.enabled = false;
-    }
+	//////////////////////////////// Getters and setters////////////////////////////////////////////
+    
+	//Method to set the status icon for this hex
+	private void setStatusIcon(Sprite s){
+		hexStatusIcon.sprite = s;
+	}
 
-    //Method to enable the status icon for this hex
-    public void enableStatusIcon()
-    {
-        hexStatusIcon.enabled = true;
-    }
 
-    //Method to disable the status icon for this hex
-    public void disableStatusIcon()
-    {
-        hexStatusIcon.enabled = false;
-    }
+	public Sprite getSprite(){
+		return standard;
+	}
 
-    //Method to set the status icon for this hex
-    public void setStatusIcon(Sprite s)
-    {
-        hexStatusIcon.sprite = s;
-    }
-
-    //Getters and setters
-    //Set X
+	//Set X
     public void setX(int x) { 
 		this.x = x; 
 	}
@@ -201,30 +259,7 @@ public class Hex : NetworkBehaviour {
 	//Get Tile Type
     public HexGrid.TileType getTileType() { 
 		return tileType; 
-	}
-		
-	[Command]
-	public void CmdSetBuilding(Building.BuildingType buildingId) {
-		// Update building on server
-		setBuilding (buildingId);
-		// Update building on all clients
-		RpcSetBuilding (buildingId);
-	}
-
-	[ClientRpc]
-	private void RpcSetBuilding(Building.BuildingType buildingId) {
-		setBuilding (buildingId);
-	}
-
-	//Set Building
-	private void setBuilding(Building.BuildingType buildingId) {
-		Building buildingPrefab = FindObjectOfType<BuildingController>().getBuildingFromType(buildingId);
-		//Instantiate a new Building object for the building.
-		//Allows it to hold it's own values, rather than statically for all buildings of same type
-		this.building = (Building)Instantiate(buildingPrefab);
-		//Associate this hex with the building
-		building.setHexAssociatedWith(this);
-    }
+	}		
 
 	//Get Building
     public Building getBuilding() { 
@@ -271,6 +306,8 @@ public class Hex : NetworkBehaviour {
 		}
 	}
 
+	///////////////////////////////////////// Custom Methods ///////////////////////////////////////////
+
 	//Do Damage, Performs damage to both factions and updates units, health, and damage respectively
 	public void doDamage() {
 		int tempRedHealth = redWarriorHealth + redWorkerHealth;
@@ -285,7 +322,7 @@ public class Hex : NetworkBehaviour {
 			redWorkers = 0;
 			redWarriorHealth = 0;
 			redWarriors = 0;
-            disableCombatBar();
+            RpcDisableCombatBar();
         } 
 		//Some health remaining after attack
 		else {
@@ -314,7 +351,7 @@ public class Hex : NetworkBehaviour {
             blueWorkers = 0;
             blueWarriorHealth = 0;
             blueWarriors = 0;
-            disableCombatBar();
+            RpcDisableCombatBar();
         }
         //Some health remaining after attack
         else {
@@ -567,15 +604,10 @@ public class Hex : NetworkBehaviour {
         return false;
     }
 
-    //Method to change the sprite of the hex
-    
-	public void changeHexSprite(Sprite s)
-    {
-        this.GetComponent<SpriteRenderer>().sprite = s;
-    }
 
-	public Sprite getSprite(){
-		return standard;
+	////////////////////////////////// SyncVar hooks //////////////////////////////
+	private void setBuilding(GameObject newBuilding){
+		building = newBuilding.GetComponent<Building> ();
+		setStatusIcon (building.getConstructionIconSprite());
 	}
-
 }

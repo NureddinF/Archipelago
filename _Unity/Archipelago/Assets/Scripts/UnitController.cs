@@ -362,7 +362,7 @@ public class UnitController : NetworkBehaviour {
 		//sets the sprite to unactive
 		unit.SetActive (false);
 		//changes the hex sprite back to the original sprite thats under the trap(removes the trap)
-		h.disableStatusIcon();
+		h.RpcDisableStatusIcon();
 		//removes the building(trap)
 		h.CmdSetBuilding (Building.BuildingType.None);
 	}
