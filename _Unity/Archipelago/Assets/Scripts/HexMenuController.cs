@@ -217,6 +217,17 @@ public class HexMenuController : MonoBehaviour {
     }
 
 	void purchaseWarrior(Hex barracksHex){
+//		float warriorAmount = 25;
+//		float currentAmount = GetComponent<Player> ().getCurrentMoney ();
+//		if (warriorAmount > currentAmount) {
+//			Debug.Log ("Insufficent funds");
+//		
+//		} else {
+//			Debug.Log ("Warrior added");
+//			GetComponent<Player> ().removeMoney (warriorAmount);
+//			GetComponent<UnitController> ().addWarriors (1, barracksHex);
+//		}
+
 		Debug.Log ("Warrior added");
 //		GetComponent<Player> ().removeMoney (warriorAmount);
 		GetComponent<UnitController> ().addWarriors (1, barracksHex);
