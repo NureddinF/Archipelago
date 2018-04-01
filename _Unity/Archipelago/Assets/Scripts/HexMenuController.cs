@@ -15,6 +15,9 @@ public class HexMenuController : NetworkBehaviour {
     private Text tileWorkerCount;
     private Text tileWarriorCount;
     private Image tileActionBox;
+
+	public float workerAmount = 25;
+	public float warriorAmount = 50;
     
 
     //Parameter to store the current hex that the menu is displaying for.
@@ -186,6 +189,7 @@ public class HexMenuController : NetworkBehaviour {
                 //For each building option
                 foreach (Building b in buildingOptions)
                 {
+					Debug.Log (b);
                     //New gameobject
                     GameObject go = new GameObject();
                     //Set its parent
@@ -207,15 +211,90 @@ public class HexMenuController : NetworkBehaviour {
                     //Set its displayed sprite
                     go.GetComponent<Image>().sprite = b.getMenuIconSprite();
                     //Set its click function
-					go.GetComponent<Button>().onClick.AddListener(() => { tileActionBuild(b.buildingId); });
+					if (selectedHex.getTileType ().Equals (HexGrid.TileType.BASE)) {
+						go.GetComponent<Button> ().onClick.AddListener (() => {
+							StartCoroutine(purchaseWorker (selectedHex));
+						});
+
+					} else {
+
+						go.GetComponent<Button> ().onClick.AddListener (() => {
+							CmdTileActionBuild (selectedHex.gameObject , b.buildingId);
+						});
+					}
                     //Increment count
                     count++;
                 }
             }
+			else if(selectedHex.getBuilding() != null &&selectedHex.getHexOwner().Equals(GetComponent<Player>().playerId)){
+				Building barracks = selectedHex.getBuilding ();
+				if (barracks.buildingId.Equals (Building.BuildingType.Barracks)) {
+					GameObject go = new GameObject ();
+					//Set its parent
+					go.transform.parent = tileActionBox.transform;
+					//Set its name
+					go.name = barracks.name;
+					//Add appropriate components
+					go.AddComponent<RectTransform> ();
+					go.AddComponent<Image> ();
+					go.AddComponent<Button> ();
+
+					//Set its rect transform properties
+					go.GetComponent<RectTransform> ().pivot = new Vector2 (0.5f, 1f);
+					go.GetComponent<RectTransform> ().anchorMin = new Vector2 (0.5f, 1f);
+					go.GetComponent<RectTransform> ().anchorMax = new Vector2 (0.5f, 1f);
+
+					go.GetComponent<RectTransform> ().sizeDelta = new Vector2 (childWidth, childHeight);
+					go.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0f, 0 * childHeight * go.GetComponent<RectTransform> ().localScale.x - yOffset);
+					//Set its displayed sprite
+					go.GetComponent<Image> ().sprite = barracks.GetComponent<Barracks>().getpurchaseWarriorSprite ();
+
+					go.GetComponent<Button>().onClick.AddListener (() => {
+						StartCoroutine(purchaseWarrior (selectedHex));
+					});
+				}
+
+
+			}
         }
     }
 		
     //Method for the tileaction, when selecting a building
+	IEnumerator purchaseWorker(Hex barracksHex){
+		if (workerAmount > GetComponent<Player> ().getCurrentMoney ()) {
+			Debug.Log ("Insufficent funds");
+			tileWorkerCount.color = Color.red;
+			yield return new WaitForSeconds(0.5f);
+			tileWorkerCount.color = Color.black;
+		
+		} else {
+			GetComponent<Player> ().removeMoney (workerAmount);
+			GetComponent<UnitController> ().CmdAddWorkers (1, barracksHex.gameObject);
+			tileWorkerCount.color = new Color(0, 0.75f, 0);
+			yield return new WaitForSeconds(0.5f);
+			tileWorkerCount.color = Color.black;
+		}
+		RpcRefreshUIValues ();
+	}
+
+	IEnumerator purchaseWarrior(Hex barracksHex){
+		float currentAmount = GetComponent<Player> ().getCurrentMoney ();
+		if (warriorAmount > currentAmount) {
+			Debug.Log ("Insufficent funds");
+			tileWarriorCount.color = Color.red;
+			yield return new WaitForSeconds(0.5f);
+			tileWarriorCount.color = Color.black;
+
+		} else {
+			Debug.Log ("Warrior added");
+			GetComponent<Player> ().removeMoney (warriorAmount);
+			GetComponent<UnitController> ().CmdAddWarriors (1, barracksHex.gameObject);
+			tileWarriorCount.color = new Color(0, 0.75f, 0);
+			yield return new WaitForSeconds(0.5f);
+			tileWarriorCount.color = Color.black;
+		}
+		RpcRefreshUIValues ();
+	}
 	void tileActionBuild(Building.BuildingType buildingId){
 		CmdTileActionBuild (selectedHex.gameObject, buildingId);
 	}

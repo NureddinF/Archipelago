@@ -73,6 +73,7 @@ public class UnitController : NetworkBehaviour {
     }
     
     //Method to add new warrior(s) given a specified amount and a hex
+
 	[Command]
 	public void CmdAddWarriors(int amount, GameObject hex) {
 		Hex h = hex.GetComponent<Hex> ();
