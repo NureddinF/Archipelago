@@ -572,6 +572,8 @@ public class Hex : NetworkBehaviour {
 	public void changeHexSprite(Sprite s)
     {
         this.GetComponent<SpriteRenderer>().sprite = s;
+        //Refresh hex menu to update ui if necessary
+        FindObjectOfType<HexMenuController>().RpcRefreshUIValues();
     }
 
 	public Sprite getSprite(){
