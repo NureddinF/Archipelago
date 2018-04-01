@@ -27,6 +27,8 @@ public class Building : MonoBehaviour
     public Sprite menuIconSprite;
     public Sprite buildingSprite;
     public Sprite constructionIconSprite;
+	public Sprite purchaseWarriorSprite;
+
 
     void Start()
     {
@@ -108,6 +110,11 @@ public class Building : MonoBehaviour
 
     public Sprite getMenuIconSprite() { 
 		return menuIconSprite; 
+	}
+
+	public Sprite getpurchaseWarriorSprite(){
+
+		return purchaseWarriorSprite;
 	}
 
     public bool getIsConstructed() { 

@@ -93,6 +93,8 @@ MonoBehaviour:
   - {fileID: 114107314746249068, guid: 23e1f30b7964a2c43a8e3e1c1d98270f, type: 2}
   - {fileID: 114508294377568670, guid: 1f2da6618e2d46b4aa1aaf903e2fe9b7, type: 2}
   - {fileID: 114179157828309864, guid: 2368aeeccd7f44120b342287e2c74281, type: 2}
+  - {fileID: 114594292549062602, guid: 86255eab5207049aea60918b5c671299, type: 2}
+  - {fileID: 114135447590627104, guid: 883bbff62d3394c65ad411c8974e3bcc, type: 2}
 --- !u!114 &114690798338816192
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -143,3 +145,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hexMenu: {fileID: 0}
+  workerAmount: 25
+  warriorAmount: 50

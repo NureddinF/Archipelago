@@ -244,9 +244,9 @@ public class HexMenuController : NetworkBehaviour {
 					go.GetComponent<RectTransform> ().anchorMax = new Vector2 (0.5f, 1f);
 
 					go.GetComponent<RectTransform> ().sizeDelta = new Vector2 (childWidth, childHeight);
-					go.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0f, childHeight * go.GetComponent<RectTransform> ().localScale.x - yOffset);
+					go.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0f, 0 * childHeight * go.GetComponent<RectTransform> ().localScale.x - yOffset);
 					//Set its displayed sprite
-					go.GetComponent<Image> ().sprite = barracks.getMenuIconSprite ();
+					go.GetComponent<Image> ().sprite = barracks.getpurchaseWarriorSprite ();
 
 					go.GetComponent<Button>().onClick.AddListener (() => {
 						purchaseWarrior (selectedHex);
