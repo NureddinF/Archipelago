@@ -25,52 +25,68 @@ public class Building : MonoBehaviour
 
     //Building sprites
     public Sprite menuIconSprite;
-    public Sprite buildingSprite;
-    public Sprite constructionIconSprite;
+	public Sprite buildingBlueSprite;
+	public Sprite buildingRedSprite;
+	public Sprite constructionBlueIconSprite;
+	public Sprite constructionRedIconSprite;
 
     void Start()
     {
         currentBuildTime = 0;
     }
 
+	//Returns Current Hex
     public Hex getHexAssociatedWith() { 
 		return hexAssociatedWith; 
 	}
 
+	//Sets Construction sprite
     public void setHexAssociatedWith(Hex h) {
         this.hexAssociatedWith = h;
+		Player.PlayerId hOwner = h.getHexOwner();
         if (!isConstructed)
         {
             h.enableConstructionBar();
             h.enableStatusIcon();
-            h.setStatusIcon(constructionIconSprite);
+			//If Player 1 set construction icon to red
+			if (hOwner == Player.PlayerId.P1) {
+				h.setStatusIcon(constructionRedIconSprite);
+			}
+			//If Player 2 set construction icon to blue
+			else if(hOwner == Player.PlayerId.P2) {
+				h.setStatusIcon(constructionBlueIconSprite);
+			}
         }
         else
         {
             if (this.buildingId != Building.BuildingType.Trap)
             {
-                h.changeHexSprite(buildingSprite);
+				//If Player 1 set building to red
+				if (hOwner == Player.PlayerId.P1) {
+					h.changeHexSprite(buildingRedSprite);
+				}
+				//If Player 2 set building to blue
+				else if(hOwner == Player.PlayerId.P2) {
+					h.changeHexSprite(buildingBlueSprite);
+				}
                 h.disableStatusIcon();
                 h.disableConstructionBar();
             }
             else
             {
                 h.enableConstructionBar();
-                h.setStatusIcon(buildingSprite);
+				//If Player 1 set trap to red
+				if (hOwner == Player.PlayerId.P1) {
+					h.setStatusIcon(buildingRedSprite);
+				}
+				//If Player 2 set building to blue
+				else if(hOwner == Player.PlayerId.P2) {
+					h.setStatusIcon(buildingBlueSprite);
+				}
             }
             
         }
     }
-
-    public Sprite getBuildingSprite() { 
-		return buildingSprite; 
-	}
-
-    public void setBuildingSprite(Sprite s) { 
-		buildingSprite = s; 
-	}
-
-
 
     //Getters & Setters
     public float getCost() { 
@@ -94,12 +110,8 @@ public class Building : MonoBehaviour
 	}
 
     public float getCurrentBuildTime()
-    {
-        return currentBuildTime;
-    }
-
-    public Sprite getConstructionIconSprite() { 
-		return constructionIconSprite; 
+	{
+		return currentBuildTime;
 	}
 
     public List<HexGrid.TileType> getTileTypesAssociatedWith() { 
@@ -125,6 +137,7 @@ public class Building : MonoBehaviour
         }
     }
 
+	//Finalizes construction on a tile and updates relevant UI sprites
     private void finalizeConstruction()
     {
         isConstructed = true;
@@ -132,11 +145,26 @@ public class Building : MonoBehaviour
         if (this.buildingId != Building.BuildingType.Trap)
         {
             hexAssociatedWith.disableStatusIcon();
-            hexAssociatedWith.changeHexSprite(buildingSprite);
+			//If Player 1 make red building type
+			if(getHexAssociatedWith().getHexOwner() == Player.PlayerId.P1) {
+				hexAssociatedWith.changeHexSprite(buildingRedSprite);
+			}
+			//If Player 2 make blue building type
+			else if(getHexAssociatedWith().getHexOwner() == Player.PlayerId.P2) {
+				hexAssociatedWith.changeHexSprite(buildingBlueSprite);
+			}
         }
         else
         {
-            hexAssociatedWith.setStatusIcon(buildingSprite);
+			//If Player 1 make red building type
+			if(getHexAssociatedWith().getHexOwner() == Player.PlayerId.P1) {
+				hexAssociatedWith.setStatusIcon(buildingRedSprite);
+			}
+			//If Player 2 make blue building type
+			else if(getHexAssociatedWith().getHexOwner() == Player.PlayerId.P2) {
+				hexAssociatedWith.setStatusIcon(buildingBlueSprite);
+			}
+            
         }
     }
 }
