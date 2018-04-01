@@ -189,6 +189,7 @@ public class HexMenuController : NetworkBehaviour {
                 //For each building option
                 foreach (Building b in buildingOptions)
                 {
+					Debug.Log (b);
                     //New gameobject
                     GameObject go = new GameObject();
                     //Set its parent
@@ -246,7 +247,7 @@ public class HexMenuController : NetworkBehaviour {
 					go.GetComponent<RectTransform> ().sizeDelta = new Vector2 (childWidth, childHeight);
 					go.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0f, 0 * childHeight * go.GetComponent<RectTransform> ().localScale.x - yOffset);
 					//Set its displayed sprite
-					go.GetComponent<Image> ().sprite = barracks.getpurchaseWarriorSprite ();
+					go.GetComponent<Image> ().sprite = barracks.GetComponent<Barracks>().getpurchaseWarriorSprite ();
 
 					go.GetComponent<Button>().onClick.AddListener (() => {
 						purchaseWarrior (selectedHex);
