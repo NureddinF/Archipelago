@@ -18,6 +18,12 @@ public class Warrior : Unit
 		//Call to check if there is a trap on the Hex
 		GameObject.Find ("Player").GetComponent<UnitController> ().checkTrap (h, this.gameObject);
 
+        if (h.GetComponent<Hex>().hasEnemyWarriors(id))
+        {
+            GameObject.Find("Player").GetComponent<UnitController>().addWarriors(1, h.GetComponent<Hex>());
+            Destroy(gameObject);
+        }
+
 		//If reached destination, add it to the hex and remove the gameobject
         if (transform.position.Equals(getDestinationCoord()))
         {

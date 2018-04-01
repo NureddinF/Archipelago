@@ -68,7 +68,6 @@ public class MouseManager : MonoBehaviour {
 				canPerformSelection = false;
 				doSelection ();
 			}
-			Debug.Log (halfHeight + "," + halfWidth);
 		}
 		//panning
 		else if (Input.touchCount == 1) { //one touch on screen
@@ -135,11 +134,9 @@ public class MouseManager : MonoBehaviour {
 	private void doSelection(){        
         //Screen pos is relative to camera location in unity coordinates
 		Vector3 screenPos = Camera.main.ScreenToWorldPoint(clickPos);
-		Debug.Log (screenPos);
         //Information regarding the object the ray collides with
         //Returns true or false but also provides information of object collider coliided with
         RaycastHit2D hitInfo = Physics2D.Raycast(screenPos, Vector2.zero);
-//		string debugLog = hitInfo == null ? "NULL" : "Not null";
         //If ray collides with an object
         if (hitInfo)
         {   
@@ -155,7 +152,6 @@ public class MouseManager : MonoBehaviour {
                 if (collidedHitInfo.GetComponent<Hex>() != null)
                 {
                     Hex hex = collidedHitInfo.GetComponent<Hex>();
-					Debug.Log (hex.getTileType());
                     //clicked on a hex
                     //bring up menu
                     //if(hex.hexOwner2 == player.playerId){

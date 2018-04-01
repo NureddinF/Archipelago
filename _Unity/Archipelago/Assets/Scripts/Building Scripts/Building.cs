@@ -9,7 +9,6 @@ public class Building : MonoBehaviour
     public float cost = 3;
     public float tileIncomeAfterBuild = 1;
     private float currentTileIncome;
-    public float constructionTime = 5;
     public List<HexGrid.TileType> tilesAssociatedWith;
 
     //Construction parameters
@@ -23,20 +22,13 @@ public class Building : MonoBehaviour
     //Building sprites
     public Sprite menuIconSprite;
     public Sprite buildingSprite;
-    public Sprite constructionSprite;
+    public Sprite constructionIconSprite;
 
     void Start()
     {
         currentBuildTime = 0;
     }
 
-    void Update()
-    {
-        if (!isConstructed)
-        {
-            progressConstruction();
-        } 
-    }
     public Hex getHexAssociatedWith() { 
 		return hexAssociatedWith; 
 	}
@@ -45,11 +37,24 @@ public class Building : MonoBehaviour
         this.hexAssociatedWith = h;
         if (!isConstructed)
         {
-            h.changeHexSprite(constructionSprite);
+            h.enableConstructionBar();
+            h.enableStatusIcon();
+            h.setStatusIcon(constructionIconSprite);
         }
         else
         {
-            h.changeHexSprite(buildingSprite);
+            if (!this.GetComponent<Trap>())
+            {
+                h.changeHexSprite(buildingSprite);
+                h.disableStatusIcon();
+                h.disableConstructionBar();
+            }
+            else
+            {
+                h.enableConstructionBar();
+                h.setStatusIcon(buildingSprite);
+            }
+            
         }
     }
 
@@ -80,12 +85,17 @@ public class Building : MonoBehaviour
 		this.currentTileIncome = currentTileIncome; 
 	}
 
-    public float getConstructionTime() { 
-		return constructionTime; 
+    public float getTotalBuildTime() { 
+		return totalBuildTime; 
 	}
 
-    public Sprite getConstructionSprite() { 
-		return constructionSprite; 
+    public float getCurrentBuildTime()
+    {
+        return currentBuildTime;
+    }
+
+    public Sprite getConstructionIconSprite() { 
+		return constructionIconSprite; 
 	}
 
     public List<HexGrid.TileType> getTileTypesAssociatedWith() { 
@@ -100,12 +110,11 @@ public class Building : MonoBehaviour
 		return isConstructed; 
 	}
 
-    private void progressConstruction() {
-		//Get the id of the player
-		Player.PlayerId pid = GetComponent<Player> ().playerId;
+    public void progressConstruction() {
 		//Calculate Current Build Time
-        currentBuildTime += Time.deltaTime * hexAssociatedWith.getNumOfWorkersOnHex(pid) * buildSpeedPerWorker;
+        currentBuildTime += Time.deltaTime * hexAssociatedWith.getNumOfWorkersOnHex(hexAssociatedWith.getHexOwner()) * buildSpeedPerWorker;
 
+        Debug.Log("% Constructed: " + currentBuildTime / totalBuildTime * 100);
         if(currentBuildTime >= totalBuildTime)
         {
             finalizeConstruction();
@@ -115,6 +124,15 @@ public class Building : MonoBehaviour
     private void finalizeConstruction()
     {
         isConstructed = true;
-        hexAssociatedWith.changeHexSprite(buildingSprite);
+        hexAssociatedWith.disableConstructionBar();
+        if (!this.GetComponent<Trap>())
+        {
+            hexAssociatedWith.disableStatusIcon();
+            hexAssociatedWith.changeHexSprite(buildingSprite);
+        }
+        else
+        {
+            hexAssociatedWith.setStatusIcon(buildingSprite);
+        }
     }
 }
