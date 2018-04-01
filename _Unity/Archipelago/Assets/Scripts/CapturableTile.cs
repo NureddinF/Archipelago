@@ -91,7 +91,7 @@ public class CapturableTile: NetworkBehaviour{
 			//if tile is not being captured don't have to do anything with capturing
 			return;
 		}
-
+			
 		//Only a single Player has units on the tile therefore they can capture
 		// Always add decay towards neutral regardless of the player
 		if (amountCaptured > 0) {
@@ -113,17 +113,6 @@ public class CapturableTile: NetworkBehaviour{
 		//If all these return true Player 2 begins to capture
 		else if (numP2UnitsOnHex > 0 && thisHex.hasOwnedNeighbor (Player.PlayerId.P2) && thisHex.getHexOwner () != Player.PlayerId.P2) {
 			updateTileCapture (Player.PlayerId.P2, newAmountCaptured);
-			/*if (newAmountCaptured < -totalCaptureCost) {
-				//p2 captured tile
-				thisHex.setHexOwner (Player.PlayerId.P2);
-				captureBorder.enabled = false;
-				tileSprite.sprite = p2CaptureTile;
-				finalizeCapture ();
-			} else if (newAmountCaptured * amountCaptured < 0) {
-				// change occured
-				captureBorder.sprite = p2CaptureBorder;
-				captureBorder.fillClockwise = false;
-			}*/
 		} else if (numP1UnitsOnHex == 0 && numP1UnitsOnHex == 0 && thisHex.getHexOwner () == Player.PlayerId.NEUTRAL){
 			// Capture amount degrades towards neutral
 			updateTileCapture (Player.PlayerId.NEUTRAL, newAmountCaptured);

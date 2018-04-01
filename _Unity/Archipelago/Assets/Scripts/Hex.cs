@@ -71,8 +71,7 @@ public class Hex : NetworkBehaviour {
 		blueWorkerHealth = 0;
 
         //If not a water tile, since doesn't hold the canvas object or have interactibility
-        if (this.getTileType() != HexGrid.TileType.WATER)
-        {
+        if (this.getTileType() != HexGrid.TileType.WATER) {
             //Connect the respective image parameters to their child hex 'Image' components
             hexStatusIcon = gameObject.transform.Find("Canvas/tileStatusIcon").GetComponent<Image>();
             hexConstructionBarBG = gameObject.transform.Find("Canvas/tileConstructionBar").GetComponent<Image>();
@@ -180,14 +179,14 @@ public class Hex : NetworkBehaviour {
 	// Method to change the sprite of the hex to the build
 	[ClientRpc]
 	public void RpcDisplayBuildingSprite(){
-		GetComponent<SpriteRenderer> ().sprite = building.getBuildingSprite ();
+		GetComponent<SpriteRenderer> ().sprite = building.getBuildingSprite (hexOwner);
 	}
 
 
 	// Method to change the sprite of the hex to the build
 	[ClientRpc]
 	public void RpcDisplayTrap(){
-		setStatusIcon(building.getBuildingSprite());
+		setStatusIcon(building.getBuildingSprite(hexOwner));
 	}
 
     //Method to update the combat bar for this hex
@@ -603,11 +602,20 @@ public class Hex : NetworkBehaviour {
         }
         return false;
     }
+		
+    //Method to change the sprite of the hex
+    
+	public void changeHexSprite(Sprite s)
+    {
+        this.GetComponent<SpriteRenderer>().sprite = s;
+        //Refresh hex menu to update ui if necessary
+        FindObjectOfType<HexMenuController>().RpcRefreshUIValues();
+    }
 
 
 	////////////////////////////////// SyncVar hooks //////////////////////////////
 	private void setBuilding(GameObject newBuilding){
 		building = newBuilding.GetComponent<Building> ();
-		setStatusIcon (building.getConstructionIconSprite());
+		setStatusIcon (building.getConstructionIconSprite(hexOwner));
 	}
 }

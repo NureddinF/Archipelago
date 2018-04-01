@@ -144,7 +144,6 @@ public class MouseManager : MonoBehaviour {
             GameObject collidedHitInfo = hitInfo
 				.collider
 				.transform.gameObject;
-
             // Check what we clicked on
             if (collidedHitInfo.GetComponent<Hex>() != null) {
                 Hex hex = collidedHitInfo.GetComponent<Hex>();

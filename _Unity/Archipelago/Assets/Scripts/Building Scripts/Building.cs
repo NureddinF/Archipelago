@@ -12,7 +12,7 @@ public class Building : NetworkBehaviour{
     public List<HexGrid.TileType> tilesAssociatedWith;
 
 	//Id for each type of building that can be passed over the network
-	public enum BuildingType{None, Farm, Fishing, LogCabbin, Mine, Trap};
+	public enum BuildingType{None, Farm, Fishing, LogCabbin, Mine, Trap, Barracks};
 	public BuildingType buildingId;
 
     //Construction parameters
@@ -21,12 +21,15 @@ public class Building : NetworkBehaviour{
     public float buildSpeedPerWorker;
 	[SyncVar] private bool isConstructed;
 
+	// The hex this building is on, only valid on the server
     private Hex hexAssociatedWith;
 
     //Building sprites
     public Sprite menuIconSprite;
-    public Sprite buildingSprite;
-    public Sprite constructionIconSprite;
+	public Sprite buildingBlueSprite;
+	public Sprite buildingRedSprite;
+	public Sprite constructionBlueIconSprite;
+	public Sprite constructionRedIconSprite;
 
 
 	////////////////////////// Monobehaviour methods //////////////////////////////////////////
@@ -35,21 +38,33 @@ public class Building : NetworkBehaviour{
         currentBuildTime = 0;
     }
 
+
 	////////////////////////// Getters & Setters //////////////////////////////////////////
-
-    public Hex getHexAssociatedWith() { 
-		return hexAssociatedWith; 
-	}
 		
-    public Sprite getBuildingSprite() { 
-		return buildingSprite; 
+	public Sprite getBuildingSprite(Player.PlayerId pid) {
+		Sprite buildSprite;
+		if(pid == Player.PlayerId.P1){
+			buildSprite = buildingRedSprite;
+		} else if(pid == Player.PlayerId.P2){
+			buildSprite = buildingBlueSprite;
+		} else {
+			buildSprite = null;
+		}
+		return buildSprite; 
 	}
 
-    public void setBuildingSprite(Sprite s) { 
-		buildingSprite = s; 
+	public Sprite getConstructionIconSprite(Player.PlayerId pid) { 
+		Sprite constructionSprite;
+		if(pid == Player.PlayerId.P1){
+			constructionSprite = constructionRedIconSprite;
+		} else if(pid == Player.PlayerId.P2){
+			constructionSprite = constructionBlueIconSprite;
+		} else {
+			constructionSprite = null;
+		}
+		return constructionSprite;
 	}
-
-
+	
     public float getCost() { 
 		return cost; 
 	}
@@ -71,12 +86,8 @@ public class Building : NetworkBehaviour{
 	}
 
     public float getCurrentBuildTime()
-    {
-        return currentBuildTime;
-    }
-
-    public Sprite getConstructionIconSprite() { 
-		return constructionIconSprite; 
+	{
+		return currentBuildTime;
 	}
 
     public List<HexGrid.TileType> getTileTypesAssociatedWith() { 
@@ -126,7 +137,7 @@ public class Building : NetworkBehaviour{
 			finalizeConstruction();
 		}
 	}
-
+		
 	private void finalizeConstruction(){
 		isConstructed = true;
 		hexAssociatedWith.RpcDisableConstructionBar();
@@ -140,8 +151,5 @@ public class Building : NetworkBehaviour{
 	}
 
 	////////////////////////// RPCs ///////////////////////////////////////////
-	[ClientRpc]
-	private void RpcSetHexAssociatedWith(GameObject hex){
-		
-	}
+
 }
