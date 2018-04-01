@@ -59,7 +59,11 @@ MonoBehaviour:
   buildSpeedPerWorker: 1
   menuIconSprite: {fileID: 21300000, guid: 21ae4043538274b0ab7d1749d3df52ef, type: 3}
   buildingSprite: {fileID: 21300000, guid: 6677b4c3aa468457a9363ea6563ad8e9, type: 3}
+  buildingBlueSprite: {fileID: 21300000, guid: e3040fe60a00348d992c0c0a7a761ace, type: 3}
+  buildingRedSprite: {fileID: 21300000, guid: e583d703b111b4be8800071b42161350, type: 3}
   constructionIconSprite: {fileID: 21300000, guid: db84b18b62dc0410a80b0113624ad01d,
     type: 3}
+  constructionBlueIconSprite: {fileID: 0}
+  constructionRedIconSprite: {fileID: 0}
   maxNumberOfAssignedWorkers: 5
   increasedIncomePerWorker: 0.5
