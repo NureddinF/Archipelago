@@ -211,13 +211,9 @@ public class HexMenuController : NetworkBehaviour {
                     go.GetComponent<Image>().sprite = b.getMenuIconSprite();
                     //Set its click function
 					if (selectedHex.getTileType ().Equals (HexGrid.TileType.BASE)) {
-						if (workerAmount < GetComponent<Player> ().getCurrentMoney ()) {
-							go.GetComponent<Button> ().onClick.AddListener (() => {
-								purchaseWorker (selectedHex);
-							});
-						} else {
-							go.GetComponent<Button> () = null;
-						}
+						go.GetComponent<Button> ().onClick.AddListener (() => {
+							purchaseWorker (selectedHex);
+						});
 
 					} else {
 
@@ -230,6 +226,32 @@ public class HexMenuController : NetworkBehaviour {
                 }
             }
 			else if(selectedHex.getBuilding() != null &&selectedHex.getHexOwner().Equals(GetComponent<Player>().playerId)){
+				Building barracks = selectedHex.getBuilding ();
+				if (barracks.buildingId.Equals (Building.BuildingType.Barracks)) {
+					GameObject go = new GameObject ();
+					//Set its parent
+					go.transform.parent = tileActionBox.transform;
+					//Set its name
+					go.name = barracks.name;
+					//Add appropriate components
+					go.AddComponent<RectTransform> ();
+					go.AddComponent<Image> ();
+					go.AddComponent<Button> ();
+
+					//Set its rect transform properties
+					go.GetComponent<RectTransform> ().pivot = new Vector2 (0.5f, 1f);
+					go.GetComponent<RectTransform> ().anchorMin = new Vector2 (0.5f, 1f);
+					go.GetComponent<RectTransform> ().anchorMax = new Vector2 (0.5f, 1f);
+
+					go.GetComponent<RectTransform> ().sizeDelta = new Vector2 (childWidth, childHeight);
+					go.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0f, childHeight * go.GetComponent<RectTransform> ().localScale.x - yOffset);
+					//Set its displayed sprite
+					go.GetComponent<Image> ().sprite = barracks.getMenuIconSprite ();
+
+					go.GetComponent<Button>().onClick.AddListener (() => {
+						purchaseWarrior (selectedHex);
+					});
+				}
 
 
 			}
@@ -238,15 +260,12 @@ public class HexMenuController : NetworkBehaviour {
 		
     //Method for the tileaction, when selecting a building
 	void purchaseWorker(Hex barracksHex){
-		float warriorAmount = 25;
-		float currentAmount = GetComponent<Player> ().getCurrentMoney ();
-		if (workerAmount > currentAmount) {
+		if (workerAmount > GetComponent<Player> ().getCurrentMoney ()) {
 			Debug.Log ("Insufficent funds");
-
 		
 		} else {
 			Debug.Log ("Warrior added");
-			GetComponent<Player> ().removeMoney (warriorAmount);
+			GetComponent<Player> ().removeMoney (workerAmount);
 			GetComponent<UnitController> ().CmdAddWorkers (1, barracksHex.gameObject);
 		}
 		Debug.Log ("Worker added");
