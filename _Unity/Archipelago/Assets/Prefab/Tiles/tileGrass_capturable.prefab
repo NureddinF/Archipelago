@@ -398,6 +398,7 @@ MonoBehaviour:
   p2CaptureBorder: {fileID: 21300000, guid: cc92ddfc1ccea09489c73fcd86605303, type: 3}
   p1CaptureTile: {fileID: 21300000, guid: b98308afa482e473da6e4c5bdd3d6292, type: 3}
   p2CaptureTile: {fileID: 21300000, guid: b121c91b2f4974d569d10adc885a81a5, type: 3}
+  neutralCaptureTile: {fileID: 21300000, guid: 90fbba6c15a0d4385a351330aa5c1f6f, type: 3}
   captureSpeedPerUnit: 1
   neutralResetSpeed: 0.25
   totalCaptureCost: 10

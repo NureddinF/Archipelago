@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4509391605510340}
   - component: {fileID: 114508294377568670}
+  - component: {fileID: 114085111300023712}
   m_Layer: 0
   m_Name: Mine
   m_TagString: Untagged
@@ -40,6 +41,38 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114085111300023712
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1137365979205170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 31
+    i1: 45
+    i2: 166
+    i3: 97
+    i4: 142
+    i5: 45
+    i6: 70
+    i7: 180
+    i8: 170
+    i9: 26
+    i10: 175
+    i11: 144
+    i12: 62
+    i13: 47
+    i14: 233
+    i15: 183
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!114 &114508294377568670
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -60,9 +93,9 @@ MonoBehaviour:
   menuIconSprite: {fileID: 21300000, guid: 21ae4043538274b0ab7d1749d3df52ef, type: 3}
   buildingBlueSprite: {fileID: 21300000, guid: e2053db512d1240768aca86752cb7d82, type: 3}
   buildingRedSprite: {fileID: 21300000, guid: ab2ef8bd464f5488890e6e02012c27cc, type: 3}
-  constructionBlueIconSprite: {fileID: 21300000, guid: a3a766ba039dc444b9f276e239e294f0,
+  constructionBlueIconSprite: {fileID: 21300000, guid: 759b25967804a405bb45226a000ae6bd,
     type: 3}
-  constructionRedIconSprite: {fileID: 21300000, guid: db84b18b62dc0410a80b0113624ad01d,
+  constructionRedIconSprite: {fileID: 21300000, guid: 358e55220afa24557ac6c318b3e6b229,
     type: 3}
   maxNumberOfAssignedWorkers: 5
   increasedIncomePerWorker: 0.5
