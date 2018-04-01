@@ -26,6 +26,10 @@ public class CapturableTile: MonoBehaviour{
 	private int numP1UnitsOnHex = 0;
 	private int numP2UnitsOnHex = 0;
 
+	//Used for the battle loop function
+	private bool timeFrameStart = false;
+	private float timePeriod;
+
 	//Hex script associated with this tile
 	private Hex thisHex;
 
@@ -95,8 +99,7 @@ public class CapturableTile: MonoBehaviour{
 		//When a tile is contested a battle sequence/loop is started
 		//Warriors fight other warriors and workers. Workers do not fight. They merely add to the health of the group.
 		if (numP1UnitsOnHex > 0 && numP2UnitsOnHex > 0) {
-			//TODO: units fight or something
-			return;
+			beginBattle ();
 		} 
 		//Only a single Player has units on the tile therefore they can capture
 		else {
@@ -174,5 +177,23 @@ public class CapturableTile: MonoBehaviour{
 			}
 		}
 		return null;
+	}
+
+	//Fight-Battle Sequence
+	private void beginBattle() {
+		Hex currentHex = gameObject.GetComponent<Hex>();
+		//If a new timeframe hasnt begun start one
+		if(!timeFrameStart) {
+			timePeriod = Time.time;
+			timeFrameStart = true;
+		}
+		//If the timeframe has been reached doDamage and reset timeFrameStart
+		else if(timeFrameStart) {
+			if(timePeriod + 2 <= Time.time) {
+				currentHex.doDamage ();
+				currentHex.doDamage ();
+				timeFrameStart = false;
+			}
+		}
 	}
 }

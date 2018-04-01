@@ -32,10 +32,9 @@ public class Hex : MonoBehaviour {
     private int maxX = HexGrid.getGridWidth() - 1;
 
 	//Store Amount of Player 1 (Red) and Player 2 (Blue) Units
-	private int redWarriors;
-	private int redWorkers;
-	private int blueWarriors;
-	private int blueWorkers;
+	private int redWarriors, redWorkers, redDamage, redWarriorHealth, redWorkerHealth;
+	private int blueWarriors, blueWorkers, blueDamage, blueWarriorHealth, blueWorkerHealth;
+
 
     //Calls once on object creation
     void Start()
@@ -45,8 +44,14 @@ public class Hex : MonoBehaviour {
         //Initialize ints to store the units on the tile
 		redWarriors = 0;
 		redWorkers = 0;
+		redDamage = 0;
+		redWarriorHealth = 0;
+		redWorkerHealth = 0;
 		blueWarriors = 0;
 		blueWorkers = 0;
+		blueDamage = 0;
+		blueWarriorHealth = 0;
+		blueWorkerHealth = 0;
 
         //Set it's current sprite to the standard hex sprite
         changeHexSprite(standard);
@@ -113,6 +118,108 @@ public class Hex : MonoBehaviour {
     public Building getBuilding() { 
 		return building;
 	}
+
+	//Get Health
+	public int getHealth(Player.PlayerId player) {
+		int result = 0;
+		//If Player 1, get redHealth
+		if (player == Player.PlayerId.P1) {
+			result = redWarriorHealth + redWorkerHealth;
+		} 
+		//If Player 2, get blueHealth
+		else if (player == Player.PlayerId.P2) {
+			result = blueWarriorHealth + blueWorkerHealth;
+		}
+		return result; 
+	}
+
+	//Get Damage
+	public int getDamage(Player.PlayerId player) {
+		int result = 0;
+		//If Player 1, get redDamage
+		if (player == Player.PlayerId.P1) {
+			result = redDamage;
+		} 
+		//If Player 2, get blueDamage
+		else if (player == Player.PlayerId.P2) {
+			result = blueDamage;
+		}
+		return result; 
+	}		
+
+	//Set Damage
+	public void setDamage(int amount, Player.PlayerId player) {
+		//If Player 1, set redDamage
+		if (player == Player.PlayerId.P1) {
+			redDamage = amount;
+		} 
+		//If Player 2, set blueDamage
+		else if (player == Player.PlayerId.P2) {
+			blueDamage = amount;
+		}
+	}
+
+	//Do Damage, Performs damage to both factions and updates units, health, and damage respectively
+	public void doDamage() {
+		int tempRedHealth = redWarriorHealth + redWorkerHealth;
+		int tempRedDamage = redDamage;
+		int tempBlueHealth = blueWarriorHealth + blueWorkerHealth;
+		int tempBlueDamage = blueDamage;
+		//Red Faction Updated
+		//No Health remaining after attack
+		if (tempRedHealth - tempBlueDamage <= 0) {
+			redDamage = 0;
+			redWorkerHealth = 0;
+			redWorkers = 0;
+			redWarriorHealth = 0;
+			redWarriors = 0;
+		} 
+		//Some health remaining after attack
+		else {
+			//Red Warrior have no health left
+			if (redWarriorHealth - tempBlueDamage <= 0) {
+				redWorkerHealth -= (tempBlueDamage - redWarriorHealth);
+				redWorkers = (int)((redWorkerHealth / 3) + 1);
+				redWarriorHealth = 0;
+				redWarriors = 0;
+				redDamage = 0;
+			} 
+			//Red Warriors have some health remaining
+			else {
+				redWarriors = (int)((redWarriorHealth / 6) + 1);
+				redDamage = redWarriors;
+				redWarriorHealth -= tempBlueDamage;
+				//Because warriors have health remaining workers are unaffected
+			}
+
+		}
+		//Blue Faction Updated
+		//No Health remaining after attack
+		if (tempBlueHealth - tempRedDamage <= 0) {
+			blueDamage = 0;
+			blueWorkerHealth = 0;
+			blueWorkers = 0;
+			blueWarriorHealth = 0;
+			blueWarriors = 0;
+		} 
+		//Some health remaining after attack
+		else {
+			//Blue Warrior have no health left
+			if(blueWarriorHealth - tempRedDamage <= 0) {
+				blueWorkerHealth -= (tempRedDamage - blueWarriorHealth);
+				blueWorkers = (int)((blueWorkerHealth / 3) + 1);
+				blueWarriorHealth = 0;
+				blueWarriors = 0;
+				blueDamage = 0;
+			}
+			//Blue Warrior have some health remaining
+			else {
+				blueWarriors = (int)((blueWarriorHealth / 6) + 1);
+				blueDamage = blueWarriors;
+				blueWarriorHealth -= tempRedDamage;
+			}
+		}
+	}
     
 	//Get Number of Workers on Hex
 	public int getNumOfWorkersOnHex(Player.PlayerId player) {
@@ -147,10 +254,12 @@ public class Hex : MonoBehaviour {
 		//If Player 1, add to redWorkers
 		if (player == Player.PlayerId.P1) {
 			redWorkers += amount;
+			redWorkerHealth += (amount * 3);
 		} 
 		//If Player 2, add to blueWorkers
 		else if (player == Player.PlayerId.P2) {
 			blueWorkers += amount;
+			blueWorkerHealth += (amount * 3);
 		}
     }
 
@@ -159,10 +268,14 @@ public class Hex : MonoBehaviour {
 		//If Player 1, add to redWarriors
 		if (player == Player.PlayerId.P1) {
 			redWarriors += amount;
+			redWarriorHealth += (amount * 6);
+			redDamage += amount;
 		} 
 		//If Player 2, add to blueWarriors
 		else if (player == Player.PlayerId.P2) {
 			blueWarriors += amount;
+			blueWarriorHealth += (amount * 6);
+			blueDamage += amount;
 		}
     }
 
@@ -172,6 +285,7 @@ public class Hex : MonoBehaviour {
 		if (player == Player.PlayerId.P1) {
 			if(redWorkers >= amount) {
 				redWorkers -= amount;
+				redWorkerHealth -= (amount * 3);
 			}
 			else
 			{
@@ -182,6 +296,7 @@ public class Hex : MonoBehaviour {
 		else if (player == Player.PlayerId.P2) {
 			if(blueWorkers >= amount) {
 				blueWorkers -= amount;
+				blueWorkerHealth -= (amount * 3);
 			}
 			else
 			{
@@ -196,6 +311,8 @@ public class Hex : MonoBehaviour {
 		if (player == Player.PlayerId.P1) {
 			if(redWarriors >= amount) {
 				redWarriors -= amount;
+				redWarriorHealth -= (amount * 6);
+				redDamage -= amount;
 			}
 			else
 			{
@@ -206,6 +323,8 @@ public class Hex : MonoBehaviour {
 		else if (player == Player.PlayerId.P2) {
 			if(blueWarriors >= amount) {
 				blueWarriors -= amount;
+				blueWarriorHealth -= (amount * 6);
+				blueDamage -= amount;
 			}
 			else
 			{
