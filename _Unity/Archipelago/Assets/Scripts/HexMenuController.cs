@@ -66,7 +66,14 @@ public class HexMenuController : NetworkBehaviour {
             selectedHex = h;
             //Set the hex menu parameteres to the hex's values 
             tileType.text = h.getTileType().ToString();
-            //tileStage.text = h.getTileStage().ToString();
+
+            //Update the tilestage text
+            if (h.getBuilding() != null && h.getBuilding().buildingId != Building.BuildingType.Trap)
+                tileStage.text = h.getHexOwner().ToString() + ": " + h.getBuilding().buildingId.ToString().ToUpper();
+            else
+                tileStage.text = h.getHexOwner().ToString();
+
+
             float income = h.getTileIncome();
 
             //Set income and it's text colour based on it's amount

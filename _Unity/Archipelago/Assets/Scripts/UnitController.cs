@@ -283,8 +283,8 @@ public class UnitController : NetworkBehaviour {
         //If it's closer than the current closest stored then store this instead
         foreach (Hex h in warriorLocations)
         {
-            //If hex is already captured, and not fighting then warriors assumed to be free
-			if (h.hexOwner.Equals(pid) && h.hasEnemyWarriors(pid)){
+            //If hex is already captured, or uncaptured but uncapturable, and not fighting then warriors assumed to be free
+			if ((h.hexOwner.Equals(pid) || (!h.hexOwner.Equals(pid) && (!h.hasOwnedNeighbor(pid)))) && !h.hasEnemyWarriors(pid)){
 
                 //Get its x/y value
                 int xFrom = h.getX();
