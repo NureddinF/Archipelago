@@ -1889,7 +1889,18 @@ MonoBehaviour:
   m_PlayerSpawnMethod: 0
   m_OfflineScene: Lobby Scene
   m_OnlineScene: 
-  m_SpawnPrefabs: []
+  m_SpawnPrefabs:
+  - {fileID: 1442786257015066, guid: b8b880a565daea8489c000cc2c142ed4, type: 2}
+  - {fileID: 1912176421554492, guid: 2b41692cb77c98743a7662465d917685, type: 2}
+  - {fileID: 1104672884267244, guid: 618bf1d152028724684ba72f7001c7cb, type: 2}
+  - {fileID: 1692912300926586, guid: bf218af2d364aa445a493944561de572, type: 2}
+  - {fileID: 1308510330598628, guid: 04241fb745664e844a5ea75535b92b95, type: 2}
+  - {fileID: 1524050681234130, guid: 60936a422d625964f82303cf87595ef6, type: 2}
+  - {fileID: 1726542138188176, guid: a62c8619dc8b5894d828e14f2f5acfe4, type: 2}
+  - {fileID: 1786172073235050, guid: 4842d7996c846254ab367560645fde5c, type: 2}
+  - {fileID: 1974426177275934, guid: 1be3cb836ad194140a74ad2b155a9a68, type: 2}
+  - {fileID: 1113874209341802, guid: a1822ac9a34268b499b18513cc5d5c72, type: 2}
+  - {fileID: 1940432781439648, guid: 12fd2b2754f01574685cf5485c3070e0, type: 2}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -1957,7 +1968,7 @@ MonoBehaviour:
   m_PlayScene: Hex Grid
   lobbySlots: []
   isDebug: 1
-  isHost: 1
+  isHost: 0
   isSinglePlayer: 1
   searchUi: {fileID: 0}
   lobbyUi: {fileID: 0}

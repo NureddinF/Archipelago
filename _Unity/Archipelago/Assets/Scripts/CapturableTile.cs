@@ -39,14 +39,6 @@ public class CapturableTile: MonoBehaviour{
         tileSprite = GetComponent<SpriteRenderer> ();
 		captureBorder = GetComponentInChildren<Image>();
 
-		// Update player income if this tile is spawned with an owner
-		if(thisHex.getHexOwner() != Player.PlayerId.NEUTRAL){
-			finalizeCapture();
-
-            //This initiliazies units, only works since this only calls once, for the tile that is player base. Wont work in other places since not every start has been done
-            GameObject.Find("Player").GetComponent<UnitController>().initializeUnits();            
-        }
-
 		// This is mostly for testing. Fill Amount should be set to 0 so the tiles starts neutral.
 		amountCaptured = captureBorder.fillAmount * totalCaptureCost;
 	}
@@ -57,9 +49,8 @@ public class CapturableTile: MonoBehaviour{
 		progressTileCapture ();
 	}
 
-    public Hex getHex()
-    {
-        return thisHex;
+    public Hex getHex(){
+		return GetComponent<Hex>();
     }
 
 
@@ -77,7 +68,7 @@ public class CapturableTile: MonoBehaviour{
 			captureClockwise = false;
 		}
 
-        if (thisHex.getHexOwner() == Player.PlayerId.NEUTRAL && !captureBorder.enabled) {
+		if (GetComponent<Hex>().getHexOwner() == Player.PlayerId.NEUTRAL && !captureBorder.enabled) {
 			captureBorder.enabled = true;
 			captureBorder.sprite = border;
 			captureBorder.fillClockwise = captureClockwise;
@@ -160,7 +151,7 @@ public class CapturableTile: MonoBehaviour{
 	}
 
 	// Increase income of player once tile is captured
-	private void finalizeCapture(){
+	public void finalizeCapture(){
 		Player player = getPlayer ();
 		if(player != null){
 			player.captureTile (this);
@@ -172,7 +163,7 @@ public class CapturableTile: MonoBehaviour{
 		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
 		for(int i=0; i<players.Length; i++){
 			Player player = players[i].GetComponentInChildren<Player>();
-			if(player.playerId.Equals(thisHex.getHexOwner())){
+			if(player.playerId.Equals(GetComponent<Hex>().getHexOwner())){
 				return player;
 			}
 		}
@@ -184,7 +175,8 @@ public class CapturableTile: MonoBehaviour{
 		Hex currentHex = gameObject.GetComponent<Hex>();
 		//If a new timeframe hasnt begun start one
 		if(!timeFrameStart) {
-			timePeriod = Time.time;
+            currentHex.enableCombatBar();
+            timePeriod = Time.time;
 			timeFrameStart = true;
 		}
 		//If the timeframe has been reached doDamage and reset timeFrameStart

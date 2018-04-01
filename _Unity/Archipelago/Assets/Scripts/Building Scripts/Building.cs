@@ -11,6 +11,10 @@ public class Building : MonoBehaviour
     private float currentTileIncome;
     public List<HexGrid.TileType> tilesAssociatedWith;
 
+	//Id for each type of building that can be passed over the network
+	public enum BuildingType{None, Farm, Fishing, LogCabbin, Mine, Trap};
+	public BuildingType buildingId;
+
     //Construction parameters
     private float currentBuildTime;
     public float totalBuildTime;
@@ -43,7 +47,7 @@ public class Building : MonoBehaviour
         }
         else
         {
-            if (!this.GetComponent<Trap>())
+            if (this.buildingId != Building.BuildingType.Trap)
             {
                 h.changeHexSprite(buildingSprite);
                 h.disableStatusIcon();
@@ -125,7 +129,7 @@ public class Building : MonoBehaviour
     {
         isConstructed = true;
         hexAssociatedWith.disableConstructionBar();
-        if (!this.GetComponent<Trap>())
+        if (this.buildingId != Building.BuildingType.Trap)
         {
             hexAssociatedWith.disableStatusIcon();
             hexAssociatedWith.changeHexSprite(buildingSprite);

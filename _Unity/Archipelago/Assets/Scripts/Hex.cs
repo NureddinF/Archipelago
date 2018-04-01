@@ -2,34 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
+public class Hex : NetworkBehaviour {
 
-public class Hex : MonoBehaviour {
-
-	public static bool isEnabled = false; 
+	public static bool isDisabled = false; 
 
     //Stores coordinate in the map
-    private int x;
-    private int y;
+	[SyncVar] private int x;
+	[SyncVar] private int y;
 
     //Store who owns the hex
-    public Player.PlayerId hexOwner;
+	[SyncVar] public Player.PlayerId hexOwner;
 
     //Stores the hex's type
-    private HexGrid.TileType tileType;
+	[SyncVar] private HexGrid.TileType tileType;
 
     //Stores the hex's income
-    private float tileIncome;
+	private float tileIncome;
 
     //Store the hex's sprites
     public Sprite standard;
 
-    //Store the Image component of the hex status icon
+    //Store the Image component of the hex status icon's
     private Image hexStatusIcon;
+    private Image hexFightingIcon;
 
     //Store the Image components of the hex construction progress bar
     private Image hexConstructionBarBG;
     private Image hexConstructionBarFill;
+    private Image hexFightingBarRed;
+    private Image hexFightingBarBlue;
 
     //Store the building on the hex, null if not one
     private Building building;
@@ -41,6 +44,10 @@ public class Hex : MonoBehaviour {
 	//Store Amount of Player 1 (Red) and Player 2 (Blue) Units
 	private int redWarriors, redWorkers, redDamage, redWarriorHealth, redWorkerHealth;
 	private int blueWarriors, blueWorkers, blueDamage, blueWarriorHealth, blueWorkerHealth;
+
+    //The amount of health the unit types start with each
+    private int workerHealth = 3;
+    private int warriorHealth = 6;
 
 
     //Calls once on object creation
@@ -67,6 +74,9 @@ public class Hex : MonoBehaviour {
             hexStatusIcon = gameObject.transform.Find("Canvas/tileStatusIcon").GetComponent<Image>();
             hexConstructionBarBG = gameObject.transform.Find("Canvas/tileConstructionBar").GetComponent<Image>();
             hexConstructionBarFill = gameObject.transform.Find("Canvas/tileConstructionBar/Fill").GetComponent<Image>();
+            hexFightingBarRed = gameObject.transform.Find("Canvas/tileFightingBar/Red").GetComponent<Image>();
+            hexFightingBarBlue = gameObject.transform.Find("Canvas/tileFightingBar/Blue").GetComponent<Image>();
+            hexFightingIcon = gameObject.transform.Find("Canvas/tileFightingIcon").GetComponent<Image>();
         }
 
         //Set it's current sprite to the standard hex sprite
@@ -86,28 +96,57 @@ public class Hex : MonoBehaviour {
         
     }
 
+    //Method to enable the combat bar and icon for this hex
+    public void enableCombatBar()
+    {
+        hexFightingBarBlue.enabled = true;
+        hexFightingBarRed.enabled = true;
+        hexFightingIcon.enabled = true;
+    }
+
+    //Method to disable the combat bar and icon for this hex
+    public void disableCombatBar()
+    {
+        hexFightingBarBlue.enabled = false;
+        hexFightingBarRed.enabled  = false;
+        hexFightingIcon.enabled = false;
+    }
+
+    //Method to update the combat bar for this hex
+    public void updateCombatBar()
+    {
+        int totalWarriors = redWarriors + blueWarriors;
+        hexFightingBarBlue.GetComponent<RectTransform>().localScale = new Vector2((float)blueWarriors / (float)totalWarriors, 1);
+        hexFightingBarRed.GetComponent<RectTransform>().localScale = new Vector2((float)redWarriors / (float)totalWarriors, 1);
+    }
+
+    //Method to enable the construction bar for this hex
     public void enableConstructionBar()
     {
         hexConstructionBarBG.enabled = true;
         hexConstructionBarFill.enabled = true;
     }
 
+    //Method to disable the construction bar for this hex
     public void disableConstructionBar()
     {
         hexConstructionBarBG.enabled = false;
         hexConstructionBarFill.enabled = false;
     }
 
+    //Method to enable the status icon for this hex
     public void enableStatusIcon()
     {
         hexStatusIcon.enabled = true;
     }
 
+    //Method to disable the status icon for this hex
     public void disableStatusIcon()
     {
         hexStatusIcon.enabled = false;
     }
 
+    //Method to set the status icon for this hex
     public void setStatusIcon(Sprite s)
     {
         hexStatusIcon.sprite = s;
@@ -163,12 +202,28 @@ public class Hex : MonoBehaviour {
     public HexGrid.TileType getTileType() { 
 		return tileType; 
 	}
+		
+	[Command]
+	public void CmdSetBuilding(Building.BuildingType buildingId) {
+		// Update building on server
+		setBuilding (buildingId);
+		// Update building on all clients
+		RpcSetBuilding (buildingId);
+	}
+
+	[ClientRpc]
+	private void RpcSetBuilding(Building.BuildingType buildingId) {
+		setBuilding (buildingId);
+	}
 
 	//Set Building
-    public void setBuilding(Building b) {
-        this.building = b;
-        //Associate this hex with the building
-        b.setHexAssociatedWith(this);
+	private void setBuilding(Building.BuildingType buildingId) {
+		Building buildingPrefab = FindObjectOfType<BuildingController>().getBuildingFromType(buildingId);
+		//Instantiate a new Building object for the building.
+		//Allows it to hold it's own values, rather than statically for all buildings of same type
+		this.building = (Building)Instantiate(buildingPrefab);
+		//Associate this hex with the building
+		building.setHexAssociatedWith(this);
     }
 
 	//Get Building
@@ -230,53 +285,73 @@ public class Hex : MonoBehaviour {
 			redWorkers = 0;
 			redWarriorHealth = 0;
 			redWarriors = 0;
-		} 
+            disableCombatBar();
+        } 
 		//Some health remaining after attack
 		else {
 			//Red Warrior have no health left
 			if (redWarriorHealth - tempBlueDamage <= 0) {
 				redWorkerHealth -= (tempBlueDamage - redWarriorHealth);
-				redWorkers = (int)((redWorkerHealth / 3) + 1);
+				redWorkers = (int)((redWorkerHealth / workerHealth) + 1);
 				redWarriorHealth = 0;
 				redWarriors = 0;
 				redDamage = 0;
 			} 
 			//Red Warriors have some health remaining
 			else {
-				redWarriors = (int)((redWarriorHealth / 6) + 1);
+				redWarriors = (int)((redWarriorHealth / warriorHealth) + 1);
 				redDamage = redWarriors;
 				redWarriorHealth -= tempBlueDamage;
 				//Because warriors have health remaining workers are unaffected
 			}
 
 		}
-		//Blue Faction Updated
-		//No Health remaining after attack
-		if (tempBlueHealth - tempRedDamage <= 0) {
-			blueDamage = 0;
-			blueWorkerHealth = 0;
-			blueWorkers = 0;
-			blueWarriorHealth = 0;
-			blueWarriors = 0;
-		} 
-		//Some health remaining after attack
-		else {
-			//Blue Warrior have no health left
-			if(blueWarriorHealth - tempRedDamage <= 0) {
-				blueWorkerHealth -= (tempRedDamage - blueWarriorHealth);
-				blueWorkers = (int)((blueWorkerHealth / 3) + 1);
-				blueWarriorHealth = 0;
-				blueWarriors = 0;
-				blueDamage = 0;
-			}
-			//Blue Warrior have some health remaining
-			else {
-				blueWarriors = (int)((blueWarriorHealth / 6) + 1);
-				blueDamage = blueWarriors;
-				blueWarriorHealth -= tempRedDamage;
-			}
-		}
+        //Blue Faction Updated
+        //No Health remaining after attack
+        if (tempBlueHealth - tempRedDamage <= 0) {
+            blueDamage = 0;
+            blueWorkerHealth = 0;
+            blueWorkers = 0;
+            blueWarriorHealth = 0;
+            blueWarriors = 0;
+            disableCombatBar();
+        }
+        //Some health remaining after attack
+        else {
+            //Blue Warrior have no health left
+            if (blueWarriorHealth - tempRedDamage <= 0) {
+                blueWorkerHealth -= (tempRedDamage - blueWarriorHealth);
+                blueWorkers = (int)((blueWorkerHealth / workerHealth) + 1);
+                blueWarriorHealth = 0;
+                blueWarriors = 0;
+                blueDamage = 0;
+            }
+            //Blue Warrior have some health remaining
+            else {
+                blueWarriors = (int)((blueWarriorHealth / warriorHealth) + 1);
+                blueDamage = blueWarriors;
+                blueWarriorHealth -= tempRedDamage;
+            }
+        }
+        //If one team has wiped out other team, then reset health of units on tile
+        if(redWarriors+redWorkers == 0 || blueWarriors+blueWorkers == 0)
+        {
+            resetHealth();
+        }
+        else
+        {
+            updateCombatBar();
+        }
 	}
+
+    //Method to reset health of remaining units on tile
+    private void resetHealth()
+    {
+        redWarriorHealth = redWarriors * warriorHealth;
+        redWorkerHealth = redWorkers * workerHealth;
+        blueWarriorHealth = blueWarriors * warriorHealth;
+        blueWorkerHealth = blueWorkers * workerHealth;
+    }
     
 	//Get Number of Workers on Hex
 	public int getNumOfWorkersOnHex(Player.PlayerId player) {
@@ -311,12 +386,12 @@ public class Hex : MonoBehaviour {
 		//If Player 1, add to redWorkers
 		if (player == Player.PlayerId.P1) {
 			redWorkers += amount;
-			redWorkerHealth += (amount * 3);
+			redWorkerHealth += (amount * workerHealth);
 		} 
 		//If Player 2, add to blueWorkers
 		else if (player == Player.PlayerId.P2) {
 			blueWorkers += amount;
-			blueWorkerHealth += (amount * 3);
+			blueWorkerHealth += (amount * workerHealth);
 		}
     }
 
@@ -325,13 +400,13 @@ public class Hex : MonoBehaviour {
 		//If Player 1, add to redWarriors
 		if (player == Player.PlayerId.P1) {
 			redWarriors += amount;
-			redWarriorHealth += (amount * 6);
+			redWarriorHealth += (amount * warriorHealth);
 			redDamage += amount;
 		} 
 		//If Player 2, add to blueWarriors
 		else if (player == Player.PlayerId.P2) {
 			blueWarriors += amount;
-			blueWarriorHealth += (amount * 6);
+			blueWarriorHealth += (amount * warriorHealth);
 			blueDamage += amount;
 		}
     }
@@ -342,7 +417,7 @@ public class Hex : MonoBehaviour {
 		if (player == Player.PlayerId.P1) {
 			if(redWorkers >= amount) {
 				redWorkers -= amount;
-				redWorkerHealth -= (amount * 3);
+				redWorkerHealth -= (amount * workerHealth);
 			}
 			else
 			{
@@ -353,7 +428,7 @@ public class Hex : MonoBehaviour {
 		else if (player == Player.PlayerId.P2) {
 			if(blueWorkers >= amount) {
 				blueWorkers -= amount;
-				blueWorkerHealth -= (amount * 3);
+				blueWorkerHealth -= (amount * workerHealth);
 			}
 			else
 			{
@@ -368,7 +443,7 @@ public class Hex : MonoBehaviour {
 		if (player == Player.PlayerId.P1) {
 			if(redWarriors >= amount) {
 				redWarriors -= amount;
-				redWarriorHealth -= (amount * 6);
+				redWarriorHealth -= (amount * warriorHealth);
 				redDamage -= amount;
 			}
 			else
@@ -380,7 +455,7 @@ public class Hex : MonoBehaviour {
 		else if (player == Player.PlayerId.P2) {
 			if(blueWarriors >= amount) {
 				blueWarriors -= amount;
-				blueWarriorHealth -= (amount * 6);
+				blueWarriorHealth -= (amount * warriorHealth);
 				blueDamage -= amount;
 			}
 			else
@@ -502,4 +577,5 @@ public class Hex : MonoBehaviour {
 	public Sprite getSprite(){
 		return standard;
 	}
+
 }

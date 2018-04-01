@@ -9,7 +9,8 @@ public class MouseManager : MonoBehaviour {
     //Needed to detect clicks on UI, and thus prevent the raycast from interacting with items below the menu
     
 
-	public static bool isEnabled = true;
+	public static bool isDisabled = false;
+
 	// human player who is associated with this mouse manager
 	public Player player;
 
@@ -138,27 +139,20 @@ public class MouseManager : MonoBehaviour {
         //Returns true or false but also provides information of object collider coliided with
         RaycastHit2D hitInfo = Physics2D.Raycast(screenPos, Vector2.zero);
         //If ray collides with an object
-        if (hitInfo)
-        {   
+		if (hitInfo && (!EventSystem.current.IsPointerOverGameObject())){   
             //Return the gameobject that the ray has collided with
             GameObject collidedHitInfo = hitInfo
 				.collider
 				.transform.gameObject;
-//			Debug.Log (collidedHitInfo);
-            //If left mouse button pressed, only calls once on initial press(e.g not constantly calling on hold)
-            if (!EventSystem.current.IsPointerOverGameObject()){
-				
-                // Check what we clicked on
-                if (collidedHitInfo.GetComponent<Hex>() != null)
-                {
-                    Hex hex = collidedHitInfo.GetComponent<Hex>();
-                    //clicked on a hex
-                    //bring up menu
-                    //if(hex.hexOwner2 == player.playerId){
-                        player.GetComponent<HexMenuController>().setSelectedHex(hex);
-                    //}                   
-                }
-            } 
+
+            // Check what we clicked on
+            if (collidedHitInfo.GetComponent<Hex>() != null) {
+                Hex hex = collidedHitInfo.GetComponent<Hex>();
+				Debug.Log (hex.getTileType());
+                //clicked on a hex
+                //bring up menu
+                player.GetComponent<HexMenuController>().setSelectedHex(hex);
+            }
         }
 	}
 

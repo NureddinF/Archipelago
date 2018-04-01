@@ -54,11 +54,12 @@ MonoBehaviour:
   cost: 3
   tileIncomeAfterBuild: 1
   tilesAssociatedWith: 00000000
+  buildingId: 1
   totalBuildTime: 10
   buildSpeedPerWorker: 1
   menuIconSprite: {fileID: 21300000, guid: 21ae4043538274b0ab7d1749d3df52ef, type: 3}
   buildingSprite: {fileID: 21300000, guid: e4dff83303b374637a28515bfa2ccd60, type: 3}
-  constructionIconSprite: {fileID: 21300000, guid: 759b25967804a405bb45226a000ae6bd,
+  constructionIconSprite: {fileID: 21300000, guid: db84b18b62dc0410a80b0113624ad01d,
     type: 3}
   maxNumberOfAssignedWorkers: 5
   increasedIncomePerWorker: 0.5

@@ -1,32 +1,36 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 //Superclass for units, warrior and worker inherits from this class
-public class Unit : MonoBehaviour {
+public class Unit : NetworkBehaviour {
 
     //Parameters
     public float unitSpeed = 2f;
-    private Hex destinationHex;
-    private Hex initialHex;
+    public Hex destinationHex;
+    public Hex initialHex;
     private Vector3 currentCoord;
     private Vector3 destinationCoord;
 	public Player.PlayerId id;
 
+	//Player who owns this unit
+	public UnitController unitController;
+
     //On script start, set it's position and destination vector
 	void Start () {
-        transform.position = new Vector3(initialHex.transform.position.x, initialHex.transform.position.y, -5);
-        destinationCoord = new Vector3(destinationHex.transform.position.x, destinationHex.transform.position.y, -5);
+        
 	}
 
     //Getters/Setters
 	//Set Initial Hex (Starting Point of Unit Travel)
     public void setInitialHex(Hex h) { 
-		initialHex = h; 
+		initialHex = h;
+		transform.position = new Vector3(initialHex.transform.position.x, initialHex.transform.position.y, -5);
 	}
-	//Set Destination Hex (Endpoint of Unit Travel)
     public void setDestinationHex(Hex h) { 
 		destinationHex = h; 
+		destinationCoord = new Vector3(destinationHex.transform.position.x, destinationHex.transform.position.y, -5);
 	}
 	//Get Destination Hex (Endpoint of Unit Travel)
     public Hex getDestinationHex() { 
@@ -44,6 +48,24 @@ public class Unit : MonoBehaviour {
 	//Get Player ID
 	public Player.PlayerId getPlayerId(){
 		return id;
+	}
+
+	[Command]
+	public void CmdInitUnit(GameObject unitControllerObject, GameObject fromHex, GameObject toHex, Player.PlayerId id){
+		initUnit(unitControllerObject, fromHex, toHex, id);
+		RpcInitUnit(unitControllerObject, fromHex, toHex, id);
+	}
+
+	[ClientRpc]
+	private void RpcInitUnit(GameObject unitControllerObject, GameObject fromHex, GameObject toHex, Player.PlayerId id){
+		initUnit(unitControllerObject, fromHex, toHex, id);
+	}
+
+	private void initUnit(GameObject unitControllerObject, GameObject fromHex, GameObject toHex, Player.PlayerId id){
+		unitController = unitControllerObject.GetComponent<UnitController> ();
+		setDestinationHex (toHex.GetComponent<Hex> ());
+		setInitialHex (fromHex.GetComponent<Hex> ());
+		setPlayerId (id);
 	}
 }
 
