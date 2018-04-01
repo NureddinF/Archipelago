@@ -226,7 +226,7 @@ public class HexMenuController : NetworkBehaviour {
 					} else {
 
 						go.GetComponent<Button> ().onClick.AddListener (() => {
-							CmdTileActionBuild (selectedHex.gameObject , b.buildingId);
+							CmdTileActionBuild (selectedHex.gameObject , b.buildingId, b.getCost());
 						});
 					}
                     //Increment count
@@ -302,13 +302,17 @@ public class HexMenuController : NetworkBehaviour {
 		}
 		RpcRefreshUIValues ();
 	}
-	void tileActionBuild(Building.BuildingType buildingId){
-		CmdTileActionBuild (selectedHex.gameObject, buildingId);
-	}
-		
+
 	[Command]
-	void CmdTileActionBuild(GameObject tile, Building.BuildingType buildingId){
-		tile.GetComponent<Hex> ().CmdSetBuilding (buildingId);
+	void CmdTileActionBuild(GameObject tile, Building.BuildingType buildingId, float cost){
+		float totalGold = GetComponent<Player> ().getCurrentMoney ();
+		if(totalGold < cost) {
+			//Can't afford upgrade, do nothing
+		}
+		else {
+			tile.GetComponent<Hex> ().CmdSetBuilding (buildingId);
+			GetComponent<Player> ().removeMoney (cost);
+		}
 		//Refresh hex menu's values to display these changes
 		RpcRefreshUIValues ();
 	}
