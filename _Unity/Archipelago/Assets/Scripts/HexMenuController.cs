@@ -188,15 +188,15 @@ public class HexMenuController : MonoBehaviour {
 					//Set its displayed sprite
 					go.GetComponent<Image> ().sprite = b.getMenuIconSprite ();
 					//Set its click function
-					Debug.Log(b.getTileTypesAssociatedWith()+"sssss");
-
-					if (selectedHex.getTileType().Equals(HexGrid.TileType.BASE)) {
+					Debug.Log (b.getTileTypesAssociatedWith () + "sssss");
+					Debug.Log ("        ss      " + selectedHex.getTileType());
+					if (selectedHex.getTileType ().Equals (HexGrid.TileType.BASE)) {
 						Debug.Log ("IFFFFF");
 						go.GetComponent<Button> ().onClick.AddListener (() => {
-							purchaseWarrior (selectedHex);
+							purchaseWorker (selectedHex);
 						});
 					
-					} else {
+					} else if(selectedHex.getBuilding() != null) {
 							
 						go.GetComponent<Button> ().onClick.AddListener (() => {
 							tileActionBuild (b);
@@ -205,7 +205,33 @@ public class HexMenuController : MonoBehaviour {
 					//Increment count
 					count++;
 				}
-			} 
+			} else {
+				Building barracks = selectedHex.getBuilding ();
+				Debug.Log (barracks);
+				if (barracks.name.Equals ("Barracks(Clone)")) {
+					GameObject go = new GameObject ();
+					//Set its parent
+					go.transform.parent = tileActionBox.transform;
+					//Set its name
+					go.name = barracks.name;
+					//Add appropriate components
+					go.AddComponent<RectTransform> ();
+					go.AddComponent<Image> ();
+					go.AddComponent<Button> ();
+
+					//Set its rect transform properties
+					go.GetComponent<RectTransform> ().pivot = new Vector2 (0.5f, 1f);
+					go.GetComponent<RectTransform> ().anchorMin = new Vector2 (0.5f, 1f);
+					go.GetComponent<RectTransform> ().anchorMax = new Vector2 (0.5f, 1f);
+					go.GetComponent<RectTransform> ().sizeDelta = new Vector2 (childWidth, childHeight);
+					go.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0f, childHeight * go.GetComponent<RectTransform> ().localScale.x - yOffset);
+					//Set its displayed sprite
+					go.GetComponent<Image> ().sprite = barracks.getMenuIconSprite ();
+					go.GetComponent<Button> ().onClick.AddListener (() => {
+						purchaseWarrior (selectedHex);
+					});
+				}
+			}
         }
     }
 
@@ -216,7 +242,7 @@ public class HexMenuController : MonoBehaviour {
         refreshUIValues();
     }
 
-	void purchaseWarrior(Hex barracksHex){
+	void purchaseWorker(Hex barracksHex){
 //		float warriorAmount = 25;
 //		float currentAmount = GetComponent<Player> ().getCurrentMoney ();
 //		if (warriorAmount > currentAmount) {
@@ -230,6 +256,24 @@ public class HexMenuController : MonoBehaviour {
 
 		Debug.Log ("Warrior added");
 //		GetComponent<Player> ().removeMoney (warriorAmount);
+		GetComponent<UnitController> ().addWorkers (1, barracksHex);
+		refreshUIValues ();
+	}
+
+	void purchaseWarrior(Hex barracksHex){
+//		float warriorAmount = 25;
+		//		float currentAmount = GetComponent<Player> ().getCurrentMoney ();
+		//		if (warriorAmount > currentAmount) {
+		//			Debug.Log ("Insufficent funds");
+		//		
+		//		} else {
+		//			Debug.Log ("Warrior added");
+		//			GetComponent<Player> ().removeMoney (warriorAmount);
+		//			GetComponent<UnitController> ().addWarriors (1, barracksHex);
+		//		}
+
+		Debug.Log ("Warrior added");
+		//		GetComponent<Player> ().removeMoney (warriorAmount);
 		GetComponent<UnitController> ().addWarriors (1, barracksHex);
 		refreshUIValues ();
 	}

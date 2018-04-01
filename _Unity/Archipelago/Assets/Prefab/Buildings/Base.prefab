@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4183458363650556}
-  - component: {fileID: 114023970804748398}
+  - component: {fileID: 114594292549062602}
   m_Layer: 0
   m_Name: Base
   m_TagString: Untagged
@@ -40,7 +40,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114023970804748398
+--- !u!114 &114594292549062602
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -48,7 +48,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1054217419468100}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09e0003079f819b45a71f55c4f4a039c, type: 3}
+  m_Script: {fileID: 11500000, guid: f19a68ac1239bc140af55bcc27ff86c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cost: 3
@@ -57,7 +57,8 @@ MonoBehaviour:
   tilesAssociatedWith: 01000000
   totalBuildTime: 0
   buildSpeedPerWorker: 0
-  menuIconSprite: {fileID: 21300000, guid: f582aab872e032b448ccfe6ed5836d0f, type: 3}
+  menuIconSprite: {fileID: 21300000, guid: 6d10efb119bbae14a88644846dfc47e7, type: 3}
   buildingSprite: {fileID: 0}
   constructionSprite: {fileID: 0}
-  warriorAmount: 25
+  maxNumberOfAssignedWorkers: 5
+  increasedIncomePerWorker: 0.5
