@@ -47,7 +47,7 @@ public class Building : MonoBehaviour
         }
         else
         {
-            if (!this.GetComponent<Trap>())
+            if (this.buildingId != Building.BuildingType.Trap)
             {
                 h.changeHexSprite(buildingSprite);
                 h.disableStatusIcon();
@@ -129,7 +129,7 @@ public class Building : MonoBehaviour
     {
         isConstructed = true;
         hexAssociatedWith.disableConstructionBar();
-        if (!this.GetComponent<Trap>())
+        if (this.buildingId != Building.BuildingType.Trap)
         {
             hexAssociatedWith.disableStatusIcon();
             hexAssociatedWith.changeHexSprite(buildingSprite);
