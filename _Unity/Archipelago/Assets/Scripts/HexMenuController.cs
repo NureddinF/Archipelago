@@ -196,7 +196,7 @@ public class HexMenuController : MonoBehaviour {
 							purchaseWorker (selectedHex);
 						});
 					
-					} else if(selectedHex.getBuilding() != null) {
+					} else {
 							
 						go.GetComponent<Button> ().onClick.AddListener (() => {
 							tileActionBuild (b);
@@ -205,7 +205,7 @@ public class HexMenuController : MonoBehaviour {
 					//Increment count
 					count++;
 				}
-			} else {
+			} else if(selectedHex.getBuilding() != null){
 				Building barracks = selectedHex.getBuilding ();
 				Debug.Log (barracks);
 				if (barracks.name.Equals ("Barracks(Clone)")) {
