@@ -54,6 +54,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitSpeed: 1
+  destinationHex: {fileID: 0}
+  initialHex: {fileID: 0}
   id: 0
   unitController: {fileID: 0}
 --- !u!114 &114926125553515404
@@ -122,9 +124,9 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: f1d91014ca75d4d9fa966d718144df94, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e66edfb89e1cc4dc1a5209dfbf45e7e7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 4, y: 4}

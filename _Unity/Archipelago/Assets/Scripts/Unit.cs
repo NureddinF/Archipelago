@@ -23,6 +23,7 @@ public class Unit : NetworkBehaviour {
 	}
 
     //Getters/Setters
+	//Set Initial Hex (Starting Point of Unit Travel)
     public void setInitialHex(Hex h) { 
 		initialHex = h;
 		transform.position = new Vector3(initialHex.transform.position.x, initialHex.transform.position.y, -5);
@@ -31,11 +32,19 @@ public class Unit : NetworkBehaviour {
 		destinationHex = h; 
 		destinationCoord = new Vector3(destinationHex.transform.position.x, destinationHex.transform.position.y, -5);
 	}
-    public Hex getDestinationHex() { return destinationHex; }
-    public Vector3 getDestinationCoord() { return destinationCoord; }
+	//Get Destination Hex (Endpoint of Unit Travel)
+    public Hex getDestinationHex() { 
+		return destinationHex; 
+	}
+	//Get Destination Coordinates
+    public Vector3 getDestinationCoord() { 
+		return destinationCoord; 
+	}
+	//Set Player ID
 	public void setPlayerId(Player.PlayerId id){
 		this.id = id;
 	}
+
 	//Get Player ID
 	public Player.PlayerId getPlayerId(){
 		return id;

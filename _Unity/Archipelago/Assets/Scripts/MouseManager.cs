@@ -135,21 +135,16 @@ public class MouseManager : MonoBehaviour {
 	private void doSelection(){        
         //Screen pos is relative to camera location in unity coordinates
 		Vector3 screenPos = Camera.main.ScreenToWorldPoint(clickPos);
-		Debug.Log (screenPos);
         //Information regarding the object the ray collides with
         //Returns true or false but also provides information of object collider coliided with
         RaycastHit2D hitInfo = Physics2D.Raycast(screenPos, Vector2.zero);
-//		string debugLog = hitInfo == null ? "NULL" : "Not null";
         //If ray collides with an object
-		if ((hitInfo != null) && (hitInfo.transform != null) && (!EventSystem.current.IsPointerOverGameObject())){
-			Transform t = hitInfo.transform.GetComponent<Transform> ();
-			string debug_t = t == null ? "NULL" : t.name;
-			Debug.LogWarning ("MouseManager: doSelection: hitinfo=" + debug_t);
+		if (hitInfo && (!EventSystem.current.IsPointerOverGameObject())){   
             //Return the gameobject that the ray has collided with
             GameObject collidedHitInfo = hitInfo
 				.collider
 				.transform.gameObject;
-				
+
             // Check what we clicked on
             if (collidedHitInfo.GetComponent<Hex>() != null) {
                 Hex hex = collidedHitInfo.GetComponent<Hex>();

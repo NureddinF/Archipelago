@@ -87,7 +87,7 @@ public class HexMenuController : NetworkBehaviour {
 			tileWorkerCount.text = h.getNumOfWorkersOnHex(pid).ToString();
             tileWarriorCount.text = h.getNumOfWarriorsOnHex(pid).ToString();
 
-            setTileActions();
+            setTileActions();            
 
             hexMenu.SetActive(true);
         }
@@ -171,13 +171,12 @@ public class HexMenuController : NetworkBehaviour {
 
             //Floats to store the height and width of the child object, if equal 1:1 ratio
             float childWidth = percentageWidth * parentWidth;
-            float childHeight = childWidth;
+            float childHeight = 0.65f * childWidth;
 
             // The distance between each menu items as well as the initial offset from top of action box
-            float yOffset = 10f;
-            //If the selected hex does not have a building
-            if (selectedHex.getBuilding() == null)
-            {
+            float yOffset = 35f;
+            //If the selected hex does not have a building and player owns the hex, then display build options
+            if (selectedHex.getBuilding() == null &&selectedHex.getHexOwner().Equals(GetComponent<Player>().playerId)){
                 //Get a list of possible building types that can be built on this hex
                 List<Building> buildingOptions = gameObject.GetComponent<BuildingController>().getListOfBuildingByTileType(selectedHex.getTileType());
 
@@ -202,6 +201,7 @@ public class HexMenuController : NetworkBehaviour {
                     go.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
                     go.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 1f);
                     go.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 1f);
+                    
                     go.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth, childHeight);
                     go.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -count * childHeight * go.GetComponent<RectTransform>().localScale.x - yOffset);
                     //Set its displayed sprite
@@ -219,11 +219,11 @@ public class HexMenuController : NetworkBehaviour {
 	void tileActionBuild(Building.BuildingType buildingId){
 		CmdTileActionBuild (selectedHex.gameObject, buildingId);
 	}
-
-
+		
 	[Command]
 	void CmdTileActionBuild(GameObject tile, Building.BuildingType buildingId){
-		tile.GetComponent<Hex>().CmdSetBuilding(buildingId);
-        RpcRefreshUIValues();
-    }
+		tile.GetComponent<Hex> ().CmdSetBuilding (buildingId);
+		//Refresh hex menu's values to display these changes
+		RpcRefreshUIValues ();
+	}
 }

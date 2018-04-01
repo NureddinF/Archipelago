@@ -27,7 +27,6 @@ public class Player : NetworkBehaviour{
     private Text tilesOwnedText;
     private Text numOfWorkersOwned;
     private Text numOfWarriorsOwned;
-    private Image redBarTemp;
 
     // State variables
     private float startTime;
@@ -73,7 +72,6 @@ public class Player : NetworkBehaviour{
 		if (hasAuthority) {
 			authoritativeUpdate ();
 		}
-
     }
 
 	// Run on server, update game state here
@@ -100,7 +98,6 @@ public class Player : NetworkBehaviour{
 		}
 
 		tilesOwnedText.text = "" + totalTilesOwned;
-		redBarTemp.transform.localScale = new Vector3((float)totalTilesOwned/((float)totalTilesOwned+1), 1, 1);
 	}
 
 	//Update unit UI
@@ -197,7 +194,6 @@ public class Player : NetworkBehaviour{
 		tilesOwnedText = stateMenu.transform.Find("Territory Icon/Total Territory Text").gameObject.GetComponent<Text>();
 		numOfWorkersOwned = stateMenu.transform.Find("Worker Button/Worker Count Text").gameObject.GetComponent<Text>();
 		numOfWarriorsOwned = stateMenu.transform.Find("Warrior Button/Warrior Count Text").gameObject.GetComponent<Text>();
-		redBarTemp = stateMenu.transform.Find("TileOwnershipRatioBar/Red Bar").gameObject.GetComponent<Image>();
 
 		// Move camera to show players base
 		Vector3 cameraStartingPos = Camera.main.transform.position;

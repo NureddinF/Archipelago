@@ -83,7 +83,8 @@ public class UnitController : NetworkBehaviour {
 
         if (!warriorLocations.Contains(h))
             warriorLocations.Add(h);
-		
+
+		//get component of player to access id
         h.gameObject.GetComponent<CapturableTile>().addUnits(amount, pid);
     }
 
@@ -361,11 +362,11 @@ public class UnitController : NetworkBehaviour {
 		//sets the sprite to unactive
 		unit.SetActive (false);
 		//changes the hex sprite back to the original sprite thats under the trap(removes the trap)
-		h.RpcResetSprite();
+		h.disableStatusIcon();
 		//removes the building(trap)
 		h.CmdSetBuilding (Building.BuildingType.None);
-
 	}
+
 
 	private void updateAvailableWorkerUI(int newAvailableWorkers){
 		Debug.Log ("UnitController: updateAvailableWorkerUI: newAvailableWorkers=" + newAvailableWorkers);
