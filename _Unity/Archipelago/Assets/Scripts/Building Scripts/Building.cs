@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class Building : MonoBehaviour
-{
+public class Building : NetworkBehaviour{
 
     // Building parameters
     public float cost = 3;
@@ -16,11 +16,12 @@ public class Building : MonoBehaviour
 	public BuildingType buildingId;
 
     //Construction parameters
-    private float currentBuildTime;
+	[SyncVar] private float currentBuildTime;
     public float totalBuildTime;
     public float buildSpeedPerWorker;
-    private bool isConstructed;
+	[SyncVar] private bool isConstructed;
 
+	// The hex this building is on, only valid on the server
     private Hex hexAssociatedWith;
 
     //Building sprites
@@ -30,65 +31,40 @@ public class Building : MonoBehaviour
 	public Sprite constructionBlueIconSprite;
 	public Sprite constructionRedIconSprite;
 
-    void Start()
-    {
+
+	////////////////////////// Monobehaviour methods //////////////////////////////////////////
+
+    void Start(){
         currentBuildTime = 0;
     }
 
-	//Returns Current Hex
-    public Hex getHexAssociatedWith() { 
-		return hexAssociatedWith; 
+
+	////////////////////////// Getters & Setters //////////////////////////////////////////
+		
+	public Sprite getBuildingSprite(Player.PlayerId pid) {
+		Sprite buildSprite;
+		if(pid == Player.PlayerId.P1){
+			buildSprite = buildingRedSprite;
+		} else if(pid == Player.PlayerId.P2){
+			buildSprite = buildingBlueSprite;
+		} else {
+			buildSprite = null;
+		}
+		return buildSprite; 
 	}
 
-	//Sets Construction sprite
-    public void setHexAssociatedWith(Hex h) {
-        this.hexAssociatedWith = h;
-		Player.PlayerId hOwner = h.getHexOwner();
-        if (!isConstructed)
-        {
-            h.enableConstructionBar();
-            h.enableStatusIcon();
-			//If Player 1 set construction icon to red
-			if (hOwner == Player.PlayerId.P1) {
-				h.setStatusIcon(constructionRedIconSprite);
-			}
-			//If Player 2 set construction icon to blue
-			else if(hOwner == Player.PlayerId.P2) {
-				h.setStatusIcon(constructionBlueIconSprite);
-			}
-        }
-        else
-        {
-            if (this.buildingId != Building.BuildingType.Trap)
-            {
-				//If Player 1 set building to red
-				if (hOwner == Player.PlayerId.P1) {
-					h.changeHexSprite(buildingRedSprite);
-				}
-				//If Player 2 set building to blue
-				else if(hOwner == Player.PlayerId.P2) {
-					h.changeHexSprite(buildingBlueSprite);
-				}
-                h.disableStatusIcon();
-                h.disableConstructionBar();
-            }
-            else
-            {
-                h.enableConstructionBar();
-				//If Player 1 set trap to red
-				if (hOwner == Player.PlayerId.P1) {
-					h.setStatusIcon(buildingRedSprite);
-				}
-				//If Player 2 set building to blue
-				else if(hOwner == Player.PlayerId.P2) {
-					h.setStatusIcon(buildingBlueSprite);
-				}
-            }
-            
-        }
-    }
-
-    //Getters & Setters
+	public Sprite getConstructionIconSprite(Player.PlayerId pid) { 
+		Sprite constructionSprite;
+		if(pid == Player.PlayerId.P1){
+			constructionSprite = constructionRedIconSprite;
+		} else if(pid == Player.PlayerId.P2){
+			constructionSprite = constructionBlueIconSprite;
+		} else {
+			constructionSprite = null;
+		}
+		return constructionSprite;
+	}
+	
     public float getCost() { 
 		return cost; 
 	}
@@ -126,45 +102,54 @@ public class Building : MonoBehaviour
 		return isConstructed; 
 	}
 
-    public void progressConstruction() {
+
+
+	////////////////////////// Custom Methods ///////////////////////////////////////////
+
+	////////////////////////// Commands and Server Methods ///////////////////////////////////////////
+	[Command]
+	public void CmdSetHexAssociatedWith(GameObject hex) {
+		Hex h = hex.GetComponent<Hex> ();
+		this.hexAssociatedWith = h;
+		if (!isConstructed) {
+			h.RpcEnableConstructionBar();
+			h.RpcEnableStatusIcon();
+		}
+		else {
+			if (this.buildingId != Building.BuildingType.Trap) {
+				h.RpcDisplayBuildingSprite();
+				h.RpcDisableConstructionBar();
+				h.RpcDisableStatusIcon();
+			}
+			else {
+				h.RpcEnableConstructionBar();
+			}
+		}
+	}
+
+	// Progresss the construction time towards completion if there are workers on the hex
+	public void progressConstruction() {
 		//Calculate Current Build Time
-        currentBuildTime += Time.deltaTime * hexAssociatedWith.getNumOfWorkersOnHex(hexAssociatedWith.getHexOwner()) * buildSpeedPerWorker;
+		currentBuildTime += Time.deltaTime * hexAssociatedWith.getNumOfWorkersOnHex(hexAssociatedWith.getHexOwner()) * buildSpeedPerWorker;
 
-        Debug.Log("% Constructed: " + currentBuildTime / totalBuildTime * 100);
-        if(currentBuildTime >= totalBuildTime)
-        {
-            finalizeConstruction();
-        }
-    }
+		Debug.Log("% Constructed: " + currentBuildTime / totalBuildTime * 100);
+		if(currentBuildTime >= totalBuildTime){
+			finalizeConstruction();
+		}
+	}
+		
+	private void finalizeConstruction(){
+		isConstructed = true;
+		hexAssociatedWith.RpcDisableConstructionBar();
+		if (this.buildingId != Building.BuildingType.Trap) {
+			hexAssociatedWith.RpcDisableStatusIcon();
+			hexAssociatedWith.RpcDisplayBuildingSprite();
+		}
+		else {
+			hexAssociatedWith.RpcDisplayTrap ();
+		}
+	}
 
-	//Finalizes construction on a tile and updates relevant UI sprites
-    private void finalizeConstruction()
-    {
-        isConstructed = true;
-        hexAssociatedWith.disableConstructionBar();
-        if (this.buildingId != Building.BuildingType.Trap)
-        {
-            hexAssociatedWith.disableStatusIcon();
-			//If Player 1 make red building type
-			if(getHexAssociatedWith().getHexOwner() == Player.PlayerId.P1) {
-				hexAssociatedWith.changeHexSprite(buildingRedSprite);
-			}
-			//If Player 2 make blue building type
-			else if(getHexAssociatedWith().getHexOwner() == Player.PlayerId.P2) {
-				hexAssociatedWith.changeHexSprite(buildingBlueSprite);
-			}
-        }
-        else
-        {
-			//If Player 1 make red building type
-			if(getHexAssociatedWith().getHexOwner() == Player.PlayerId.P1) {
-				hexAssociatedWith.setStatusIcon(buildingRedSprite);
-			}
-			//If Player 2 make blue building type
-			else if(getHexAssociatedWith().getHexOwner() == Player.PlayerId.P2) {
-				hexAssociatedWith.setStatusIcon(buildingBlueSprite);
-			}
-            
-        }
-    }
+	////////////////////////// RPCs ///////////////////////////////////////////
+
 }

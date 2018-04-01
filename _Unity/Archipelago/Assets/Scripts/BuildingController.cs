@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BuildingController : MonoBehaviour{
 
-    public List<Building> allConstructableBuildings;
+	public List<GameObject> allConstructableBuildings;
 
 	//TODO: Remove this? its not used
     private string hexToString(Hex h)
@@ -44,8 +44,8 @@ public class BuildingController : MonoBehaviour{
     public List<Building> getListOfBuildingByTileType(HexGrid.TileType type){
         List<Building> result = new List<Building>();
 
-        foreach (Building b in allConstructableBuildings)
-        {
+		foreach (GameObject buildObj in allConstructableBuildings){
+			Building b = buildObj.GetComponent<Building>();
             List<HexGrid.TileType> tilesTypesAssociatedWith = b.getTileTypesAssociatedWith();
             if (tilesTypesAssociatedWith.Contains(type))
             {
@@ -61,10 +61,10 @@ public class BuildingController : MonoBehaviour{
     }
 
 	// Get Building object from Building ID
-	public Building getBuildingFromType(Building.BuildingType buildingId){
-		foreach (Building b in allConstructableBuildings){
-			if(b.buildingId.Equals(buildingId)){
-				return b;
+	public GameObject getBuildingFromType(Building.BuildingType buildingId){
+		foreach (GameObject buildObj in allConstructableBuildings){
+			if(buildObj.GetComponent<Building>().buildingId.Equals(buildingId)){
+				return buildObj;
 			}
 		}
 

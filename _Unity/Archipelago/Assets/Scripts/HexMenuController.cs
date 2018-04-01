@@ -112,8 +112,7 @@ public class HexMenuController : NetworkBehaviour {
     public void hideHexMenu() {
         hexMenu.SetActive(false);
     }
-
-	//TODO: Multiplayer
+		
     //Method to move a worker to the selected hex
     public void moveWorkerToSelectedHex() {
 		//Get the id of the player
@@ -126,8 +125,7 @@ public class HexMenuController : NetworkBehaviour {
         else
             Debug.Log("No hex selected to move a worker unit to");
     }
-
-	//TODO: Multiplayer
+		
     //Method to move a warrior to the selected hex
     public void moveWarriorToSelectedHex() {
 		//Get the id of the player
@@ -140,8 +138,7 @@ public class HexMenuController : NetworkBehaviour {
         else
             Debug.Log("No hex selected to move a warrior unit to");
     }
-
-	//TODO: Multiplayer: make sure this is called from server
+		
     //Refresh the ui values, useful for when the hex is still selected but changed values, e.g moved unit there, built something etc.
 	[ClientRpc]
     public void RpcRefreshUIValues() {
