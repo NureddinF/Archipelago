@@ -175,7 +175,8 @@ public class CapturableTile: MonoBehaviour{
 		Hex currentHex = gameObject.GetComponent<Hex>();
 		//If a new timeframe hasnt begun start one
 		if(!timeFrameStart) {
-			timePeriod = Time.time;
+            currentHex.enableCombatBar();
+            timePeriod = Time.time;
 			timeFrameStart = true;
 		}
 		//If the timeframe has been reached doDamage and reset timeFrameStart
