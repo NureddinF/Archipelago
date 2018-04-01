@@ -1,5 +1,11 @@
 m_EditorVersion: 2017.3.0f3
 <<<<<<< HEAD
+<<<<<<< Updated upstream
 
 =======
 >>>>>>> master
+=======
+=======
+
+>>>>>>> fighting-functionality
+>>>>>>> Stashed changes

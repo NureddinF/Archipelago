@@ -23,6 +23,7 @@ public class Unit : NetworkBehaviour {
 	}
 
     //Getters/Setters
+<<<<<<< Updated upstream
 	//Set Initial Hex (Starting Point of Unit Travel)
     public void setInitialHex(Hex h) { 
 		initialHex = h;
@@ -46,6 +47,40 @@ public class Unit : NetworkBehaviour {
 	}
 
 	//Get Player ID
+=======
+<<<<<<< HEAD
+    public void setInitialHex(Hex h) { initialHex = h; }
+    public void setDestinationHex(Hex h) { destinationHex = h; }
+    public Hex getDestinationHex() { return destinationHex; }
+    public Vector3 getDestinationCoord() { return destinationCoord; }
+	public void setPlayerId(Player.PlayerId id){
+		this.id = id;
+	}
+=======
+	//Set Initial Hex (Starting Point of Unit Travel)
+    public void setInitialHex(Hex h) { 
+		initialHex = h; 
+	}
+	//Set Destination Hex (Endpoint of Unit Travel)
+    public void setDestinationHex(Hex h) { 
+		destinationHex = h; 
+	}
+	//Get Destination Hex (Endpoint of Unit Travel)
+    public Hex getDestinationHex() { 
+		return destinationHex; 
+	}
+	//Get Destination Coordinates
+    public Vector3 getDestinationCoord() { 
+		return destinationCoord; 
+	}
+	//Set Player ID
+	public void setPlayerId(Player.PlayerId id){
+		this.id = id;
+	}
+
+	//Get Player ID
+>>>>>>> fighting-functionality
+>>>>>>> Stashed changes
 	public Player.PlayerId getPlayerId(){
 		return id;
 	}

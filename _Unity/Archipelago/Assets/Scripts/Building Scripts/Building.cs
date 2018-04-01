@@ -33,6 +33,16 @@ public class Building : MonoBehaviour
         currentBuildTime = 0;
     }
 
+<<<<<<< Updated upstream
+=======
+    void Update()
+    {
+        if (!isConstructed)
+        {
+            progressConstruction();
+        } 
+    }
+>>>>>>> Stashed changes
     public Hex getHexAssociatedWith() { 
 		return hexAssociatedWith; 
 	}
@@ -89,6 +99,7 @@ public class Building : MonoBehaviour
 		this.currentTileIncome = currentTileIncome; 
 	}
 
+<<<<<<< Updated upstream
     public float getTotalBuildTime() { 
 		return totalBuildTime; 
 	}
@@ -100,6 +111,14 @@ public class Building : MonoBehaviour
 
     public Sprite getConstructionIconSprite() { 
 		return constructionIconSprite; 
+=======
+    public float getConstructionTime() { 
+		return constructionTime; 
+	}
+
+    public Sprite getConstructionSprite() { 
+		return constructionSprite; 
+>>>>>>> Stashed changes
 	}
 
     public List<HexGrid.TileType> getTileTypesAssociatedWith() { 
@@ -113,6 +132,15 @@ public class Building : MonoBehaviour
     public bool getIsConstructed() { 
 		return isConstructed; 
 	}
+<<<<<<< Updated upstream
+=======
+
+    private void progressConstruction() {
+		//Get the id of the player
+		Player.PlayerId pid = GetComponent<Player> ().playerId;
+		//Calculate Current Build Time
+        currentBuildTime += Time.deltaTime * hexAssociatedWith.getNumOfWorkersOnHex(pid) * buildSpeedPerWorker;
+>>>>>>> Stashed changes
 
     public void progressConstruction() {
 		//Calculate Current Build Time

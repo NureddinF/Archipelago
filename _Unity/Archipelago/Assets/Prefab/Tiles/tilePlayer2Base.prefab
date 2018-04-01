@@ -31,6 +31,7 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+<<<<<<< Updated upstream
 --- !u!1 &1389667832693880
 GameObject:
   m_ObjectHideFlags: 1
@@ -82,6 +83,8 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+=======
+>>>>>>> Stashed changes
 --- !u!1 &1955653359229268
 GameObject:
   m_ObjectHideFlags: 0
@@ -290,6 +293,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+<<<<<<< Updated upstream
 --- !u!114 &114517968525122750
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -371,6 +375,8 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+=======
+>>>>>>> Stashed changes
 --- !u!212 &212218913899025482
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -415,6 +421,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+<<<<<<< Updated upstream
 --- !u!222 &222274114960156210
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -433,6 +440,8 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1688217566547054}
+=======
+>>>>>>> Stashed changes
 --- !u!222 &222515194824941700
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -459,6 +468,7 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+<<<<<<< Updated upstream
 --- !u!224 &224005171416490248
 RectTransform:
   m_ObjectHideFlags: 1
@@ -496,6 +506,8 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 3, y: 0.5}
   m_Pivot: {x: 0.5, y: 0.5}
+=======
+>>>>>>> Stashed changes
 --- !u!224 &224464756919276514
 RectTransform:
   m_ObjectHideFlags: 1
@@ -507,13 +519,22 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 224848534642998956}
+<<<<<<< Updated upstream
   m_RootOrder: 0
+=======
+<<<<<<< Updated upstream
+  m_RootOrder: 2
+=======
+  m_RootOrder: 0
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 4.2, y: 4.2}
   m_Pivot: {x: 0.5, y: 0.5}
+<<<<<<< Updated upstream
 --- !u!224 &224839305705832326
 RectTransform:
   m_ObjectHideFlags: 1
@@ -532,6 +553,8 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0.2}
   m_SizeDelta: {x: 1.5, y: 1.5}
   m_Pivot: {x: 0.5, y: 0.1}
+=======
+>>>>>>> Stashed changes
 --- !u!224 &224848534642998956
 RectTransform:
   m_ObjectHideFlags: 1
@@ -542,14 +565,27 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+<<<<<<< Updated upstream
   - {fileID: 224464756919276514}
   - {fileID: 224172438328637654}
   - {fileID: 224839305705832326}
+=======
+<<<<<<< Updated upstream
+  - {fileID: 224172438328637654}
+  - {fileID: 224839305705832326}
+=======
+>>>>>>> Stashed changes
+  - {fileID: 224464756919276514}
+>>>>>>> Stashed changes
   m_Father: {fileID: 4060389820043732}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
+<<<<<<< Updated upstream
   m_AnchoredPosition: {x: 0, y: 0}
+=======
+  m_AnchoredPosition: {x: -5, y: -10}
+>>>>>>> Stashed changes
   m_SizeDelta: {x: 5, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}

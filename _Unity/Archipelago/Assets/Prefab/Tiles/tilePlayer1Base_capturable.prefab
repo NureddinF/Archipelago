@@ -208,6 +208,7 @@ MonoBehaviour:
   captureSpeedPerUnit: 1
   neutralResetSpeed: 0.25
   totalCaptureCost: 10
+<<<<<<< Updated upstream
 --- !u!114 &114290863115888362
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -235,6 +236,8 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+=======
+>>>>>>> Stashed changes
 --- !u!114 &114430012806728684
 MonoBehaviour:
   m_ObjectHideFlags: 1

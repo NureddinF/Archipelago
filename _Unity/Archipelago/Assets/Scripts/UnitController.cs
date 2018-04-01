@@ -50,6 +50,7 @@ public class UnitController : NetworkBehaviour {
 		if(Player.PlayerId.P1 == pid){
 			//Initialize number of warriors, only if initial amount specified > 0 
 			if (initialNumOfWarriors > 0)
+<<<<<<< Updated upstream
 				//Add initial location and amount of warriors into the correct dict
 				CmdAddWarriors(initialNumOfWarriors, FindObjectOfType<HexGrid>().getPlayer1Base().gameObject);
 
@@ -57,11 +58,29 @@ public class UnitController : NetworkBehaviour {
 			if (initialNumOfWorkers > 0)
 				//Add initial location and amount of workers into the correct dict
 				CmdAddWorkers(initialNumOfWorkers, FindObjectOfType<HexGrid>().getPlayer1Base().gameObject);
+=======
+<<<<<<< Updated upstream
+				//Add initial location and amount of warriors into the correct list
+=======
+				//Add initial location and amount of warriors into the correct dict
+>>>>>>> Stashed changes
+				addWarriors(initialNumOfWarriors, GameObject.Find("Hex Grid").GetComponent<HexGrid>().getPlayer1Base());
+
+			//Initialize number of warriors, only if initial amount specified > 0 
+			if (initialNumOfWorkers > 0)
+<<<<<<< Updated upstream
+				//Add initial location and amount of workers into the correct list
+=======
+				//Add initial location and amount of workers into the correct dict
+>>>>>>> Stashed changes
+				addWorkers(initialNumOfWorkers, GameObject.Find("Hex Grid").GetComponent<HexGrid>().getPlayer1Base());
+>>>>>>> Stashed changes
 		}
 		//If Player 2
 		else if(Player.PlayerId.P2 == pid) {
 			//Initialize number of warriors, only if initial amount specified > 0 
 			if (initialNumOfWarriors > 0)
+<<<<<<< Updated upstream
 				//Add initial location and amount of warriors into the correct dict
 				CmdAddWarriors(initialNumOfWarriors, FindObjectOfType<HexGrid>().getPlayer2Base().gameObject);
 
@@ -69,6 +88,23 @@ public class UnitController : NetworkBehaviour {
 			if (initialNumOfWorkers > 0)
 				//Add initial location and amount of workers into the correct dict
 				CmdAddWorkers(initialNumOfWorkers, FindObjectOfType<HexGrid>().getPlayer2Base().gameObject);
+=======
+<<<<<<< Updated upstream
+				//Add initial location and amount of warriors into the correct list
+=======
+				//Add initial location and amount of warriors into the correct dict
+>>>>>>> Stashed changes
+				addWarriors(initialNumOfWarriors, GameObject.Find("Hex Grid").GetComponent<HexGrid>().getPlayer2Base());
+
+			//Initialize number of warriors, only if initial amount specified > 0 
+			if (initialNumOfWorkers > 0)
+<<<<<<< Updated upstream
+				//Add initial location and amount of workers into the correct list
+=======
+				//Add initial location and amount of workers into the correct dict
+>>>>>>> Stashed changes
+				addWorkers(initialNumOfWorkers, GameObject.Find("Hex Grid").GetComponent<HexGrid>().getPlayer2Base());
+>>>>>>> Stashed changes
 		}
     }
     
@@ -85,7 +121,11 @@ public class UnitController : NetworkBehaviour {
             warriorLocations.Add(h);
 
 		//get component of player to access id
+<<<<<<< Updated upstream
         h.gameObject.GetComponent<CapturableTile>().addUnits(amount, pid);
+=======
+        h.gameObject.GetComponent<CapturableTile>().addUnits(amount, pid); //Hard coded P1 -- TODO --
+>>>>>>> Stashed changes
     }
 
     //Method to remove warrior(s) given a specified amount and a hex
