@@ -2,24 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
+public class Hex : NetworkBehaviour {
 
-public class Hex : MonoBehaviour {
-
-	public static bool isEnabled = false; 
+	public static bool isDisabled = false; 
 
     //Stores coordinate in the map
-    private int x;
-    private int y;
+	[SyncVar] private int x;
+	[SyncVar] private int y;
 
     //Store who owns the hex
-    public Player.PlayerId hexOwner;
+	[SyncVar] public Player.PlayerId hexOwner;
 
     //Stores the hex's type
-    private HexGrid.TileType tileType;
+	[SyncVar] private HexGrid.TileType tileType;
 
     //Stores the hex's income
-    private float tileIncome;
+	private float tileIncome;
 
     //Store the hex's sprites
     public Sprite standard;
@@ -158,12 +158,28 @@ public class Hex : MonoBehaviour {
     public HexGrid.TileType getTileType() { 
 		return tileType; 
 	}
+		
+	[Command]
+	public void CmdSetBuilding(Building.BuildingType buildingId) {
+		// Update building on server
+		setBuilding (buildingId);
+		// Update building on all clients
+		RpcSetBuilding (buildingId);
+	}
+
+	[ClientRpc]
+	private void RpcSetBuilding(Building.BuildingType buildingId) {
+		setBuilding (buildingId);
+	}
 
 	//Set Building
-    public void setBuilding(Building b) {
-        this.building = b;
-        //Associate this hex with the building
-        b.setHexAssociatedWith(this);
+	private void setBuilding(Building.BuildingType buildingId) {
+		Building buildingPrefab = FindObjectOfType<BuildingController>().getBuildingFromType(buildingId);
+		//Instantiate a new Building object for the building.
+		//Allows it to hold it's own values, rather than statically for all buildings of same type
+		this.building = (Building)Instantiate(buildingPrefab);
+		//Associate this hex with the building
+		building.setHexAssociatedWith(this);
     }
 
 	//Get Building
@@ -383,4 +399,5 @@ public class Hex : MonoBehaviour {
 	public Sprite getSprite(){
 		return standard;
 	}
+
 }
