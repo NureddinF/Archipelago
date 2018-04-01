@@ -113,22 +113,20 @@ public class Hex : NetworkBehaviour {
     public void updateCombatBar()
     {
         int totalWarriors = redWarriors + blueWarriors;
-        hexFightingBarBlue.GetComponent<RectTransform>().localScale = new Vector2((float)blueWarriors / (float)totalWarriors * 0.5f, 1);
-        hexFightingBarRed.GetComponent<RectTransform>().localScale = new Vector2((float)redWarriors / (float)totalWarriors * 0.5f, 1);
+        hexFightingBarBlue.GetComponent<RectTransform>().localScale = new Vector2((float)blueWarriors / (float)totalWarriors, 1);
+        hexFightingBarRed.GetComponent<RectTransform>().localScale = new Vector2((float)redWarriors / (float)totalWarriors, 1);
     }
 
     public void enableConstructionBar()
     {
         hexConstructionBarBG.enabled = true;
         hexConstructionBarFill.enabled = true;
-        hexFightingIcon.enabled = true;
     }
 
     public void disableConstructionBar()
     {
         hexConstructionBarBG.enabled = false;
         hexConstructionBarFill.enabled = false;
-        hexFightingIcon.enabled = false;
     }
 
     public void enableStatusIcon()
