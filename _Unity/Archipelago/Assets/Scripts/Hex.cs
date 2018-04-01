@@ -2,27 +2,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
+public class Hex : NetworkBehaviour {
 
-public class Hex : MonoBehaviour {
-
-	public static bool isEnabled = false; 
+	public static bool isDisabled = false; 
 
     //Stores coordinate in the map
-    private int x;
-    private int y;
+	[SyncVar] private int x;
+	[SyncVar] private int y;
 
     //Store who owns the hex
-    public Player.PlayerId hexOwner;
+	[SyncVar] public Player.PlayerId hexOwner;
 
     //Stores the hex's type
-    private HexGrid.TileType tileType;
+	[SyncVar] private HexGrid.TileType tileType;
 
     //Stores the hex's income
-    private float tileIncome;
+	private float tileIncome;
 
     //Store the hex's sprites
     public Sprite standard;
+
+    //Store the Image component of the hex status icon
+    private Image hexStatusIcon;
+
+    //Store the Image components of the hex construction progress bar
+    private Image hexConstructionBarBG;
+    private Image hexConstructionBarFill;
 
     //Store the building on the hex, null if not one
     private Building building;
@@ -32,10 +39,9 @@ public class Hex : MonoBehaviour {
     private int maxX = HexGrid.getGridWidth() - 1;
 
 	//Store Amount of Player 1 (Red) and Player 2 (Blue) Units
-	private int redWarriors;
-	private int redWorkers;
-	private int blueWarriors;
-	private int blueWorkers;
+	private int redWarriors, redWorkers, redDamage, redWarriorHealth, redWorkerHealth;
+	private int blueWarriors, blueWorkers, blueDamage, blueWarriorHealth, blueWorkerHealth;
+
 
     //Calls once on object creation
     void Start()
@@ -45,15 +51,70 @@ public class Hex : MonoBehaviour {
         //Initialize ints to store the units on the tile
 		redWarriors = 0;
 		redWorkers = 0;
+		redDamage = 0;
+		redWarriorHealth = 0;
+		redWorkerHealth = 0;
 		blueWarriors = 0;
 		blueWorkers = 0;
+		blueDamage = 0;
+		blueWarriorHealth = 0;
+		blueWorkerHealth = 0;
+
+        //If not a water tile, since doesn't hold the canvas object or have interactibility
+        if (this.getTileType() != HexGrid.TileType.WATER)
+        {
+            //Connect the respective image parameters to their child hex 'Image' components
+            hexStatusIcon = gameObject.transform.Find("Canvas/tileStatusIcon").GetComponent<Image>();
+            hexConstructionBarBG = gameObject.transform.Find("Canvas/tileConstructionBar").GetComponent<Image>();
+            hexConstructionBarFill = gameObject.transform.Find("Canvas/tileConstructionBar/Fill").GetComponent<Image>();
+        }
 
         //Set it's current sprite to the standard hex sprite
         changeHexSprite(standard);
     }
 
+    //Calls once on every frame
+    void Update()
+    {   
+        //If there is a building on the hex and it isn't yet constructed
+        if (building != null && !building.getIsConstructed())
+        {
+            //Progress the buildings construction
+            building.progressConstruction();
+            hexConstructionBarFill.GetComponent<RectTransform>().localScale = new Vector2(building.getCurrentBuildTime() / building.getTotalBuildTime(), 1);
+        }
+        
+    }
+
+    public void enableConstructionBar()
+    {
+        hexConstructionBarBG.enabled = true;
+        hexConstructionBarFill.enabled = true;
+    }
+
+    public void disableConstructionBar()
+    {
+        hexConstructionBarBG.enabled = false;
+        hexConstructionBarFill.enabled = false;
+    }
+
+    public void enableStatusIcon()
+    {
+        hexStatusIcon.enabled = true;
+    }
+
+    public void disableStatusIcon()
+    {
+        hexStatusIcon.enabled = false;
+    }
+
+    public void setStatusIcon(Sprite s)
+    {
+        hexStatusIcon.sprite = s;
+    }
+
     //Getters and setters
-	//Set X
+    //Set X
     public void setX(int x) { 
 		this.x = x; 
 	}
@@ -102,16 +163,135 @@ public class Hex : MonoBehaviour {
     public HexGrid.TileType getTileType() { 
 		return tileType; 
 	}
+		
+	[Command]
+	public void CmdSetBuilding(Building.BuildingType buildingId) {
+		// Update building on server
+		setBuilding (buildingId);
+		// Update building on all clients
+		RpcSetBuilding (buildingId);
+	}
+
+	[ClientRpc]
+	private void RpcSetBuilding(Building.BuildingType buildingId) {
+		setBuilding (buildingId);
+	}
 
 	//Set Building
-    public void setBuilding(Building b) {
-        this.building = b;
-        b.setHexAssociatedWith(this);
+	private void setBuilding(Building.BuildingType buildingId) {
+		Building buildingPrefab = FindObjectOfType<BuildingController>().getBuildingFromType(buildingId);
+		//Instantiate a new Building object for the building.
+		//Allows it to hold it's own values, rather than statically for all buildings of same type
+		this.building = (Building)Instantiate(buildingPrefab);
+		//Associate this hex with the building
+		building.setHexAssociatedWith(this);
     }
 
 	//Get Building
     public Building getBuilding() { 
 		return building;
+	}
+
+	//Get Health
+	public int getHealth(Player.PlayerId player) {
+		int result = 0;
+		//If Player 1, get redHealth
+		if (player == Player.PlayerId.P1) {
+			result = redWarriorHealth + redWorkerHealth;
+		} 
+		//If Player 2, get blueHealth
+		else if (player == Player.PlayerId.P2) {
+			result = blueWarriorHealth + blueWorkerHealth;
+		}
+		return result; 
+	}
+
+	//Get Damage
+	public int getDamage(Player.PlayerId player) {
+		int result = 0;
+		//If Player 1, get redDamage
+		if (player == Player.PlayerId.P1) {
+			result = redDamage;
+		} 
+		//If Player 2, get blueDamage
+		else if (player == Player.PlayerId.P2) {
+			result = blueDamage;
+		}
+		return result; 
+	}		
+
+	//Set Damage
+	public void setDamage(int amount, Player.PlayerId player) {
+		//If Player 1, set redDamage
+		if (player == Player.PlayerId.P1) {
+			redDamage = amount;
+		} 
+		//If Player 2, set blueDamage
+		else if (player == Player.PlayerId.P2) {
+			blueDamage = amount;
+		}
+	}
+
+	//Do Damage, Performs damage to both factions and updates units, health, and damage respectively
+	public void doDamage() {
+		int tempRedHealth = redWarriorHealth + redWorkerHealth;
+		int tempRedDamage = redDamage;
+		int tempBlueHealth = blueWarriorHealth + blueWorkerHealth;
+		int tempBlueDamage = blueDamage;
+		//Red Faction Updated
+		//No Health remaining after attack
+		if (tempRedHealth - tempBlueDamage <= 0) {
+			redDamage = 0;
+			redWorkerHealth = 0;
+			redWorkers = 0;
+			redWarriorHealth = 0;
+			redWarriors = 0;
+		} 
+		//Some health remaining after attack
+		else {
+			//Red Warrior have no health left
+			if (redWarriorHealth - tempBlueDamage <= 0) {
+				redWorkerHealth -= (tempBlueDamage - redWarriorHealth);
+				redWorkers = (int)((redWorkerHealth / 3) + 1);
+				redWarriorHealth = 0;
+				redWarriors = 0;
+				redDamage = 0;
+			} 
+			//Red Warriors have some health remaining
+			else {
+				redWarriors = (int)((redWarriorHealth / 6) + 1);
+				redDamage = redWarriors;
+				redWarriorHealth -= tempBlueDamage;
+				//Because warriors have health remaining workers are unaffected
+			}
+
+		}
+		//Blue Faction Updated
+		//No Health remaining after attack
+		if (tempBlueHealth - tempRedDamage <= 0) {
+			blueDamage = 0;
+			blueWorkerHealth = 0;
+			blueWorkers = 0;
+			blueWarriorHealth = 0;
+			blueWarriors = 0;
+		} 
+		//Some health remaining after attack
+		else {
+			//Blue Warrior have no health left
+			if(blueWarriorHealth - tempRedDamage <= 0) {
+				blueWorkerHealth -= (tempRedDamage - blueWarriorHealth);
+				blueWorkers = (int)((blueWorkerHealth / 3) + 1);
+				blueWarriorHealth = 0;
+				blueWarriors = 0;
+				blueDamage = 0;
+			}
+			//Blue Warrior have some health remaining
+			else {
+				blueWarriors = (int)((blueWarriorHealth / 6) + 1);
+				blueDamage = blueWarriors;
+				blueWarriorHealth -= tempRedDamage;
+			}
+		}
 	}
     
 	//Get Number of Workers on Hex
@@ -147,10 +327,12 @@ public class Hex : MonoBehaviour {
 		//If Player 1, add to redWorkers
 		if (player == Player.PlayerId.P1) {
 			redWorkers += amount;
+			redWorkerHealth += (amount * 3);
 		} 
 		//If Player 2, add to blueWorkers
 		else if (player == Player.PlayerId.P2) {
 			blueWorkers += amount;
+			blueWorkerHealth += (amount * 3);
 		}
     }
 
@@ -159,10 +341,14 @@ public class Hex : MonoBehaviour {
 		//If Player 1, add to redWarriors
 		if (player == Player.PlayerId.P1) {
 			redWarriors += amount;
+			redWarriorHealth += (amount * 6);
+			redDamage += amount;
 		} 
 		//If Player 2, add to blueWarriors
 		else if (player == Player.PlayerId.P2) {
 			blueWarriors += amount;
+			blueWarriorHealth += (amount * 6);
+			blueDamage += amount;
 		}
     }
 
@@ -172,6 +358,7 @@ public class Hex : MonoBehaviour {
 		if (player == Player.PlayerId.P1) {
 			if(redWorkers >= amount) {
 				redWorkers -= amount;
+				redWorkerHealth -= (amount * 3);
 			}
 			else
 			{
@@ -182,6 +369,7 @@ public class Hex : MonoBehaviour {
 		else if (player == Player.PlayerId.P2) {
 			if(blueWorkers >= amount) {
 				blueWorkers -= amount;
+				blueWorkerHealth -= (amount * 3);
 			}
 			else
 			{
@@ -196,6 +384,8 @@ public class Hex : MonoBehaviour {
 		if (player == Player.PlayerId.P1) {
 			if(redWarriors >= amount) {
 				redWarriors -= amount;
+				redWarriorHealth -= (amount * 6);
+				redDamage -= amount;
 			}
 			else
 			{
@@ -206,12 +396,34 @@ public class Hex : MonoBehaviour {
 		else if (player == Player.PlayerId.P2) {
 			if(blueWarriors >= amount) {
 				blueWarriors -= amount;
+				blueWarriorHealth -= (amount * 6);
+				blueDamage -= amount;
 			}
 			else
 			{
 				Debug.Log("Can't remove workers from hex since requested " + amount + " to be removed, and only " + blueWarriors + " recorded to be located on this hex: " + this.name);
 			}
 		}
+    }
+
+    public bool hasEnemyWarriors(Player.PlayerId player)
+    {
+        if (player == Player.PlayerId.P1)
+        {
+            if (blueWarriors > 0)
+            {
+                return true;
+            }
+        }
+        else
+        {
+            if (redWarriors > 0)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     //Method to return a list of a hex's direct neighbors
@@ -306,4 +518,5 @@ public class Hex : MonoBehaviour {
 	public Sprite getSprite(){
 		return standard;
 	}
+
 }

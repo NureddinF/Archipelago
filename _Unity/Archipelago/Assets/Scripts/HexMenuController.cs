@@ -1,10 +1,11 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 //Class to control the hex menu
-public class HexMenuController : MonoBehaviour {
+public class HexMenuController : NetworkBehaviour {
     //Parameters, 
     public GameObject hexMenu;
     private Text tileType;
@@ -14,23 +15,37 @@ public class HexMenuController : MonoBehaviour {
     private Text tileWorkerCount;
     private Text tileWarriorCount;
     private Image tileActionBox;
+
+	public float workerAmount = 25;
+	public float warriorAmount = 50;
     
 
     //Parameter to store the current hex that the menu is displaying for.
     private Hex selectedHex;
 
-    private void Start() {
-        //Use the hexMenu gameobject to find all it's individual UI elements.
-        tileType = hexMenu.transform.Find("TileType").gameObject.GetComponent<Text>();
-        tileStage = hexMenu.transform.Find("TileStage").gameObject.GetComponent<Text>();
-        tileIncome = hexMenu.transform.Find("TileIncome").gameObject.GetComponent<Text>();
-        tileImage = hexMenu.transform.Find("TileImage").gameObject.GetComponent<Image>();
-        tileWorkerCount = hexMenu.transform.Find("TileWorkerCount").gameObject.GetComponent<Text>();
-        tileWarriorCount = hexMenu.transform.Find("TileWarriorCount").gameObject.GetComponent<Text>();
-        tileActionBox = hexMenu.transform.Find("TileActionBox").gameObject.GetComponent<Image>();
-        selectedHex = null;
-        hideHexMenu();
+    private void Start(){
+
     }
+
+	public void startWithAuthority(){
+		if(!hasAuthority){
+			//Only let local player update/access UI
+			return;
+		}
+
+		hexMenu = GameObject.Find("Canvas").transform.Find("HexMenuBar").gameObject;
+
+		//Use the hexMenu gameobject to find all it's individual UI elements.
+		tileType = hexMenu.transform.Find("TileType").gameObject.GetComponent<Text>();
+		tileStage = hexMenu.transform.Find("TileStage").gameObject.GetComponent<Text>();
+		tileIncome = hexMenu.transform.Find("TileIncome").gameObject.GetComponent<Text>();
+		tileImage = hexMenu.transform.Find("TileImage").gameObject.GetComponent<Image>();
+		tileWorkerCount = hexMenu.transform.Find("TileWorkerCount").gameObject.GetComponent<Text>();
+		tileWarriorCount = hexMenu.transform.Find("TileWarriorCount").gameObject.GetComponent<Text>();
+		tileActionBox = hexMenu.transform.Find("TileActionBox").gameObject.GetComponent<Image>();
+		selectedHex = null;
+		hideHexMenu();
+	}
 
     //Method to return the currently selected hex
     public Hex getSelectedHex() {
@@ -38,6 +53,7 @@ public class HexMenuController : MonoBehaviour {
     }
 
     //Method to set the currently selected hex
+	//Updates local players UI
     public void setSelectedHex(Hex h) {
 		//Get the id of the player
 		Player.PlayerId pid = GetComponent<Player> ().playerId;
@@ -74,7 +90,7 @@ public class HexMenuController : MonoBehaviour {
 			tileWorkerCount.text = h.getNumOfWorkersOnHex(pid).ToString();
             tileWarriorCount.text = h.getNumOfWarriorsOnHex(pid).ToString();
 
-            setTileActions();
+            setTileActions();            
 
             hexMenu.SetActive(true);
         }
@@ -90,33 +106,39 @@ public class HexMenuController : MonoBehaviour {
         hexMenu.SetActive(false);
     }
 
+	//TODO: Multiplayer
     //Method to move a worker to the selected hex
     public void moveWorkerToSelectedHex() {
 		//Get the id of the player
 		Player.PlayerId pid = GetComponent<Player> ().playerId;
+		Debug.Log ("HexMenuController: moveWorkerToSelectedHex: moving worker for " + pid);
         if (selectedHex != null) {
-            gameObject.GetComponent<UnitController>().moveClosestAvailableWorker(selectedHex);
+			gameObject.GetComponent<UnitController>().CmdMoveClosestAvailableWorker(selectedHex.gameObject);
             tileWorkerCount.text = selectedHex.getNumOfWorkersOnHex(pid).ToString();
         }
         else
             Debug.Log("No hex selected to move a worker unit to");
     }
 
+	//TODO: Multiplayer
     //Method to move a warrior to the selected hex
     public void moveWarriorToSelectedHex() {
 		//Get the id of the player
 		Player.PlayerId pid = GetComponent<Player> ().playerId;
+		Debug.Log ("HexMenuController: moveWarriorToSelectedHex: moving warrior for " + pid);
         if (selectedHex != null) {
-            gameObject.GetComponent<UnitController>().moveClosestAvailableWarrior(selectedHex);
+			gameObject.GetComponent<UnitController>().CmdMoveClosestAvailableWarrior(selectedHex.gameObject);
             tileWarriorCount.text = selectedHex.getNumOfWarriorsOnHex(pid).ToString();
         }
         else
             Debug.Log("No hex selected to move a warrior unit to");
     }
 
+	//TODO: Multiplayer: make sure this is called from server
     //Refresh the ui values, useful for when the hex is still selected but changed values, e.g moved unit there, built something etc.
-    public void refreshUIValues() {
-        if(selectedHex != null)
+	[ClientRpc]
+    public void RpcRefreshUIValues() {
+		if(selectedHex != null && hasAuthority)
         {
             //Store current selected hex, deselect hex then reselect hex. This way on refresh if on same hex the menu wont hide itself
             Hex h = selectedHex;
@@ -152,129 +174,105 @@ public class HexMenuController : MonoBehaviour {
 
             //Floats to store the height and width of the child object, if equal 1:1 ratio
             float childWidth = percentageWidth * parentWidth;
-            float childHeight = childWidth;
+            float childHeight = 0.65f * childWidth;
 
             // The distance between each menu items as well as the initial offset from top of action box
-            float yOffset = 10f;
-            //If the selected hex does not have a building
+            float yOffset = 35f;
+            //If the selected hex does not have a building and player owns the hex, then display build options
+            if (selectedHex.getBuilding() == null &&selectedHex.getHexOwner().Equals(GetComponent<Player>().playerId)){
+                //Get a list of possible building types that can be built on this hex
+                List<Building> buildingOptions = gameObject.GetComponent<BuildingController>().getListOfBuildingByTileType(selectedHex.getTileType());
 
-			if (selectedHex.getBuilding () == null) {
-				Debug.Log (selectedHex.getTileType ());
-				//Get a list of possible building types that can be built on this hex
-				List<Building> buildingOptions = gameObject.GetComponent<BuildingController> ().getListOfBuildingByTileType (selectedHex.getTileType ());
+                //Count number of items iterated through to allow correct vertical displacement
+                int count = 0;
 
-				//Count number of items iterated through to allow correct vertical displacement
-				int count = 0;
+                //For each building option
+                foreach (Building b in buildingOptions)
+                {
+                    //New gameobject
+                    GameObject go = new GameObject();
+                    //Set its parent
+                    go.transform.parent = tileActionBox.transform;
+                    //Set its name
+                    go.name = b.name;
+                    //Add appropriate components
+                    go.AddComponent<RectTransform>();
+                    go.AddComponent<Image>();
+                    go.AddComponent<Button>();
 
-				//For each building option
-				foreach (Building b in buildingOptions) {
-					//New gameobject
-					GameObject go = new GameObject ();
-					//Set its parent
-					go.transform.parent = tileActionBox.transform;
-					//Set its name
-					go.name = b.name;
-					//Add appropriate components
-					go.AddComponent<RectTransform> ();
-					go.AddComponent<Image> ();
-					go.AddComponent<Button> ();
-
-					//Set its rect transform properties
-					go.GetComponent<RectTransform> ().pivot = new Vector2 (0.5f, 1f);
-					go.GetComponent<RectTransform> ().anchorMin = new Vector2 (0.5f, 1f);
-					go.GetComponent<RectTransform> ().anchorMax = new Vector2 (0.5f, 1f);
-					go.GetComponent<RectTransform> ().sizeDelta = new Vector2 (childWidth, childHeight);
-					go.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0f, -count * childHeight * go.GetComponent<RectTransform> ().localScale.x - yOffset);
-					//Set its displayed sprite
-					go.GetComponent<Image> ().sprite = b.getMenuIconSprite ();
-					//Set its click function
-					Debug.Log (b.getTileTypesAssociatedWith () + "sssss");
-					Debug.Log ("        ss      " + selectedHex.getTileType());
+                    //Set its rect transform properties
+                    go.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
+                    go.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 1f);
+                    go.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 1f);
+                    
+                    go.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth, childHeight);
+                    go.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -count * childHeight * go.GetComponent<RectTransform>().localScale.x - yOffset);
+                    //Set its displayed sprite
+                    go.GetComponent<Image>().sprite = b.getMenuIconSprite();
+                    //Set its click function
 					if (selectedHex.getTileType ().Equals (HexGrid.TileType.BASE)) {
-						Debug.Log ("IFFFFF");
-						go.GetComponent<Button> ().onClick.AddListener (() => {
-							purchaseWorker (selectedHex);
-						});
-					
+						if (workerAmount < GetComponent<Player> ().getCurrentMoney ()) {
+							go.GetComponent<Button> ().onClick.AddListener (() => {
+								purchaseWorker (selectedHex);
+							});
+						} else {
+							go.GetComponent<Button> () = null;
+						}
+
 					} else {
-							
+
 						go.GetComponent<Button> ().onClick.AddListener (() => {
-							tileActionBuild (b);
+							CmdTileActionBuild (selectedHex.gameObject , b.buildingId);
 						});
 					}
-					//Increment count
-					count++;
-				}
-			} else if(selectedHex.getBuilding() != null){
-				Building barracks = selectedHex.getBuilding ();
-				Debug.Log (barracks);
-				if (barracks.name.Equals ("Barracks(Clone)")) {
-					GameObject go = new GameObject ();
-					//Set its parent
-					go.transform.parent = tileActionBox.transform;
-					//Set its name
-					go.name = barracks.name;
-					//Add appropriate components
-					go.AddComponent<RectTransform> ();
-					go.AddComponent<Image> ();
-					go.AddComponent<Button> ();
+                    //Increment count
+                    count++;
+                }
+            }
+			else if(selectedHex.getBuilding() != null &&selectedHex.getHexOwner().Equals(GetComponent<Player>().playerId)){
 
-					//Set its rect transform properties
-					go.GetComponent<RectTransform> ().pivot = new Vector2 (0.5f, 1f);
-					go.GetComponent<RectTransform> ().anchorMin = new Vector2 (0.5f, 1f);
-					go.GetComponent<RectTransform> ().anchorMax = new Vector2 (0.5f, 1f);
-					go.GetComponent<RectTransform> ().sizeDelta = new Vector2 (childWidth, childHeight);
-					go.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0f, childHeight * go.GetComponent<RectTransform> ().localScale.x - yOffset);
-					//Set its displayed sprite
-					go.GetComponent<Image> ().sprite = barracks.getMenuIconSprite ();
-					go.GetComponent<Button> ().onClick.AddListener (() => {
-						purchaseWarrior (selectedHex);
-					});
-				}
+
 			}
         }
     }
-
+		
     //Method for the tileaction, when selecting a building
-    void tileActionBuild(Building b)
-    {
-		selectedHex.setBuilding(b);
-        refreshUIValues();
-    }
-
 	void purchaseWorker(Hex barracksHex){
-//		float warriorAmount = 25;
-//		float currentAmount = GetComponent<Player> ().getCurrentMoney ();
-//		if (warriorAmount > currentAmount) {
-//			Debug.Log ("Insufficent funds");
-//		
-//		} else {
-//			Debug.Log ("Warrior added");
-//			GetComponent<Player> ().removeMoney (warriorAmount);
-//			GetComponent<UnitController> ().addWarriors (1, barracksHex);
-//		}
+		float warriorAmount = 25;
+		float currentAmount = GetComponent<Player> ().getCurrentMoney ();
+		if (workerAmount > currentAmount) {
+			Debug.Log ("Insufficent funds");
 
-		Debug.Log ("Warrior added");
-//		GetComponent<Player> ().removeMoney (warriorAmount);
-		GetComponent<UnitController> ().addWorkers (1, barracksHex);
-		refreshUIValues ();
+		
+		} else {
+			Debug.Log ("Warrior added");
+			GetComponent<Player> ().removeMoney (warriorAmount);
+			GetComponent<UnitController> ().CmdAddWorkers (1, barracksHex.gameObject);
+		}
+		Debug.Log ("Worker added");
+		RpcRefreshUIValues ();
 	}
 
 	void purchaseWarrior(Hex barracksHex){
-//		float warriorAmount = 25;
-		//		float currentAmount = GetComponent<Player> ().getCurrentMoney ();
-		//		if (warriorAmount > currentAmount) {
-		//			Debug.Log ("Insufficent funds");
-		//		
-		//		} else {
-		//			Debug.Log ("Warrior added");
-		//			GetComponent<Player> ().removeMoney (warriorAmount);
-		//			GetComponent<UnitController> ().addWarriors (1, barracksHex);
-		//		}
+		float currentAmount = GetComponent<Player> ().getCurrentMoney ();
+		if (warriorAmount > currentAmount) {
+			Debug.Log ("Insufficent funds");
 
-		Debug.Log ("Warrior added");
-		//		GetComponent<Player> ().removeMoney (warriorAmount);
-		GetComponent<UnitController> ().addWarriors (1, barracksHex);
-		refreshUIValues ();
+		} else {
+			Debug.Log ("Warrior added");
+			GetComponent<Player> ().removeMoney (warriorAmount);
+			GetComponent<UnitController> ().CmdAddWarriors (1, barracksHex.gameObject);
+		}
+		RpcRefreshUIValues ();
+	}
+	void tileActionBuild(Building.BuildingType buildingId){
+		CmdTileActionBuild (selectedHex.gameObject, buildingId);
+	}
+		
+	[Command]
+	void CmdTileActionBuild(GameObject tile, Building.BuildingType buildingId){
+		tile.GetComponent<Hex> ().CmdSetBuilding (buildingId);
+		//Refresh hex menu's values to display these changes
+		RpcRefreshUIValues ();
 	}
 }
