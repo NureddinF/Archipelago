@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4755822893507016}
-  - component: {fileID: 114135447590627104}
+  - component: {fileID: 114535633271764374}
   m_Layer: 0
   m_Name: Barracks
   m_TagString: Untagged
@@ -40,7 +40,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114135447590627104
+--- !u!114 &114535633271764374
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -48,17 +48,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 1516818766033162}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f19a68ac1239bc140af55bcc27ff86c2, type: 3}
+  m_Script: {fileID: 11500000, guid: 09e0003079f819b45a71f55c4f4a039c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cost: 3
   tileIncomeAfterBuild: 1
   tilesAssociatedWith: 00000000
   buildingId: 6
-  totalBuildTime: 0
-  buildSpeedPerWorker: 0
-  menuIconSprite: {fileID: 21300000, guid: f582aab872e032b448ccfe6ed5836d0f, type: 3}
+  totalBuildTime: 5
+  buildSpeedPerWorker: 3
+  menuIconSprite: {fileID: 21300000, guid: 1a2f3390ce09a4078bc4143c8e51dc30, type: 3}
   buildingSprite: {fileID: 21300000, guid: 5001bae95942a4f95a15a121c818b971, type: 3}
-  constructionIconSprite: {fileID: 0}
+  constructionIconSprite: {fileID: 21300000, guid: 759b25967804a405bb45226a000ae6bd,
+    type: 3}
   maxNumberOfAssignedWorkers: 5
   increasedIncomePerWorker: 0.5
+  purchaseWarriorSprite: {fileID: 21300000, guid: f582aab872e032b448ccfe6ed5836d0f,
+    type: 3}
