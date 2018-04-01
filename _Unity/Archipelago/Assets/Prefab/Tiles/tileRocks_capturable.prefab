@@ -262,7 +262,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hexOwner: 2
   standard: {fileID: 21300000, guid: d962ed0dd356f4c45826c1d8b7d57ae4, type: 3}
-<<<<<<< Updated upstream
 --- !u!114 &114603882050534910
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -317,8 +316,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
-=======
->>>>>>> Stashed changes
 --- !u!114 &114782294160399594
 MonoBehaviour:
   m_ObjectHideFlags: 1

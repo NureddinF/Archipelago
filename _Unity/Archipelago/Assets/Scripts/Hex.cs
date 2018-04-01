@@ -56,13 +56,9 @@ public class Hex : NetworkBehaviour {
 		redWorkerHealth = 0;
 		blueWarriors = 0;
 		blueWorkers = 0;
-<<<<<<< Updated upstream
 		blueDamage = 0;
 		blueWarriorHealth = 0;
 		blueWorkerHealth = 0;
-=======
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
 
         //If not a water tile, since doesn't hold the canvas object or have interactibility
         if (this.getTileType() != HexGrid.TileType.WATER)
@@ -72,8 +68,6 @@ public class Hex : NetworkBehaviour {
             hexConstructionBarBG = gameObject.transform.Find("Canvas/tileConstructionBar").GetComponent<Image>();
             hexConstructionBarFill = gameObject.transform.Find("Canvas/tileConstructionBar/Fill").GetComponent<Image>();
         }
-=======
->>>>>>> Stashed changes
 
         //Set it's current sprite to the standard hex sprite
         changeHexSprite(standard);
@@ -120,11 +114,7 @@ public class Hex : NetworkBehaviour {
     }
 
     //Getters and setters
-<<<<<<< Updated upstream
     //Set X
-=======
-	//Set X
->>>>>>> Stashed changes
     public void setX(int x) { 
 		this.x = x; 
 	}
@@ -414,7 +404,6 @@ public class Hex : NetworkBehaviour {
 				Debug.Log("Can't remove workers from hex since requested " + amount + " to be removed, and only " + blueWarriors + " recorded to be located on this hex: " + this.name);
 			}
 		}
-<<<<<<< Updated upstream
     }
 
     public bool hasEnemyWarriors(Player.PlayerId player)
@@ -435,8 +424,6 @@ public class Hex : NetworkBehaviour {
         }
 
         return false;
-=======
->>>>>>> Stashed changes
     }
 
     //Method to return a list of a hex's direct neighbors
