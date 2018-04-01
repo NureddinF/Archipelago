@@ -213,7 +213,7 @@ public class HexMenuController : NetworkBehaviour {
                     //Set its click function
 					if (selectedHex.getTileType ().Equals (HexGrid.TileType.BASE)) {
 						go.GetComponent<Button> ().onClick.AddListener (() => {
-							purchaseWorker (selectedHex);
+							StartCoroutine(purchaseWorker (selectedHex));
 						});
 
 					} else {
@@ -250,7 +250,7 @@ public class HexMenuController : NetworkBehaviour {
 					go.GetComponent<Image> ().sprite = barracks.GetComponent<Barracks>().getpurchaseWarriorSprite ();
 
 					go.GetComponent<Button>().onClick.AddListener (() => {
-						purchaseWarrior (selectedHex);
+						StartCoroutine(purchaseWarrior (selectedHex));
 					});
 				}
 
@@ -260,28 +260,38 @@ public class HexMenuController : NetworkBehaviour {
     }
 		
     //Method for the tileaction, when selecting a building
-	void purchaseWorker(Hex barracksHex){
+	IEnumerator purchaseWorker(Hex barracksHex){
 		if (workerAmount > GetComponent<Player> ().getCurrentMoney ()) {
 			Debug.Log ("Insufficent funds");
+			tileWorkerCount.color = Color.red;
+			yield return new WaitForSeconds(0.5f);
+			tileWorkerCount.color = Color.black;
 		
 		} else {
-			Debug.Log ("Warrior added");
 			GetComponent<Player> ().removeMoney (workerAmount);
 			GetComponent<UnitController> ().CmdAddWorkers (1, barracksHex.gameObject);
+			tileWorkerCount.color = new Color(0, 0.75f, 0);
+			yield return new WaitForSeconds(0.5f);
+			tileWorkerCount.color = Color.black;
 		}
-		Debug.Log ("Worker added");
 		RpcRefreshUIValues ();
 	}
 
-	void purchaseWarrior(Hex barracksHex){
+	IEnumerator purchaseWarrior(Hex barracksHex){
 		float currentAmount = GetComponent<Player> ().getCurrentMoney ();
 		if (warriorAmount > currentAmount) {
 			Debug.Log ("Insufficent funds");
+			tileWarriorCount.color = Color.red;
+			yield return new WaitForSeconds(0.5f);
+			tileWarriorCount.color = Color.black;
 
 		} else {
 			Debug.Log ("Warrior added");
 			GetComponent<Player> ().removeMoney (warriorAmount);
 			GetComponent<UnitController> ().CmdAddWarriors (1, barracksHex.gameObject);
+			tileWarriorCount.color = new Color(0, 0.75f, 0);
+			yield return new WaitForSeconds(0.5f);
+			tileWarriorCount.color = Color.black;
 		}
 		RpcRefreshUIValues ();
 	}
