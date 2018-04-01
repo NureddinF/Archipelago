@@ -96,6 +96,7 @@ public class Hex : NetworkBehaviour {
         
     }
 
+    //Method to enable the combat bar and icon for this hex
     public void enableCombatBar()
     {
         hexFightingBarBlue.enabled = true;
@@ -103,6 +104,7 @@ public class Hex : NetworkBehaviour {
         hexFightingIcon.enabled = true;
     }
 
+    //Method to disable the combat bar and icon for this hex
     public void disableCombatBar()
     {
         hexFightingBarBlue.enabled = false;
@@ -110,6 +112,7 @@ public class Hex : NetworkBehaviour {
         hexFightingIcon.enabled = false;
     }
 
+    //Method to update the combat bar for this hex
     public void updateCombatBar()
     {
         int totalWarriors = redWarriors + blueWarriors;
@@ -117,28 +120,33 @@ public class Hex : NetworkBehaviour {
         hexFightingBarRed.GetComponent<RectTransform>().localScale = new Vector2((float)redWarriors / (float)totalWarriors, 1);
     }
 
+    //Method to enable the construction bar for this hex
     public void enableConstructionBar()
     {
         hexConstructionBarBG.enabled = true;
         hexConstructionBarFill.enabled = true;
     }
 
+    //Method to disable the construction bar for this hex
     public void disableConstructionBar()
     {
         hexConstructionBarBG.enabled = false;
         hexConstructionBarFill.enabled = false;
     }
 
+    //Method to enable the status icon for this hex
     public void enableStatusIcon()
     {
         hexStatusIcon.enabled = true;
     }
 
+    //Method to disable the status icon for this hex
     public void disableStatusIcon()
     {
         hexStatusIcon.enabled = false;
     }
 
+    //Method to set the status icon for this hex
     public void setStatusIcon(Sprite s)
     {
         hexStatusIcon.sprite = s;
@@ -329,6 +337,10 @@ public class Hex : NetworkBehaviour {
         if(redWarriors+redWorkers == 0 || blueWarriors+blueWorkers == 0)
         {
             resetHealth();
+        }
+        else
+        {
+            updateCombatBar();
         }
 	}
 
