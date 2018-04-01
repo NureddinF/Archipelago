@@ -225,9 +225,13 @@ public class UnitController : NetworkBehaviour {
         //If it's closer than the current closest stored then store this instead
         foreach (Hex h in workerLocations)
         {
+            //Get id of player
+            Player.PlayerId pid = GetComponent<Player>().playerId;
+
             //If hex is already captured, and if there is a building that it isn't under construction, then the workers can be assumed to be free
-            //and can be a candidate for the closest available worker
-			if (h.hexOwner.Equals(GetComponent<Player>().playerId) && !(h.getBuilding() != null && !h.getBuilding().getIsConstructed())){
+            //and can be a candidate for the closest available worker. Or if the hex isn't captured but is uncapturable at this time
+            //Then the worker can be classed as available
+            if ((h.hexOwner.Equals(pid) && !(h.getBuilding() != null && !h.getBuilding().getIsConstructed()))||(!h.hexOwner.Equals(pid)&&(!h.hasOwnedNeighbor(pid)))){
 
                 //Get its x/y value
                 int xFrom = h.getX();
@@ -272,12 +276,15 @@ public class UnitController : NetworkBehaviour {
         //Variable to store the key string from the dictionary for the closest available unit.
         Hex currentClosestHex = null;
 
+        //Get id of player
+        Player.PlayerId pid = GetComponent<Player>().playerId;
+
         //For each hex in the warrior location list. Parse it's coordinates and work out the distance to destination hex, via pythagoras theorem
         //If it's closer than the current closest stored then store this instead
         foreach (Hex h in warriorLocations)
         {
-            //If hex is already captured, then workers assumed to be free, //////////////////// TODO: When fighting added etc. needs to check if enemy units are present on this hex, if so then they shouldn't be classed as available
-			if (h.hexOwner.Equals(GetComponent<Player>().playerId)){
+            //If hex is already captured, and not fighting then warriors assumed to be free
+			if (h.hexOwner.Equals(pid) && h.hasEnemyWarriors(pid)){
 
                 //Get its x/y value
                 int xFrom = h.getX();

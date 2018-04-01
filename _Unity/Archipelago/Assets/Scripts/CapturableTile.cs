@@ -101,12 +101,13 @@ public class CapturableTile: MonoBehaviour{
 					neutralResetSpeed = -Mathf.Abs (neutralResetSpeed);
 				}
 
-				float newAmountCaptured = amountCaptured + Time.deltaTime * captureSpeedPerUnit * (numP1UnitsOnHex - numP2UnitsOnHex - neutralResetSpeed);
+                float newAmountCaptured = amountCaptured - (Time.deltaTime * neutralResetSpeed); 
 
 				//Checks if Player 1 has one or more units on the tile, Owns a tile next to it, and if they don't own it already
 				//If all these return true Player 1 begins to capture
 				if (numP1UnitsOnHex > 0 && thisHex.hasOwnedNeighbor(Player.PlayerId.P1) && thisHex.getHexOwner() != Player.PlayerId.P1) {
-					if(newAmountCaptured > totalCaptureCost){
+                    newAmountCaptured += Time.deltaTime * captureSpeedPerUnit * numP1UnitsOnHex;
+                    if (newAmountCaptured > totalCaptureCost){
 						//p1 captured tile
 						thisHex.setHexOwner(Player.PlayerId.P1);
 						captureBorder.enabled = false;
@@ -122,7 +123,8 @@ public class CapturableTile: MonoBehaviour{
 				//Checks if Player 2 has one or more units on the tile, Owns a tile next to it, and if they don't own it already
 				//If all these return true Player 2 begins to capture
 				else if (numP2UnitsOnHex > 0 && thisHex.hasOwnedNeighbor(Player.PlayerId.P2) && thisHex.getHexOwner() != Player.PlayerId.P2) {
-					if(newAmountCaptured < -totalCaptureCost){
+                    newAmountCaptured += Time.deltaTime * captureSpeedPerUnit * numP2UnitsOnHex;
+                    if (newAmountCaptured < -totalCaptureCost){
 						//p2 captured tile
 						thisHex.setHexOwner(Player.PlayerId.P2);
 						captureBorder.enabled = false;
