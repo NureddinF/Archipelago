@@ -173,7 +173,6 @@ public class HexMenuController : NetworkBehaviour {
 
 
             //Work out the action box's height and width, have to do it this way since rect transform has weird properties
-            float parentHeight = corners[2].y - corners[0].y;
             float parentWidth = corners[2].x - corners[0].x;
 
             //Float to store the percentage width for the child objects. Height if needed also

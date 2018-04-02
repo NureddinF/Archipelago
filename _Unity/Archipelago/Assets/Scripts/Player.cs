@@ -210,7 +210,6 @@ public class Player : NetworkBehaviour{
 		Button warriorButton = stateMenu.transform.Find ("Warrior Button").GetComponent<Button> ();
 		warriorButton.onClick.AddListener(GetComponent<HexMenuController>().moveWarriorToSelectedHex);
 
-
 		Debug.Log ("Player: RpcStartWithAuthority: workerBtn=" + workerButton.name + ", warriorBtn="+warriorButton.name);
 
 		// Initalize UI values
@@ -232,7 +231,6 @@ public class Player : NetworkBehaviour{
 			//Only want to update UI for player who owns this object
 			return;
 		}
-		Debug.Log ("Player: RpcUpdateMoneyText: newMoney = " + newMoney);
 		// Update local state and display information
 		currentMoney = newMoney;
 		incomeText.text = "" + currentMoney;

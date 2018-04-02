@@ -132,7 +132,6 @@ public class Building : NetworkBehaviour{
 		//Calculate Current Build Time
 		currentBuildTime += Time.deltaTime * hexAssociatedWith.getNumOfWorkersOnHex(hexAssociatedWith.getHexOwner()) * buildSpeedPerWorker;
 
-		Debug.Log("% Constructed: " + currentBuildTime / totalBuildTime * 100);
 		if(currentBuildTime >= totalBuildTime){
 			finalizeConstruction();
 		}

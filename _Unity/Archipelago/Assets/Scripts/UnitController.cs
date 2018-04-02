@@ -90,6 +90,7 @@ public class UnitController : NetworkBehaviour {
 
         if (!warriorLocations.Contains(h))
             warriorLocations.Add(h);
+		GetComponent<HexMenuController>().RpcRefreshUIValues ();
     }
 
     //Method to remove warrior(s) given a specified amount and a hex
@@ -106,17 +107,17 @@ public class UnitController : NetworkBehaviour {
             {
 				h.removeWarriorsFromHex(amount, pid);
 				availableWarriors -= amount;
-                h.gameObject.GetComponent<CapturableTile>().removeUnits(amount, pid); 
+				GetComponent<HexMenuController>().RpcRefreshUIValues ();
             }
             else if(numOfWarriorsOnHex == amount)
             {
                 h.removeWarriorsFromHex(amount, pid);
 				availableWarriors -= amount;
                 warriorLocations.Remove(h);
-				h.gameObject.GetComponent<CapturableTile>().removeUnits(amount, pid);
+				GetComponent<HexMenuController>().RpcRefreshUIValues ();
             }            
             else
-                Debug.Log("There were only " + numOfWarriorsOnHex + " warriors at the specified hex, yet " +
+                Debug.LogError("There were only " + numOfWarriorsOnHex + " warriors at the specified hex, yet " +
                     amount + " were requested to be removed. No action has been taken");
         }
         else
@@ -126,9 +127,7 @@ public class UnitController : NetworkBehaviour {
     //Method to move warrior(s) using the add remove methods. Removes then adds
 	[Command]
 	public void CmdMoveWarriors(int amount, GameObject fromHex, GameObject toHex) {
-		Hex from = fromHex.GetComponent<Hex> ();
-		Hex to = toHex.GetComponent<Hex> ();
-		CmdRemoveWarriors(amount, from.gameObject);
+		CmdRemoveWarriors(amount, fromHex);
 
         GameObject unitToMove = Instantiate(warriorPrefab);
 		NetworkServer.Spawn(unitToMove);
@@ -171,16 +170,16 @@ public class UnitController : NetworkBehaviour {
             if (numOfWorkersOnHex > amount) {
 				h.removeWorkersFromHex(amount, pid);
 				availableWorkers -= amount;
-				h.gameObject.GetComponent<CapturableTile>().removeUnits(amount, pid);
+				GetComponent<HexMenuController>().RpcRefreshUIValues ();
             }
             else if (numOfWorkersOnHex == amount) {
 				h.removeWorkersFromHex(amount, pid);
 				availableWorkers -= amount;
                 workerLocations.Remove(h);
-				h.gameObject.GetComponent<CapturableTile>().removeUnits(amount, pid); 
+				GetComponent<HexMenuController>().RpcRefreshUIValues ();
             }
             else
-                Debug.Log("There were only " + numOfWorkersOnHex + " workers at the specified hex, yet " +
+                Debug.LogError("There were only " + numOfWorkersOnHex + " workers at the specified hex, yet " +
                     amount + " were requested to be removed. No action has been taken");
         }
         else
@@ -190,9 +189,7 @@ public class UnitController : NetworkBehaviour {
     //Method to move worker(s) using the add remove methods. Removes then adds
 	[Command]
 	public void CmdMoveWorkers(int amount, GameObject fromHex, GameObject toHex) {
-		Hex from = fromHex.GetComponent<Hex> ();
-		Hex to = toHex.GetComponent<Hex> ();
-		CmdRemoveWorkers(amount, from.gameObject);
+		CmdRemoveWorkers(amount, fromHex);
 
 		GameObject unitToMove = Instantiate(workerPrefab);
 		NetworkServer.Spawn(unitToMove);

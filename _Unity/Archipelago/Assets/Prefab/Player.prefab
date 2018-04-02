@@ -107,10 +107,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerId: 2
-  rateMultiplier: 1
+  rateMultiplier: 2
   baseIncome: 0
   timeFrame: 1
-  moneyToWin: 1000
+  moneyToWin: 10000
   stateMenu: {fileID: 0}
 --- !u!114 &114901735811757312
 MonoBehaviour:
