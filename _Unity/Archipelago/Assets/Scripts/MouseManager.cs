@@ -79,8 +79,9 @@ public class MouseManager : MonoBehaviour {
 			Touch singleTouch = Input.GetTouch (0); //stores touch
 			if (singleTouch.phase == TouchPhase.Began) { //checks touch phase
 				//gets touch position
-				clickPos = singleTouch.position; 
-				canPerformSelection = true;
+				clickPos = singleTouch.position;
+				//If this touch is not over a UI it might be for selecting a hex
+				canPerformSelection = !EventSystem.current.IsPointerOverGameObject(singleTouch.fingerId);
 			} else if (singleTouch.phase == TouchPhase.Moved) { //check phase if moved
 				panCamera(singleTouch.position, clickPos);
 				clickPos = singleTouch.position;
@@ -119,7 +120,7 @@ public class MouseManager : MonoBehaviour {
 				Vector3 oldCenterWorldPoint = main.ScreenToWorldPoint(centerPoint);
 
 				// Zoom camera
-				float zoomDir = pinchZoomCamera(touchZero, touchOne);
+				pinchZoomCamera(touchZero, touchOne);
 				// Pan camera so it doesn't just zoom on center of screen
 				Vector3 newTouchCenterPoint = touchZero.position + (touchOne.position - touchZero.position)/2f;
 				Vector3 diffBetweenCameraAndCenter = main.ScreenToWorldPoint(newTouchCenterPoint) - oldCenterWorldPoint;

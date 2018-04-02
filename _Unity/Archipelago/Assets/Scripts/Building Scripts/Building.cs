@@ -12,14 +12,14 @@ public class Building : NetworkBehaviour{
     public List<HexGrid.TileType> tilesAssociatedWith;
 
 	//Id for each type of building that can be passed over the network
-	public enum BuildingType{None, Farm, Fishing, LogCabbin, Mine, Trap, Barracks};
+	public enum BuildingType{None, Farm, Fishing, LogCabbin, Mine, Trap, Barracks, Base};
 	public BuildingType buildingId;
 
     //Construction parameters
 	[SyncVar] private float currentBuildTime;
     public float totalBuildTime;
     public float buildSpeedPerWorker;
-	[SyncVar] private bool isConstructed;
+	[SyncVar (hook = "updateIsConstructed")] private bool isConstructed;
 
 	// The hex this building is on, only valid on the server
     private Hex hexAssociatedWith;
@@ -136,7 +136,6 @@ public class Building : NetworkBehaviour{
 		//Calculate Current Build Time
 		currentBuildTime += Time.deltaTime * hexAssociatedWith.getNumOfWorkersOnHex(hexAssociatedWith.getHexOwner()) * buildSpeedPerWorker;
 
-		Debug.Log("% Constructed: " + currentBuildTime / totalBuildTime * 100);
 		if(currentBuildTime >= totalBuildTime){
 			finalizeConstruction();
 		}
@@ -152,8 +151,15 @@ public class Building : NetworkBehaviour{
 		else {
 			hexAssociatedWith.RpcDisplayTrap ();
 		}
+	
+		//update player ui to display new options
+		FindObjectOfType<HexMenuController> ().RpcRefreshUIValues ();
 	}
 
-	////////////////////////// RPCs ///////////////////////////////////////////
+	////////////////////////// SyncVar Hooks ///////////////////////////////////////////
 
+	private void updateIsConstructed(bool newIsConstructed){
+		isConstructed = newIsConstructed;
+		FindObjectOfType<HexMenuController> ().refreshUIValues ();
+	}
 }

@@ -28,10 +28,6 @@ public class CapturableTile: NetworkBehaviour{
 	private int numP1UnitsOnHex = 0;
 	private int numP2UnitsOnHex = 0;
 
-	//Used for the battle loop function
-	private bool timeFrameStart = false;
-	private float timePeriod;
-
 	//Hex script associated with this tile
 	private Hex thisHex;
 
@@ -83,7 +79,7 @@ public class CapturableTile: NetworkBehaviour{
 		//When a tile is contested a battle sequence/loop is started
 		//Warriors fight other warriors and workers. Workers do not fight. They merely add to the health of the group.
 		if (numP1UnitsOnHex > 0 && numP2UnitsOnHex > 0) {
-			beginBattle ();
+			//Units fighting, don't do capture
 			return;
 		}
 			
@@ -104,64 +100,67 @@ public class CapturableTile: NetworkBehaviour{
 		float newAmountCaptured = amountCaptured + Time.deltaTime * captureSpeedPerUnit * (numP1UnitsOnHex - numP2UnitsOnHex - neutralResetSpeed);
 		newAmountCaptured = Mathf.Clamp (newAmountCaptured, -totalCaptureCost, totalCaptureCost);
 
-		//Checks if Player 1 has one or more units on the tile, Owns a tile next to it, and if they don't own it already
+		//Checks if Player 1 has one or more units on the tile and Owns a tile next to it
 		//If all these return true Player 1 begins to capture
-		if (numP1UnitsOnHex > 0 && thisHex.hasOwnedNeighbor (Player.PlayerId.P1) && thisHex.getHexOwner () != Player.PlayerId.P1) {
-			updateTileCapture (Player.PlayerId.P1, newAmountCaptured);
+		if (numP1UnitsOnHex > 0 && thisHex.hasOwnedNeighbor (Player.PlayerId.P1)) {
+			if (thisHex.getHexOwner () != Player.PlayerId.P1) {
+				//capturing enemy or neutral tile
+				updateTileCapture (Player.PlayerId.P1, newAmountCaptured);
+			} else {
+				//Defending a tile
+				resetCapture(Player.PlayerId.P1, totalCaptureCost);
+			}
 		} 
 		//Checks if Player 2 has one or more units on the tile, Owns a tile next to it, and if they don't own it already
 		//If all these return true Player 2 begins to capture
 		else if (numP2UnitsOnHex > 0 && thisHex.hasOwnedNeighbor (Player.PlayerId.P2) && thisHex.getHexOwner () != Player.PlayerId.P2) {
-			updateTileCapture (Player.PlayerId.P2, newAmountCaptured);
-		} else if (numP1UnitsOnHex == 0 && numP1UnitsOnHex == 0 && thisHex.getHexOwner () == Player.PlayerId.NEUTRAL){
+			if (thisHex.getHexOwner () != Player.PlayerId.P2) {
+				//capturing enemy or neutral tile
+				updateTileCapture (Player.PlayerId.P2, newAmountCaptured);
+			} else {
+				//Defending a tile
+				resetCapture(Player.PlayerId.P2, -totalCaptureCost);
+			}
+		} else if (numP1UnitsOnHex == 0 && numP2UnitsOnHex == 0 && thisHex.getHexOwner () == Player.PlayerId.NEUTRAL){
 			// Capture amount degrades towards neutral
-			updateTileCapture (Player.PlayerId.NEUTRAL, newAmountCaptured);
+			isCapturing = !updateTileCapture (Player.PlayerId.NEUTRAL, newAmountCaptured);
 		}
-
-		// Update the amount capture for next frame (also sent to clients)
-		amountCaptured = newAmountCaptured;
 	}
 
-	private void updateTileCapture(Player.PlayerId pid, float newAmountCaptured){
+	private bool updateTileCapture(Player.PlayerId pid, float newAmountCaptured){
+		Debug.Log ("CaptureableTile: updateTileCapture: pid=" + pid + ", this hex = " + name);
+		bool switchedToNeutral = false;
 		if (Mathf.Abs(newAmountCaptured) >= totalCaptureCost) {
 			//player captured tile
 			//update the hex
 			thisHex.setHexOwner (pid);
 			//update the map on all the clients
-			RpcCaptureTile (pid);
+			RpcCaptureTile (pid,pid);
 			// Update the player income
 			finalizeCapture ();
 		} else if (newAmountCaptured * amountCaptured < 0) {
 			//Tile was neutralised
 			//Update theplayer income
-			loseTile (pid);
-			//update the map on all the clients
-			RpcCaptureTile (Player.PlayerId.NEUTRAL);
-		}
-	}
-
-	//Fight-Battle Sequence
-	private void beginBattle() {
-		Hex currentHex = gameObject.GetComponent<Hex>();
-		//If a new timeframe hasnt begun start one
-		if(!timeFrameStart) {
-			currentHex.RpcEnableCombatBar();
-			timePeriod = Time.time;
-			timeFrameStart = true;
-		}
-		//If the timeframe has been reached doDamage and reset timeFrameStart
-		else if(timeFrameStart) {
-			if(timePeriod + 2 <= Time.time) {
-				currentHex.doDamage ();
-				timeFrameStart = false;
+			//Lose tile called on the other player
+			if (pid.Equals (Player.PlayerId.P1)) {
+				
+				loseTile (Player.PlayerId.P2);
+			} else {
+				loseTile (Player.PlayerId.P1);
 			}
+			//update the map on all the clients
+			RpcCaptureTile (Player.PlayerId.NEUTRAL,pid);
+			switchedToNeutral = true;
 		}
+		// Update the amount capture for next frame (also sent to clients)
+		amountCaptured = newAmountCaptured;
+		return switchedToNeutral;
 	}
 
 	//////////////////////////////// Getters/Setters /////////////////////////////////////////////
 
 	// Get the player object for the owner of this tile
-	private Player getPlayer(Player.PlayerId pid){
+	public Player getPlayer(Player.PlayerId pid){
 		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
 		for(int i=0; i<players.Length; i++){
 			Player player = players[i].GetComponentInChildren<Player>();
@@ -201,7 +200,7 @@ public class CapturableTile: NetworkBehaviour{
 			numP2UnitsOnHex += numUnits;
 		}
 
-		if (GetComponent<Hex>().getHexOwner() == Player.PlayerId.NEUTRAL && !isCapturing) {
+		if (GetComponent<Hex>().getHexOwner() != player && !isCapturing) {
 			isCapturing = true;
 			RpcStartCapture (player);
 		}
@@ -225,6 +224,7 @@ public class CapturableTile: NetworkBehaviour{
 		if (!isServer) {
 			return;
 		}
+		isCapturing = false;
 		Player player = getPlayer (GetComponent<Hex>().getHexOwner());
 		if(player != null){
 			player.captureTile (this);
@@ -237,10 +237,21 @@ public class CapturableTile: NetworkBehaviour{
 			return;
 		}
 
+		Building building = this.getHex ().getBuilding();
 		Player player = getPlayer (pid);
 		if (player != null) {
 			player.removeTile (this);
 		}
+		//Cehcks if there was a building on the tile
+		if (building != null) {
+			//removes the income of tile
+			player.removeBuildIncome (building);
+		}
+	}
+
+	private void resetCapture(Player.PlayerId pid, float newCaptureAmount){
+		amountCaptured = newCaptureAmount;
+		RpcCaptureTile (pid, pid);
 	}
 
 	//////////////////////////////// RPCs and client methods /////////////////////////////////////////////
@@ -266,16 +277,33 @@ public class CapturableTile: NetworkBehaviour{
 
 	[ClientRpc]
 	//Update the map for all the clients so they see the correct sprite when a tile is captured
-	private void RpcCaptureTile(Player.PlayerId pid){
-		if (pid == Player.PlayerId.P1) {
+	private void RpcCaptureTile(Player.PlayerId newTileOwner, Player.PlayerId playerCapturing){
+		Debug.Log ("CapturableTile: RpcCaptureTile: newTileOwner=" + newTileOwner);
+		if (newTileOwner == Player.PlayerId.P1) {
 			captureBorder.enabled = false;
 			tileSprite.sprite = p1CaptureTile;
-		} else if (pid == Player.PlayerId.P2) {
+		} else if (newTileOwner == Player.PlayerId.P2) {
 			captureBorder.enabled = false;
 			tileSprite.sprite = p2CaptureTile;
 		} else {
 			tileSprite.sprite = neutralCaptureTile;
 			captureBorder.fillClockwise = !captureBorder.fillClockwise;
+			if (playerCapturing == Player.PlayerId.P1) {
+				captureBorder.sprite = p1CaptureBorder;	
+			} else if (playerCapturing == Player.PlayerId.P2) {
+				captureBorder.sprite = p2CaptureBorder;
+			}
+		}
+		// Update UI on clients if needed
+		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
+		for(int i=0; i<players.Length; i++){
+			Player player = players[i].GetComponent<Player>();
+			Debug.Log ("CapturableTile: RpcCaptureTile: player=" + player.playerId);
+			if(player.hasAuthority){
+				Debug.Log ("CapturableTile: RpcCaptureTile: refreshing UI");
+				player.GetComponent<HexMenuController> ().refreshUIValues ();
+				return;
+			}
 		}
 	}
 

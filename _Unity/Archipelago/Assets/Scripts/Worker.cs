@@ -26,6 +26,18 @@ public class Worker : Unit {
 
 	[Command]
 	private void CmdCheckReachedDestination(){
+		//Call to check if there is a trap on the Hex
+		unitController.CmdCheckTrap (transform.position, this.gameObject);
+
+		// Get the hex the unit is currently on
+		GameObject hex = FindObjectOfType<HexGrid>().getHex(transform.position);
+
+		// If unit walks into enemny unit stop to fight
+		if (hex.GetComponent<Hex>().hasEnemyUnits(id)){
+			unitController.CmdAddWorkers(1, hex);
+			NetworkServer.Destroy(gameObject);
+		}
+
 		//If reached destination, add it to the hex and remove the gameobject
 		if (transform.position.Equals(getDestinationCoord())) {
 			unitController.CmdAddWorkers(1, getDestinationHex().gameObject);

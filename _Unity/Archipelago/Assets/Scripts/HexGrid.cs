@@ -30,7 +30,7 @@ public class HexGrid : NetworkBehaviour {
 	int[,] level1 = new int[7, 35]
 	{
 		{6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6},
-		{6,6,6,3,6,6,6,6,6,4,6,4,6,3,6,6,6,4,6,6,6,3,6,4,6,4,6,6,6,6,6,3,6,6,6},
+		{6,6,6,3,6,6,6,6,6,4,6,4,6,3,6,6,6,4,6,6,6,3,6,4,6,4,1,6,6,6,6,3,6,6,6},
 		{6,4,4,0,4,4,6,4,4,0,4,6,4,6,4,0,0,3,0,0,4,6,4,6,4,0,4,4,6,4,4,0,4,4,6},
 		{6,3,5,1,0,3,4,3,5,3,0,5,0,4,5,5,3,3,3,5,5,4,0,5,0,3,5,3,4,3,0,2,5,3,6},
 		{6,4,5,0,0,4,4,4,5,0,0,6,0,6,5,0,3,3,3,0,5,6,0,6,0,0,5,4,4,4,0,0,5,4,6},
@@ -106,15 +106,13 @@ public class HexGrid : NetworkBehaviour {
 	//Enumerate the different types of tiles
 	public enum TileType {GRASS, BASE, TREE, SAND, ROCK, WATER, ALL }
 
+	// Initialisation state variables
+	public bool serverInitialised = false;
+	private bool clientInitialised = false;
+
     // Initialization
     void Start(){
 		Debug.Log ("HexGrid: Start");
-		if (!isServer) {
-			// Only let the server actually create the map
-			return;
-		}
-
-       
     }
 
 	public override  void OnStartServer() {
@@ -122,9 +120,9 @@ public class HexGrid : NetworkBehaviour {
 		OnStartClient (); // manually make this call to ensure everthings initialised
 		//Create the hex grid
 		createHexGrid();
+		serverInitialised = true;
 	}
-
-	private bool clientInitialised = false;
+		
 	public override void OnStartClient() {
 		Debug.Log("HexGrid: OnStartClient");
 		if (clientInitialised) {
