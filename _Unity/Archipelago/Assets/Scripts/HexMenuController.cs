@@ -202,7 +202,6 @@ public class HexMenuController : NetworkBehaviour {
                     GameObject go = new GameObject();
 					GameObject textObject = new GameObject ();
 					textObject.AddComponent<Text> ();
-					textObject.AddComponent <RectTransform> ();
 
                     //Set its parent
                     go.transform.parent = tileActionBox.transform;
@@ -218,18 +217,16 @@ public class HexMenuController : NetworkBehaviour {
                     go.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
                     go.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 1f);
                     go.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 1f);
-
-
+			
 					textObject.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
 					textObject.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 1f);
 					textObject.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 1f);
-                    
+
                     go.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth, childHeight);
                     go.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -count * childHeight * go.GetComponent<RectTransform>().localScale.x - yOffset);
-
-					textObject.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth/3, childHeight/3);
-					textObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -count * childHeight * textObject.GetComponent<RectTransform>().localScale.x - yOffset);
-
+				
+					textObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -count * childHeight/2 * go.GetComponent<RectTransform>().localScale.x - yOffset);
+					textObject.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth/2, childHeight/2);
 					//Set its displayed sprite
                     go.GetComponent<Image>().sprite = b.getMenuIconSprite();
 					textObject.GetComponent<Text> ().text = "hsgdfs";
