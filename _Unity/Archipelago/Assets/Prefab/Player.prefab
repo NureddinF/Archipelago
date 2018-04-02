@@ -112,6 +112,8 @@ MonoBehaviour:
   timeFrame: 1
   moneyToWin: 10000
   stateMenu: {fileID: 0}
+  p1TerritorySprite: {fileID: 21300000, guid: 180b765ac0d5f984389222ac88688ed9, type: 3}
+  p2TerritorySprite: {fileID: 21300000, guid: b7d4550aab637074a919204e0092569e, type: 3}
 --- !u!114 &114901735811757312
 MonoBehaviour:
   m_ObjectHideFlags: 1
