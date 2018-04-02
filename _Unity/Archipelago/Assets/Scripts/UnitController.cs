@@ -90,9 +90,6 @@ public class UnitController : NetworkBehaviour {
 
         if (!warriorLocations.Contains(h))
             warriorLocations.Add(h);
-
-		//get component of player to access id
-        h.gameObject.GetComponent<CapturableTile>().addUnits(amount, pid);
     }
 
     //Method to remove warrior(s) given a specified amount and a hex
@@ -159,7 +156,6 @@ public class UnitController : NetworkBehaviour {
 
         if (!workerLocations.Contains(h))
             workerLocations.Add(h);
-            h.gameObject.GetComponent<CapturableTile>().addUnits(amount, pid); 
 		GetComponent<HexMenuController>().RpcRefreshUIValues ();
     }
 

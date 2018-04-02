@@ -110,7 +110,7 @@ MonoBehaviour:
   rateMultiplier: 1
   baseIncome: 0
   timeFrame: 1
-  moneyToWin: 500
+  moneyToWin: 1000
   stateMenu: {fileID: 0}
 --- !u!114 &114901735811757312
 MonoBehaviour:
@@ -145,3 +145,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hexMenu: {fileID: 0}
+  workerCost: 25
+  warriorCost: 50

@@ -28,10 +28,6 @@ public class CapturableTile: NetworkBehaviour{
 	private int numP1UnitsOnHex = 0;
 	private int numP2UnitsOnHex = 0;
 
-	//Used for the battle loop function
-	private bool timeFrameStart = false;
-	private float timePeriod;
-
 	//Hex script associated with this tile
 	private Hex thisHex;
 
@@ -83,7 +79,7 @@ public class CapturableTile: NetworkBehaviour{
 		//When a tile is contested a battle sequence/loop is started
 		//Warriors fight other warriors and workers. Workers do not fight. They merely add to the health of the group.
 		if (numP1UnitsOnHex > 0 && numP2UnitsOnHex > 0) {
-			beginBattle ();
+			//Units fighting, don't do capture
 			return;
 		}
 			
@@ -113,16 +109,15 @@ public class CapturableTile: NetworkBehaviour{
 		//If all these return true Player 2 begins to capture
 		else if (numP2UnitsOnHex > 0 && thisHex.hasOwnedNeighbor (Player.PlayerId.P2) && thisHex.getHexOwner () != Player.PlayerId.P2) {
 			updateTileCapture (Player.PlayerId.P2, newAmountCaptured);
-		} else if (numP1UnitsOnHex == 0 && numP1UnitsOnHex == 0 && thisHex.getHexOwner () == Player.PlayerId.NEUTRAL){
+		} else if (numP1UnitsOnHex == 0 && numP2UnitsOnHex == 0 && thisHex.getHexOwner () == Player.PlayerId.NEUTRAL){
 			// Capture amount degrades towards neutral
-			updateTileCapture (Player.PlayerId.NEUTRAL, newAmountCaptured);
+			isCapturing = !updateTileCapture (Player.PlayerId.NEUTRAL, newAmountCaptured);
 		}
-
-		// Update the amount capture for next frame (also sent to clients)
-		amountCaptured = newAmountCaptured;
 	}
 
-	private void updateTileCapture(Player.PlayerId pid, float newAmountCaptured){
+	private bool updateTileCapture(Player.PlayerId pid, float newAmountCaptured){
+		Debug.Log ("CaptureableTile: updateTileCapture: pid=" + pid + ", this hex = " + name);
+		bool switchedToNeutral = false;
 		if (Mathf.Abs(newAmountCaptured) >= totalCaptureCost) {
 			//player captured tile
 			//update the hex
@@ -137,25 +132,11 @@ public class CapturableTile: NetworkBehaviour{
 			loseTile (pid);
 			//update the map on all the clients
 			RpcCaptureTile (Player.PlayerId.NEUTRAL);
+			switchedToNeutral = true;
 		}
-	}
-
-	//Fight-Battle Sequence
-	private void beginBattle() {
-		Hex currentHex = gameObject.GetComponent<Hex>();
-		//If a new timeframe hasnt begun start one
-		if(!timeFrameStart) {
-			currentHex.RpcEnableCombatBar();
-			timePeriod = Time.time;
-			timeFrameStart = true;
-		}
-		//If the timeframe has been reached doDamage and reset timeFrameStart
-		else if(timeFrameStart) {
-			if(timePeriod + 2 <= Time.time) {
-				currentHex.doDamage ();
-				timeFrameStart = false;
-			}
-		}
+		// Update the amount capture for next frame (also sent to clients)
+		amountCaptured = newAmountCaptured;
+		return switchedToNeutral;
 	}
 
 	//////////////////////////////// Getters/Setters /////////////////////////////////////////////
@@ -225,6 +206,7 @@ public class CapturableTile: NetworkBehaviour{
 		if (!isServer) {
 			return;
 		}
+		isCapturing = false;
 		Player player = getPlayer (GetComponent<Hex>().getHexOwner());
 		if(player != null){
 			player.captureTile (this);
