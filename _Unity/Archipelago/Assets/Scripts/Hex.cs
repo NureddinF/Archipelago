@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,7 +14,7 @@ public class Hex : NetworkBehaviour {
 	[SyncVar] private int y;
 
     //Store who owns the hex
-	[SyncVar] public Player.PlayerId hexOwner;
+	[SyncVar (hook = "updateHexOwner")] public Player.PlayerId hexOwner;
 
     //Stores the hex's type
 	[SyncVar] private HexGrid.TileType tileType;
@@ -43,14 +44,24 @@ public class Hex : NetworkBehaviour {
     private int maxX = HexGrid.getGridWidth() - 1;
 
 	//Store Amount of Player 1 (Red) and Player 2 (Blue) Units
-	private int redWarriors, redWorkers, redDamage, redWarriorHealth, redWorkerHealth;
-	private int blueWarriors, blueWorkers, blueDamage, blueWarriorHealth, blueWorkerHealth;
+	[SyncVar(hook = "setRedWarriors")] private int redWarriors;
+	[SyncVar(hook = "setRedWorkers")] private int redWorkers;
+	private int redDamage, currentRedWarriorHealth, currentRedWorkerHealth, maxRedWarriorHealth, maxRedWorkerHealth;
+	[SyncVar(hook = "setBlueWarriors")] private int blueWarriors;
+	[SyncVar(hook = "setBlueWorkers")] private int blueWorkers;
+	private int blueDamage, currentBlueWarriorHealth, currentBlueWorkerHealth, maxBlueWarriorHealth, maxBlueWorkerHealth;
 
     //The amount of health the unit types start with each
     private int workerHealth = 3;
     private int warriorHealth = 6;
 
-
+	//Used for the battle loop function
+	private bool battleStarted = false;
+	private bool timeFrameStart = false;
+	private float timePeriod;
+	private const float timeFrame = 1f;
+	private UnitController p1UnitCtrl;
+	private UnitController p2UnitCtrl;
 
 	//////////////////////////////// MonoBehaviour Methods ////////////////////////////////////////
 
@@ -62,13 +73,17 @@ public class Hex : NetworkBehaviour {
 		redWarriors = 0;
 		redWorkers = 0;
 		redDamage = 0;
-		redWarriorHealth = 0;
-		redWorkerHealth = 0;
+		currentRedWarriorHealth = 0;
+		currentRedWorkerHealth = 0;
+		maxRedWarriorHealth = 0;
+		maxRedWorkerHealth = 0;
 		blueWarriors = 0;
 		blueWorkers = 0;
 		blueDamage = 0;
-		blueWarriorHealth = 0;
-		blueWorkerHealth = 0;
+		currentBlueWarriorHealth = 0;
+		currentBlueWorkerHealth = 0;
+		maxBlueWarriorHealth = 0;
+		maxBlueWorkerHealth = 0;
 
         //If not a water tile, since doesn't hold the canvas object or have interactibility
         if (this.getTileType() != HexGrid.TileType.WATER) {
@@ -102,8 +117,15 @@ public class Hex : NetworkBehaviour {
 
 	//update game stae
 	private void serverUpdate(){
+
+		if(blueWarriors + blueWorkers > 0 && redWorkers + redWarriors > 0){
+			if(!battleStarted){
+				beginBattle ();
+			}
+			progressBattle ();
+		}
 		//If there is a building on the hex and it isn't yet constructed
-		if (building != null && !building.getIsConstructed()){
+		else if (building != null && !building.getIsConstructed()){
 			//Progress the buildings construction
 			building.progressConstruction();
 		}
@@ -111,6 +133,13 @@ public class Hex : NetworkBehaviour {
 		
 	[Command]
 	public void CmdSetBuilding(Building.BuildingType buildingId) {
+		// Check if this is removing a building
+		if(buildingId == Building.BuildingType.None){
+			if(buildingObject != null){
+				NetworkServer.Destroy (buildingObject);
+			}
+			return;
+		}
 		GameObject buildingPrefab = FindObjectOfType<BuildingController>().getBuildingFromType(buildingId);
 		//Instantiate a new Building object for the building.
 		//Allows it to hold it's own values, rather than statically for all buildings of same type
@@ -121,6 +150,53 @@ public class Hex : NetworkBehaviour {
 
 		//Associate this hex with the building
 		building.CmdSetHexAssociatedWith(gameObject);
+	}
+
+
+	private void beginBattle(){
+		battleStarted = true;
+		//update clients UI
+		RpcEnableCombatBar ();
+
+		//initialise battle stats
+		currentRedWarriorHealth = maxRedWarriorHealth;
+		currentRedWorkerHealth = maxRedWorkerHealth;
+		currentBlueWarriorHealth = maxBlueWarriorHealth;
+		currentBlueWorkerHealth = maxBlueWorkerHealth;
+
+		RpcUpdateCombatBar (currentRedWarriorHealth , currentBlueWarriorHealth );
+
+		// Get the UnitControler for each player so units can properly be killed
+		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
+		for(int i=0; i<players.Length; i++){
+			Player player = players[i].GetComponentInChildren<Player>();
+			if (player.playerId.Equals (Player.PlayerId.P1)) {
+				p1UnitCtrl = player.GetComponent<UnitController>();
+			} else if (player.playerId.Equals (Player.PlayerId.P2)) {
+				p2UnitCtrl = player.GetComponent<UnitController>();
+			}
+		}
+		//There should always be a unit controller for eahc player
+		if(p1UnitCtrl == null){
+			Debug.LogError ("Hex: beginBattle: could not find player 1 unit controller");
+		}
+		if(p2UnitCtrl == null){
+			Debug.LogError ("Hex: beginBattle: could not find player 2 unit controller");
+		}
+	}
+
+	//Fight-Battle Sequence
+	private void progressBattle() {
+		//If a new timeframe hasnt begun start one
+		if(!timeFrameStart) {
+			timePeriod = Time.time;
+			timeFrameStart = true;
+		}
+		//If the timeframe has been reached doDamage and reset timeFrameStart
+		else if(timePeriod + timeFrame <= Time.time) {
+			doDamage ();
+			timeFrameStart = false;
+		}
 	}
 
 	//////////////////////////////// RPCs and Client Methods //////////////////////////////////////////
@@ -190,10 +266,11 @@ public class Hex : NetworkBehaviour {
 	}
 
     //Method to update the combat bar for this hex
-    public void updateCombatBar(){
-        int totalWarriors = redWarriors + blueWarriors;
-        hexFightingBarBlue.GetComponent<RectTransform>().localScale = new Vector2((float)blueWarriors / (float)totalWarriors, 1);
-        hexFightingBarRed.GetComponent<RectTransform>().localScale = new Vector2((float)redWarriors / (float)totalWarriors, 1);
+	[ClientRpc]
+	public void RpcUpdateCombatBar(int redHealth, int blueHealth){
+		int totalHealth = redHealth + blueHealth;
+		hexFightingBarBlue.GetComponent<RectTransform>().localScale = new Vector2((float)blueHealth / (float)totalHealth, 1);
+		hexFightingBarRed.GetComponent<RectTransform>().localScale = new Vector2((float)redHealth / (float)totalHealth, 1);
     }
 		
 
@@ -264,129 +341,89 @@ public class Hex : NetworkBehaviour {
     public Building getBuilding() { 
 		return building;
 	}
-
-	//Get Health
-	public int getHealth(Player.PlayerId player) {
-		int result = 0;
-		//If Player 1, get redHealth
-		if (player == Player.PlayerId.P1) {
-			result = redWarriorHealth + redWorkerHealth;
-		} 
-		//If Player 2, get blueHealth
-		else if (player == Player.PlayerId.P2) {
-			result = blueWarriorHealth + blueWorkerHealth;
-		}
-		return result; 
-	}
-
-	//Get Damage
-	public int getDamage(Player.PlayerId player) {
-		int result = 0;
-		//If Player 1, get redDamage
-		if (player == Player.PlayerId.P1) {
-			result = redDamage;
-		} 
-		//If Player 2, get blueDamage
-		else if (player == Player.PlayerId.P2) {
-			result = blueDamage;
-		}
-		return result; 
-	}		
-
-	//Set Damage
-	public void setDamage(int amount, Player.PlayerId player) {
-		//If Player 1, set redDamage
-		if (player == Player.PlayerId.P1) {
-			redDamage = amount;
-		} 
-		//If Player 2, set blueDamage
-		else if (player == Player.PlayerId.P2) {
-			blueDamage = amount;
-		}
-	}
-
+		
 	///////////////////////////////////////// Custom Methods ///////////////////////////////////////////
 
 	//Do Damage, Performs damage to both factions and updates units, health, and damage respectively
 	public void doDamage() {
-		int tempRedHealth = redWarriorHealth + redWorkerHealth;
+		int tempRedHealth = currentRedWarriorHealth + currentRedWorkerHealth;
 		int tempRedDamage = redDamage;
-		int tempBlueHealth = blueWarriorHealth + blueWorkerHealth;
+		int tempBlueHealth = currentBlueWarriorHealth + currentBlueWorkerHealth;
 		int tempBlueDamage = blueDamage;
+
+		Debug.Log ("Hex: doDamage:" + Environment.NewLine
+			+ "\ttempRedHealth=\t" + tempRedHealth + Environment.NewLine
+			+ "\ttempBlueHealth\t" + tempBlueHealth + Environment.NewLine
+			+ "\ttempRedDamage=\t" + tempRedDamage + Environment.NewLine
+			+ "\ttempBlueDamage=\t" + tempBlueDamage + Environment.NewLine
+			+ "\tredWarriors=\t" + redWarriors + Environment.NewLine
+			+ "\tblueWarriors=\t" + blueWarriors + Environment.NewLine
+			+ "\tredWorkers=\t" + redWorkers + Environment.NewLine
+			+ "\tblueWorkers=\t" + blueWorkers + Environment.NewLine);
+
 		//Red Faction Updated
-		//No Health remaining after attack
 		if (tempRedHealth - tempBlueDamage <= 0) {
-			redDamage = 0;
-			redWorkerHealth = 0;
-			redWorkers = 0;
-			redWarriorHealth = 0;
-			redWarriors = 0;
-            RpcDisableCombatBar();
+			//No Health remaining after attack
+			p1UnitCtrl.CmdRemoveWorkers (redWorkers, gameObject);
+			p1UnitCtrl.CmdRemoveWarriors (redWarriors, gameObject);
+			Debug.Log ("Hex: doDamage: all red units died");
         } 
 		//Some health remaining after attack
 		else {
-			//Red Warrior have no health left
-			if (redWarriorHealth - tempBlueDamage <= 0) {
-				redWorkerHealth -= (tempBlueDamage - redWarriorHealth);
-				redWorkers = (int)((redWorkerHealth / workerHealth) + 1);
-				redWarriorHealth = 0;
-				redWarriors = 0;
-				redDamage = 0;
+			if (currentRedWarriorHealth - tempBlueDamage <= 0) {
+				//Red Warrior have no health left, do damage to workers
+				currentRedWorkerHealth -= (tempBlueDamage - currentRedWarriorHealth);
+				int remainingWorkers = (int)Mathf.Ceil(currentRedWorkerHealth / ((float) workerHealth));
+				p1UnitCtrl.CmdRemoveWorkers (redWorkers-remainingWorkers, gameObject);
+				p1UnitCtrl.CmdRemoveWarriors (redWarriors, gameObject);
 			} 
-			//Red Warriors have some health remaining
 			else {
-				redWarriors = (int)((redWarriorHealth / warriorHealth) + 1);
-				redDamage = redWarriors;
-				redWarriorHealth -= tempBlueDamage;
+				//Red Warriors have some health remaining, damage them
+				currentRedWarriorHealth -= tempBlueDamage;
+				int remainingWarriors = (int)Mathf.Ceil(currentRedWarriorHealth / ((float)warriorHealth));
+				p1UnitCtrl.CmdRemoveWarriors (redWarriors - remainingWarriors, gameObject);
+				Debug.Log ("Hex: doDamage: red warriors damaged. Remaining warriors=" + remainingWarriors);
 				//Because warriors have health remaining workers are unaffected
 			}
 
 		}
         //Blue Faction Updated
-        //No Health remaining after attack
         if (tempBlueHealth - tempRedDamage <= 0) {
-            blueDamage = 0;
-            blueWorkerHealth = 0;
-            blueWorkers = 0;
-            blueWarriorHealth = 0;
-            blueWarriors = 0;
-            RpcDisableCombatBar();
+			//No Health remaining after attack
+			p2UnitCtrl.CmdRemoveWorkers (blueWorkers, gameObject);
+			p2UnitCtrl.CmdRemoveWarriors (blueWarriors, gameObject);
+			Debug.Log ("Hex: doDamage: all red units died");
         }
-        //Some health remaining after attack
         else {
-            //Blue Warrior have no health left
-            if (blueWarriorHealth - tempRedDamage <= 0) {
-                blueWorkerHealth -= (tempRedDamage - blueWarriorHealth);
-                blueWorkers = (int)((blueWorkerHealth / workerHealth) + 1);
-                blueWarriorHealth = 0;
-                blueWarriors = 0;
-                blueDamage = 0;
+			//Some health remaining after attack
+            if (currentBlueWarriorHealth - tempRedDamage <= 0) {
+				//Blue Warrior have no health left, damage workers
+                currentBlueWorkerHealth -= (tempRedDamage - currentBlueWarriorHealth);
+				int remainingWorkers = (int)Mathf.Ceil(currentBlueWorkerHealth / ((float)workerHealth));
+				p2UnitCtrl.CmdRemoveWorkers (blueWorkers - remainingWorkers, gameObject);
+				p2UnitCtrl.CmdRemoveWarriors (blueWarriors, gameObject);
             }
-            //Blue Warrior have some health remaining
             else {
-                blueWarriors = (int)((blueWarriorHealth / warriorHealth) + 1);
-                blueDamage = blueWarriors;
-                blueWarriorHealth -= tempRedDamage;
+				//Blue Warrior have some health remaining, damage them
+                currentBlueWarriorHealth -= tempRedDamage;
+				int remainingWarriors = (int)Mathf.Ceil(currentBlueWarriorHealth / ((float)warriorHealth));
+				p2UnitCtrl.CmdRemoveWarriors (blueWarriors - remainingWarriors, gameObject);
+				Debug.Log ("Hex: doDamage: blue warriors damaged. Remaining warriors=" + remainingWarriors);
             }
         }
         //If one team has wiped out other team, then reset health of units on tile
-        if(redWarriors+redWorkers == 0 || blueWarriors+blueWorkers == 0)
-        {
-            resetHealth();
+        if(redWarriors+redWorkers == 0 || blueWarriors+blueWorkers == 0) {
+            endBattle();
         }
-        else
-        {
-            updateCombatBar();
+        else {
+			RpcUpdateCombatBar (currentRedWarriorHealth , currentBlueWarriorHealth );
         }
 	}
 
     //Method to reset health of remaining units on tile
-    private void resetHealth()
-    {
-        redWarriorHealth = redWarriors * warriorHealth;
-        redWorkerHealth = redWorkers * workerHealth;
-        blueWarriorHealth = blueWarriors * warriorHealth;
-        blueWorkerHealth = blueWorkers * workerHealth;
+    private void endBattle(){
+		battleStarted = false;
+		RpcDisableCombatBar ();
     }
     
 	//Get Number of Workers on Hex
@@ -422,12 +459,18 @@ public class Hex : NetworkBehaviour {
 		//If Player 1, add to redWorkers
 		if (player == Player.PlayerId.P1) {
 			redWorkers += amount;
-			redWorkerHealth += (amount * workerHealth);
+			currentRedWorkerHealth += (amount * workerHealth);
+			maxRedWorkerHealth += (amount * workerHealth);
 		} 
 		//If Player 2, add to blueWorkers
 		else if (player == Player.PlayerId.P2) {
 			blueWorkers += amount;
-			blueWorkerHealth += (amount * workerHealth);
+			currentBlueWorkerHealth += (amount * workerHealth);
+			maxBlueWorkerHealth += (amount * workerHealth);
+		}
+		CapturableTile capture = GetComponent<CapturableTile> ();
+		if(capture != null){
+			capture.addUnits (amount, player);
 		}
     }
 
@@ -436,14 +479,21 @@ public class Hex : NetworkBehaviour {
 		//If Player 1, add to redWarriors
 		if (player == Player.PlayerId.P1) {
 			redWarriors += amount;
-			redWarriorHealth += (amount * warriorHealth);
+			maxRedWarriorHealth += (amount * warriorHealth);
+			currentRedWarriorHealth += (amount * warriorHealth);
 			redDamage += amount;
 		} 
 		//If Player 2, add to blueWarriors
 		else if (player == Player.PlayerId.P2) {
 			blueWarriors += amount;
-			blueWarriorHealth += (amount * warriorHealth);
+			maxBlueWarriorHealth += (amount * warriorHealth);
+			currentBlueWarriorHealth += (amount * warriorHealth);
 			blueDamage += amount;
+		}
+
+		CapturableTile capture = GetComponent<CapturableTile> ();
+		if(capture != null){
+			capture.addUnits(amount, player);
 		}
     }
 
@@ -453,23 +503,27 @@ public class Hex : NetworkBehaviour {
 		if (player == Player.PlayerId.P1) {
 			if(redWorkers >= amount) {
 				redWorkers -= amount;
-				redWorkerHealth -= (amount * workerHealth);
+				maxRedWorkerHealth -= (amount * workerHealth);
 			}
 			else
 			{
-				Debug.Log("Can't remove workers from hex since requested " + amount + " to be removed, and only " + redWorkers + " recorded to be located on this hex: " + this.name);
+				Debug.LogError("Can't remove workers from hex since requested " + amount + " to be removed, and only " + redWorkers + " recorded to be located on this hex: " + this.name);
 			}
 		} 
 		//If Player 2, remove blueWorkers
 		else if (player == Player.PlayerId.P2) {
 			if(blueWorkers >= amount) {
 				blueWorkers -= amount;
-				blueWorkerHealth -= (amount * workerHealth);
+				maxBlueWorkerHealth -= (amount * workerHealth);
 			}
 			else
 			{
-				Debug.Log("Can't remove workers from hex since requested " + amount + " to be removed, and only " + blueWorkers + " recorded to be located on this hex: " + this.name);
+				Debug.LogError("Can't remove workers from hex since requested " + amount + " to be removed, and only " + blueWorkers + " recorded to be located on this hex: " + this.name);
 			}
+		}
+		CapturableTile capture = GetComponent<CapturableTile> ();
+		if (capture != null) {
+			capture.removeUnits (amount, player);
 		}
     }
 
@@ -479,40 +533,45 @@ public class Hex : NetworkBehaviour {
 		if (player == Player.PlayerId.P1) {
 			if(redWarriors >= amount) {
 				redWarriors -= amount;
-				redWarriorHealth -= (amount * warriorHealth);
+				maxRedWarriorHealth -= (amount * warriorHealth);
 				redDamage -= amount;
 			}
 			else
 			{
-				Debug.Log("Can't remove workers from hex since requested " + amount + " to be removed, and only " + redWarriors + " recorded to be located on this hex: " + this.name);
+				Debug.LogError("Can't remove workers from hex since requested " + amount + " to be removed, and only " + redWarriors + " recorded to be located on this hex: " + this.name);
 			}
 		} 
 		//If Player 2, remove blueWorkers
 		else if (player == Player.PlayerId.P2) {
 			if(blueWarriors >= amount) {
 				blueWarriors -= amount;
-				blueWarriorHealth -= (amount * warriorHealth);
+				maxBlueWarriorHealth -= (amount * warriorHealth);
 				blueDamage -= amount;
 			}
 			else
 			{
-				Debug.Log("Can't remove workers from hex since requested " + amount + " to be removed, and only " + blueWarriors + " recorded to be located on this hex: " + this.name);
+				Debug.LogError("Can't remove workers from hex since requested " + amount + " to be removed, and only " + blueWarriors + " recorded to be located on this hex: " + this.name);
 			}
+		}
+
+		CapturableTile capture = GetComponent<CapturableTile> ();
+		if (capture != null) {
+			capture.removeUnits (amount, player);
 		}
     }
 
-    public bool hasEnemyWarriors(Player.PlayerId player)
-    {
+    public bool hasEnemyUnits(Player.PlayerId player){
+		
         if (player == Player.PlayerId.P1)
         {
-            if (blueWarriors > 0)
+			if (blueWarriors > 0 || blueWorkers > 0)
             {
                 return true;
             }
         }
         else
         {
-            if (redWarriors > 0)
+			if (redWarriors > 0 || redWorkers > 0)
             {
                 return true;
             }
@@ -605,8 +664,7 @@ public class Hex : NetworkBehaviour {
 		
     //Method to change the sprite of the hex
     
-	public void changeHexSprite(Sprite s)
-    {
+	public void changeHexSprite(Sprite s) {
         this.GetComponent<SpriteRenderer>().sprite = s;
         //Refresh hex menu to update ui if necessary
         FindObjectOfType<HexMenuController>().RpcRefreshUIValues();
@@ -615,7 +673,48 @@ public class Hex : NetworkBehaviour {
 
 	////////////////////////////////// SyncVar hooks //////////////////////////////
 	private void setBuilding(GameObject newBuilding){
-		building = newBuilding.GetComponent<Building> ();
-		setStatusIcon (building.getConstructionIconSprite(hexOwner));
+		if (newBuilding == null) {
+			building = null;
+		} else {
+			building = newBuilding.GetComponent<Building> ();
+			setStatusIcon (building.getConstructionIconSprite(hexOwner));
+		}
+		FindObjectOfType<HexMenuController> ().refreshUIValues();
+	}
+
+	private void setRedWarriors(int newVal){
+		if (!isServer) {
+			redWarriors = newVal;
+		}
+		FindObjectOfType<HexMenuController> ().refreshUIValues ();
+	}
+
+	private void setRedWorkers(int newVal){
+		if (!isServer) {
+			redWorkers = newVal;
+		}
+		FindObjectOfType<HexMenuController> ().refreshUIValues ();
+	}
+
+	private void setBlueWarriors(int newVal){
+		if (!isServer) {
+			blueWarriors = newVal;
+		}
+		FindObjectOfType<HexMenuController> ().refreshUIValues ();
+	}
+
+	private void setBlueWorkers(int newVal){
+		if (!isServer) {
+			blueWorkers = newVal;
+		}
+		FindObjectOfType<HexMenuController> ().refreshUIValues ();
+	}
+
+	private void updateHexOwner(Player.PlayerId pid){
+		hexOwner = pid;
+		HexMenuController hexMenu = FindObjectOfType<HexMenuController> ();
+		if(hexMenu != null){
+			hexMenu.refreshUIValues ();
+		}
 	}
 }

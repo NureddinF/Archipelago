@@ -16,8 +16,8 @@ public class HexMenuController : NetworkBehaviour {
     private Text tileWarriorCount;
     private Image tileActionBox;
 
-	public float workerAmount = 25;
-	public float warriorAmount = 50;
+	public float workerCost = 25;
+	public float warriorCost = 50;
     
 
     //Parameter to store the current hex that the menu is displaying for.
@@ -142,15 +142,19 @@ public class HexMenuController : NetworkBehaviour {
     //Refresh the ui values, useful for when the hex is still selected but changed values, e.g moved unit there, built something etc.
 	[ClientRpc]
     public void RpcRefreshUIValues() {
-		if(selectedHex != null && hasAuthority)
-        {
-            //Store current selected hex, deselect hex then reselect hex. This way on refresh if on same hex the menu wont hide itself
-            Hex h = selectedHex;
-            deselectHex();
-            //"Reselect Hex" to update any changed values
-            setSelectedHex(h);
-        }
+		refreshUIValues ();
     }
+
+	public void refreshUIValues(){
+		if(selectedHex != null && hasAuthority)
+		{
+			//Store current selected hex, deselect hex then reselect hex. This way on refresh if on same hex the menu wont hide itself
+			Hex h = selectedHex;
+			deselectHex();
+			//"Reselect Hex" to update any changed values
+			setSelectedHex(h);
+		}
+	}
 
     //Set the tile actions part of the hex menu
     private void setTileActions() {
@@ -169,7 +173,6 @@ public class HexMenuController : NetworkBehaviour {
 
 
             //Work out the action box's height and width, have to do it this way since rect transform has weird properties
-            float parentHeight = corners[2].y - corners[0].y;
             float parentWidth = corners[2].x - corners[0].x;
 
             //Float to store the percentage width for the child objects. Height if needed also
@@ -216,9 +219,7 @@ public class HexMenuController : NetworkBehaviour {
                     go.GetComponent<Image>().sprite = b.getMenuIconSprite();
                     //Set its click function
 					if (selectedHex.getTileType ().Equals (HexGrid.TileType.BASE)) {
-						go.GetComponent<Button> ().onClick.AddListener (() => {
-							StartCoroutine(purchaseWorker (selectedHex));
-						});
+						go.GetComponent<Button> ().onClick.AddListener (purchaseWorker);
 
 					} else {
 
@@ -240,8 +241,6 @@ public class HexMenuController : NetworkBehaviour {
 					go.name = barracks.name;
 					//Add appropriate components
 					go.AddComponent<RectTransform> ();
-					go.AddComponent<Image> ();
-					go.AddComponent<Button> ();
 
 					//Set its rect transform properties
 					go.GetComponent<RectTransform> ().pivot = new Vector2 (0.5f, 1f);
@@ -250,59 +249,123 @@ public class HexMenuController : NetworkBehaviour {
 
 					go.GetComponent<RectTransform> ().sizeDelta = new Vector2 (childWidth, childHeight);
 					go.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0f, 0 * childHeight * go.GetComponent<RectTransform> ().localScale.x - yOffset);
-					//Set its displayed sprite
-					go.GetComponent<Image> ().sprite = barracks.GetComponent<Barracks>().getpurchaseWarriorSprite ();
 
-					go.GetComponent<Button>().onClick.AddListener (() => {
-						StartCoroutine(purchaseWarrior (selectedHex));
-					});
+					if (barracks.GetComponent<Barracks> ().getIsConstructed ()) {
+						go.AddComponent<Image> ();
+						go.AddComponent<Button> ();
+						//Set its displayed sprite
+						go.GetComponent<Image> ().sprite = barracks.GetComponent<Barracks> ().getpurchaseWarriorSprite ();
+
+						go.GetComponent<Button> ().onClick.AddListener (purchasWarrior);
+					}
 				}
 
 
 			}
         }
     }
-		
-    //Method for the tileaction, when selecting a building
-	IEnumerator purchaseWorker(Hex barracksHex){
-		if (workerAmount > GetComponent<Player> ().getCurrentMoney ()) {
-			Debug.Log ("Insufficent funds");
-			tileWorkerCount.color = Color.red;
-			yield return new WaitForSeconds(0.5f);
-			tileWorkerCount.color = Color.black;
-		
-		} else {
-			GetComponent<Player> ().removeMoney (workerAmount);
-			GetComponent<UnitController> ().CmdAddWorkers (1, barracksHex.gameObject);
-			tileWorkerCount.color = new Color(0, 0.75f, 0);
-			yield return new WaitForSeconds(0.5f);
-			tileWorkerCount.color = Color.black;
+
+	// Try to purchase a worker when the button is clicked
+	private void purchaseWorker(){
+		if (hasAuthority) {
+			CmdPurchaseWorker (selectedHex.gameObject);
 		}
-		RpcRefreshUIValues ();
 	}
 
-	IEnumerator purchaseWarrior(Hex barracksHex){
-		float currentAmount = GetComponent<Player> ().getCurrentMoney ();
-		if (warriorAmount > currentAmount) {
-			Debug.Log ("Insufficent funds");
-			tileWarriorCount.color = Color.red;
-			yield return new WaitForSeconds(0.5f);
-			tileWarriorCount.color = Color.black;
-
+	// Check if player can afford worker and take approprate action
+	[Command]
+	private void CmdPurchaseWorker(GameObject barracksHex){
+		if (workerCost > GetComponent<Player> ().getCurrentMoney ()) {
+			//Can not afford worker
+			Debug.Log ("CmdPurchaseWorker: Insufficent funds");
+			RpcPurchaseWorkerFailed (barracksHex);
 		} else {
-			Debug.Log ("Warrior added");
-			GetComponent<Player> ().removeMoney (warriorAmount);
-			GetComponent<UnitController> ().CmdAddWarriors (1, barracksHex.gameObject);
-			tileWarriorCount.color = new Color(0, 0.75f, 0);
-			yield return new WaitForSeconds(0.5f);
-			tileWarriorCount.color = Color.black;
+			//Can afford worker
+			GetComponent<Player> ().removeMoney (workerCost);
+			GetComponent<UnitController> ().CmdAddWorkers (1, barracksHex);
+			RpcPurchaseWorkerSuccess (barracksHex);
 		}
-		RpcRefreshUIValues ();
 	}
+
+
+	// Blink worker count red on failure
+	[ClientRpc]
+	private void RpcPurchaseWorkerFailed(GameObject barracksHex){
+		if(hasAuthority && selectedHex.gameObject == barracksHex){
+			StartCoroutine (purchaseWorkerResult(Color.red));
+		}
+	}
+
+	// Blink worker count green on sucess
+	[ClientRpc]
+	private void RpcPurchaseWorkerSuccess(GameObject barracksHex){
+		if (hasAuthority && selectedHex.gameObject == barracksHex) {
+			tileWorkerCount.text = selectedHex.getNumOfWorkersOnHex(GetComponent<Player>().playerId).ToString();
+			Color green = new Color (0, 0.75f, 0);
+			StartCoroutine (purchaseWorkerResult (green));
+		}
+	}
+
+    //Blink the worker count with a color
+	IEnumerator purchaseWorkerResult(Color flashingColor){
+		tileWorkerCount.color = flashingColor;
+		yield return new WaitForSeconds(0.5f);
+		tileWorkerCount.color = Color.black;
+	}
+
+	// Try to purchase a warrior when the button is clicked
+	private void purchasWarrior(){
+		if (hasAuthority) {
+			CmdPurchaseWarrior (selectedHex.gameObject);
+		}
+	}
+
+	// Check if player can afford warrior and take approprate action
+	[Command]
+	private void CmdPurchaseWarrior(GameObject barracksHex){
+		if (warriorCost > GetComponent<Player> ().getCurrentMoney ()) {
+			// can not afford a warrior
+			Debug.Log ("CmdPurchaseWorker: Insufficent funds");
+			RpcPurchaseWarriorFailed (barracksHex);
+		} else {
+			// can affoed a warrior
+			GetComponent<Player> ().removeMoney (warriorCost);
+			GetComponent<UnitController> ().CmdAddWarriors (1, barracksHex);
+			RpcPurchaseWarriorSuccess (barracksHex);
+		}
+	}
+
+	// Blink warrior count red on failure
+	[ClientRpc]
+	private void RpcPurchaseWarriorFailed(GameObject barracksHex){
+		if(hasAuthority && selectedHex.gameObject == barracksHex){
+			StartCoroutine (purchaseWarriorResult(Color.red));
+		}
+	}
+
+	// Blink warrior count green on sucess
+	[ClientRpc]
+	private void RpcPurchaseWarriorSuccess(GameObject barracksHex){
+		if (hasAuthority && selectedHex.gameObject == barracksHex) {
+			tileWarriorCount.text = selectedHex.getNumOfWarriorsOnHex(GetComponent<Player>().playerId).ToString();
+			Color green = new Color (0, 0.75f, 0);
+			StartCoroutine (purchaseWarriorResult (green));
+		}
+	}
+
+	//Blink the warrior count with a color
+	IEnumerator purchaseWarriorResult(Color flashingColor){
+		tileWarriorCount.color = flashingColor;
+		yield return new WaitForSeconds(0.5f);
+		tileWarriorCount.color = Color.black;
+	}
+
+	//OnClick listener for buildings
 	void tileActionBuild(Building.BuildingType buildingId){
 		CmdTileActionBuild (selectedHex.gameObject, buildingId);
 	}
 		
+	// Command to build a building
 	[Command]
 	void CmdTileActionBuild(GameObject tile, Building.BuildingType buildingId){
 		tile.GetComponent<Hex> ().CmdSetBuilding (buildingId);

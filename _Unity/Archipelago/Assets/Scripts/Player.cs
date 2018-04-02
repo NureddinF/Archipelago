@@ -27,6 +27,8 @@ public class Player : NetworkBehaviour{
     private Text tilesOwnedText;
     private Text numOfWorkersOwned;
     private Text numOfWarriorsOwned;
+	public Sprite p1TerritorySprite;
+	public Sprite p2TerritorySprite;
 
     // State variables
     private float startTime;
@@ -191,7 +193,8 @@ public class Player : NetworkBehaviour{
 		stateMenu = GameObject.Find ("GameStateMenuBar");
 		incomeText = stateMenu.transform.Find("Resource Icon/Total Amount Text").gameObject.GetComponent<Text>();
 		rateText = stateMenu.transform.Find("Resource Icon/Increase Rate Text").gameObject.GetComponent<Text>();
-		tilesOwnedText = stateMenu.transform.Find("Territory Icon/Total Territory Text").gameObject.GetComponent<Text>();
+		Transform territoryIcon = stateMenu.transform.Find ("Territory Icon");
+		tilesOwnedText = territoryIcon.Find("Total Territory Text").gameObject.GetComponent<Text>();
 		numOfWorkersOwned = stateMenu.transform.Find("Worker Button/Worker Count Text").gameObject.GetComponent<Text>();
 		numOfWarriorsOwned = stateMenu.transform.Find("Warrior Button/Warrior Count Text").gameObject.GetComponent<Text>();
 
@@ -200,8 +203,10 @@ public class Player : NetworkBehaviour{
 		if (pid == PlayerId.P1) {
 			//TODO: Find a dynamic way to set camera position that accounts for map edges and panning limits
 			cameraStartingPos = new Vector3 (16,-16,-10);
+			territoryIcon.GetComponent<Image> ().sprite = p1TerritorySprite;
 		} else if (pid == PlayerId.P2){
 			cameraStartingPos = new Vector3 (86,-16,-10);
+			territoryIcon.GetComponent<Image> ().sprite = p2TerritorySprite;
 		}
 		Camera.main.transform.position = cameraStartingPos;
 
@@ -209,7 +214,6 @@ public class Player : NetworkBehaviour{
 		workerButton.onClick.AddListener(GetComponent<HexMenuController>().moveWorkerToSelectedHex);
 		Button warriorButton = stateMenu.transform.Find ("Warrior Button").GetComponent<Button> ();
 		warriorButton.onClick.AddListener(GetComponent<HexMenuController>().moveWarriorToSelectedHex);
-
 
 		Debug.Log ("Player: RpcStartWithAuthority: workerBtn=" + workerButton.name + ", warriorBtn="+warriorButton.name);
 
@@ -232,7 +236,6 @@ public class Player : NetworkBehaviour{
 			//Only want to update UI for player who owns this object
 			return;
 		}
-		Debug.Log ("Player: RpcUpdateMoneyText: newMoney = " + newMoney);
 		// Update local state and display information
 		currentMoney = newMoney;
 		incomeText.text = "" + currentMoney;

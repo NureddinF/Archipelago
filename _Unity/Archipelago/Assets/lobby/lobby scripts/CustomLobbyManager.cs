@@ -108,7 +108,7 @@ public class CustomLobbyManager : NetworkLobbyManager {
 		//make sure the ip addres is valid
 		try{
 			for (int i = 0; i < 4; i++) {
-				byte  b = Byte.Parse(ipBytesString[i]);
+				Byte.Parse(ipBytesString[i]);
 			}
 		} catch (Exception e){
 			Debug.Log ("bad format: ipStr: " + ipStr + e.ToString());

@@ -459,6 +459,7 @@ MonoBehaviour:
   levelNumber: 0
   yOffsetGap: 0
   xOffsetGap: 0
+  serverInitialised: 0
 --- !u!4 &463588564
 Transform:
   m_ObjectHideFlags: 0

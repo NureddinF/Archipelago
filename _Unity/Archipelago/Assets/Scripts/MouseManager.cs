@@ -119,7 +119,7 @@ public class MouseManager : MonoBehaviour {
 				Vector3 oldCenterWorldPoint = main.ScreenToWorldPoint(centerPoint);
 
 				// Zoom camera
-				float zoomDir = pinchZoomCamera(touchZero, touchOne);
+				pinchZoomCamera(touchZero, touchOne);
 				// Pan camera so it doesn't just zoom on center of screen
 				Vector3 newTouchCenterPoint = touchZero.position + (touchOne.position - touchZero.position)/2f;
 				Vector3 diffBetweenCameraAndCenter = main.ScreenToWorldPoint(newTouchCenterPoint) - oldCenterWorldPoint;
