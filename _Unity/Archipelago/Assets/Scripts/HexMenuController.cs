@@ -52,6 +52,11 @@ public class HexMenuController : NetworkBehaviour {
         return selectedHex;
     }
 
+	//Set Tile Income
+	public void setTileIncome(float income) {
+		tileIncome.text = "+" + income + "/sec";
+	}
+
     //Method to set the currently selected hex
 	//Updates local players UI
     public void setSelectedHex(Hex h) {
