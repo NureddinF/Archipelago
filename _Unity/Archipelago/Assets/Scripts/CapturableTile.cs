@@ -267,6 +267,7 @@ public class CapturableTile: NetworkBehaviour{
 	[ClientRpc]
 	//Update the map for all the clients so they see the correct sprite when a tile is captured
 	private void RpcCaptureTile(Player.PlayerId pid){
+		Debug.Log ("CapturableTile: RpcCaptureTile: pid=" + pid);
 		if (pid == Player.PlayerId.P1) {
 			captureBorder.enabled = false;
 			tileSprite.sprite = p1CaptureTile;
@@ -276,6 +277,17 @@ public class CapturableTile: NetworkBehaviour{
 		} else {
 			tileSprite.sprite = neutralCaptureTile;
 			captureBorder.fillClockwise = !captureBorder.fillClockwise;
+		}
+		// Update UI on clients if needed
+		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
+		for(int i=0; i<players.Length; i++){
+			Player player = players[i].GetComponent<Player>();
+			Debug.Log ("CapturableTile: RpcCaptureTile: player=" + player.playerId);
+			if(player.hasAuthority){
+				Debug.Log ("CapturableTile: RpcCaptureTile: refreshing UI");
+				player.GetComponent<HexMenuController> ().refreshUIValues ();
+				return;
+			}
 		}
 	}
 

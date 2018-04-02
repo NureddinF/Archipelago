@@ -106,15 +106,13 @@ public class HexGrid : NetworkBehaviour {
 	//Enumerate the different types of tiles
 	public enum TileType {GRASS, BASE, TREE, SAND, ROCK, WATER, ALL }
 
+	// Initialisation state variables
+	public bool serverInitialised = false;
+	private bool clientInitialised = false;
+
     // Initialization
     void Start(){
 		Debug.Log ("HexGrid: Start");
-		if (!isServer) {
-			// Only let the server actually create the map
-			return;
-		}
-
-       
     }
 
 	public override  void OnStartServer() {
@@ -122,9 +120,9 @@ public class HexGrid : NetworkBehaviour {
 		OnStartClient (); // manually make this call to ensure everthings initialised
 		//Create the hex grid
 		createHexGrid();
+		serverInitialised = true;
 	}
-
-	private bool clientInitialised = false;
+		
 	public override void OnStartClient() {
 		Debug.Log("HexGrid: OnStartClient");
 		if (clientInitialised) {

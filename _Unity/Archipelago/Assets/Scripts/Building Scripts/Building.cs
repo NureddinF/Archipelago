@@ -148,6 +148,9 @@ public class Building : NetworkBehaviour{
 		else {
 			hexAssociatedWith.RpcDisplayTrap ();
 		}
+
+		//update player ui to display new options
+		FindObjectOfType<HexMenuController> ().RpcRefreshUIValues ();
 	}
 
 	////////////////////////// RPCs ///////////////////////////////////////////

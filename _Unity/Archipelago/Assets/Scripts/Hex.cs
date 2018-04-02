@@ -13,7 +13,7 @@ public class Hex : NetworkBehaviour {
 	[SyncVar] private int y;
 
     //Store who owns the hex
-	[SyncVar] public Player.PlayerId hexOwner;
+	[SyncVar (hook = "updateHexOwner")] public Player.PlayerId hexOwner;
 
     //Stores the hex's type
 	[SyncVar] private HexGrid.TileType tileType;
@@ -43,8 +43,12 @@ public class Hex : NetworkBehaviour {
     private int maxX = HexGrid.getGridWidth() - 1;
 
 	//Store Amount of Player 1 (Red) and Player 2 (Blue) Units
-	private int redWarriors, redWorkers, redDamage, redWarriorHealth, redWorkerHealth;
-	private int blueWarriors, blueWorkers, blueDamage, blueWarriorHealth, blueWorkerHealth;
+	[SyncVar(hook = "setRedWarriors")] private int redWarriors;
+	[SyncVar(hook = "setRedWorkers")] private int redWorkers;
+	private int redDamage, redWarriorHealth, redWorkerHealth;
+	[SyncVar(hook = "setBlueWarriors")] private int blueWarriors;
+	[SyncVar(hook = "setBlueWorkers")] private int blueWorkers;
+	private int blueDamage, blueWarriorHealth, blueWorkerHealth;
 
     //The amount of health the unit types start with each
     private int workerHealth = 3;
@@ -605,8 +609,7 @@ public class Hex : NetworkBehaviour {
 		
     //Method to change the sprite of the hex
     
-	public void changeHexSprite(Sprite s)
-    {
+	public void changeHexSprite(Sprite s) {
         this.GetComponent<SpriteRenderer>().sprite = s;
         //Refresh hex menu to update ui if necessary
         FindObjectOfType<HexMenuController>().RpcRefreshUIValues();
@@ -617,5 +620,34 @@ public class Hex : NetworkBehaviour {
 	private void setBuilding(GameObject newBuilding){
 		building = newBuilding.GetComponent<Building> ();
 		setStatusIcon (building.getConstructionIconSprite(hexOwner));
+		FindObjectOfType<HexMenuController> ().refreshUIValues();
+	}
+
+	private void setRedWarriors(int newVal){
+		redWarriors = newVal;
+		FindObjectOfType<HexMenuController> ().refreshUIValues();
+	}
+
+	private void setRedWorkers(int newVal){
+		redWorkers = newVal;
+		FindObjectOfType<HexMenuController> ().refreshUIValues();
+	}
+
+	private void setBlueWarriors(int newVal){
+		blueWarriors = newVal;
+		FindObjectOfType<HexMenuController> ().refreshUIValues();
+	}
+
+	private void setBlueWorkers(int newVal){
+		blueWorkers = newVal;
+		FindObjectOfType<HexMenuController> ().refreshUIValues();
+	}
+
+	private void updateHexOwner(Player.PlayerId pid){
+		hexOwner = pid;
+		HexMenuController hexMenu = FindObjectOfType<HexMenuController> ();
+		if(hexMenu != null){
+			hexMenu.refreshUIValues ();
+		}
 	}
 }

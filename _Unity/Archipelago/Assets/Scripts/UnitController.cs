@@ -35,13 +35,19 @@ public class UnitController : NetworkBehaviour {
 		if (!isServer) {
 			return;
 		}
-		initializeUnits ();
+		StartCoroutine(initializeUnits());
     }
-    
+
 	//Adds units to the player's base at the start of the game
-    public void initializeUnits() {
+	private IEnumerator initializeUnits() {
 		if (!isServer) {
-			//server keeps track of game state
+			// Only server keeps track of game state
+			yield break;
+		}
+
+		//Make sure map is created before adding units to it
+		while(!FindObjectOfType<HexGrid>().serverInitialised){
+			yield return new WaitForSeconds(0.1f);
 		}
 
 		//Get the id of the player
@@ -154,6 +160,7 @@ public class UnitController : NetworkBehaviour {
         if (!workerLocations.Contains(h))
             workerLocations.Add(h);
             h.gameObject.GetComponent<CapturableTile>().addUnits(amount, pid); 
+		GetComponent<HexMenuController>().RpcRefreshUIValues ();
     }
 
     //Method to remove worker(s) given a specified amount and a hex
