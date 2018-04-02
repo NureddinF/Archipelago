@@ -81,6 +81,8 @@ public class Building : NetworkBehaviour{
 		this.currentTileIncome = currentTileIncome; 
 		//updates the sidebar Text Field but doesn't update income generation or its text field.
 		hexAssociatedWith.setTileIncome (currentTileIncome);
+
+
 	}
 
     public float getTotalBuildTime() { 

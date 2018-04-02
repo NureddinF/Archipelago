@@ -242,7 +242,9 @@ public class Hex : NetworkBehaviour {
 
 	//Set Tile Income
     public void setTileIncome(float amount) { 
-		this.tileIncome = amount;
+		this.tileIncome = amount;			
+		//update players income generation
+
 	}
 
 	//Get Tile Income

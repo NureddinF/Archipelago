@@ -117,6 +117,11 @@ public class Player : NetworkBehaviour{
 
     public void removeMoney(float amount) { currentMoney -= amount; }
 
+	//Add to current totalTitleIncome
+	public void addToTotalTileIncome(float amount) {
+		totalTileIncome += amount;
+	}
+
 	//function not taking into account when a tile is upgraded
     // Generates income in discrete chunks rather than each frame
     public void generateIncomeDiscrete(){
