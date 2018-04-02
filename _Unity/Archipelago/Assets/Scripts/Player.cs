@@ -152,6 +152,11 @@ public class Player : NetworkBehaviour{
         totalTilesOwned -= 1;
     }
 
+	public void removeBuildIncome(Building building){
+		totalTileIncome -= building.getTileIncomeAfterBuild ();
+
+	}
+
 	// Display loss screen for players who have not won when game ends
 	private void loseGame(){
 		endedGame = true;

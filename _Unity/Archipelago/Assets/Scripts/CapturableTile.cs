@@ -141,7 +141,12 @@ public class CapturableTile: NetworkBehaviour{
 		} else if (newAmountCaptured * amountCaptured < 0) {
 			//Tile was neutralised
 			//Update theplayer income
-			loseTile (pid);
+			if (pid.Equals (Player.PlayerId.P1)) {
+				
+				loseTile (Player.PlayerId.P2);
+			} else {
+				loseTile (Player.PlayerId.P1);
+			}
 			//update the map on all the clients
 			RpcCaptureTile (Player.PlayerId.NEUTRAL,pid);
 			switchedToNeutral = true;
@@ -230,10 +235,14 @@ public class CapturableTile: NetworkBehaviour{
 		if (!isServer) {
 			return;
 		}
-
+		Building building = this.getHex ().getBuilding();
 		Player player = getPlayer (pid);
 		if (player != null) {
 			player.removeTile (this);
+		}
+
+		if (building != null) {
+			player.removeBuildIncome (building);
 		}
 	}
 
