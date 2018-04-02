@@ -138,9 +138,8 @@ public class Player : NetworkBehaviour{
         totalTilesOwned += 1;
         this.GetComponent<HexMenuController>().RpcRefreshUIValues();
     }
-
+	//Incremnets total resource when there is a building
 	public void builtTile(Building building){
-		Debug.Log (building.getTileIncomeAfterBuild ());
 		totalTileIncome += building.getTileIncomeAfterBuild();
 
 
