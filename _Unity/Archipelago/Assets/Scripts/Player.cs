@@ -139,6 +139,13 @@ public class Player : NetworkBehaviour{
         this.GetComponent<HexMenuController>().RpcRefreshUIValues();
     }
 
+	public void builtTile(Building building){
+		Debug.Log (building.getTileIncomeAfterBuild ());
+		totalTileIncome += building.getTileIncomeAfterBuild();
+
+
+	}
+
 	//TODO: Multiplayer
 	//Lose a Tile
     public void removeTile(CapturableTile tile){

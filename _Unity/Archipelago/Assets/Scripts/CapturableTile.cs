@@ -154,7 +154,7 @@ public class CapturableTile: NetworkBehaviour{
 	//////////////////////////////// Getters/Setters /////////////////////////////////////////////
 
 	// Get the player object for the owner of this tile
-	private Player getPlayer(Player.PlayerId pid){
+	public Player getPlayer(Player.PlayerId pid){
 		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
 		for(int i=0; i<players.Length; i++){
 			Player player = players[i].GetComponentInChildren<Player>();
