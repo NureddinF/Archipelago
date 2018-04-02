@@ -24,30 +24,31 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.Random;
 
 public class LoginActivity extends Activity {
 
-    private String name;  // Local username
-    private String pass;  // Local password
-    EditText et_name;
-    EditText et_pass;
-    TextView tv_guest_login;
-    ImageButton btn_setting;
+	private String name;  // Local username
+	private String pass;  // Local password
+	EditText et_name;
+	EditText et_pass;
+	TextView tv_guest_login;
+	ImageButton btn_setting;
     private SoundPool soundPool;
     private int soundId;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_login);
-        checkPermission();
-        //Acquire inputs from user
-        readAccount(); //Read the username and password for local files
-        et_name = (EditText) findViewById(R.id.et_name);
-        et_pass = (EditText) findViewById(R.id.et_pass);
-        tv_guest_login = (TextView) findViewById(R.id.tv_guest_login);
-        btn_setting = (ImageButton) findViewById(R.id.setting);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.activity_login);
+		checkPermission();
+		//Acquire inputs from user
+		readAccount(); //Read the username and password for local files
+		et_name = (EditText) findViewById(R.id.et_name);
+		et_pass = (EditText) findViewById(R.id.et_pass);
+		tv_guest_login = (TextView) findViewById(R.id.tv_guest_login);
+		btn_setting = (ImageButton) findViewById(R.id.setting);
         btn_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,30 +60,25 @@ public class LoginActivity extends Activity {
             @Override
             public void onClick(View view) {
                 soundPool.play(soundId, 1, 1, 0, 0, 1);
+                String tempName = "Player" + new Random().nextInt();
+                SharedPreferenceUtils.saveString(LoginActivity.this, "username", tempName);
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
             }
         });
-        //**Use Utils method, used to check
-        //判断是否保存过信息，如果isSaved存在代表保存过,返回true，不存在默认返回false
-        if (SharedPreferenceUtils.getBoolean(LoginActivity.this, "isSaved", false)) {
-            //把账号密码回显至输入框
-            et_name.setText(name);
-            et_pass.setText(pass);
-        }
+		//**Use Utils method, used to check
+		//判断是否保存过信息，如果isSaved存在代表保存过,返回true，不存在默认返回false
+		if (SharedPreferenceUtils.getBoolean(LoginActivity.this, "isSaved", false)) {
+			//把账号密码回显至输入框
+			et_name.setText(name);
+			et_pass.setText(pass);
+		}
         soundPool = new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);
         soundId = soundPool.load(this, R.raw.click_bgm, 1);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        startService(new Intent(this, MusicService.class));
-    }
-
-    public void login(View v) {
+	}
+	public void login(View v) {
         readAccount(); //读取本地文件的账号密码
-        switch (v.getId()) {
-            case R.id.login:
+		switch (v.getId()) {
+			case R.id.login: {
                 soundPool.play(soundId, 1, 1, 0, 0, 1);
                 CheckBox cb = (CheckBox) findViewById(R.id.cb);
                 //记录 保存密码 设置
@@ -98,27 +94,31 @@ public class LoginActivity extends Activity {
                 if (name1.equals(name) && pass1.equals(pass)) {
                     Toast.makeText(this, "Login Successfully!", Toast.LENGTH_SHORT).show();
                     SharedPreferenceUtils.saveBoolean(LoginActivity.this, "isLogin", true);
+                    SharedPreferenceUtils.saveString(LoginActivity.this, "username", name);
                     startActivity(new Intent(this, MainActivity.class));
                 } else {
                     Toast.makeText(this, "Wrong username or password!", Toast.LENGTH_SHORT).show();
                 }
 
                 break;
-            case R.id.regist:
+            }
+			case R.id.regist: {
                 soundPool.play(soundId, 1, 1, 0, 0, 1);
                 startActivity(new Intent(this, RegisterActivity.class));
                 break;
-        }
-    }
+            }
+		}
+	}
 
-    public void logout(View v) {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startService(new Intent(this, MusicService.class));
     }
-
 
     //回显账号
     public void readAccount() {
         //读取本地存储的账号和密码
-//    	File file = new File(getFilesDir(), "/info.txt");
         File file = new File(getCacheDir(), "/info.txt");
         if (file.exists()) {
             Log.i("XXX", "xxxxxxxx");
@@ -152,11 +152,9 @@ public class LoginActivity extends Activity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
 
         } else {
-//            Toast.makeText(this, "授权成功！", Toast.LENGTH_SHORT).show();
-            Log.e("XXX", "checkPermission: 已经授权！");
-        }
-
-    }
+			Log.e("XXX", "checkPermission: 已经授权！");
+		}
+	}
 
     @Override
     protected void onStop() {

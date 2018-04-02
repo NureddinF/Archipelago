@@ -8,20 +8,29 @@ import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
+
+import com.unity3d.player.UnityPlayer;
 
 public class UnityPlayerActivity extends Activity
 {
     protected UnityPlayer mUnityPlayer; // don't change the name of this variable; referenced from native code
+
+    //scene to load when unity starts
+    private String startCommand;
+    //IP address of this device
+    private String ipAddr;
+    //User's username
+    private String username;
 
     // Setup activity layout
     @Override protected void onCreate(Bundle savedInstanceState)
     {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-
+        startCommand = getIntent().getStringExtra("startCommand");
+        ipAddr = getIntent().getStringExtra("ipaddr");
+        username = getIntent().getStringExtra("username");
         getWindow().setFormat(PixelFormat.RGBX_8888); // <--- This makes xperia play happy
 
         mUnityPlayer = new UnityPlayer(this);
@@ -117,7 +126,25 @@ public class UnityPlayerActivity extends Activity
     @Override public boolean onTouchEvent(MotionEvent event)          { return mUnityPlayer.injectEvent(event); }
     /*API12*/ public boolean onGenericMotionEvent(MotionEvent event)  { return mUnityPlayer.injectEvent(event); }
 
+    //Native methods
+
+    public String getStartCommand(){
+        return startCommand;
+    }
+
+    public String getIpAddr(){
+        return ipAddr;
+    }
+
+    public String getUsername(){
+        return username;
+    }
+
     public void win() {
+        finish();
+    }
+
+    public void exit(){
         finish();
     }
 }

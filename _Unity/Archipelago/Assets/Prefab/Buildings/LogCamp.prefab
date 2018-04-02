@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4428720969927636}
   - component: {fileID: 114107314746249068}
+  - component: {fileID: 114410230233072626}
   m_Layer: 0
   m_Name: LogCamp
   m_TagString: Untagged
@@ -51,14 +52,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f19a68ac1239bc140af55bcc27ff86c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cost: 3
-  tileIncomeAfterBuild: 1
-  constructionTime: 5
+  cost: 70
+  tileIncomeAfterBuild: 5
   tilesAssociatedWith: 02000000
+  buildingId: 3
   totalBuildTime: 10
   buildSpeedPerWorker: 1
-  menuIconSprite: {fileID: 21300000, guid: 5777f63745de54024adfe5533251d539, type: 3}
-  buildingSprite: {fileID: 21300000, guid: 5777f63745de54024adfe5533251d539, type: 3}
-  constructionSprite: {fileID: 21300000, guid: a73a253afb5804348875cea91ef24140, type: 3}
+  menuIconSprite: {fileID: 21300000, guid: 21ae4043538274b0ab7d1749d3df52ef, type: 3}
+  buildingBlueSprite: {fileID: 21300000, guid: 0749649aafe464603ba5eb1d0151a075, type: 3}
+  buildingRedSprite: {fileID: 21300000, guid: a3d6e6e61756d43e0961d5cb1e9beed4, type: 3}
+  constructionBlueIconSprite: {fileID: 21300000, guid: 759b25967804a405bb45226a000ae6bd,
+    type: 3}
+  constructionRedIconSprite: {fileID: 21300000, guid: 358e55220afa24557ac6c318b3e6b229,
+    type: 3}
   maxNumberOfAssignedWorkers: 5
   increasedIncomePerWorker: 0.5
+--- !u!114 &114410230233072626
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1283247700040868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 35
+    i1: 225
+    i2: 243
+    i3: 11
+    i4: 121
+    i5: 100
+    i6: 162
+    i7: 196
+    i8: 58
+    i9: 142
+    i10: 62
+    i11: 28
+    i12: 29
+    i13: 152
+    i14: 39
+    i15: 15
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0

@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.xuhongcheng.archipelago.myapplication.R;
+import com.example.xuhongcheng.archipelago.utils.SharedPreferenceUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -40,6 +41,7 @@ public class ProfileActivity extends Activity {
         btn_setting = (ImageButton) findViewById(R.id.setting);
         tv_userName = (TextView) findViewById(R.id.username);
         tv_email = (TextView) findViewById(R.id.email);
+
         btn_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

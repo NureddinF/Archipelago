@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4420662064249548}
   - component: {fileID: 212596613699915722}
   - component: {fileID: 114555707016744418}
+  - component: {fileID: 114628893420050000}
   m_Layer: 0
   m_Name: tileWater
   m_TagString: Untagged
@@ -53,8 +54,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hexOwner: 2
-  standard: {fileID: 21300000, guid: 8042e7b90506446f8b1c82c3fff1c4cd, type: 3}
-  idleUnits: {fileID: 21300000, guid: 8042e7b90506446f8b1c82c3fff1c4cd, type: 3}
+  standard: {fileID: 21300000, guid: ca58b10f629c748069082ddf1e97a202, type: 3}
+--- !u!114 &114628893420050000
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1974426177275934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 27
+    i1: 227
+    i2: 203
+    i3: 131
+    i4: 106
+    i5: 209
+    i6: 148
+    i7: 20
+    i8: 10
+    i9: 116
+    i10: 173
+    i11: 43
+    i12: 21
+    i13: 90
+    i14: 154
+    i15: 104
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!212 &212596613699915722
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -89,7 +121,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 8042e7b90506446f8b1c82c3fff1c4cd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ca58b10f629c748069082ddf1e97a202, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

@@ -21,6 +21,21 @@ public class SharedPreferenceUtils {
 		return sp.getBoolean(key, defValue);
 		
 	}
+
+
+
+	public static void saveString(Context context,String key,String value) {
+		sp = context.getSharedPreferences(SP_NAME , 0);
+		sp.edit().putString(key, value).commit();
+
+	}
+	public static String getString(Context context,String key,String defValue) {
+		sp = context.getSharedPreferences(SP_NAME , 0);
+		return sp.getString(key, defValue);
+
+	}
+
+
 	public class password {
 
 		String s;

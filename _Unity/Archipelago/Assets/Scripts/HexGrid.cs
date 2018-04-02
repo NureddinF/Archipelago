@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
+using UnityEngine.Networking.NetworkSystem;
 
-public class HexGrid : MonoBehaviour {
+public class HexGrid : NetworkBehaviour {
     //Tile variant prefab gameobjects for building the map
     public GameObject tileGrass; //0
     public GameObject tilePlayer1Base; //1
@@ -11,6 +13,7 @@ public class HexGrid : MonoBehaviour {
     public GameObject tileSand; //4
     public GameObject tileTrees; //5
     public GameObject tileWater; //6
+	public GameObject parentMapObjectPrefab; // parent object of all hexes
 
     public float baseGrassIncome = 1f;
     public float basePlayerBaseIncome = 2f;
@@ -21,12 +24,13 @@ public class HexGrid : MonoBehaviour {
 	public int levelNumber;
 
     private Hex player1Base;
+	private Hex player2Base;
 	//Game Maps - Represented by a matrix
 	//Level 1 Map
 	int[,] level1 = new int[7, 35]
 	{
 		{6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6},
-		{6,6,6,3,6,6,6,6,6,4,6,4,6,3,6,6,6,4,6,6,6,3,6,4,6,4,6,6,6,6,6,3,6,6,6},
+		{6,6,6,3,6,6,6,6,6,4,6,4,6,3,6,6,6,4,6,6,6,3,6,4,6,4,1,6,6,6,6,3,6,6,6},
 		{6,4,4,0,4,4,6,4,4,0,4,6,4,6,4,0,0,3,0,0,4,6,4,6,4,0,4,4,6,4,4,0,4,4,6},
 		{6,3,5,1,0,3,4,3,5,3,0,5,0,4,5,5,3,3,3,5,5,4,0,5,0,3,5,3,4,3,0,2,5,3,6},
 		{6,4,5,0,0,4,4,4,5,0,0,6,0,6,5,0,3,3,3,0,5,6,0,6,0,0,5,4,4,4,0,0,5,4,6},
@@ -59,12 +63,24 @@ public class HexGrid : MonoBehaviour {
     private static int gridWidth;
     private static int gridHeight;
 
-    //Get methods for grid dimensions
-    public static int getGridHeight() { return gridHeight; }
-    public static int getGridWidth() { return gridWidth;  }
+    //Get Grid Height
+    public static int getGridHeight() { 
+		return gridHeight; 
+	}
+	//Get Grid Width
+    public static int getGridWidth() { 
+		return gridWidth;  
+	}
 
-    //Get methods for player1base coordinates
-    public Hex getPlayer1Base() { return player1Base; }
+    //Returns coordinates for Player 1's Base
+    public Hex getPlayer1Base() { 
+		return player1Base; 
+	}
+
+	//Returns coordinates for Player 2's Base
+	public Hex getPlayer2Base() {
+		return player2Base;
+	}
 
     //Dimensions of individual hex
     private float hexWidth;
@@ -84,26 +100,48 @@ public class HexGrid : MonoBehaviour {
 	//Matrix of instanciated hexes
 	private GameObject[,] mapHexes;
 
-    private GameObject player;
-
+	// List of Hexes each player starts with. Created dynamicly based on map layout
+	private Dictionary<Player.PlayerId,List<CapturableTile>> startingHexes;
 
 	//Enumerate the different types of tiles
-	public enum TileType {GRASS, BASE, TREE, SAND, ROCK, WATER }
+	public enum TileType {GRASS, BASE, TREE, SAND, ROCK, WATER, ALL }
+
+	// Initialisation state variables
+	public bool serverInitialised = false;
+	private bool clientInitialised = false;
 
     // Initialization
-    void Start()
-    {   
-        //Initialize map, and sizes
-        initiateMapStructure();
-        initializeSizes();
-
-        //Create the hex grid
-        createHexGrid();
+    void Start(){
+		Debug.Log ("HexGrid: Start");
     }
 
+	public override  void OnStartServer() {
+		Debug.Log("HexGrid: OnStartServer");
+		OnStartClient (); // manually make this call to ensure everthings initialised
+		//Create the hex grid
+		createHexGrid();
+		serverInitialised = true;
+	}
+		
+	public override void OnStartClient() {
+		Debug.Log("HexGrid: OnStartClient");
+		if (clientInitialised) {
+			return;
+		}
+		//initialize data structure for storing starting hexes
+		startingHexes = new Dictionary<Player.PlayerId, List<CapturableTile>>();
+		for(Player.PlayerId playId = Player.PlayerId.P1; playId != Player.PlayerId.NEUTRAL ;playId++){
+			startingHexes.Add(playId, new List<CapturableTile>());
+		}
+
+		//Initialize map, and sizes
+		initiateMapStructure();
+		initializeSizes();
+		clientInitialised = true;
+	}
+
     //Method to store the sizes of grid/hexes/offsets
-    private void initializeSizes()
-    {
+    private void initializeSizes(){
         hexHeight = tileGrass.GetComponent<SpriteRenderer>().bounds.size.y;
         hexWidth = tileGrass.GetComponent<SpriteRenderer>().bounds.size.x;
         xOffset = hexWidth * (0.5f - xOffsetGap);
@@ -113,16 +151,15 @@ public class HexGrid : MonoBehaviour {
 
 		Vector3 maxMapCoord= calcUnityCoord (new Vector2 (gridWidth-1, gridHeight-1));
 		BoxCollider2D cameraEdge = GetComponent<BoxCollider2D>();
-		cameraEdge.size = new Vector2(maxMapCoord.x + 2*xOffset,Mathf.Abs(maxMapCoord.y) + 2*yOffset);
+		cameraEdge.size = new Vector2(maxMapCoord.x + 10*xOffset,Mathf.Abs(maxMapCoord.y) + 5*yOffset);
 		cameraEdge.offset = new Vector2 (maxMapCoord.x/2, -cameraEdge.size.y / 2 + yOffset);
 		FindObjectOfType<MouseManager> ().setBounds (GetComponent<BoxCollider2D> ());
     }
 
     //This method chooses which level map to create
-    private void initiateMapStructure()
-    {
+    private void initiateMapStructure(){
 		//Level 1 map is used by default or if specifically chosen
-		if (levelNumber == 0 || levelNumber == null || levelNumber == 1) {
+		if (levelNumber == 0 || levelNumber == 1) {
 			mapStructure = level1;
 		}
 		//Level 2 map is created
@@ -132,7 +169,7 @@ public class HexGrid : MonoBehaviour {
     }
 
     //Turns a grid position to unity coordinates
-    public Vector3 calcUnityCoord(Vector2 gridPos)
+    private Vector3 calcUnityCoord(Vector2 gridPos)
     {
         float x = gridPos.x * (hexWidth - xOffset/2);
         float y = -gridPos.y * hexHeight;
@@ -144,12 +181,13 @@ public class HexGrid : MonoBehaviour {
     }
 
     //Method to create the hex grid
-    void createHexGrid() {
+    private void createHexGrid() {
 		mapHexes = new GameObject[gridHeight,gridWidth];
 
-        GameObject hexGridObject = new GameObject("HexGrid");
+		GameObject hexGridObject = Instantiate(parentMapObjectPrefab,transform);
         //Makes sure all generated game objects are under a parent. Allows tidier scene management
-        hexGridObject.transform.parent = this.transform;
+		hexGridObject.transform.SetParent(transform);
+		NetworkServer.Spawn (hexGridObject);
 
         //Incrementing through the two dimensional map array, row by row.
         for (int y = 0; y < gridHeight; y++)
@@ -170,6 +208,7 @@ public class HexGrid : MonoBehaviour {
 						thisHex.GetComponent<Hex>().setTileType(TileType.BASE);
                         thisHex.GetComponent<Hex>().setTileIncome(basePlayerBaseIncome);
                         thisHex.GetComponent<Hex>().setHexOwner(Player.PlayerId.P1);
+						Debug.Log ("HexGrid: createHexGrid: creating player 1 base with pid=" + thisHex.GetComponent<Hex>().getHexOwner());
                         player1Base = thisHex.GetComponent<Hex>();
                         break;
 					}
@@ -178,6 +217,8 @@ public class HexGrid : MonoBehaviour {
 						thisHex.GetComponent<Hex>().setTileType(TileType.BASE);
                         thisHex.GetComponent<Hex>().setTileIncome(basePlayerBaseIncome);
                         thisHex.GetComponent<Hex>().setHexOwner(Player.PlayerId.P2);
+						Debug.Log ("HexGrid: createHexGrid: creating player 2 base with pid=" + thisHex.GetComponent<Hex>().getHexOwner());
+						player2Base = thisHex.GetComponent<Hex>();
                         break;
 					}
 					case 3:{
@@ -205,10 +246,16 @@ public class HexGrid : MonoBehaviour {
 					}
 				}
 
+				Player.PlayerId playId = thisHex.GetComponent<Hex>().getHexOwner();
+				if(playId != Player.PlayerId.NEUTRAL){
+					Debug.Log ("HexGrid: createHexGrid: adding starting tile for " + playId);
+					startingHexes [playId].Add (thisHex.GetComponent<CapturableTile>());
+				}
+
                 //Set it's position, tranformation, name and other variables attached to the hex. 0 0 is top left corner
                 Vector2 gridPos = new Vector2(x, y);
                 thisHex.transform.position = calcUnityCoord(gridPos);
-                thisHex.transform.parent = hexGridObject.transform;
+				thisHex.transform.SetParent(hexGridObject.transform);
                 thisHex.name = "Hex_" + x + "_" + y;
                 thisHex.GetComponent<Hex>().setX(x);
                 thisHex.GetComponent<Hex>().setY(y);
@@ -216,7 +263,11 @@ public class HexGrid : MonoBehaviour {
                 //Potential Optimization for hexgrid
                 thisHex.isStatic = true;
 
+				NetworkServer.Spawn (thisHex);
+
 				mapHexes [y, x] = thisHex;
+
+				RpcSetMap (thisHex, y, x);
             }
 
         }
@@ -245,5 +296,26 @@ public class HexGrid : MonoBehaviour {
 			hex = mapHexes [y, x];
 		}
 		return hex;
+	}
+
+	// Add income for each starting tile to the coresponding player
+	public void initPlayerTiles(Player.PlayerId pid){
+		if (!isServer) {
+			return;
+		}
+		List<CapturableTile> playerStartingTiles = startingHexes [pid];
+		Debug.Log ("HexGrid: initPlayerTiles: pid="+pid + ", startingTiles=" + playerStartingTiles.Count	);
+		foreach (CapturableTile tile in playerStartingTiles) {
+			tile.finalizeCapture ();
+		}
+	}
+
+
+	[ClientRpc]
+	private void RpcSetMap(GameObject hex, int y, int x){
+		if(mapHexes == null){
+			mapHexes = new GameObject[gridHeight,gridWidth];
+		}
+		mapHexes [y, x] = hex;
 	}
 }

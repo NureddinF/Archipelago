@@ -9,7 +9,8 @@ public class MouseManager : MonoBehaviour {
     //Needed to detect clicks on UI, and thus prevent the raycast from interacting with items below the menu
     
 
-	public static bool isEnabled = true;
+	public static bool isDisabled = false;
+
 	// human player who is associated with this mouse manager
 	public Player player;
 
@@ -78,8 +79,9 @@ public class MouseManager : MonoBehaviour {
 			Touch singleTouch = Input.GetTouch (0); //stores touch
 			if (singleTouch.phase == TouchPhase.Began) { //checks touch phase
 				//gets touch position
-				clickPos = singleTouch.position; 
-				canPerformSelection = true;
+				clickPos = singleTouch.position;
+				//If this touch is not over a UI it might be for selecting a hex
+				canPerformSelection = !EventSystem.current.IsPointerOverGameObject(singleTouch.fingerId);
 			} else if (singleTouch.phase == TouchPhase.Moved) { //check phase if moved
 				panCamera(singleTouch.position, clickPos);
 				clickPos = singleTouch.position;
@@ -118,7 +120,7 @@ public class MouseManager : MonoBehaviour {
 				Vector3 oldCenterWorldPoint = main.ScreenToWorldPoint(centerPoint);
 
 				// Zoom camera
-				float zoomDir = pinchZoomCamera(touchZero, touchOne);
+				pinchZoomCamera(touchZero, touchOne);
 				// Pan camera so it doesn't just zoom on center of screen
 				Vector3 newTouchCenterPoint = touchZero.position + (touchOne.position - touchZero.position)/2f;
 				Vector3 diffBetweenCameraAndCenter = main.ScreenToWorldPoint(newTouchCenterPoint) - oldCenterWorldPoint;
@@ -131,38 +133,26 @@ public class MouseManager : MonoBehaviour {
 	}
 
 	// Check if player clicked on something
-	private void doSelection(){
-        // mouse location, provides coordinates relative to screen pixels
-        Vector3 mousePos = Input.mousePosition;
-        mousePos.z = 0;
-
+	private void doSelection(){        
         //Screen pos is relative to camera location in unity coordinates
-        Vector3 screenPos = Camera.main.ScreenToWorldPoint(mousePos);
-
+		Vector3 screenPos = Camera.main.ScreenToWorldPoint(clickPos);
         //Information regarding the object the ray collides with
         //Returns true or false but also provides information of object collider coliided with
         RaycastHit2D hitInfo = Physics2D.Raycast(screenPos, Vector2.zero);
-
         //If ray collides with an object
-        if (hitInfo)
-        {   
+		if (hitInfo && (!EventSystem.current.IsPointerOverGameObject())){   
             //Return the gameobject that the ray has collided with
-            GameObject collidedHitInfo = hitInfo.collider.transform.gameObject;
-         
-            //If left mouse button pressed, only calls once on initial press(e.g not constantly calling on hold)
-            if (Input.GetMouseButtonDown(0) && (!EventSystem.current.IsPointerOverGameObject()))
-            {
-                // Check what we clicked on
-                if (collidedHitInfo.GetComponent<Hex>() != null)
-                {
-                    Hex hex = collidedHitInfo.GetComponent<Hex>();
-                    //clicked on a hex
-                    //bring up menu
-                    //if(hex.hexOwner2 == player.playerId){
-                        player.GetComponent<HexMenuController>().setSelectedHex(hex);
-                    //}                   
-                }
-            } 
+            GameObject collidedHitInfo = hitInfo
+				.collider
+				.transform.gameObject;
+            // Check what we clicked on
+            if (collidedHitInfo.GetComponent<Hex>() != null) {
+                Hex hex = collidedHitInfo.GetComponent<Hex>();
+				Debug.Log (hex.getTileType());
+                //clicked on a hex
+                //bring up menu
+                player.GetComponent<HexMenuController>().setSelectedHex(hex);
+            }
         }
 	}
 
@@ -201,7 +191,7 @@ public class MouseManager : MonoBehaviour {
 
 		//Zoom camera
 		Camera.main.orthographicSize += magnitudeDiff * zoomSpeed * 2f; //sets magnitude with zoomspeed to orthographicSize
-		float cameraMaxZoom = 15f;//Mathf.Min(Mathf.Abs(maxBounds.y), Mathf.Abs(maxBounds.x))/2;
+		float cameraMaxZoom = 13.44791f;//Mathf.Min(Mathf.Abs(maxBounds.y), Mathf.Abs(maxBounds.x))/2;
 		Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, 5f, cameraMaxZoom); //sets the zoomout max size 
 
 		//Update screen size vars
