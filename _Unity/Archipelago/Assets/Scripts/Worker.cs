@@ -33,7 +33,7 @@ public class Worker : Unit {
 		GameObject hex = FindObjectOfType<HexGrid>().getHex(transform.position);
 
 		// If unit walks into enemny unit stop to fight
-		if (hex.GetComponent<Hex>().hasEnemyWarriors(id)){
+		if (hex.GetComponent<Hex>().hasEnemyUnits(id)){
 			unitController.CmdAddWorkers(1, hex);
 			NetworkServer.Destroy(gameObject);
 		}

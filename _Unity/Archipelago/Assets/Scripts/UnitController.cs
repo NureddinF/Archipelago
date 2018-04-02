@@ -284,7 +284,7 @@ public class UnitController : NetworkBehaviour {
         foreach (Hex h in warriorLocations)
         {
             //If hex is already captured, or uncaptured but uncapturable, and not fighting then warriors assumed to be free
-			if ((h.hexOwner.Equals(pid) || (!h.hexOwner.Equals(pid) && (!h.hasOwnedNeighbor(pid)))) && !h.hasEnemyWarriors(pid)){
+			if ((h.hexOwner.Equals(pid) || (!h.hexOwner.Equals(pid) && (!h.hasOwnedNeighbor(pid)))) && !h.hasEnemyUnits(pid)){
 
                 //Get its x/y value
                 int xFrom = h.getX();

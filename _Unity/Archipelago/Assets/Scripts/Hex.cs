@@ -560,18 +560,18 @@ public class Hex : NetworkBehaviour {
 		}
     }
 
-    public bool hasEnemyWarriors(Player.PlayerId player){
+    public bool hasEnemyUnits(Player.PlayerId player){
 		
         if (player == Player.PlayerId.P1)
         {
-            if (blueWarriors > 0)
+			if (blueWarriors > 0 || blueWorkers > 0)
             {
                 return true;
             }
         }
         else
         {
-            if (redWarriors > 0)
+			if (redWarriors > 0 || redWorkers > 0)
             {
                 return true;
             }
