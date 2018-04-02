@@ -79,8 +79,9 @@ public class MouseManager : MonoBehaviour {
 			Touch singleTouch = Input.GetTouch (0); //stores touch
 			if (singleTouch.phase == TouchPhase.Began) { //checks touch phase
 				//gets touch position
-				clickPos = singleTouch.position; 
-				canPerformSelection = true;
+				clickPos = singleTouch.position;
+				//If this touch is not over a UI it might be for selecting a hex
+				canPerformSelection = !EventSystem.current.IsPointerOverGameObject(singleTouch.fingerId);
 			} else if (singleTouch.phase == TouchPhase.Moved) { //check phase if moved
 				panCamera(singleTouch.position, clickPos);
 				clickPos = singleTouch.position;

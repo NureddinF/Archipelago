@@ -15,8 +15,10 @@ public class CustomLobbyManager : NetworkLobbyManager {
 	private bool gameplayerPlayerObjectInitialised = false;
 
 	// UI elements
-	public GameObject searchUi;
-	public GameObject lobbyUi;
+	public GameObject exitButton;
+	public GameObject loadingText;
+	private GameObject searchUi;
+	private GameObject lobbyUi;
 	public Text JoiningText;
 	public Text enteredIpAddress;
 
@@ -82,6 +84,8 @@ public class CustomLobbyManager : NetworkLobbyManager {
 			//don't load lobby UI, instead just start the game
 			searchUi.SetActive (false);
 			lobbyUi.SetActive (false);
+			exitButton.SetActive(false);
+			loadingText.SetActive(true); //Game takes a send to start
 		} else {
 			searchUi.SetActive (false);
 			lobbyUi.SetActive (true);
