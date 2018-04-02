@@ -10,10 +10,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.MobileComputingGrp3.UnityPlayerActivity;
-
 import com.example.xuhongcheng.archipelago.myapplication.R;
 import com.example.xuhongcheng.archipelago.utils.SharedPreferenceUtils;
 
@@ -21,14 +21,17 @@ public class MainActivity extends Activity {
 
     private static final int PLAY_GAME = 600;
 
+    private HelpDialog helpDialog;
     public Button singlePlayer;
     public Button hostMulti;
     public Button joinMulti;
     public Button logout;
     public Button profile;
+    public TextView show;
     public ImageButton btn_settings;
     private SoundPool soundPool;
-    private int  soundId;
+    private int soundId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,23 @@ public class MainActivity extends Activity {
         if(!isLogin){
             profile.setVisibility(View.INVISIBLE);
         }
+        //https://blog.csdn.net/panghaha12138/article/details/72412902
+        //初始化弹窗 布局 点击事件的id
+        show = (TextView) findViewById(R.id.show);
+        helpDialog = new HelpDialog(this, R.layout.dialog_help,
+                new int[]{R.id.dialog_sure});
+        show.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                helpDialog.show();
+            }
+        });
+        helpDialog.setOnCenterItemClickListener(new HelpDialog.OnCenterItemClickListener() {
+            @Override
+            public void OnCenterItemClick(HelpDialog dialog, View view) {
+                    helpDialog.dismiss();
+            }
+        });
 
         singlePlayer.setOnClickListener(new View.OnClickListener() {
             @Override
