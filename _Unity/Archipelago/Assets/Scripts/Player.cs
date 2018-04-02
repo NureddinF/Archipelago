@@ -153,6 +153,7 @@ public class Player : NetworkBehaviour{
     }
 
 	public void removeBuildIncome(Building building){
+		//decremnets total income by the income building was adding, whena building is removed
 		totalTileIncome -= building.getTileIncomeAfterBuild ();
 
 	}
