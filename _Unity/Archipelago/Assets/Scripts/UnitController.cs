@@ -327,8 +327,6 @@ public class UnitController : NetworkBehaviour {
 	//Checks if a trap is placed on the hex where a gameobject is standing
 	[Command]
 	public void CmdCheckTrap(Vector3 unitPosition, GameObject unit){
-		Warrior warrior = null;
-		Worker worker = null;
 		//the hex the warrior is standing on
 		GameObject hex = FindObjectOfType<HexGrid>().getHex(unitPosition);
 		//The hex the gameobject is on
@@ -338,25 +336,11 @@ public class UnitController : NetworkBehaviour {
 
 		if (buildOnHex != null) {
 			List<HexGrid.TileType> tileTypes = buildOnHex.getTileTypesAssociatedWith ();
-			Debug.Log(unit.name);
-			//Checks if its a warrior
-			if (unit.name == "Warrior(Clone)") {
-				//gets warrior
-				warrior = unit.GetComponent<Warrior> ();
-				//Checks in the buildingis associated to ALL, which is a trap building, and the player ids of the hex and player do not match
-				if (tileTypes.Contains(HexGrid.TileType.ALL) && !warrior.getPlayerId().Equals(playerOn.getHexOwner())) {
-					//calls in the kill warrior method
-					killUnitWithTrap (warrior.gameObject, playerOn);
-				}
-				//other wise its a worker
-			} else {
-				//gets the worker
-				worker = unit.GetComponent<Worker> ();
-				//Checks in the buildingis associated to ALL, which is a trap building, and the player ids of the hex and player do not match
-				if (tileTypes.Contains(HexGrid.TileType.ALL) && !worker.getPlayerId().Equals(playerOn.getHexOwner())) {
-					//calls in the kill warrior method
-					killUnitWithTrap (worker.gameObject, playerOn);
-				}
+			Unit u = unit.GetComponent<Unit> ();
+			//Checks in the buildingis associated to ALL, which is a trap building, and the player ids of the hex and player do not match
+			if (tileTypes.Contains(HexGrid.TileType.ALL) && !u.getPlayerId().Equals(playerOn.getHexOwner())) {
+				// kill unit method
+				killUnitWithTrap (unit, playerOn);
 			}
 		}
 
@@ -367,8 +351,8 @@ public class UnitController : NetworkBehaviour {
 			//only server can change game state
 			return;
 		}
-		//sets the sprite to unactive
-		unit.SetActive (false);
+		// Destroy the unit
+		NetworkServer.Destroy(unit);
 		//changes the hex sprite back to the original sprite thats under the trap(removes the trap)
 		h.RpcDisableStatusIcon();
 		//removes the building(trap)

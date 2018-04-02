@@ -133,6 +133,13 @@ public class Hex : NetworkBehaviour {
 		
 	[Command]
 	public void CmdSetBuilding(Building.BuildingType buildingId) {
+		// Check if this is removing a building
+		if(buildingId == Building.BuildingType.None){
+			if(buildingObject != null){
+				NetworkServer.Destroy (buildingObject);
+			}
+			return;
+		}
 		GameObject buildingPrefab = FindObjectOfType<BuildingController>().getBuildingFromType(buildingId);
 		//Instantiate a new Building object for the building.
 		//Allows it to hold it's own values, rather than statically for all buildings of same type
@@ -666,8 +673,12 @@ public class Hex : NetworkBehaviour {
 
 	////////////////////////////////// SyncVar hooks //////////////////////////////
 	private void setBuilding(GameObject newBuilding){
-		building = newBuilding.GetComponent<Building> ();
-		setStatusIcon (building.getConstructionIconSprite(hexOwner));
+		if (newBuilding == null) {
+			building = null;
+		} else {
+			building = newBuilding.GetComponent<Building> ();
+			setStatusIcon (building.getConstructionIconSprite(hexOwner));
+		}
 		FindObjectOfType<HexMenuController> ().refreshUIValues();
 	}
 
