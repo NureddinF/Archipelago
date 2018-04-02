@@ -7,7 +7,7 @@ public class Building : NetworkBehaviour{
 
     // Building parameters
     public float cost = 3;
-    public float tileIncomeAfterBuild = 1;
+    public float tileIncomeAfterBuild;
     private float currentTileIncome;
     public List<HexGrid.TileType> tilesAssociatedWith;
 
@@ -147,7 +147,7 @@ public class Building : NetworkBehaviour{
 		else {
 			hexAssociatedWith.RpcDisplayTrap ();
 		}
-
+	
 		//update player ui to display new options
 		FindObjectOfType<HexMenuController> ().RpcRefreshUIValues ();
 	}

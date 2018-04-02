@@ -256,6 +256,10 @@ public class Hex : NetworkBehaviour {
 	[ClientRpc]
 	public void RpcDisplayBuildingSprite(){
 		GetComponent<SpriteRenderer> ().sprite = building.getBuildingSprite (hexOwner);
+		//gets the player
+		Player player = GetComponent<CapturableTile> ().getPlayer (hexOwner);
+		//calls built tile to incremnet the resource count
+		player.builtTile (building);
 	}
 
 

@@ -138,6 +138,12 @@ public class Player : NetworkBehaviour{
         totalTilesOwned += 1;
         this.GetComponent<HexMenuController>().RpcRefreshUIValues();
     }
+	//Incremnets total resource when there is a building
+	public void builtTile(Building building){
+		totalTileIncome += building.getTileIncomeAfterBuild();
+
+
+	}
 
 	//TODO: Multiplayer
 	//Lose a Tile
@@ -145,6 +151,12 @@ public class Player : NetworkBehaviour{
         totalTileIncome -= tile.getHex().getTileIncome();
         totalTilesOwned -= 1;
     }
+
+	public void removeBuildIncome(Building building){
+		//decremnets total income by the income building was adding, whena building is removed
+		totalTileIncome -= building.getTileIncomeAfterBuild ();
+
+	}
 
 	// Display loss screen for players who have not won when game ends
 	private void loseGame(){
