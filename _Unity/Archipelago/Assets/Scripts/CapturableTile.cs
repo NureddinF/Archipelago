@@ -100,15 +100,27 @@ public class CapturableTile: NetworkBehaviour{
 		float newAmountCaptured = amountCaptured + Time.deltaTime * captureSpeedPerUnit * (numP1UnitsOnHex - numP2UnitsOnHex - neutralResetSpeed);
 		newAmountCaptured = Mathf.Clamp (newAmountCaptured, -totalCaptureCost, totalCaptureCost);
 
-		//Checks if Player 1 has one or more units on the tile, Owns a tile next to it, and if they don't own it already
+		//Checks if Player 1 has one or more units on the tile and Owns a tile next to it
 		//If all these return true Player 1 begins to capture
-		if (numP1UnitsOnHex > 0 && thisHex.hasOwnedNeighbor (Player.PlayerId.P1) && thisHex.getHexOwner () != Player.PlayerId.P1) {
-			updateTileCapture (Player.PlayerId.P1, newAmountCaptured);
+		if (numP1UnitsOnHex > 0 && thisHex.hasOwnedNeighbor (Player.PlayerId.P1)) {
+			if (thisHex.getHexOwner () != Player.PlayerId.P1) {
+				//capturing enemy or neutral tile
+				updateTileCapture (Player.PlayerId.P1, newAmountCaptured);
+			} else {
+				//Defending a tile
+				resetCapture(Player.PlayerId.P1, totalCaptureCost);
+			}
 		} 
 		//Checks if Player 2 has one or more units on the tile, Owns a tile next to it, and if they don't own it already
 		//If all these return true Player 2 begins to capture
 		else if (numP2UnitsOnHex > 0 && thisHex.hasOwnedNeighbor (Player.PlayerId.P2) && thisHex.getHexOwner () != Player.PlayerId.P2) {
-			updateTileCapture (Player.PlayerId.P2, newAmountCaptured);
+			if (thisHex.getHexOwner () != Player.PlayerId.P2) {
+				//capturing enemy or neutral tile
+				updateTileCapture (Player.PlayerId.P2, newAmountCaptured);
+			} else {
+				//Defending a tile
+				resetCapture(Player.PlayerId.P2, -totalCaptureCost);
+			}
 		} else if (numP1UnitsOnHex == 0 && numP2UnitsOnHex == 0 && thisHex.getHexOwner () == Player.PlayerId.NEUTRAL){
 			// Capture amount degrades towards neutral
 			isCapturing = !updateTileCapture (Player.PlayerId.NEUTRAL, newAmountCaptured);
@@ -123,7 +135,7 @@ public class CapturableTile: NetworkBehaviour{
 			//update the hex
 			thisHex.setHexOwner (pid);
 			//update the map on all the clients
-			RpcCaptureTile (pid);
+			RpcCaptureTile (pid,pid);
 			// Update the player income
 			finalizeCapture ();
 		} else if (newAmountCaptured * amountCaptured < 0) {
@@ -131,7 +143,7 @@ public class CapturableTile: NetworkBehaviour{
 			//Update theplayer income
 			loseTile (pid);
 			//update the map on all the clients
-			RpcCaptureTile (Player.PlayerId.NEUTRAL);
+			RpcCaptureTile (Player.PlayerId.NEUTRAL,pid);
 			switchedToNeutral = true;
 		}
 		// Update the amount capture for next frame (also sent to clients)
@@ -182,7 +194,7 @@ public class CapturableTile: NetworkBehaviour{
 			numP2UnitsOnHex += numUnits;
 		}
 
-		if (GetComponent<Hex>().getHexOwner() == Player.PlayerId.NEUTRAL && !isCapturing) {
+		if (GetComponent<Hex>().getHexOwner() != player && !isCapturing) {
 			isCapturing = true;
 			RpcStartCapture (player);
 		}
@@ -225,6 +237,11 @@ public class CapturableTile: NetworkBehaviour{
 		}
 	}
 
+	private void resetCapture(Player.PlayerId pid, float newCaptureAmount){
+		amountCaptured = newCaptureAmount;
+		RpcCaptureTile (pid, pid);
+	}
+
 	//////////////////////////////// RPCs and client methods /////////////////////////////////////////////
 
 
@@ -248,17 +265,22 @@ public class CapturableTile: NetworkBehaviour{
 
 	[ClientRpc]
 	//Update the map for all the clients so they see the correct sprite when a tile is captured
-	private void RpcCaptureTile(Player.PlayerId pid){
-		Debug.Log ("CapturableTile: RpcCaptureTile: pid=" + pid);
-		if (pid == Player.PlayerId.P1) {
+	private void RpcCaptureTile(Player.PlayerId newTileOwner, Player.PlayerId playerCapturing){
+		Debug.Log ("CapturableTile: RpcCaptureTile: newTileOwner=" + newTileOwner);
+		if (newTileOwner == Player.PlayerId.P1) {
 			captureBorder.enabled = false;
 			tileSprite.sprite = p1CaptureTile;
-		} else if (pid == Player.PlayerId.P2) {
+		} else if (newTileOwner == Player.PlayerId.P2) {
 			captureBorder.enabled = false;
 			tileSprite.sprite = p2CaptureTile;
 		} else {
 			tileSprite.sprite = neutralCaptureTile;
 			captureBorder.fillClockwise = !captureBorder.fillClockwise;
+			if (playerCapturing == Player.PlayerId.P1) {
+				captureBorder.sprite = p1CaptureBorder;	
+			} else if (playerCapturing == Player.PlayerId.P2) {
+				captureBorder.sprite = p2CaptureBorder;
+			}
 		}
 		// Update UI on clients if needed
 		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
