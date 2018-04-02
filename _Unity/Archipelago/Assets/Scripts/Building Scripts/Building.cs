@@ -19,7 +19,7 @@ public class Building : NetworkBehaviour{
 	[SyncVar] private float currentBuildTime;
     public float totalBuildTime;
     public float buildSpeedPerWorker;
-	[SyncVar] private bool isConstructed;
+	[SyncVar (hook = "updateIsConstructed")] private bool isConstructed;
 
 	// The hex this building is on, only valid on the server
     private Hex hexAssociatedWith;
@@ -152,6 +152,10 @@ public class Building : NetworkBehaviour{
 		FindObjectOfType<HexMenuController> ().RpcRefreshUIValues ();
 	}
 
-	////////////////////////// RPCs ///////////////////////////////////////////
+	////////////////////////// SyncVar Hooks ///////////////////////////////////////////
 
+	private void updateIsConstructed(bool newIsConstructed){
+		isConstructed = newIsConstructed;
+		FindObjectOfType<HexMenuController> ().refreshUIValues ();
+	}
 }

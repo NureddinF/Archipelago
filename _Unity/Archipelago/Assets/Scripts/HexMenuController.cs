@@ -241,8 +241,6 @@ public class HexMenuController : NetworkBehaviour {
 					go.name = barracks.name;
 					//Add appropriate components
 					go.AddComponent<RectTransform> ();
-					go.AddComponent<Image> ();
-					go.AddComponent<Button> ();
 
 					//Set its rect transform properties
 					go.GetComponent<RectTransform> ().pivot = new Vector2 (0.5f, 1f);
@@ -251,10 +249,15 @@ public class HexMenuController : NetworkBehaviour {
 
 					go.GetComponent<RectTransform> ().sizeDelta = new Vector2 (childWidth, childHeight);
 					go.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0f, 0 * childHeight * go.GetComponent<RectTransform> ().localScale.x - yOffset);
-					//Set its displayed sprite
-					go.GetComponent<Image> ().sprite = barracks.GetComponent<Barracks>().getpurchaseWarriorSprite ();
 
-					go.GetComponent<Button>().onClick.AddListener (purchasWarrior);
+					if (barracks.GetComponent<Barracks> ().getIsConstructed ()) {
+						go.AddComponent<Image> ();
+						go.AddComponent<Button> ();
+						//Set its displayed sprite
+						go.GetComponent<Image> ().sprite = barracks.GetComponent<Barracks> ().getpurchaseWarriorSprite ();
+
+						go.GetComponent<Button> ().onClick.AddListener (purchasWarrior);
+					}
 				}
 
 
