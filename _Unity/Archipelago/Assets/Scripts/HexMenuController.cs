@@ -15,6 +15,7 @@ public class HexMenuController : NetworkBehaviour {
     private Text tileWorkerCount;
     private Text tileWarriorCount;
     private Image tileActionBox;
+	private Text price;
 
 	public float workerCost = 25;
 	public float warriorCost = 50;
@@ -199,36 +200,53 @@ public class HexMenuController : NetworkBehaviour {
 					Debug.Log (b);
                     //New gameobject
                     GameObject go = new GameObject();
+					GameObject textObject = new GameObject ();
+					textObject.AddComponent<Text> ();
+					textObject.AddComponent <RectTransform> ();
+
                     //Set its parent
                     go.transform.parent = tileActionBox.transform;
+					textObject.transform.parent = tileActionBox.transform;
                     //Set its name
                     go.name = b.name;
                     //Add appropriate components
                     go.AddComponent<RectTransform>();
-                    go.AddComponent<Image>();
+					go.AddComponent<Image>();
                     go.AddComponent<Button>();
 
                     //Set its rect transform properties
                     go.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
                     go.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 1f);
                     go.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 1f);
+
+
+					textObject.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
+					textObject.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 1f);
+					textObject.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 1f);
                     
                     go.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth, childHeight);
                     go.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -count * childHeight * go.GetComponent<RectTransform>().localScale.x - yOffset);
-                    //Set its displayed sprite
+
+					textObject.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth/3, childHeight/3);
+					textObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -count * childHeight * textObject.GetComponent<RectTransform>().localScale.x - yOffset);
+
+					//Set its displayed sprite
                     go.GetComponent<Image>().sprite = b.getMenuIconSprite();
+					textObject.GetComponent<Text> ().text = "hsgdfs";
+
+
                     //Set its click function
 					if (selectedHex.getTileType ().Equals (HexGrid.TileType.BASE)) {
 						go.GetComponent<Button> ().onClick.AddListener (purchaseWorker);
 
 					} else {
-
+						
 						go.GetComponent<Button> ().onClick.AddListener (() => {
 							CmdTileActionBuild (selectedHex.gameObject , b.buildingId);
 						});
 					}
                     //Increment count
-                    count++;
+                    count = count+2;
                 }
             }
 			else if(selectedHex.getBuilding() != null &&selectedHex.getHexOwner().Equals(GetComponent<Player>().playerId)){
@@ -241,6 +259,7 @@ public class HexMenuController : NetworkBehaviour {
 					go.name = barracks.name;
 					//Add appropriate components
 					go.AddComponent<RectTransform> ();
+					
 
 					//Set its rect transform properties
 					go.GetComponent<RectTransform> ().pivot = new Vector2 (0.5f, 1f);
@@ -254,8 +273,8 @@ public class HexMenuController : NetworkBehaviour {
 						go.AddComponent<Image> ();
 						go.AddComponent<Button> ();
 						//Set its displayed sprite
-						go.GetComponent<Image> ().sprite = barracks.GetComponent<Barracks> ().getpurchaseWarriorSprite ();
 
+						go.GetComponent<Image> ().sprite = barracks.GetComponent<Barracks> ().getpurchaseWarriorSprite ();
 						go.GetComponent<Button> ().onClick.AddListener (purchasWarrior);
 					}
 				}
