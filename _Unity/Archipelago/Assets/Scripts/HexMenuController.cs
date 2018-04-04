@@ -201,18 +201,15 @@ public class HexMenuController : NetworkBehaviour {
                     //New gameobject
                     GameObject go = new GameObject();
 					GameObject textObject = new GameObject ();
-
-
                     //Set its parent
                     go.transform.parent = tileActionBox.transform;
 					textObject.transform.parent = tileActionBox.transform;
-
                     //Set its name
                     go.name = b.name;
-					textObject.name = b.name;
                     //Add appropriate components
-					textObject.AddComponent<Text>();
                     go.AddComponent<RectTransform>();
+					textObject.AddComponent<RectTransform> ();
+					price = textObject.AddComponent<Text> ();
 					go.AddComponent<Image>();
                     go.AddComponent<Button>();
 
@@ -221,27 +218,30 @@ public class HexMenuController : NetworkBehaviour {
                     go.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 1f);
                     go.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 1f);
 			
-//					textObject.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
-//					textObject.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 1f);
-//					textObject.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 1f);
+					textObject.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
+					textObject.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 1f);
+					textObject.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 1f);
 
                     go.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth, childHeight);
                     go.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -count * childHeight * go.GetComponent<RectTransform>().localScale.x - yOffset);
 				
+
 					textObject.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth/2, childHeight/2);
-					textObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f,  -count*childHeight/2 * textObject.GetComponent<RectTransform>().localScale.x - yOffset);
 
+					textObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-50f, -1 * childHeight * textObject.GetComponent<RectTransform>().localScale.x - yOffset);
+				
 					//Set its displayed sprite
-
-
+			
                     go.GetComponent<Image>().sprite = b.getMenuIconSprite();
 
                     //Set its click function
 					if (selectedHex.getTileType ().Equals (HexGrid.TileType.BASE)) {
-
-						tileActionBox.GetComponentInChildren<Text> ().text = "hgafsd";
-						tileActionBox.GetComponentInChildren<Text> ().color = Color.black;
-
+						price.text = "hfgdfs";
+						price.fontSize = 16;
+						price.verticalOverflow = VerticalWrapMode.Overflow;
+						price.color = Color.black;
+						price.font = Resources.GetBuiltinResource (typeof(Font), "Arial.ttf") as Font;
+						price.fontStyle = FontStyle.Normal;
 						go.GetComponent<Button> ().onClick.AddListener (purchaseWorker);
 
 					} else {
