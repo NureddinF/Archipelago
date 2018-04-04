@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
+using UnityEngine.Networking.NetworkSystem;
+using UnityEngine.SceneManagement;
 
 public class CustomLobbyManager : NetworkLobbyManager {
 
@@ -233,5 +235,182 @@ public class CustomLobbyManager : NetworkLobbyManager {
 
 		return baseRet;
 	}
-	
+
+	/// <summary>
+	/// ////////////////////////////////////
+	/// </summary>
+	/// <param name="conn">Conn.</param>
+
+
+
+
+
+	public override void OnServerAddPlayer (NetworkConnection conn, short playerControllerId)
+	{
+		Debug.LogWarning ("NetworkLobbyManager: OnServerAddPlayer: playerControllerId=" + playerControllerId);
+		if (SceneManager.GetSceneAt(0).name != this.lobbyScene)
+			return;
+		int num = 0;
+		using (List<PlayerController>.Enumerator enumerator = conn.playerControllers.GetEnumerator())
+		{
+			while (enumerator.MoveNext())
+			{
+				if (enumerator.Current.IsValid)
+					++num;
+			}
+		}
+		if (num >= this.maxPlayersPerConnection)
+		{
+			if (LogFilter.logWarn)
+				Debug.LogWarning((object) "NetworkLobbyManager no more players for this connection.");
+			EmptyMessage emptyMessage = new EmptyMessage();
+			conn.Send((short) 45, (MessageBase) emptyMessage);
+		}
+		else
+		{
+			byte slot = this.FindSlot();
+			if ((int) slot == (int) byte.MaxValue)
+			{
+				if (LogFilter.logWarn)
+					Debug.LogWarning((object) "NetworkLobbyManager no space for more players");
+				EmptyMessage emptyMessage = new EmptyMessage();
+				conn.Send((short) 45, (MessageBase) emptyMessage);
+			}
+			else
+			{
+				GameObject player = (GameObject)UnityEngine.Object.Instantiate(this.lobbyPlayerPrefab.gameObject, Vector3.zero, Quaternion.identity);
+				NetworkLobbyPlayer component = player.GetComponent<NetworkLobbyPlayer>();
+				component.slot = slot;
+				this.lobbySlots[(int) slot] = component;
+				NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
+			}
+		}
+	}
+
+	private byte FindSlot()
+	{
+		for (byte index = 0; (int) index < this.maxPlayers; ++index)
+		{
+			if ((UnityEngine.Object) this.lobbySlots[(int) index] == (UnityEngine.Object) null)
+				return index;
+		}
+		return byte.MaxValue;
+	}
+
+	public override void OnClientSceneChanged(NetworkConnection conn){
+		Debug.LogWarning ("NetworkLobbyManager: OnClientSceneChanged: connectionID" + conn.connectionId);
+		if (SceneManager.GetSceneAt(0).name == lobbyScene)
+		{
+			if (this.client.isConnected)
+				this.CallOnClientEnterLobby();
+		}
+		else
+			this.CallOnClientExitLobby();
+		OnClientSceneChangedBase(conn);
+		this.OnLobbyClientSceneChanged(conn);
+	}
+
+	private void OnClientSceneChangedBase(NetworkConnection conn){
+		Debug.LogWarning ("NetworkLobbyManager: OnClientSceneChangedBase: connectionID" + conn.connectionId);
+		bool flag1 = ClientScene.localPlayers.Count == 0;
+		bool flag2 = false;
+		using (List<PlayerController>.Enumerator enumerator = ClientScene.localPlayers.GetEnumerator())
+		{
+			while (enumerator.MoveNext())
+			{
+				if ((UnityEngine.Object) enumerator.Current.gameObject != (UnityEngine.Object) null)
+				{
+					flag2 = true;
+					break;
+				}
+			}
+		}
+		if (!flag2)
+			flag1 = true;
+		if (!flag1)
+			return;
+		ClientScene.AddPlayer((short) 0);
+	}
+
+	public override void OnClientConnect(NetworkConnection conn){
+		Debug.LogWarning ("NetworkLobbyManager: OnClientConnect: connectionID" + conn.connectionId);
+
+		bool addPlayer = false;
+		if (ClientScene.localPlayers.Count == 0)
+		{
+			// no players exist
+			addPlayer = true;
+		}
+
+		bool foundPlayer = false;
+		foreach (var playerController in ClientScene.localPlayers)
+		{
+			if (playerController.gameObject != null)
+			{
+				foundPlayer = true;
+				break;
+			}
+		}
+		if (!foundPlayer)
+		{
+			// there are players, but their game objects have all been deleted
+			addPlayer = true;
+		}
+		if (addPlayer)
+		{
+			ClientScene.AddPlayer(conn, 0);
+		}
+		//ClientScene.AddPlayer(conn, 0);
+	}
+
+
+
+
+
+
+
+
+
+	/*
+	public void OnClientSceneChanged(NetworkConnection conn){
+		Debug.Log ("NetworkLobbyManager: OnClientSceneChanged: connectionID" + conn.connectionId);
+		string loadedSceneName = SceneManager.GetSceneAt(0).name;
+		if (loadedSceneName == lobbyScene)
+		{
+			if (client.isConnected)
+				CallOnClientEnterLobby();
+		}
+		else
+		{
+			CallOnClientExitLobby();
+		}
+
+		/// This call is commented out since it causes a unet "A connection has already been set as ready. There can only be one." error.
+		/// More info: http://answers.unity3d.com/questions/991552/unet-a-connection-has-already-been-set-as-ready-th.html
+		//base.OnClientSceneChanged(conn);
+		OnLobbyClientSceneChanged(conn);
+	}*/
+		
+
+	private void CallOnClientEnterLobby(){
+		this.OnLobbyClientEnter();
+		foreach (NetworkLobbyPlayer lobbySlot in this.lobbySlots)
+		{
+			if (!((UnityEngine.Object) lobbySlot == (UnityEngine.Object) null))
+			{
+				lobbySlot.readyToBegin = false;
+				lobbySlot.OnClientEnterLobby();
+			}
+		}
+	}
+
+	private void CallOnClientExitLobby()
+	{
+		this.OnLobbyClientExit();
+		foreach (NetworkLobbyPlayer lobbySlot in this.lobbySlots)
+		{
+			if (!((UnityEngine.Object) lobbySlot == (UnityEngine.Object) null))
+				lobbySlot.OnClientExitLobby();
+		}
+	}
 }
