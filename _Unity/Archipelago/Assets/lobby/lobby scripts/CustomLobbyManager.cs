@@ -25,7 +25,6 @@ public class CustomLobbyManager : NetworkLobbyManager {
 	//on failed connection the scene is reloaded so the state needs to be saved
 	string ipStr = "";
 	string joiningStr = "";
-	private NetworkClient netClient = null;
 
 	// Use this for initialization
 	void Start () {
@@ -126,11 +125,11 @@ public class CustomLobbyManager : NetworkLobbyManager {
 		JoiningText.text = "Joining...";
 
 		//if there is a connection in progress cancel it before starting new one
-		if(netClient != null){
-			netClient.Disconnect ();
+		if(client != null){
+			StopClient ();
 		}
 
-		netClient = StartClient ();
+		StartClient ();
 	}
 
 	// https://stackoverflow.com/questions/6219454/efficient-way-to-remove-all-whitespace-from-string
