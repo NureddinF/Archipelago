@@ -219,10 +219,10 @@ public class HexMenuController : NetworkBehaviour {
                     go.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 1f);
 			
 					textObject.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth, childHeight);
-					textObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-50f, go.GetComponent<RectTransform>().localScale.y + 30);
+					textObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(30f, go.GetComponent<RectTransform>().localScale.x - 135);
 
                     go.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth, childHeight);
-					go.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -count * 1.175f * childHeight * go.GetComponent<RectTransform>().localScale.x - yOffset);
+					go.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -count * childHeight * go.GetComponent<RectTransform>().localScale.x - yOffset);
 
 					//Set its displayed sprite
 					go.GetComponent<Image>().sprite = b.getMenuIconSprite();
@@ -235,22 +235,11 @@ public class HexMenuController : NetworkBehaviour {
 
                     //Set its click function
 					if (selectedHex.getTileType ().Equals (HexGrid.TileType.BASE)) {
-						price.text = "Worker cost: " + b.getCost ().ToString ();
-//						price.verticalOverflow = VerticalWrapMode.Overflow;
+						price.text = "Worker cost: " + warriorCost.ToString ()+" Gold";
 						go.GetComponent<Button> ().onClick.AddListener (purchaseWorker);
 
 					} else {
-						if (b.buildingId.Equals (Building.BuildingType.Barracks)) {
-							price.text = "Barracks cost: " + b.getCost ().ToString ();
-						}
-
-						if (b.buildingId.Equals (Building.BuildingType.Trap)) {
-							price.text = "Trap cost: " + b.getCost ().ToString ();
-
-					
-						} else if (!b.buildingId.Equals (Building.BuildingType.Trap) && !b.buildingId.Equals (Building.BuildingType.Barracks)){
-							price.text = "Uprgrade cost: " + b.getCost ().ToString ();
-						}
+						price.text = "Cost: " + b.getCost ().ToString () + " Gold"; 
 						go.GetComponent<Button> ().onClick.AddListener (() => {
 							CmdTileActionBuild (selectedHex.gameObject, b.buildingId);
 						});
