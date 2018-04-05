@@ -64,17 +64,17 @@ public class RegisterActivity extends Activity {
 //			Toast.makeText(this, "Invalid Username！!", Toast.LENGTH_SHORT).show();
 //			return;
 //		}
-//		if (!pass.matches(passRegex)) {
-//			Toast.makeText(this, "Invalid Password！!", Toast.LENGTH_SHORT).show();
-//			return;
-//		}
-//		if (!email.matches(emailRegex)) {
-//			Toast.makeText(this, "Invalid Email！!", Toast.LENGTH_SHORT).show();
-//			return;
-//		}
+		if (!pass.matches(passRegex)) {
+			Toast.makeText(this, "Invalid Password！!", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		if (!email.matches(emailRegex)) {
+			Toast.makeText(this, "Invalid Email！!", Toast.LENGTH_SHORT).show();
+			return;
+		}
 
 		//2Write the username and password to the file
-//    		File file = new File(getFilesDir(), "/info.txt");
+
 		File file = new File(getCacheDir(), "/info.txt");
 		try {
 			FileOutputStream fos = new FileOutputStream(file);
