@@ -141,11 +141,10 @@ public class CapturableTile: NetworkBehaviour{
 		} else if (newAmountCaptured * amountCaptured < 0) {
 			//Tile was neutralised
 			//Update theplayer income
-			//Lose tile called on the other player
+			//Lose tile called on the other player to reduce their income
 			if (pid.Equals (Player.PlayerId.P1)) {
-				
 				loseTile (Player.PlayerId.P2);
-			} else {
+			} else if(pid.Equals (Player.PlayerId.P2)){
 				loseTile (Player.PlayerId.P1);
 			}
 			//update the map on all the clients
@@ -236,7 +235,7 @@ public class CapturableTile: NetworkBehaviour{
 		if (!isServer) {
 			return;
 		}
-
+		thisHex.setHexOwner (Player.PlayerId.NEUTRAL);
 		Building building = this.getHex ().getBuilding();
 		Player player = getPlayer (pid);
 		if (player != null) {
@@ -246,6 +245,8 @@ public class CapturableTile: NetworkBehaviour{
 		if (building != null) {
 			//removes the income of tile
 			player.removeBuildIncome (building);
+			// Destroy building
+			thisHex.CmdSetBuilding (Building.BuildingType.None);
 		}
 	}
 

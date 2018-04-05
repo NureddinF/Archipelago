@@ -8,6 +8,9 @@ public class BuildingWorkable : Building {
     public float increasedIncomePerWorker = 0.5f;
 
     void Start() {
+		if (!isServer) {
+			return;
+		}
         setCurrentTileIncome(getTileIncomeAfterBuild());
     }
 
