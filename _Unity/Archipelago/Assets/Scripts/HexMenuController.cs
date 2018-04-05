@@ -218,26 +218,20 @@ public class HexMenuController : NetworkBehaviour {
                     go.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 1f);
                     go.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 1f);
 			
-//					textObject.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
-//					textObject.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 1f);
-//					textObject.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 1f);
-
 					textObject.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth, childHeight);
 					textObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-28f, go.GetComponent<RectTransform>().localScale.y + 20);
 
                     go.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth, childHeight);
 					go.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -count * 1.175f * childHeight * go.GetComponent<RectTransform>().localScale.x - yOffset);
 
-
-//					textObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-70f, count * go.GetComponent<RectTransform>().localScale.x - yOffset);
-				
 					//Set its displayed sprite
 					go.GetComponent<Image>().sprite = b.getMenuIconSprite();
-					price.fontSize = 16;
+					price.fontSize = 35;
+					price.fontStyle = FontStyle.Bold;
 					price.color = Color.black;
 					price.font = Resources.GetBuiltinResource (typeof(Font), "Arial.ttf") as Font;
 
-					price.fontStyle = FontStyle.Normal;
+//					price.fontStyle = FontStyle.Normal;
 
                     //Set its click function
 					if (selectedHex.getTileType ().Equals (HexGrid.TileType.BASE)) {
@@ -293,7 +287,7 @@ public class HexMenuController : NetworkBehaviour {
 					go.GetComponent<RectTransform> ().sizeDelta = new Vector2 (childWidth, childHeight);
 					go.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0f, 0 * childHeight * go.GetComponent<RectTransform> ().localScale.x - yOffset);
 
-					price.fontSize = 16;
+					price.fontSize = 30;
 					price.color = Color.black;
 					price.font = Resources.GetBuiltinResource (typeof(Font), "Arial.ttf") as Font;
 
