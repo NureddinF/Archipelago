@@ -136,6 +136,7 @@ public class Hex : NetworkBehaviour {
 		// Check if this is removing a building
 		if(buildingId == Building.BuildingType.None){
 			if(buildingObject != null){
+				// Remove building, clean up internal state
 				NetworkServer.Destroy (buildingObject);
 				building = null;
 				buildingObject = null;

@@ -245,6 +245,7 @@ public class CapturableTile: NetworkBehaviour{
 		if (building != null) {
 			//removes the income of tile
 			player.removeBuildIncome (building);
+			// Destroy building
 			thisHex.CmdSetBuilding (Building.BuildingType.None);
 		}
 	}
