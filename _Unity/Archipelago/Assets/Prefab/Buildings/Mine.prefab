@@ -84,8 +84,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f19a68ac1239bc140af55bcc27ff86c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cost: 3
-  tileIncomeAfterBuild: 1
+  cost: 100
+  tileIncomeAfterBuild: 8
   tilesAssociatedWith: 04000000
   buildingId: 4
   totalBuildTime: 10

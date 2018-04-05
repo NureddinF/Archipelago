@@ -119,6 +119,12 @@ public class Player : NetworkBehaviour{
 
     public void removeMoney(float amount) { currentMoney -= amount; }
 
+	//Add to current totalTitleIncome
+	public void addToTotalTileIncome(float amount) {
+		totalTileIncome += amount;
+	}
+
+	//function not taking into account when a tile is upgraded
     // Generates income in discrete chunks rather than each frame
     public void generateIncomeDiscrete(){
         if (Time.time > timeFrame + startTime){
@@ -138,6 +144,12 @@ public class Player : NetworkBehaviour{
         totalTilesOwned += 1;
         this.GetComponent<HexMenuController>().RpcRefreshUIValues();
     }
+	//Incremnets total resource when there is a building
+	public void builtTile(Building building){
+		totalTileIncome += building.getTileIncomeAfterBuild();
+
+
+	}
 
 	//TODO: Multiplayer
 	//Lose a Tile
@@ -145,6 +157,12 @@ public class Player : NetworkBehaviour{
         totalTileIncome -= tile.getHex().getTileIncome();
         totalTilesOwned -= 1;
     }
+
+	public void removeBuildIncome(Building building){
+		//decremnets total income by the income building was adding, whena building is removed
+		totalTileIncome -= building.getTileIncomeAfterBuild ();
+
+	}
 
 	// Display loss screen for players who have not won when game ends
 	private void loseGame(){

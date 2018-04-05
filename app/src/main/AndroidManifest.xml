@@ -8,6 +8,7 @@
 
     <application
         android:theme="@style/AppTheme"
+        android:name="com.example.xuhongcheng.archipelago.activitys.BaseApplication"
         xmlns:tools="http://schemas.android.com/tools"
         tools:replace="android:theme"
         android:allowBackup="true"
