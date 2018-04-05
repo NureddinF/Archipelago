@@ -235,7 +235,7 @@ public class CapturableTile: NetworkBehaviour{
 		if (!isServer) {
 			return;
 		}
-
+		thisHex.setHexOwner (Player.PlayerId.NEUTRAL);
 		Building building = this.getHex ().getBuilding();
 		Player player = getPlayer (pid);
 		if (player != null) {
