@@ -53,9 +53,25 @@
                 android:layout_marginRight="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
+                android:text="Players can build worker units to capture new tiles and build new buildings, which helps to both defend their territory as well as produce more gold. In addition players can also train warriors to battle the opponent head on to expand their territory."
+                android:textColor="#8e8e8e"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:text="1.How to Win\n2.To win the game you must reach 1,000 gold before your opponent. To earn more gold you must capture more territory. Territory you capture can be upgraded to improve its gold output."
                 android:textColor="#8e8e8e"
                 android:textSize="13sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -67,6 +83,16 @@
                 android:text="1.Capturing Territory\n2.Territory can be captured using workers or warriors. A unit can travel to any tile (except water) but they can only capture territory that is adjacent to territory you currently own. "
                 android:textColor="#8e8e8e"
                 android:textSize="13sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/warrior"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/worker"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -108,6 +134,65 @@
                 android:layout_marginRight="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
+                android:text="A tile can have up to 3 build options at a time. Upgrade, Barracks, and Trap."
+                android:textColor="#8e8e8e"
+                android:textSize="13sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/upgrade"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="Upgrade : Improves the gold generation of the tile and changes the image of the tile to indicate the upgrade."
+                android:textColor="#8e8e8e"
+                android:textSize="13sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/barracks"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="Barracks : Allows warriors to be purchased from the selected tile. Adds a defence bonus to any units on it."
+                android:textColor="#8e8e8e"
+                android:textSize="13sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/trap"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="Trap : Places a trap on the selected tile. A trap destroys itself and any enemy units that enter the tile its on."
+                android:textColor="#8e8e8e"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:text="Warriors\nWarriors can capture territory adjacent to territory you already own and can fight enemy warriors and workers. Use warriors to defend important or strategic tiles from enemy units. "
                 android:textColor="#8e8e8e"
                 android:textSize="13sp" />
@@ -119,7 +204,51 @@
                 android:layout_marginRight="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="Multiplayer\nThe first player must choose the “Host Game” option from the main menu. This brings up a lobby screen where the player can view their IP address\nThe second player then use the “Join Game” button to bring then a search screen."
+                android:text="Also use warriors to remove enemy units from territory they own in order to capture it yourself."
+                android:textColor="#8e8e8e"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="Multiplayer\nTo challenge a friend in multiplayer both players require a device with the game installed. "
+                android:textColor="#8e8e8e"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="The first player must choose the “Host Game” option from the main menu. This brings up a lobby screen where the player can view their IP address"
+                android:textColor="#8e8e8e"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="The second player then use the “Join Game” button to bring then a search screen. This player then enters the IP address of the host and presses “Connect”."
+                android:textColor="#8e8e8e"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="After both players are connected they can ready-up by clicking their respective check box.\nWhen both players are ready the “Start Game” button enables for the host. Press this to start playing the game!"
                 android:textColor="#8e8e8e"
                 android:textSize="13sp" />
 
