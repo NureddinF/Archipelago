@@ -5,6 +5,10 @@ using UnityEngine.Networking;
 
 //Subclass of unity for a worker unit
 public class Worker : Unit {
+
+	public Sprite blueWorker;
+	public Sprite redWorker;
+
     //Every frame
     void Update() {
         //Float for how much it should move, based of time passed and it's speed variable
@@ -23,6 +27,18 @@ public class Worker : Unit {
 		//check if unit got to where it needs to
 		CmdCheckReachedDestination ();
     }
+
+	//Sets the sprite for player 1 and player 2's workers
+	protected override void setUnitSprite (){
+		//P1 -> Red
+		if(id == Player.PlayerId.P1) {
+			this.GetComponent<SpriteRenderer> ().sprite = redWorker;
+		}
+		//P2 -> Blue
+		else if(id == Player.PlayerId.P2) {
+			this.GetComponent<SpriteRenderer> ().sprite = blueWorker;
+		}
+	}
 
 	[Command]
 	private void CmdCheckReachedDestination(){
