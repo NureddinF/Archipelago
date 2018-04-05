@@ -43,11 +43,16 @@ public class Unit : NetworkBehaviour {
 	//Set Player ID
 	public void setPlayerId(Player.PlayerId id){
 		this.id = id;
+		setUnitSprite ();
 	}
 
 	//Get Player ID
 	public Player.PlayerId getPlayerId(){
 		return id;
+	}
+
+	protected virtual void setUnitSprite (){
+		
 	}
 
 	[Command]

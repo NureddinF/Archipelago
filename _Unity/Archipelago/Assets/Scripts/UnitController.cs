@@ -5,10 +5,6 @@ using UnityEngine.Networking;
 
 public class UnitController : NetworkBehaviour {
 
-	public GameObject redWarrior;
-	public GameObject redWorker;
-	public GameObject blueWarrior;
-	public GameObject blueWorker;
     public GameObject workerPrefab;
     public GameObject warriorPrefab;
 
