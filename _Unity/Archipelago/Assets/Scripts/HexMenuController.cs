@@ -208,6 +208,7 @@ public class HexMenuController : NetworkBehaviour {
                     go.name = b.name;
                     //Add appropriate components
                     go.AddComponent<RectTransform>();
+					textObject.AddComponent<RectTransform> ();
 					price = textObject.AddComponent<Text> ();
 					go.AddComponent<Image>();
                     go.AddComponent<Button>();
@@ -222,10 +223,10 @@ public class HexMenuController : NetworkBehaviour {
 //					textObject.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 1f);
 
 					textObject.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth, childHeight);
-					textObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-28f, (-count + 0.4f) * childHeight * go.GetComponent<RectTransform>().localScale.x - yOffset);
+					textObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-28f, go.GetComponent<RectTransform>().localScale.y + 20);
 
                     go.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth, childHeight);
-					go.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -count * childHeight * go.GetComponent<RectTransform>().localScale.x - yOffset);
+					go.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -count * 1.175f * childHeight * go.GetComponent<RectTransform>().localScale.x - yOffset);
 
 
 //					textObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-70f, count * go.GetComponent<RectTransform>().localScale.x - yOffset);
@@ -245,6 +246,7 @@ public class HexMenuController : NetworkBehaviour {
 						go.GetComponent<Button> ().onClick.AddListener (purchaseWorker);
 
 					} else {
+						Debug.Log (b.buildingId);
 						if(b.buildingId.Equals(Building.BuildingType.Barracks)){
 							price.text = "Barracks cost: "+b.getCost().ToString();
 
