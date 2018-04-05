@@ -137,6 +137,8 @@ public class Hex : NetworkBehaviour {
 		if(buildingId == Building.BuildingType.None){
 			if(buildingObject != null){
 				NetworkServer.Destroy (buildingObject);
+				building = null;
+				buildingObject = null;
 			}
 			return;
 		}
