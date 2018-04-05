@@ -219,7 +219,7 @@ public class HexMenuController : NetworkBehaviour {
                     go.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 1f);
 			
 					textObject.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth, childHeight);
-					textObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-28f, go.GetComponent<RectTransform>().localScale.y + 20);
+					textObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-50f, go.GetComponent<RectTransform>().localScale.y + 30);
 
                     go.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth, childHeight);
 					go.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -count * 1.175f * childHeight * go.GetComponent<RectTransform>().localScale.x - yOffset);
@@ -235,28 +235,26 @@ public class HexMenuController : NetworkBehaviour {
 
                     //Set its click function
 					if (selectedHex.getTileType ().Equals (HexGrid.TileType.BASE)) {
-						price.text = "Worker cost: "+b.getCost().ToString();
+						price.text = "Worker cost: " + b.getCost ().ToString ();
 //						price.verticalOverflow = VerticalWrapMode.Overflow;
 						go.GetComponent<Button> ().onClick.AddListener (purchaseWorker);
 
 					} else {
-						Debug.Log (b.buildingId);
-						if(b.buildingId.Equals(Building.BuildingType.Barracks)){
-							price.text = "Barracks cost: "+b.getCost().ToString();
-
+						if (b.buildingId.Equals (Building.BuildingType.Barracks)) {
+							price.text = "Barracks cost: " + b.getCost ().ToString ();
 						}
 
 						if (b.buildingId.Equals (Building.BuildingType.Trap)) {
 							price.text = "Trap cost: " + b.getCost ().ToString ();
 
-						} else {
+					
+						} else if (!b.buildingId.Equals (Building.BuildingType.Trap) && !b.buildingId.Equals (Building.BuildingType.Barracks)){
 							price.text = "Uprgrade cost: " + b.getCost ().ToString ();
-							go.GetComponent<Button> ().onClick.AddListener (() => {
-								CmdTileActionBuild (selectedHex.gameObject, b.buildingId);
-							});
 						}
+						go.GetComponent<Button> ().onClick.AddListener (() => {
+							CmdTileActionBuild (selectedHex.gameObject, b.buildingId);
+						});
 					}
-
                     //Increment count
 					count ++;
                 }
@@ -282,18 +280,21 @@ public class HexMenuController : NetworkBehaviour {
 					go.GetComponent<RectTransform> ().anchorMax = new Vector2 (0.5f, 1f);
 
 					textObject.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth, childHeight);
-					textObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-28f,  0.4f * childHeight * go.GetComponent<RectTransform>().localScale.x - yOffset);
+					textObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-50f, go.GetComponent<RectTransform>().localScale.y + 30);
 
 					go.GetComponent<RectTransform> ().sizeDelta = new Vector2 (childWidth, childHeight);
-					go.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0f, 0 * childHeight * go.GetComponent<RectTransform> ().localScale.x - yOffset);
+					go.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0f,  go.GetComponent<RectTransform> ().localScale.x - yOffset);
 
-					price.fontSize = 30;
-					price.color = Color.black;
-					price.font = Resources.GetBuiltinResource (typeof(Font), "Arial.ttf") as Font;
+
 
 					price.fontStyle = FontStyle.Normal;
 					if (barracks.GetComponent<Barracks> ().getIsConstructed ()) {
 						price.text = "Warrior cost: " + barracks.getCost ().ToString ();
+						price.fontSize = 35;
+						price.fontStyle = FontStyle.Bold;
+						price.color = Color.black;
+						price.font = Resources.GetBuiltinResource (typeof(Font), "Arial.ttf") as Font;
+
 						go.AddComponent<Image> ();
 						go.AddComponent<Button> ();
 						//Set its displayed sprite
