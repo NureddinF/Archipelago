@@ -86,8 +86,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitSpeed: 2
+  destinationHex: {fileID: 0}
+  initialHex: {fileID: 0}
   id: 0
   unitController: {fileID: 0}
+  blueWorker: {fileID: 21300000, guid: aace12ccfa4334f968e9567d2fc78bcb, type: 3}
+  redWorker: {fileID: 21300000, guid: 01b8f89c795c54414bbb8fa17be75629, type: 3}
 --- !u!212 &212041327185372760
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -122,7 +126,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 472f6ef8dfd134e85a9a2b5c9dde9b88, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 01b8f89c795c54414bbb8fa17be75629, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

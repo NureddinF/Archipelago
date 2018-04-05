@@ -53,6 +53,11 @@ public class HexMenuController : NetworkBehaviour {
         return selectedHex;
     }
 
+	//Set Tile Income
+	public void setTileIncome(float income) {
+		tileIncome.text = "+" + income + "/sec";
+	}
+
     //Method to set the currently selected hex
 	//Updates local players UI
     public void setSelectedHex(Hex h) {
@@ -241,7 +246,11 @@ public class HexMenuController : NetworkBehaviour {
 					} else {
 						price.text = "Cost: " + b.getCost ().ToString () + " Gold"; 
 						go.GetComponent<Button> ().onClick.AddListener (() => {
+<<<<<<< HEAD
 							CmdTileActionBuild (selectedHex.gameObject, b.buildingId);
+=======
+							CmdTileActionBuild (selectedHex.gameObject , b.buildingId, b.getCost());
+>>>>>>> master
 						});
 					}
                     //Increment count
@@ -367,7 +376,7 @@ public class HexMenuController : NetworkBehaviour {
 			RpcPurchaseWarriorSuccess (barracksHex);
 		}
 	}
-
+		
 	// Blink warrior count red on failure
 	[ClientRpc]
 	private void RpcPurchaseWarriorFailed(GameObject barracksHex){
@@ -392,16 +401,18 @@ public class HexMenuController : NetworkBehaviour {
 		yield return new WaitForSeconds(0.5f);
 		tileWarriorCount.color = Color.black;
 	}
-
-	//OnClick listener for buildings
-	void tileActionBuild(Building.BuildingType buildingId){
-		CmdTileActionBuild (selectedHex.gameObject, buildingId);
-	}
 		
 	// Command to build a building
 	[Command]
-	void CmdTileActionBuild(GameObject tile, Building.BuildingType buildingId){
-		tile.GetComponent<Hex> ().CmdSetBuilding (buildingId);
+	void CmdTileActionBuild(GameObject tile, Building.BuildingType buildingId, float cost){
+		float totalGold = GetComponent<Player> ().getCurrentMoney ();
+		if(totalGold < cost) {
+			//Can't afford upgrade, do nothing
+		}
+		else {
+			tile.GetComponent<Hex> ().CmdSetBuilding (buildingId);
+			GetComponent<Player> ().removeMoney (cost);
+		}
 		//Refresh hex menu's values to display these changes
 		RpcRefreshUIValues ();
 	}

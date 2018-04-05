@@ -29,6 +29,8 @@ public class Player : NetworkBehaviour{
     private Text numOfWarriorsOwned;
 	public Sprite p1TerritorySprite;
 	public Sprite p2TerritorySprite;
+	public Sprite p1ToolBar;
+	public Sprite p2ToolBar;
 
     // State variables
     private float startTime;
@@ -119,6 +121,12 @@ public class Player : NetworkBehaviour{
 
     public void removeMoney(float amount) { currentMoney -= amount; }
 
+	//Add to current totalTitleIncome
+	public void addToTotalTileIncome(float amount) {
+		totalTileIncome += amount;
+	}
+
+	//function not taking into account when a tile is upgraded
     // Generates income in discrete chunks rather than each frame
     public void generateIncomeDiscrete(){
         if (Time.time > timeFrame + startTime){
@@ -138,6 +146,12 @@ public class Player : NetworkBehaviour{
         totalTilesOwned += 1;
         this.GetComponent<HexMenuController>().RpcRefreshUIValues();
     }
+	//Incremnets total resource when there is a building
+	public void builtTile(Building building){
+		totalTileIncome += building.getTileIncomeAfterBuild();
+
+
+	}
 
 	//TODO: Multiplayer
 	//Lose a Tile
@@ -145,6 +159,12 @@ public class Player : NetworkBehaviour{
         totalTileIncome -= tile.getHex().getTileIncome();
         totalTilesOwned -= 1;
     }
+
+	public void removeBuildIncome(Building building){
+		//decremnets total income by the income building was adding, whena building is removed
+		totalTileIncome -= building.getTileIncomeAfterBuild ();
+
+	}
 
 	// Display loss screen for players who have not won when game ends
 	private void loseGame(){
@@ -204,9 +224,11 @@ public class Player : NetworkBehaviour{
 			//TODO: Find a dynamic way to set camera position that accounts for map edges and panning limits
 			cameraStartingPos = new Vector3 (16,-16,-10);
 			territoryIcon.GetComponent<Image> ().sprite = p1TerritorySprite;
+			stateMenu.GetComponent<Image> ().sprite = p1ToolBar;
 		} else if (pid == PlayerId.P2){
 			cameraStartingPos = new Vector3 (86,-16,-10);
 			territoryIcon.GetComponent<Image> ().sprite = p2TerritorySprite;
+			stateMenu.GetComponent<Image> ().sprite = p2ToolBar;
 		}
 		Camera.main.transform.position = cameraStartingPos;
 

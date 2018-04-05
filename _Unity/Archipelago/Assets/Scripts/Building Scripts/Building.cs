@@ -6,8 +6,8 @@ using UnityEngine.Networking;
 public class Building : NetworkBehaviour{
 
     // Building parameters
-    public float cost = 3;
-    public float tileIncomeAfterBuild = 1;
+    public float cost;
+    public float tileIncomeAfterBuild;
     private float currentTileIncome;
     public List<HexGrid.TileType> tilesAssociatedWith;
 
@@ -79,6 +79,10 @@ public class Building : NetworkBehaviour{
 
     public void setCurrentTileIncome(float currentTileIncome) { 
 		this.currentTileIncome = currentTileIncome; 
+		//updates the sidebar Text Field but doesn't update income generation or its text field.
+		hexAssociatedWith.setTileIncome (currentTileIncome);
+
+
 	}
 
     public float getTotalBuildTime() { 
@@ -147,7 +151,7 @@ public class Building : NetworkBehaviour{
 		else {
 			hexAssociatedWith.RpcDisplayTrap ();
 		}
-
+	
 		//update player ui to display new options
 		FindObjectOfType<HexMenuController> ().RpcRefreshUIValues ();
 	}

@@ -330,6 +330,7 @@ MonoBehaviour:
   p2CaptureBorder: {fileID: 21300000, guid: cc92ddfc1ccea09489c73fcd86605303, type: 3}
   p1CaptureTile: {fileID: 21300000, guid: 5334077c27e7c4e3fa31dd05315163a7, type: 3}
   p2CaptureTile: {fileID: 21300000, guid: 9969aafd6dc2a45ea9865f43a411ad4c, type: 3}
+  neutralCaptureTile: {fileID: 0}
   captureSpeedPerUnit: 1
   neutralResetSpeed: 0.25
   totalCaptureCost: 10
@@ -483,7 +484,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 994b0b397088d4bcf969265b668af5e8, type: 3}
+  m_Sprite: {fileID: 21300000, guid: df9607d7da2a14058b37f366e5997268, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

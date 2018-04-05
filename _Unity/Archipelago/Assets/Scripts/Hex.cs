@@ -136,7 +136,10 @@ public class Hex : NetworkBehaviour {
 		// Check if this is removing a building
 		if(buildingId == Building.BuildingType.None){
 			if(buildingObject != null){
+				// Remove building, clean up internal state
 				NetworkServer.Destroy (buildingObject);
+				building = null;
+				buildingObject = null;
 			}
 			return;
 		}
@@ -256,6 +259,10 @@ public class Hex : NetworkBehaviour {
 	[ClientRpc]
 	public void RpcDisplayBuildingSprite(){
 		GetComponent<SpriteRenderer> ().sprite = building.getBuildingSprite (hexOwner);
+		//gets the player
+		Player player = GetComponent<CapturableTile> ().getPlayer (hexOwner);
+		//calls built tile to incremnet the resource count
+		player.builtTile (building);
 	}
 
 
@@ -319,7 +326,9 @@ public class Hex : NetworkBehaviour {
 
 	//Set Tile Income
     public void setTileIncome(float amount) { 
-		this.tileIncome = amount;
+		this.tileIncome = amount;			
+		//update players income generation
+
 	}
 
 	//Get Tile Income

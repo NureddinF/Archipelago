@@ -141,7 +141,12 @@ public class CapturableTile: NetworkBehaviour{
 		} else if (newAmountCaptured * amountCaptured < 0) {
 			//Tile was neutralised
 			//Update theplayer income
-			loseTile (pid);
+			//Lose tile called on the other player to reduce their income
+			if (pid.Equals (Player.PlayerId.P1)) {
+				loseTile (Player.PlayerId.P2);
+			} else if(pid.Equals (Player.PlayerId.P2)){
+				loseTile (Player.PlayerId.P1);
+			}
 			//update the map on all the clients
 			RpcCaptureTile (Player.PlayerId.NEUTRAL,pid);
 			switchedToNeutral = true;
@@ -154,7 +159,7 @@ public class CapturableTile: NetworkBehaviour{
 	//////////////////////////////// Getters/Setters /////////////////////////////////////////////
 
 	// Get the player object for the owner of this tile
-	private Player getPlayer(Player.PlayerId pid){
+	public Player getPlayer(Player.PlayerId pid){
 		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
 		for(int i=0; i<players.Length; i++){
 			Player player = players[i].GetComponentInChildren<Player>();
@@ -230,10 +235,18 @@ public class CapturableTile: NetworkBehaviour{
 		if (!isServer) {
 			return;
 		}
-
+		thisHex.setHexOwner (Player.PlayerId.NEUTRAL);
+		Building building = this.getHex ().getBuilding();
 		Player player = getPlayer (pid);
 		if (player != null) {
 			player.removeTile (this);
+		}
+		//Cehcks if there was a building on the tile
+		if (building != null) {
+			//removes the income of tile
+			player.removeBuildIncome (building);
+			// Destroy building
+			thisHex.CmdSetBuilding (Building.BuildingType.None);
 		}
 	}
 

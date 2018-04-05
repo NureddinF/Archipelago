@@ -9,6 +9,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+//        // Enabling multidex support.
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -29,4 +32,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     compileOnly 'com.google.android.wearable:wearable:2.2.0'
     implementation project(':Archiplegao_U')
+    compile 'com.android.support:multidex:1.0.3'
 }
