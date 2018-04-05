@@ -78,7 +78,7 @@ public class RegisterActivity extends Activity {
 		File file = new File(getCacheDir(), "/info.txt");
 		try {
 			FileOutputStream fos = new FileOutputStream(file);
-			fos.write((name + "##" + pass).getBytes());
+			fos.write((name + "##" + pass + "##"+email).getBytes());
 			fos.close();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

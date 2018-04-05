@@ -28,6 +28,15 @@
 
         </View>
 
+        <TextView
+            android:id="@+id/show"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:text=" How to Play ? "
+            android:textSize="18sp" />
+
         <ImageButton
             android:id="@+id/setting"
             android:layout_width="wrap_content"
