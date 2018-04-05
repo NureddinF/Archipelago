@@ -58,7 +58,7 @@ MonoBehaviour:
   buildingId: 5
   totalBuildTime: 1
   buildSpeedPerWorker: 1
-  menuIconSprite: {fileID: 21300000, guid: 09bd9486a313c4e3eb9f6cd2d96322e6, type: 3}
+  menuIconSprite: {fileID: 21300000, guid: da5adf2b3f965459993f47cbd9b6dac6, type: 3}
   buildingBlueSprite: {fileID: 21300000, guid: bb9802ed0ca1845fc9393267c508c252, type: 3}
   buildingRedSprite: {fileID: 21300000, guid: 8a1e050bff80843138603d89066647f2, type: 3}
   constructionBlueIconSprite: {fileID: 21300000, guid: 759b25967804a405bb45226a000ae6bd,
