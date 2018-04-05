@@ -90,7 +90,7 @@ MonoBehaviour:
   initialHex: {fileID: 0}
   id: 0
   unitController: {fileID: 0}
-  blueWorker: {fileID: 21300000, guid: aace12ccfa4334f968e9567d2fc78bcb, type: 3}
+  blueWorker: {fileID: 21300000, guid: 91b1ab9e16b424ec5b80dcbc71937ba1, type: 3}
   redWorker: {fileID: 21300000, guid: 01b8f89c795c54414bbb8fa17be75629, type: 3}
 --- !u!212 &212041327185372760
 SpriteRenderer:
