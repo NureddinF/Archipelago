@@ -16,15 +16,16 @@ public class HexMenuController : NetworkBehaviour {
     private Text tileWarriorCount;
     private Image tileActionBox;
 	private Text price;
+	private Image icon;
 
 	public float workerCost = 25;
 	public float warriorCost = 50;
-    
 
     //Parameter to store the current hex that the menu is displaying for.
     private Hex selectedHex;
 
     private void Start(){
+		icon = GameObject.Find ("testImg").GetComponent<Image>();
 
     }
 
@@ -204,7 +205,7 @@ public class HexMenuController : NetworkBehaviour {
                 {
 					Debug.Log (b);
                     //New gameobject
-                    GameObject go = new GameObject();
+					GameObject go = new GameObject();
 					GameObject textObject = new GameObject ();
                     //Set its parent
                     go.transform.parent = tileActionBox.transform;
@@ -215,6 +216,7 @@ public class HexMenuController : NetworkBehaviour {
                     go.AddComponent<RectTransform>();
 					textObject.AddComponent<RectTransform> ();
 					price = textObject.AddComponent<Text> ();
+					//icon = go.AddComponent<Image>();
 					go.AddComponent<Image>();
                     go.AddComponent<Button>();
 
@@ -224,33 +226,27 @@ public class HexMenuController : NetworkBehaviour {
                     go.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 1f);
 			
 					textObject.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth, childHeight);
-					textObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(30f, go.GetComponent<RectTransform>().localScale.x - 135);
+					textObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(150f, go.GetComponent<RectTransform>().localScale.x - 110);
 
                     go.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth, childHeight);
 					go.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -count * childHeight * go.GetComponent<RectTransform>().localScale.x - yOffset);
 
 					//Set its displayed sprite
 					go.GetComponent<Image>().sprite = b.getMenuIconSprite();
-					price.fontSize = 35;
+					price.fontSize = 55;
 					price.fontStyle = FontStyle.Bold;
-					price.color = Color.black;
+					price.color = new Color (0, 0.75f, 0);
 					price.font = Resources.GetBuiltinResource (typeof(Font), "Arial.ttf") as Font;
-
-//					price.fontStyle = FontStyle.Normal;
 
                     //Set its click function
 					if (selectedHex.getTileType ().Equals (HexGrid.TileType.BASE)) {
-						price.text = "Worker cost: " + warriorCost.ToString ()+" Gold";
+						price.text = warriorCost.ToString ();
 						go.GetComponent<Button> ().onClick.AddListener (purchaseWorker);
 
 					} else {
-						price.text = "Cost: " + b.getCost ().ToString () + " Gold"; 
+						price.text = b.getCost ().ToString (); 
 						go.GetComponent<Button> ().onClick.AddListener (() => {
-<<<<<<< HEAD
-							CmdTileActionBuild (selectedHex.gameObject, b.buildingId);
-=======
 							CmdTileActionBuild (selectedHex.gameObject , b.buildingId, b.getCost());
->>>>>>> master
 						});
 					}
                     //Increment count
@@ -278,7 +274,7 @@ public class HexMenuController : NetworkBehaviour {
 					go.GetComponent<RectTransform> ().anchorMax = new Vector2 (0.5f, 1f);
 
 					textObject.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth, childHeight);
-					textObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-50f, go.GetComponent<RectTransform>().localScale.y + 30);
+					textObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(150f, go.GetComponent<RectTransform>().localScale.x - 110);
 
 					go.GetComponent<RectTransform> ().sizeDelta = new Vector2 (childWidth, childHeight);
 					go.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0f,  go.GetComponent<RectTransform> ().localScale.x - yOffset);
@@ -287,17 +283,18 @@ public class HexMenuController : NetworkBehaviour {
 
 					price.fontStyle = FontStyle.Normal;
 					if (barracks.GetComponent<Barracks> ().getIsConstructed ()) {
-						price.text = "Warrior cost: " + barracks.getCost ().ToString ();
-						price.fontSize = 35;
+						price.text = warriorCost.ToString ();
+						price.fontSize = 55;
 						price.fontStyle = FontStyle.Bold;
-						price.color = Color.black;
+						price.color = new Color (0, 0.75f, 0);
 						price.font = Resources.GetBuiltinResource (typeof(Font), "Arial.ttf") as Font;
 
 						go.AddComponent<Image> ();
 						go.AddComponent<Button> ();
+
 						//Set its displayed sprite
 
-						go.GetComponent<Image> ().sprite = barracks.GetComponent<Barracks> ().getpurchaseWarriorSprite ();
+						go.GetComponent<Image>().sprite = barracks.GetComponent<Barracks> ().getpurchaseWarriorSprite ();
 						go.GetComponent<Button> ().onClick.AddListener (purchasWarrior);
 					}
 				}
@@ -408,6 +405,7 @@ public class HexMenuController : NetworkBehaviour {
 		float totalGold = GetComponent<Player> ().getCurrentMoney ();
 		if(totalGold < cost) {
 			//Can't afford upgrade, do nothing
+			RpcActionBuildFailed ();
 		}
 		else {
 			tile.GetComponent<Hex> ().CmdSetBuilding (buildingId);
@@ -415,5 +413,20 @@ public class HexMenuController : NetworkBehaviour {
 		}
 		//Refresh hex menu's values to display these changes
 		RpcRefreshUIValues ();
+	}
+
+	[ClientRpc]
+	private void RpcActionBuildFailed(){
+		if (icon != null) {
+			Debug.Log (icon.color);
+			Color normal = icon.color;
+			StartCoroutine (ActionBuildSuccess (normal));
+		}
+	}
+
+	IEnumerator ActionBuildSuccess(Color color){
+		icon.color = Color.red;
+		yield return new WaitForSeconds (0.5f);
+		icon.color = color;
 	}
 }
