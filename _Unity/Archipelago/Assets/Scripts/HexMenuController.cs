@@ -190,6 +190,10 @@ public class HexMenuController : NetworkBehaviour {
             float childWidth = percentageWidth * parentWidth;
             float childHeight = 0.65f * childWidth;
 
+			//calculates the size text box should be so it is responsive
+			float textWidth = percentageWidth * childWidth;
+			float textHeight = 0.55f * textWidth;
+
             // The distance between each menu items as well as the initial offset from top of action box
             float yOffset = 35f;
             //If the selected hex does not have a building and player owns the hex, then display build options
@@ -214,31 +218,38 @@ public class HexMenuController : NetworkBehaviour {
                     go.name = b.name;
                     //Add appropriate components
                     go.AddComponent<RectTransform>();
-					textObject.AddComponent<RectTransform> ();
 					price = textObject.AddComponent<Text> ();
+
 					//icon = go.AddComponent<Image>();
 					go.AddComponent<Image>();
                     go.AddComponent<Button>();
-
                     //Set its rect transform properties
                     go.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
                     go.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 1f);
                     go.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 1f);
-			
-					textObject.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth, childHeight);
-					textObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(150f, go.GetComponent<RectTransform>().localScale.x - 110);
 
-                    go.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth, childHeight);
+					//sets size of text box and sets it to the bottom left of parent
+					textObject.GetComponent<RectTransform>().sizeDelta = new Vector2(textWidth, textHeight);
+					textObject.GetComponent<RectTransform>().pivot = new Vector2(1f,0f);
+					textObject.GetComponent<RectTransform>().anchorMin = new Vector2(1f, 0f);
+					textObject.GetComponent<RectTransform>().anchorMax = new Vector2(1f, 0f);
+
+					go.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth, childHeight);
 					go.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -count * childHeight * go.GetComponent<RectTransform>().localScale.x - yOffset);
 
 					//Set its displayed sprite
 					go.GetComponent<Image>().sprite = b.getMenuIconSprite();
+
+					//sets the font,size,stile of text
 					price.fontSize = 55;
 					price.fontStyle = FontStyle.Bold;
 					price.color = new Color (0, 0.75f, 0);
 					price.font = Resources.GetBuiltinResource (typeof(Font), "Arial.ttf") as Font;
+					//aligns it to the middle center of text box
+					price.alignment = TextAnchor.MiddleCenter;
 
                     //Set its click function
+					//checks if its a base first to bring up the purchase worker button
 					if (selectedHex.getTileType ().Equals (HexGrid.TileType.BASE)) {
 						price.text = warriorCost.ToString ();
 						go.GetComponent<Button> ().onClick.AddListener (purchaseWorker);
@@ -273,8 +284,13 @@ public class HexMenuController : NetworkBehaviour {
 					go.GetComponent<RectTransform> ().anchorMin = new Vector2 (0.5f, 1f);
 					go.GetComponent<RectTransform> ().anchorMax = new Vector2 (0.5f, 1f);
 
-					textObject.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth, childHeight);
-					textObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(150f, go.GetComponent<RectTransform>().localScale.x - 110);
+					//sets the text object to the bottom left of its parent component
+					textObject.GetComponent<RectTransform>().pivot = new Vector2(1f,0f);
+					textObject.GetComponent<RectTransform>().anchorMin = new Vector2(1f, 0f);
+					textObject.GetComponent<RectTransform>().anchorMax = new Vector2(1f, 0f);
+
+					//sets the size of the text box
+					textObject.GetComponent<RectTransform>().sizeDelta = new Vector2(textWidth, textHeight);
 
 					go.GetComponent<RectTransform> ().sizeDelta = new Vector2 (childWidth, childHeight);
 					go.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0f,  go.GetComponent<RectTransform> ().localScale.x - yOffset);
@@ -283,11 +299,14 @@ public class HexMenuController : NetworkBehaviour {
 
 					price.fontStyle = FontStyle.Normal;
 					if (barracks.GetComponent<Barracks> ().getIsConstructed ()) {
+						//Sets the text component for price of warriors
 						price.text = warriorCost.ToString ();
 						price.fontSize = 55;
 						price.fontStyle = FontStyle.Bold;
 						price.color = new Color (0, 0.75f, 0);
 						price.font = Resources.GetBuiltinResource (typeof(Font), "Arial.ttf") as Font;
+						//aligns the text to the middle center of text object
+						price.alignment = TextAnchor.MiddleCenter;
 
 						go.AddComponent<Image> ();
 						go.AddComponent<Button> ();
