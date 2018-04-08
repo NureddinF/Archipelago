@@ -108,7 +108,7 @@ public class CapturableTile: NetworkBehaviour{
 				updateTileCapture (Player.PlayerId.P1, newAmountCaptured);
 			} else {
 				//Defending a tile
-				resetCapture(Player.PlayerId.P1, totalCaptureCost);
+				resetCapture (Player.PlayerId.P1, totalCaptureCost);
 			}
 		} 
 		//Checks if Player 2 has one or more units on the tile, Owns a tile next to it, and if they don't own it already
@@ -119,11 +119,16 @@ public class CapturableTile: NetworkBehaviour{
 				updateTileCapture (Player.PlayerId.P2, newAmountCaptured);
 			} else {
 				//Defending a tile
-				resetCapture(Player.PlayerId.P2, -totalCaptureCost);
+				resetCapture (Player.PlayerId.P2, -totalCaptureCost);
 			}
-		} else if (numP1UnitsOnHex == 0 && numP2UnitsOnHex == 0 && thisHex.getHexOwner () == Player.PlayerId.NEUTRAL){
+		} else if (numP1UnitsOnHex == 0 && numP2UnitsOnHex == 0 && thisHex.getHexOwner () == Player.PlayerId.NEUTRAL) {
 			// Capture amount degrades towards neutral
 			isCapturing = !updateTileCapture (Player.PlayerId.NEUTRAL, newAmountCaptured);
+		} else {
+			Debug.LogWarning ("CapturableTile: progressTileCapture: ");
+			isCapturing = false;
+			amountCaptured = Mathf.Sign (amountCaptured) * totalCaptureCost;
+			RpcDisableCaptureBorder ();
 		}
 	}
 
@@ -355,6 +360,11 @@ public class CapturableTile: NetworkBehaviour{
 				return;
 			}
 		}
+	}
+
+	[ClientRpc]
+	public void RpcDisableCaptureBorder(){
+		captureBorder.enabled = false;
 	}
 
 	private void clientUpdate(){
