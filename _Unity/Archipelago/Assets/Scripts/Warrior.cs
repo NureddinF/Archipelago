@@ -5,6 +5,9 @@ using UnityEngine.Networking;
 
 //Subclass of unity for a warrior unit
 public class Warrior : Unit{
+
+	public Sprite blueWarrior;
+	public Sprite redWarrior;
 	
     //Every frame
     void Update(){
@@ -23,6 +26,18 @@ public class Warrior : Unit{
 		CmdCheckReachedDestination ();
         
     }
+
+	//Sets the sprite for player 1 and player 2's warriors
+	protected override void setUnitSprite (){
+		//P1 -> Red
+		if(id == Player.PlayerId.P1) {
+			this.GetComponent<SpriteRenderer> ().sprite = redWarrior;
+		}
+		//P2 -> Blue
+		else if(id == Player.PlayerId.P2) {
+			this.GetComponent<SpriteRenderer> ().sprite = blueWarrior;
+		}
+	}
 
 
 	[Command]

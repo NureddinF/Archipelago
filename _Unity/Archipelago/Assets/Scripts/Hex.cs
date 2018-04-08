@@ -63,6 +63,11 @@ public class Hex : NetworkBehaviour {
 	private UnitController p1UnitCtrl;
 	private UnitController p2UnitCtrl;
 
+	// Sprites for unit icons
+	public Sprite p1UnitIcon;
+	public Sprite p2UnitIcon;
+	private Image hexUnitIcon;
+
 	//////////////////////////////// MonoBehaviour Methods ////////////////////////////////////////
 
     //Calls once on object creation
@@ -94,6 +99,7 @@ public class Hex : NetworkBehaviour {
             hexFightingBarRed = gameObject.transform.Find("Canvas/tileFightingBar/Red").GetComponent<Image>();
             hexFightingBarBlue = gameObject.transform.Find("Canvas/tileFightingBar/Blue").GetComponent<Image>();
             hexFightingIcon = gameObject.transform.Find("Canvas/tileFightingIcon").GetComponent<Image>();
+			hexUnitIcon = gameObject.transform.Find("Canvas/tileUnitIcon").GetComponent<Image>();
         }
 
         //Set it's current sprite to the standard hex sprite
@@ -136,7 +142,10 @@ public class Hex : NetworkBehaviour {
 		// Check if this is removing a building
 		if(buildingId == Building.BuildingType.None){
 			if(buildingObject != null){
+				// Remove building, clean up internal state
 				NetworkServer.Destroy (buildingObject);
+				building = null;
+				buildingObject = null;
 			}
 			return;
 		}
@@ -278,6 +287,20 @@ public class Hex : NetworkBehaviour {
     }
 		
 
+	[ClientRpc]
+	public void RpcEnableUnitIcon(Player.PlayerId player){
+		if (player == Player.PlayerId.P1) {
+			hexUnitIcon.sprite = p1UnitIcon;
+		} else if (player == Player.PlayerId.P2){
+			hexUnitIcon.sprite = p2UnitIcon;
+		}
+		hexUnitIcon.enabled = true;
+	}
+
+	[ClientRpc]
+	public void RpcDisableUnitIcon(){
+		hexUnitIcon.enabled = false;
+	}
 
 	//////////////////////////////// Getters and setters////////////////////////////////////////////
     
@@ -319,6 +342,7 @@ public class Hex : NetworkBehaviour {
 	//Set Hex Owner
     public void setHexOwner(Player.PlayerId pID) { 
 		this.hexOwner = pID; 
+		notifyNeighborsOfChange ();
 	}
 
 	//Set Tile Income
@@ -349,6 +373,20 @@ public class Hex : NetworkBehaviour {
 	}
 		
 	///////////////////////////////////////// Custom Methods ///////////////////////////////////////////
+
+	private void notifyNeighborsOfChange(){
+		List<GameObject> neighbors =  getNeighbors ();
+		foreach (GameObject neighor in neighbors) {
+			neighor.GetComponent<Hex>().notify (hexOwner);
+		}
+	}
+		
+	private void notify(Player.PlayerId adjacentHexOwner){
+		CapturableTile tile = GetComponent<CapturableTile> ();
+		if (tile != null) {
+			tile.notify (adjacentHexOwner);
+		}
+	}
 
 	//Do Damage, Performs damage to both factions and updates units, health, and damage respectively
 	public void doDamage() {

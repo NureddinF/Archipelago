@@ -29,6 +29,8 @@ public class Player : NetworkBehaviour{
     private Text numOfWarriorsOwned;
 	public Sprite p1TerritorySprite;
 	public Sprite p2TerritorySprite;
+	public Sprite p1ToolBar;
+	public Sprite p2ToolBar;
 
     // State variables
     private float startTime;
@@ -222,9 +224,11 @@ public class Player : NetworkBehaviour{
 			//TODO: Find a dynamic way to set camera position that accounts for map edges and panning limits
 			cameraStartingPos = new Vector3 (16,-16,-10);
 			territoryIcon.GetComponent<Image> ().sprite = p1TerritorySprite;
+			stateMenu.GetComponent<Image> ().sprite = p1ToolBar;
 		} else if (pid == PlayerId.P2){
 			cameraStartingPos = new Vector3 (86,-16,-10);
 			territoryIcon.GetComponent<Image> ().sprite = p2TerritorySprite;
+			stateMenu.GetComponent<Image> ().sprite = p2ToolBar;
 		}
 		Camera.main.transform.position = cameraStartingPos;
 

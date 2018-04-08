@@ -114,6 +114,8 @@ MonoBehaviour:
   stateMenu: {fileID: 0}
   p1TerritorySprite: {fileID: 21300000, guid: 180b765ac0d5f984389222ac88688ed9, type: 3}
   p2TerritorySprite: {fileID: 21300000, guid: b7d4550aab637074a919204e0092569e, type: 3}
+  p1ToolBar: {fileID: 21300000, guid: 90c6b7d0052a2c94c9626849b428edee, type: 3}
+  p2ToolBar: {fileID: 21300000, guid: 11dbf2a27e1cea342a9b1c401afc7f1b, type: 3}
 --- !u!114 &114901735811757312
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -125,10 +127,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72467bbfd3e45ee41abd1c738afd289e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  redWarrior: {fileID: 0}
-  redWorker: {fileID: 0}
-  blueWarrior: {fileID: 0}
-  blueWorker: {fileID: 0}
   workerPrefab: {fileID: 1940432781439648, guid: 12fd2b2754f01574685cf5485c3070e0,
     type: 2}
   warriorPrefab: {fileID: 1113874209341802, guid: a1822ac9a34268b499b18513cc5d5c72,
@@ -149,3 +147,4 @@ MonoBehaviour:
   hexMenu: {fileID: 0}
   workerCost: 25
   warriorCost: 50
+  go: {fileID: 0}

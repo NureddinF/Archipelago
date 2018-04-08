@@ -108,7 +108,7 @@ public class CapturableTile: NetworkBehaviour{
 				updateTileCapture (Player.PlayerId.P1, newAmountCaptured);
 			} else {
 				//Defending a tile
-				resetCapture(Player.PlayerId.P1, totalCaptureCost);
+				resetCapture (Player.PlayerId.P1, totalCaptureCost);
 			}
 		} 
 		//Checks if Player 2 has one or more units on the tile, Owns a tile next to it, and if they don't own it already
@@ -119,11 +119,16 @@ public class CapturableTile: NetworkBehaviour{
 				updateTileCapture (Player.PlayerId.P2, newAmountCaptured);
 			} else {
 				//Defending a tile
-				resetCapture(Player.PlayerId.P2, -totalCaptureCost);
+				resetCapture (Player.PlayerId.P2, -totalCaptureCost);
 			}
-		} else if (numP1UnitsOnHex == 0 && numP2UnitsOnHex == 0 && thisHex.getHexOwner () == Player.PlayerId.NEUTRAL){
+		} else if (numP1UnitsOnHex == 0 && numP2UnitsOnHex == 0 && thisHex.getHexOwner () == Player.PlayerId.NEUTRAL) {
 			// Capture amount degrades towards neutral
 			isCapturing = !updateTileCapture (Player.PlayerId.NEUTRAL, newAmountCaptured);
+		} else {
+			Debug.LogWarning ("CapturableTile: progressTileCapture: ");
+			isCapturing = false;
+			amountCaptured = Mathf.Sign (amountCaptured) * totalCaptureCost;
+			RpcDisableCaptureBorder ();
 		}
 	}
 
@@ -141,11 +146,10 @@ public class CapturableTile: NetworkBehaviour{
 		} else if (newAmountCaptured * amountCaptured < 0) {
 			//Tile was neutralised
 			//Update theplayer income
-			//Lose tile called on the other player
+			//Lose tile called on the other player to reduce their income
 			if (pid.Equals (Player.PlayerId.P1)) {
-				
 				loseTile (Player.PlayerId.P2);
-			} else {
+			} else if(pid.Equals (Player.PlayerId.P2)){
 				loseTile (Player.PlayerId.P1);
 			}
 			//update the map on all the clients
@@ -156,6 +160,32 @@ public class CapturableTile: NetworkBehaviour{
 		amountCaptured = newAmountCaptured;
 		return switchedToNeutral;
 	}
+
+	public void notify(Player.PlayerId adjacentHexOwner){
+
+		if (thisHex.hexOwner == adjacentHexOwner) {
+			// player already owns this hex so they aren't going to be capturing it
+			return;
+		}
+
+		Player.PlayerId capturingPlayer;
+		if (numP1UnitsOnHex > 0 && numP2UnitsOnHex == 0) {
+			capturingPlayer = Player.PlayerId.P1;
+		} else if (numP1UnitsOnHex == 0 && numP2UnitsOnHex > 0) {
+			capturingPlayer = Player.PlayerId.P2;
+		} else {
+			// Either both players have units on the hex (fighting) or neither do.
+			// In either case, don't start capturing it
+			return;
+		}
+		if (GetComponent<Hex>().getHexOwner() != capturingPlayer && 
+				!isCapturing && 
+				GetComponent<Hex>().getTileType() != HexGrid.TileType.BASE){
+			isCapturing = true;
+			RpcStartCapture (capturingPlayer);
+		}
+	}
+
 
 	//////////////////////////////// Getters/Setters /////////////////////////////////////////////
 
@@ -196,11 +226,20 @@ public class CapturableTile: NetworkBehaviour{
 			
 		if (player == Player.PlayerId.P1) {
 			numP1UnitsOnHex += numUnits;
+			if (numP2UnitsOnHex == 0) {
+				thisHex.RpcEnableUnitIcon (player);
+			}
 		} else if(player == Player.PlayerId.P2){
 			numP2UnitsOnHex += numUnits;
+			if (numP1UnitsOnHex == 0) {
+				thisHex.RpcEnableUnitIcon (player);
+			}
 		}
 
-		if (GetComponent<Hex>().getHexOwner() != player && !isCapturing) {
+		if (GetComponent<Hex>().getHexOwner() != player && 
+				!isCapturing && 
+				GetComponent<Hex>().getTileType() != HexGrid.TileType.BASE &&
+				thisHex.hasOwnedNeighbor (player) ){
 			isCapturing = true;
 			RpcStartCapture (player);
 		}
@@ -213,8 +252,22 @@ public class CapturableTile: NetworkBehaviour{
 		}
 		if (player == Player.PlayerId.P1) {
 			numP1UnitsOnHex -= numUnits;
+			if(numP1UnitsOnHex == 0){
+				if(numP2UnitsOnHex == 0){
+					thisHex.RpcDisableUnitIcon ();
+				} else {
+					thisHex.RpcEnableUnitIcon (Player.PlayerId.P2);
+				}
+			}
 		} else if(player == Player.PlayerId.P2){
 			numP2UnitsOnHex -= numUnits;
+			if(numP2UnitsOnHex == 0){
+				if(numP1UnitsOnHex == 0){
+					thisHex.RpcDisableUnitIcon ();
+				} else {
+					thisHex.RpcEnableUnitIcon (Player.PlayerId.P1);
+				}
+			}
 		}
 	}
 
@@ -236,7 +289,7 @@ public class CapturableTile: NetworkBehaviour{
 		if (!isServer) {
 			return;
 		}
-
+		thisHex.setHexOwner (Player.PlayerId.NEUTRAL);
 		Building building = this.getHex ().getBuilding();
 		Player player = getPlayer (pid);
 		if (player != null) {
@@ -246,6 +299,8 @@ public class CapturableTile: NetworkBehaviour{
 		if (building != null) {
 			//removes the income of tile
 			player.removeBuildIncome (building);
+			// Destroy building
+			thisHex.CmdSetBuilding (Building.BuildingType.None);
 		}
 	}
 
@@ -305,6 +360,11 @@ public class CapturableTile: NetworkBehaviour{
 				return;
 			}
 		}
+	}
+
+	[ClientRpc]
+	public void RpcDisableCaptureBorder(){
+		captureBorder.enabled = false;
 	}
 
 	private void clientUpdate(){
