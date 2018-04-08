@@ -55,6 +55,7 @@ MonoBehaviour:
   ShowLobbyGUI: 0
   PlayerUiPrefab: {fileID: 1623393845467610, guid: cdca2da8601774f2692ed79a63240a80,
     type: 2}
+  pid: 0
 --- !u!114 &114516675006919598
 MonoBehaviour:
   m_ObjectHideFlags: 1

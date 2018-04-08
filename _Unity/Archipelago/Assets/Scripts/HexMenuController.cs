@@ -16,7 +16,6 @@ public class HexMenuController : NetworkBehaviour {
     private Text tileWarriorCount;
     private Image tileActionBox;
 	private Text[] price = new Text[3];
-	private bool[] whichText = {false,false,false};
 
 	public float workerCost = 25;
 	public float warriorCost = 50;

@@ -53,7 +53,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f0caae8e7e89b640b2e800c01c04f35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitSpeed: 10
+  unitSpeed: 3
   destinationHex: {fileID: 0}
   initialHex: {fileID: 0}
   id: 0
