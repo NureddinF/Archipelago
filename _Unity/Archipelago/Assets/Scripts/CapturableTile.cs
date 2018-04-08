@@ -156,6 +156,32 @@ public class CapturableTile: NetworkBehaviour{
 		return switchedToNeutral;
 	}
 
+	public void notify(Player.PlayerId adjacentHexOwner){
+
+		if (thisHex.hexOwner == adjacentHexOwner) {
+			// player already owns this hex so they aren't going to be capturing it
+			return;
+		}
+
+		Player.PlayerId capturingPlayer;
+		if (numP1UnitsOnHex > 0 && numP2UnitsOnHex == 0) {
+			capturingPlayer = Player.PlayerId.P1;
+		} else if (numP1UnitsOnHex == 0 && numP2UnitsOnHex > 0) {
+			capturingPlayer = Player.PlayerId.P2;
+		} else {
+			// Either both players have units on the hex (fighting) or neither do.
+			// In either case, don't start capturing it
+			return;
+		}
+		if (GetComponent<Hex>().getHexOwner() != capturingPlayer && 
+				!isCapturing && 
+				GetComponent<Hex>().getTileType() != HexGrid.TileType.BASE){
+			isCapturing = true;
+			RpcStartCapture (capturingPlayer);
+		}
+	}
+
+
 	//////////////////////////////// Getters/Setters /////////////////////////////////////////////
 
 	// Get the player object for the owner of this tile
@@ -205,7 +231,10 @@ public class CapturableTile: NetworkBehaviour{
 			}
 		}
 
-		if (GetComponent<Hex>().getHexOwner() != player && !isCapturing) {
+		if (GetComponent<Hex>().getHexOwner() != player && 
+				!isCapturing && 
+				GetComponent<Hex>().getTileType() != HexGrid.TileType.BASE &&
+				thisHex.hasOwnedNeighbor (player) ){
 			isCapturing = true;
 			RpcStartCapture (player);
 		}
