@@ -16,7 +16,6 @@ public class HexMenuController : NetworkBehaviour {
     private Text tileWarriorCount;
     private Image tileActionBox;
 	private Text[] price = new Text[3];
-	private bool[] whichText = {false,false,false};
 
 	public float workerCost = 25;
 	public float warriorCost = 50;
@@ -252,7 +251,7 @@ public class HexMenuController : NetworkBehaviour {
                     //Set its click function
 					//checks if its a base first to bring up the purchase worker button
 					if (selectedHex.getTileType ().Equals (HexGrid.TileType.BASE)) {
-						price[count].text = warriorCost.ToString ();
+						price[count].text = workerCost.ToString ();
 						go.GetComponent<Button> ().onClick.AddListener (purchaseWorker);
 
 					} else {

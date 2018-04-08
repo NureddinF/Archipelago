@@ -85,7 +85,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 831630d00d248ac4d8aad3935f4ef8d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitSpeed: 2
+  unitSpeed: 4
   destinationHex: {fileID: 0}
   initialHex: {fileID: 0}
   id: 0
