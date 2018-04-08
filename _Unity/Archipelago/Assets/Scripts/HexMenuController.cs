@@ -243,6 +243,7 @@ public class HexMenuController : NetworkBehaviour {
 					//sets the font,size,stile of text
 					price[count].fontSize = 55;
 					price[count].fontStyle = FontStyle.Bold;
+					price[count].color = new Color (0, 0.75f, 0);
 					price[count].font = Resources.GetBuiltinResource (typeof(Font), "Arial.ttf") as Font;
 					//aligns it to the middle center of text box
 					price[count].alignment = TextAnchor.MiddleCenter;
@@ -251,12 +252,10 @@ public class HexMenuController : NetworkBehaviour {
 					//checks if its a base first to bring up the purchase worker button
 					if (selectedHex.getTileType ().Equals (HexGrid.TileType.BASE)) {
 						price[count].text = warriorCost.ToString ();
-						price[count].color = new Color (0, 0.75f, 0);
 						go.GetComponent<Button> ().onClick.AddListener (purchaseWorker);
 
 					} else {
 						price[count].text = b.getCost ().ToString (); 
-						price[count].color = new Color (0, 0.75f, 0);
 						go.GetComponent<Button> ().onClick.AddListener (() => {
 							CmdTileActionBuild (selectedHex.gameObject , b.buildingId, b.getCost());
 						});
@@ -369,8 +368,10 @@ public class HexMenuController : NetworkBehaviour {
     //Blink the worker count with a color
 	IEnumerator purchaseWorkerResult(Color flashingColor){
 		tileWorkerCount.color = flashingColor;
+		price [0].color = flashingColor;
 		yield return new WaitForSeconds(0.5f);
 		tileWorkerCount.color = Color.black;
+		price [0].color = new Color (0, 0.75f, 0);
 	}
 
 	// Try to purchase a warrior when the button is clicked
@@ -416,9 +417,12 @@ public class HexMenuController : NetworkBehaviour {
 	//Blink the warrior count with a color
 	IEnumerator purchaseWarriorResult(Color flashingColor){
 		tileWarriorCount.color = flashingColor;
+		price [0].color = flashingColor;
 		yield return new WaitForSeconds(0.5f);
 		tileWarriorCount.color = Color.black;
+		price [0].color = new Color (0, 0.75f, 0);
 	}
+
 		
 	// Command to build a building
 	[Command]
