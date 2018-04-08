@@ -8,11 +8,11 @@ Provide a list of **ALL** the libraries you used for your project. Example:
 **Unity version: 2017.3.0f3(MAC) 2017.3.1f1(PC)** Unity is a cross-platform game engine, used to develop 3D and 2D video games. Source [here](https://unity3d.com/)
 
 ## Installation Notes
-To install the app on an Android device open the root of the github project in Android Studios. Ensure that instant run is disabled underpreferences. Connect the Android device and ensure USB Debugging is enabled. Ensure the "app" module is selected and press the Run button. When pressing the Run button, the device should appear in the list of connected devices. Select the device from the list and press OK.
+To install the app on an Android device open the root of the github project in Android Studios. Ensure that instant run is disabled under preferences. Connect the Android device and ensure USB Debugging is enabled. Ensure the "app" module is selected and press the Run button. When pressing the Run button, the device should appear in the list of connected devices. Select the device from the list and press OK.
 
 It is normal for there to be some errors when the default gradle build executes after opening android studio. These are due to having multiple modules in the project which results in gradle not building the "app" configuration.
 
-The above is all that is needed to run the game. If the marker wishes to examine the Unity project independently it is located within the project at "/\_Unity/Archipelago/". Opening this folder in Unity may cause "Unable to parse YAML file" erros. These can be cleared and ignored. If a promt appears saying the project was last openned in an older version of untiy, simply press continue.
+The above is all that is needed to run the game. If the marker wishes to examine the Unity project independently it is located within the project at "/\_Unity/Archipelago/". Opening this folder in Unity may cause "Unable to parse YAML file" errors. These can be cleared and ignored. If a promt appears saying the project was last openned in an older version of untiy, simply press continue.
 
 
 ## Code Examples
