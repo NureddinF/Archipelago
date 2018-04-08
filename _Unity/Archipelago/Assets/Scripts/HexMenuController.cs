@@ -400,6 +400,7 @@ public class HexMenuController : NetworkBehaviour {
 	[ClientRpc]
 	private void RpcPurchaseWarriorFailed(GameObject barracksHex){
 		if(hasAuthority && selectedHex.gameObject == barracksHex){
+			//starts coroutine to get color for text to flash red
 			StartCoroutine (purchaseWarriorResult(Color.red));
 		}
 	}
@@ -410,12 +411,14 @@ public class HexMenuController : NetworkBehaviour {
 		if (hasAuthority && selectedHex.gameObject == barracksHex) {
 			tileWarriorCount.text = selectedHex.getNumOfWarriorsOnHex(GetComponent<Player>().playerId).ToString();
 			Color green = new Color (0, 0.75f, 0);
+			//starts corouting to get the color of text to flash green
 			StartCoroutine (purchaseWarriorResult (green));
 		}
 	}
 
 	//Blink the warrior count with a color
 	IEnumerator purchaseWarriorResult(Color flashingColor){
+		//Changes the color of the text of the tile count and the price to flash the cooresponding color
 		tileWarriorCount.color = flashingColor;
 		price [0].color = flashingColor;
 		yield return new WaitForSeconds(0.5f);
@@ -429,9 +432,11 @@ public class HexMenuController : NetworkBehaviour {
 	void CmdTileActionBuild(GameObject tile, Building.BuildingType buildingId, float cost){
 		float totalGold = GetComponent<Player> ().getCurrentMoney ();
 		if(totalGold < cost) {
-			//Can't afford upgrade, do nothing
+			//loops through price text array to find the the text we want to change the color for
 			for (int i = 0; i < price.Length; i++) {
+				//compares the price name equals the name of the building
 				if (price [i].name.ToString ().Equals (buildingId.ToString ())) {
+					//sets true in the boolean array to corresponding index
 					whichText [i] = true;
 				}
 			}
@@ -445,31 +450,30 @@ public class HexMenuController : NetworkBehaviour {
 			//Refresh hex menu's values to display these changes
 			RpcRefreshUIValues ();
 		}
-//		RpcRefreshUIValues ();
 	}
 
 	[ClientRpc]
 	private void RpcActionBuildFailed(){
 		if (price != null) {
 			int textIndex = 0;
+			//goes through which text array to find the index of the text in price array
 			for (int i = 0; i < whichText.Length; i++) {
 				if (whichText [i]) {
+					//gets the index
 					textIndex = i;
 				}
-				Debug.Log ("price: " + price[i]);
-				Debug.Log ("which price " + whichText[i]);
 			}
-			Debug.Log (price [textIndex].name);
-			Debug.Log ("index " + textIndex);
-			price [textIndex].color = Color.red;
+			//starts Coroutine to to ge the color to flash red
 			StartCoroutine(ActionBuildFailed (Color.red, textIndex));
 		}
 	}
 
 	IEnumerator ActionBuildFailed(Color color, int index){
+		//Changes the color to red
 		price [index].color = color;
+		//waits 
 		yield return new WaitForSeconds (0.5f);
+		//changes color back to the originial
 		price [index].color = new Color (0, 0.75f, 0);
-		Debug.Log (price [index].color);
 	}
 }
