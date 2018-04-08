@@ -2050,8 +2050,8 @@ MonoBehaviour:
   m_PlayScene: Hex Grid
   lobbySlots: []
   isDebug: 1
-  isHost: 1
-  isSinglePlayer: 0
+  isHost: 0
+  isSinglePlayer: 1
   exitButton: {fileID: 901782432}
   loadingText: {fileID: 998285999}
   JoiningText: {fileID: 0}
