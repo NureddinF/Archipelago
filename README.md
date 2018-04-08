@@ -234,6 +234,78 @@ It was found that when unity project closes it doesn't do it cleanly (letting al
 
 We also had to edit the android manifest to remove the intent filter on the generated activity. If this was not done then the app would have two icons on the device allowing the user to either start from the login screen or go to the game screen directly.
 
+**Problem 3: Multiplayer - Not Enough Money**
+When the game was changed to be multiplayer, it had to be redesigned to have state be maintained across server and clients. One example of this was when the user goes to build a building and they don't have enough money we wanted the cost to flash red. To execute this a series of steps are needed: they have to:
+ - Button clieck triggers an on click listener:
+ ```
+	price[count].text = b.getCost ().ToString (); 
+	go.GetComponent<Button> ().onClick.AddListener (() => {
+		actionBuild (selectedHex.gameObject , b.buildingId, b.getCost());
+	});
+ ```
+ - The client makes a requrest to the server telling it all the needed information. This is done using Untiy's High Level Networking API, specifically a command. When a command is called it is always executed on the server regardless of where it is called from. The parameters passed to the function have to be primitive types or networked objects (have the Network ID component and have been spawned correctly by the server).
+ 
+ ```
+ 	void actionBuild(GameObject tile, Building.BuildingType buildingId, float cost){
+		if (hasAuthority) {
+			int index = 0;
+			for (int i = 0; i < price.Length; i++) {
+				if (price [i].name.ToString ().Equals (buildingId.ToString ())) {
+					index = i;
+
+				}
+			}
+			CmdTileActionBuild (tile, buildingId, cost, index);
+			Debug.Log ("Count: " + index);
+			Debug.Log ("price text: " + price [index].text);
+		}
+
+	}
+ 
+ ```
+ 
+ - The server checks cost of building and the players current money. If the player doesn't have enough it sends a failure message back to the client. This is done using a Remote Proceedure Call (RPC). The RPC is called on the server and executes on all the clients (each client has their own instance of the networked object). RPCs have the same restriction on parameters as commands.
+ 
+ ```
+ 	// Command to build a building
+	[Command]
+	void CmdTileActionBuild(GameObject tile, Building.BuildingType buildingId, float cost, int count){
+		float totalGold = GetComponent<Player> ().getCurrentMoney ();
+		if(totalGold < cost) {
+			RpcActionBuildFailed (count);
+			Debug.Log ("INSUFFICENT FUNDS");
+		}
+		else {
+			tile.GetComponent<Hex> ().CmdSetBuilding (buildingId);
+			GetComponent<Player> ().removeMoney (cost);
+			//Refresh hex menu's values to display these changes
+			RpcRefreshUIValues ();
+		}
+	}
+ ```
+
+- The first thing the RPC does is check if it has authority. This is because each client has a copy of every player's gameobject and the RPC will execute on all clents for the player object that made the inital request. However, we don't want all players UI to flash thus we check if this player object is the authoritative player for this client (there will only be one authoritative player per client). Now that we know this is the client who made the the requrest we can start a coroutine to flash the UI:
+
+```
+	[ClientRpc]
+	private void RpcActionBuildFailed(int index){
+		if (hasAuthority && price != null) {
+			//starts Coroutine to to ge the color to flash red
+			StartCoroutine(ActionBuildFailed (Color.red, index));
+		}
+	}
+
+	IEnumerator ActionBuildFailed(Color color, int index){
+		//Changes the color to red
+		price [index].color = color;
+		//waits 
+		yield return new WaitForSeconds (0.5f);
+		//changes color back to the originial
+		price [index].color = new Color (0, 0.75f, 0);
+	}
+```
+
+
 ## Feature Section
 ###Local Storage
 	- Remeber me function created on Login, users login credentials are saved and are loaded when user opens application.
