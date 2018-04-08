@@ -342,6 +342,7 @@ public class Hex : NetworkBehaviour {
 	//Set Hex Owner
     public void setHexOwner(Player.PlayerId pID) { 
 		this.hexOwner = pID; 
+		notifyNeighborsOfChange ();
 	}
 
 	//Set Tile Income
@@ -372,6 +373,20 @@ public class Hex : NetworkBehaviour {
 	}
 		
 	///////////////////////////////////////// Custom Methods ///////////////////////////////////////////
+
+	private void notifyNeighborsOfChange(){
+		List<GameObject> neighbors =  getNeighbors ();
+		foreach (GameObject neighor in neighbors) {
+			neighor.GetComponent<Hex>().notify (hexOwner);
+		}
+	}
+		
+	private void notify(Player.PlayerId adjacentHexOwner){
+		CapturableTile tile = GetComponent<CapturableTile> ();
+		if (tile != null) {
+			tile.notify (adjacentHexOwner);
+		}
+	}
 
 	//Do Damage, Performs damage to both factions and updates units, health, and damage respectively
 	public void doDamage() {
