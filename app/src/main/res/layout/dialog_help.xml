@@ -45,7 +45,18 @@
                 android:layout_marginRight="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="1.How to Play\n2.Archipelago is a tile based mobile strategy game where 2 players compete for territory with the goal of reaching a predetermined sum of gold before their opponent does. Each captured tile adds to the total gold being earned."
+                android:text="1.How to Play\n2.Archipelago is a tile based mobile strategy game where 2 players compete for territory with the goal of reaching a predetermined sum of gold before their opponent does."
+                android:textColor="#3F51B5"
+                android:textSize="13sp" />
+            <TextView
+                android:id="@+id/updataversion_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="Each captured tile adds to the total gold being earned."
                 android:textColor="#3F51B5"
                 android:textSize="13sp" />
 
@@ -104,7 +115,18 @@
                 android:layout_marginRight="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="To move a unit to a tile: \n1. Tap the desired tile.\n2. On the bottom toolbar there are two buttons on the right hand side: one represents the warriors and the other represents the workers.\n3. Tap either button to send a warrior or worker."
+                android:text="To move a unit to a tile: \n1. Tap the desired tile.\n2. On the bottom toolbar there are two buttons on the right hand side: one represents the warriors and the other represents the workers."
+                android:textColor="#3F51B5"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="3. Tap either button to send a warrior or worker."
                 android:textColor="#3F51B5"
                 android:textSize="13sp" />
 
