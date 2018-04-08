@@ -15,8 +15,8 @@ public class HexMenuController : NetworkBehaviour {
     private Text tileWorkerCount;
     private Text tileWarriorCount;
     private Image tileActionBox;
-	private Text price;
-	private Image icon;
+	private Text[] price = new Text[3];
+	private bool[] whichText = {false,false,false};
 
 	public float workerCost = 25;
 	public float warriorCost = 50;
@@ -25,7 +25,6 @@ public class HexMenuController : NetworkBehaviour {
     private Hex selectedHex;
 
     private void Start(){
-		icon = GameObject.Find ("testImg").GetComponent<Image>();
 
     }
 
@@ -216,10 +215,11 @@ public class HexMenuController : NetworkBehaviour {
 					textObject.transform.parent = go.transform;
                     //Set its name
                     go.name = b.name;
+
                     //Add appropriate components
                     go.AddComponent<RectTransform>();
-					price = textObject.AddComponent<Text> ();
-
+					price[count] = textObject.AddComponent<Text> ();
+					price [count].name = go.name;
 					//icon = go.AddComponent<Image>();
 					go.AddComponent<Image>();
                     go.AddComponent<Button>();
@@ -241,24 +241,26 @@ public class HexMenuController : NetworkBehaviour {
 					go.GetComponent<Image>().sprite = b.getMenuIconSprite();
 
 					//sets the font,size,stile of text
-					price.fontSize = 55;
-					price.fontStyle = FontStyle.Bold;
-					price.color = new Color (0, 0.75f, 0);
-					price.font = Resources.GetBuiltinResource (typeof(Font), "Arial.ttf") as Font;
+					price[count].fontSize = 55;
+					price[count].fontStyle = FontStyle.Bold;
+					price[count].font = Resources.GetBuiltinResource (typeof(Font), "Arial.ttf") as Font;
 					//aligns it to the middle center of text box
-					price.alignment = TextAnchor.MiddleCenter;
+					price[count].alignment = TextAnchor.MiddleCenter;
 
                     //Set its click function
 					//checks if its a base first to bring up the purchase worker button
 					if (selectedHex.getTileType ().Equals (HexGrid.TileType.BASE)) {
-						price.text = warriorCost.ToString ();
+						price[count].text = warriorCost.ToString ();
+						price[count].color = new Color (0, 0.75f, 0);
 						go.GetComponent<Button> ().onClick.AddListener (purchaseWorker);
 
 					} else {
-						price.text = b.getCost ().ToString (); 
+						price[count].text = b.getCost ().ToString (); 
+						price[count].color = new Color (0, 0.75f, 0);
 						go.GetComponent<Button> ().onClick.AddListener (() => {
 							CmdTileActionBuild (selectedHex.gameObject , b.buildingId, b.getCost());
 						});
+
 					}
                     //Increment count
 					count ++;
@@ -277,7 +279,7 @@ public class HexMenuController : NetworkBehaviour {
 					go.name = barracks.name;
 					//Add appropriate components
 					go.AddComponent<RectTransform> ();
-					price = textObject.AddComponent<Text> ();
+					price[0] = textObject.AddComponent<Text> ();
 
 					//Set its rect transform properties
 					go.GetComponent<RectTransform> ().pivot = new Vector2 (0.5f, 1f);
@@ -297,16 +299,16 @@ public class HexMenuController : NetworkBehaviour {
 
 
 
-					price.fontStyle = FontStyle.Normal;
+					price[0].fontStyle = FontStyle.Normal;
 					if (barracks.GetComponent<Barracks> ().getIsConstructed ()) {
 						//Sets the text component for price of warriors
-						price.text = warriorCost.ToString ();
-						price.fontSize = 55;
-						price.fontStyle = FontStyle.Bold;
-						price.color = new Color (0, 0.75f, 0);
-						price.font = Resources.GetBuiltinResource (typeof(Font), "Arial.ttf") as Font;
+						price[0].text = warriorCost.ToString ();
+						price[0].fontSize = 55;
+						price[0].fontStyle = FontStyle.Bold;
+						price[0].color = new Color (0, 0.75f, 0);
+						price[0].font = Resources.GetBuiltinResource (typeof(Font), "Arial.ttf") as Font;
 						//aligns the text to the middle center of text object
-						price.alignment = TextAnchor.MiddleCenter;
+						price[0].alignment = TextAnchor.MiddleCenter;
 
 						go.AddComponent<Image> ();
 						go.AddComponent<Button> ();
@@ -424,28 +426,46 @@ public class HexMenuController : NetworkBehaviour {
 		float totalGold = GetComponent<Player> ().getCurrentMoney ();
 		if(totalGold < cost) {
 			//Can't afford upgrade, do nothing
+			for (int i = 0; i < price.Length; i++) {
+				if (price [i].name.ToString ().Equals (buildingId.ToString ())) {
+					whichText [i] = true;
+				}
+			}
+
 			RpcActionBuildFailed ();
+			Debug.Log ("INSUFFICENT FUNDS");
 		}
 		else {
 			tile.GetComponent<Hex> ().CmdSetBuilding (buildingId);
 			GetComponent<Player> ().removeMoney (cost);
+			//Refresh hex menu's values to display these changes
+			RpcRefreshUIValues ();
 		}
-		//Refresh hex menu's values to display these changes
-		RpcRefreshUIValues ();
+//		RpcRefreshUIValues ();
 	}
 
 	[ClientRpc]
 	private void RpcActionBuildFailed(){
-		if (icon != null) {
-			Debug.Log (icon.color);
-			Color normal = icon.color;
-			StartCoroutine (ActionBuildSuccess (normal));
+		if (price != null) {
+			int textIndex = 0;
+			for (int i = 0; i < whichText.Length; i++) {
+				if (whichText [i]) {
+					textIndex = i;
+				}
+				Debug.Log ("price: " + price[i]);
+				Debug.Log ("which price " + whichText[i]);
+			}
+			Debug.Log (price [textIndex].name);
+			Debug.Log ("index " + textIndex);
+			price [textIndex].color = Color.red;
+			StartCoroutine(ActionBuildFailed (Color.red, textIndex));
 		}
 	}
 
-	IEnumerator ActionBuildSuccess(Color color){
-		icon.color = Color.red;
+	IEnumerator ActionBuildFailed(Color color, int index){
+		price [index].color = color;
 		yield return new WaitForSeconds (0.5f);
-		icon.color = color;
+		price [index].color = new Color (0, 0.75f, 0);
+		Debug.Log (price [index].color);
 	}
 }
