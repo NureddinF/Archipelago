@@ -67,7 +67,7 @@
                 android:layout_marginRight="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="1.How to Win\n2.To win the game you must reach 1,000 gold before your opponent. To earn more gold you must capture more territory. Territory you capture can be upgraded to improve its gold output."
+                android:text="1.How to Win\n2.To win the game you must reach 50,000 gold before your opponent. To earn more gold you must capture more territory. Territory you capture can be upgraded to improve its gold output."
                 android:textColor="#3F51B5"
                 android:textSize="13sp" />
 
