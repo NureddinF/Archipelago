@@ -100,13 +100,13 @@ To determine wheather the touch on the screen is trying to zoom, pan the camera 
 
 ## Feature Section
 ### Local Storage
-Remeber me function created on Login, users login credentials are saved and are loaded when user opens application.
+-Remeber me function created on Login, users login credentials are saved and are loaded when user opens application.
 ### Touch
-Pinch to zoom, drag to pan camera, and touch to select and object implemented.
+-Pinch to zoom, drag to pan camera, and touch to select and object implemented.
 ### Sound
-Background music available.
+-Background music available.
 ### Networking
-Lobby based multiplayer created for users to play together online.
+-Lobby based multiplayer created for users to play together online.
 
 ## Final Project Status
 Write a description of the final status of the project. Did you achieve all your goals? What would be the next step for this project (if it were to continue)?
@@ -134,6 +134,7 @@ Write a description of the final status of the project. Did you achieve all your
 [4] "c# - Efficient way to remove ALL whitespace from String? - Stack Overflow". [Online]. Available: https://stackoverflow.com/questions/6219454/efficient-way-to-remove-all-whitespace-from-string.
 [5] "Unity". [Online]. Available: https://unity3d.com/learn/tutorials/modules/intermediate/live-training-archive/modal-window.
 [6] “Unity (game engine),” Wikipedia, 06-Apr-2018. [Online]. Available: https://en.wikipedia.org/wiki/Unity_(game_engine).
+[7] “安卓开发---仿网易云小火箭dialog一个简单的自动更新弹窗以及下载apk,” 安卓开发---仿网易云小火箭dialog一个简单的自动更新弹窗以及下载apk - CSDN博客. [Online]. Available: https://blog.csdn.net/panghaha12138/article/details/72412902.
 
 ------ PRIOR README BELOW ------
 
