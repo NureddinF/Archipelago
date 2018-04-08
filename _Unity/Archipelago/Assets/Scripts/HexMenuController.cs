@@ -251,7 +251,7 @@ public class HexMenuController : NetworkBehaviour {
                     //Set its click function
 					//checks if its a base first to bring up the purchase worker button
 					if (selectedHex.getTileType ().Equals (HexGrid.TileType.BASE)) {
-						price[count].text = warriorCost.ToString ();
+						price[count].text = workerCost.ToString ();
 						go.GetComponent<Button> ().onClick.AddListener (purchaseWorker);
 
 					} else {
