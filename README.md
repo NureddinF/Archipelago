@@ -104,24 +104,87 @@ The initial set of menus with the login screen and registration was done in andr
 
 To do this we had to build the unity project as android library and import it into the android studio project. This resulted in two modules in the project. We then had to modify the gradle for the unity module to make it a library:
 ```
+apply plugin: 'com.android.library'
+
+
 
 ```
 
 Next we had to add the unity library to the main app's gradle:
 
 ```
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support:wear:26.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    compileOnly 'com.google.android.wearable:wearable:2.2.0'
+    implementation project(':Archiplegao_U')
+    compile 'com.android.support:multidex:1.0.3'
+}
 
 ```
 
 Exporting the unity project automatically generates an Activity to represent it. Our android studio code launched the unity part by launching the unity activity with an intent. To pass addtional information to the unity part, Extra's are added to the intent:
 
 ```
+private class GameLauncher implements View.OnClickListener {
+
+        private final String startCommand;
+
+        public GameLauncher(String startCommand){
+            this.startCommand = startCommand;
+        }
+
+        @Override
+        public void onClick(View view) {
+            soundPool.play(soundId,1,1,0,0,1);
+            Intent launchIntent = new Intent(getApplicationContext(), UnityPlayerActivity.class);
+            if (launchIntent != null) {
+                String username = SharedPreferenceUtils.getString(MainActivity.this,"username","Player");
+                launchIntent.putExtra("username", username);
+                launchIntent.putExtra("startCommand", startCommand);
+                launchIntent.putExtra("ipaddr", getIpAddr());
+                startActivityForResult(launchIntent, PLAY_GAME);
+            } else {
+                Toast.makeText(getApplicationContext(), "Could not find game APK", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
 ```
 
 In the unity activity it reads the intent data and then stores it in the activity while providing getters to retrieve it:
 
 ```
+    @Override protected void onCreate(Bundle savedInstanceState)
+    {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        super.onCreate(savedInstanceState);
+        startCommand = getIntent().getStringExtra("startCommand");
+        ipAddr = getIntent().getStringExtra("ipaddr");
+        username = getIntent().getStringExtra("username");
+        getWindow().setFormat(PixelFormat.RGBX_8888); // <--- This makes xperia play happy
+
+        mUnityPlayer = new UnityPlayer(this);
+        setContentView(mUnityPlayer);
+        mUnityPlayer.requestFocus();
+    }
+    
+    public String getStartCommand(){
+        return startCommand;
+    }
+
+    public String getIpAddr(){
+        return ipAddr;
+    }
+
+    public String getUsername(){
+        return username;
+    }
 
 
 ```
@@ -129,18 +192,43 @@ In the unity activity it reads the intent data and then stores it in the activit
 When the unity code exectus it uses static c# functions to make native calls to the java getters:
 
 ```
+	public static string getAndroidStartCommand(){
+
+		AndroidJavaObject currentActivity = getUnityActivity();
+
+		return currentActivity.Call<string>("getStartCommand");
+	}
+	
+	private static AndroidJavaObject getUnityActivity(){
+		AndroidJavaClass jc = new AndroidJavaClass ("com.unity3d.player.UnityPlayer");
+		AndroidJavaObject currentActivity = jc.GetStatic<AndroidJavaObject>("currentActivity");
+
+		return currentActivity;
+	}
+	
 
 ```
 
 When the unity code wants to pass information back to android studio it can do this by making other native calls to the java activity. The following closes the game and returns to the menu screen when the player has won:
 
 ```
+	public static void winAction(){
+		AndroidJavaObject currentActivity = getUnityActivity();
+
+		currentActivity.Call("win");
+	}
+	
+	public void win() {
+        	finish();
+    	}
 
 ```
 
 It was found that when unity project closes it doesn't do it cleanly (letting all its threads finish and join or something like that). Instead, when it closes it issues a "kill -9" on its process ID. This resulted in the entire app closing, not just the untiy part, when the game returned to android studio code. This was fixed by editting the unity android manifest to start the unity section in a different process:
 
 ```
+<application android:theme="@style/UnityThemeSelector" android:icon="@drawable/app_icon" 			android:label="@string/app_name" android:isGame="true" android:banner="@drawable/app_banner"
+      android:process=":Archipelago_U">
 
 ```
 
