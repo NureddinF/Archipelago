@@ -235,6 +235,7 @@ It was found that when unity project closes it doesn't do it cleanly (letting al
 We also had to edit the android manifest to remove the intent filter on the generated activity. If this was not done then the app would have two icons on the device allowing the user to either start from the login screen or go to the game screen directly.
 
 **Problem 3: Multiplayer - Not Enough Money**
+
 When the game was changed to be multiplayer, it had to be redesigned to have state be maintained across server and clients. One example of this was when the user goes to build a building and they don't have enough money we wanted the cost to flash red. To execute this a series of steps are needed: they have to:
  - Button clieck triggers an on click listener:
  ```
