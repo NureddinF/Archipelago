@@ -15,10 +15,11 @@ public class HexMenuController : NetworkBehaviour {
     private Text tileWorkerCount;
     private Text tileWarriorCount;
     private Image tileActionBox;
+	private Text[] price = new Text[3];
+	private bool[] whichText = {false,false,false};
 
 	public float workerCost = 25;
 	public float warriorCost = 50;
-    
 
     //Parameter to store the current hex that the menu is displaying for.
     private Hex selectedHex;
@@ -188,6 +189,10 @@ public class HexMenuController : NetworkBehaviour {
             float childWidth = percentageWidth * parentWidth;
             float childHeight = 0.65f * childWidth;
 
+			//calculates the size text box should be so it is responsive
+			float textWidth = percentageWidth * childWidth;
+			float textHeight = 0.55f * textWidth;
+
             // The distance between each menu items as well as the initial offset from top of action box
             float yOffset = 35f;
             //If the selected hex does not have a building and player owns the hex, then display build options
@@ -203,64 +208,114 @@ public class HexMenuController : NetworkBehaviour {
                 {
 					Debug.Log (b);
                     //New gameobject
-                    GameObject go = new GameObject();
+					GameObject go = new GameObject();
+					GameObject textObject = new GameObject ();
                     //Set its parent
                     go.transform.parent = tileActionBox.transform;
+					textObject.transform.parent = go.transform;
                     //Set its name
                     go.name = b.name;
+
                     //Add appropriate components
                     go.AddComponent<RectTransform>();
-                    go.AddComponent<Image>();
+					price[count] = textObject.AddComponent<Text> ();
+					price [count].name = go.name;
+					go.AddComponent<Image>();
                     go.AddComponent<Button>();
 
                     //Set its rect transform properties
                     go.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
                     go.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 1f);
                     go.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 1f);
-                    
-                    go.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth, childHeight);
-                    go.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -count * childHeight * go.GetComponent<RectTransform>().localScale.x - yOffset);
-                    //Set its displayed sprite
-                    go.GetComponent<Image>().sprite = b.getMenuIconSprite();
+
+					//sets size of text box and sets it to the bottom left of parent
+					textObject.GetComponent<RectTransform>().sizeDelta = new Vector2(textWidth, textHeight);
+					textObject.GetComponent<RectTransform>().pivot = new Vector2(1f,0f);
+					textObject.GetComponent<RectTransform>().anchorMin = new Vector2(1f, 0f);
+					textObject.GetComponent<RectTransform>().anchorMax = new Vector2(1f, 0f);
+
+					go.GetComponent<RectTransform>().sizeDelta = new Vector2(childWidth, childHeight);
+					go.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -count * childHeight * go.GetComponent<RectTransform>().localScale.x - yOffset);
+
+					//Set its displayed sprite
+					go.GetComponent<Image>().sprite = b.getMenuIconSprite();
+
+					//sets the font,size,stile of text
+					price[count].fontSize = 38;
+					price[count].fontStyle = FontStyle.Bold;
+					price[count].color = new Color (0, 0.75f, 0);
+					price[count].font = Resources.GetBuiltinResource (typeof(Font), "Arial.ttf") as Font;
+
+					//aligns it to the middle center of text box
+					price[count].alignment = TextAnchor.MiddleCenter;
+
                     //Set its click function
+					//checks if its a base first to bring up the purchase worker button
 					if (selectedHex.getTileType ().Equals (HexGrid.TileType.BASE)) {
+						price[count].text = warriorCost.ToString ();
 						go.GetComponent<Button> ().onClick.AddListener (purchaseWorker);
 
 					} else {
-
+						price[count].text = b.getCost ().ToString (); 
 						go.GetComponent<Button> ().onClick.AddListener (() => {
-							CmdTileActionBuild (selectedHex.gameObject , b.buildingId, b.getCost());
+							actionBuild (selectedHex.gameObject , b.buildingId, b.getCost());
 						});
+
 					}
                     //Increment count
-                    count++;
+					count ++;
                 }
             }
 			else if(selectedHex.getBuilding() != null &&selectedHex.getHexOwner().Equals(GetComponent<Player>().playerId)){
 				Building barracks = selectedHex.getBuilding ();
 				if (barracks.buildingId.Equals (Building.BuildingType.Barracks)) {
 					GameObject go = new GameObject ();
+					GameObject textObject = new GameObject ();
+
 					//Set its parent
 					go.transform.parent = tileActionBox.transform;
+					textObject.transform.parent = go.transform;
 					//Set its name
 					go.name = barracks.name;
 					//Add appropriate components
 					go.AddComponent<RectTransform> ();
+					price[0] = textObject.AddComponent<Text> ();
 
 					//Set its rect transform properties
 					go.GetComponent<RectTransform> ().pivot = new Vector2 (0.5f, 1f);
 					go.GetComponent<RectTransform> ().anchorMin = new Vector2 (0.5f, 1f);
 					go.GetComponent<RectTransform> ().anchorMax = new Vector2 (0.5f, 1f);
 
-					go.GetComponent<RectTransform> ().sizeDelta = new Vector2 (childWidth, childHeight);
-					go.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0f, 0 * childHeight * go.GetComponent<RectTransform> ().localScale.x - yOffset);
+					//sets the text object to the bottom left of its parent component
+					textObject.GetComponent<RectTransform>().pivot = new Vector2(1f,0f);
+					textObject.GetComponent<RectTransform>().anchorMin = new Vector2(1f, 0f);
+					textObject.GetComponent<RectTransform>().anchorMax = new Vector2(1f, 0f);
 
+					//sets the size of the text box
+					textObject.GetComponent<RectTransform>().sizeDelta = new Vector2(textWidth, textHeight);
+
+					go.GetComponent<RectTransform> ().sizeDelta = new Vector2 (childWidth, childHeight);
+					go.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0f,  go.GetComponent<RectTransform> ().localScale.x - yOffset);
+
+
+
+					price[0].fontStyle = FontStyle.Normal;
 					if (barracks.GetComponent<Barracks> ().getIsConstructed ()) {
+						//Sets the text component for price of warriors
+						price[0].text = warriorCost.ToString ();
+						price[0].fontSize = 38;
+						price[0].fontStyle = FontStyle.Bold;
+						price[0].color = new Color (0, 0.75f, 0);
+						price[0].font = Resources.GetBuiltinResource (typeof(Font), "Arial.ttf") as Font;
+						//aligns the text to the middle center of text object
+						price[0].alignment = TextAnchor.MiddleCenter;
+
 						go.AddComponent<Image> ();
 						go.AddComponent<Button> ();
-						//Set its displayed sprite
-						go.GetComponent<Image> ().sprite = barracks.GetComponent<Barracks> ().getpurchaseWarriorSprite ();
 
+						//Set its displayed sprite
+
+						go.GetComponent<Image>().sprite = barracks.GetComponent<Barracks> ().getpurchaseWarriorSprite ();
 						go.GetComponent<Button> ().onClick.AddListener (purchasWarrior);
 					}
 				}
@@ -314,8 +369,10 @@ public class HexMenuController : NetworkBehaviour {
     //Blink the worker count with a color
 	IEnumerator purchaseWorkerResult(Color flashingColor){
 		tileWorkerCount.color = flashingColor;
+		price [0].color = flashingColor;
 		yield return new WaitForSeconds(0.5f);
 		tileWorkerCount.color = Color.black;
+		price [0].color = new Color (0, 0.75f, 0);
 	}
 
 	// Try to purchase a warrior when the button is clicked
@@ -344,6 +401,7 @@ public class HexMenuController : NetworkBehaviour {
 	[ClientRpc]
 	private void RpcPurchaseWarriorFailed(GameObject barracksHex){
 		if(hasAuthority && selectedHex.gameObject == barracksHex){
+			//starts coroutine to get color for text to flash red
 			StartCoroutine (purchaseWarriorResult(Color.red));
 		}
 	}
@@ -354,29 +412,69 @@ public class HexMenuController : NetworkBehaviour {
 		if (hasAuthority && selectedHex.gameObject == barracksHex) {
 			tileWarriorCount.text = selectedHex.getNumOfWarriorsOnHex(GetComponent<Player>().playerId).ToString();
 			Color green = new Color (0, 0.75f, 0);
+			//starts corouting to get the color of text to flash green
 			StartCoroutine (purchaseWarriorResult (green));
 		}
 	}
 
 	//Blink the warrior count with a color
 	IEnumerator purchaseWarriorResult(Color flashingColor){
+		//Changes the color of the text of the tile count and the price to flash the cooresponding color
 		tileWarriorCount.color = flashingColor;
+		price [0].color = flashingColor;
 		yield return new WaitForSeconds(0.5f);
 		tileWarriorCount.color = Color.black;
+		price [0].color = new Color (0, 0.75f, 0);
 	}
+
+
+	void actionBuild(GameObject tile, Building.BuildingType buildingId, float cost){
+		if (hasAuthority) {
+			int index = 0;
+			for (int i = 0; i < price.Length; i++) {
+				if (price [i].name.ToString ().Equals (buildingId.ToString ())) {
+					index = i;
+
+				}
+			}
+			CmdTileActionBuild (tile, buildingId, cost, index);
+			Debug.Log ("Count: " + index);
+			Debug.Log ("price text: " + price [index].text);
+		}
+
+	}
+
 		
 	// Command to build a building
 	[Command]
-	void CmdTileActionBuild(GameObject tile, Building.BuildingType buildingId, float cost){
+	void CmdTileActionBuild(GameObject tile, Building.BuildingType buildingId, float cost, int count){
 		float totalGold = GetComponent<Player> ().getCurrentMoney ();
 		if(totalGold < cost) {
-			//Can't afford upgrade, do nothing
+			RpcActionBuildFailed (count);
+			Debug.Log ("INSUFFICENT FUNDS");
 		}
 		else {
 			tile.GetComponent<Hex> ().CmdSetBuilding (buildingId);
 			GetComponent<Player> ().removeMoney (cost);
+			//Refresh hex menu's values to display these changes
+			RpcRefreshUIValues ();
 		}
-		//Refresh hex menu's values to display these changes
-		RpcRefreshUIValues ();
+	}
+
+	[ClientRpc]
+	private void RpcActionBuildFailed(int index){
+		if (hasAuthority && price != null) {
+			//starts Coroutine to to ge the color to flash red
+			StartCoroutine(ActionBuildFailed (Color.red, index));
+		}
+	}
+
+	IEnumerator ActionBuildFailed(Color color, int index){
+		//Changes the color to red
+		price [index].color = color;
+		//waits 
+		yield return new WaitForSeconds (0.5f);
+		//changes color back to the originial
+		price [index].color = new Color (0, 0.75f, 0);
 	}
 }
