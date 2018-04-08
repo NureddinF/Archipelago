@@ -1,7 +1,5 @@
 # Archipelago
-Archipelago is a tile based mobile strategy game where players compete for territory with the goal of reaching a predetermined sum of money more quickly than their opponents.
-Players can build worker units to capture new tiles and build new buildings, which help both to defend their territory as well as produce more money.
-In addition players can also train warriors to battle the opponent head on to gain their territory and buildings.
+Archipelago is a tile based mobile strategy game where 2 players connect via a network connection and compete for territory with the goal of reaching a predetermined sum of gold before their opponent does. Archipelago takes advantage of device storage to save player profile information. Enjoy upbeat and pleasant background music while you play; so we recommend using earphones or turning on sound while playing. Each captured tile adds to the total gold being earned. Players can build worker units to capture new tiles and build new buildings, which helps to both defend their territory as well as produce more gold. In addition players can also train warriors to battle the opponent head on to expand their territory.
 
 ^^^^^ One paragraph to describe your project. Your description should include the project concept andkey features implemented. ^^^^^
 
@@ -309,16 +307,28 @@ When the game was changed to be multiplayer, it had to be redesigned to have sta
 
 ## Feature Section
 ### Local Storage
--- Remeber me function created on Login, users login credentials are saved and are loaded when user opens application.
+-- Device storage is utilized through the following: the remember me function created on Login and a user's login credentials are saved and are loaded when user opens application.
 ### Touch
--- Pinch to zoom, drag to pan camera, and touch to select and object implemented.
+-- To utilize a touchscreen device's touch features we added a pinch to zoom touch gesture, drag to pan camera touch gesture, and a single touch/tap/click to select.
 ### Sound
--- Background music available.
+-- Background music for Android Studio and Unity and sound effects found in Android Studio. Sound options can be turned off inside the settings menu in Android Studio.
 ### Networking
--- Lobby based multiplayer created for users to play together online.
+-- Lobby based multiplayer created for users to play together online. A player can Host the game or join a game. If a player hosts a game their IP address is used by player 2 to join their game.
 
 ## Final Project Status
-Write a description of the final status of the project. Did you achieve all your goals? What would be the next step for this project (if it were to continue)?
+The final status of our project is positive. Archipelago is working properly and features all minimal and expected functionality we originally set out to achieve. Including this we were able to achieve both of our bonus functionality goals. Background and sound effects are included in the Android Studio portion of our application and background music is found in the Unity portion. Multiplayer is working, allowing 2 players to connect via a network connection using the Host's IP address.
+
+During the 3 months of development we were able to achieve a lot and inevitably created a working fun game. Given more time for development we believe we could have improved our game even more by adding a great deal of visual and functional polish. The following are sections of the game we would have liked to further improve upon:
+
+**Multiplayer** - To make multiplayer more functional and to help players play with more people we would have liked add matchmaking. Due to time constraints and limited knowledge regarding the subject we were unable to implement this in the original development period. Matchmaking would have made playing with a friend easier as well creating the ability to play with people you don't even know.
+
+**Music and Sound Effects** - Given more time and having some more experience with sound production/engineering it would have been nice to add more sound to add another dimension to the game. Better background sound and sound effects for actions may have created a more immersive experience for players as well as adding character to the game. This includes for example having the background music transition to project different moods or moments in the game. Due to lack of experience in the area of sound design and the limited time frame we were unable to add these in the initial development period.
+
+**Art and Visuals Effects** - Art and visual effects of a game are vital. They immerse the player and create a unique experience that is fun and enjoyable. Improving the visuals of the game was possible given our experience, but due to time constraints and priority of other features it was not possible in the initial development period. Some visual improvements include: unit movement animations, unit battling animations and effects, unit death/lose animations and effects, tile effects and animations, improved UI responsiveness as well as visual appeal.
+
+**Single Player AI** - With more time we would have liked to have built an AI the player can face in single player mode. The AI could be adjusted in difficulty increments such as easy, medium, and hard. The AI could be used to help the player learn the game as well as make our game appeal to people that prefer to play alone.
+
+**Minor Bug Fixes and Tweaking** - Our game/application is functional but there still exists small bugs and areas that need further tweaking. Given more time we would have liked to have fixed the following: Some UI elements do not scale properly for all device sizes. Some UI elements are not perfectly synced in multiplayer. Tweaking gameplay balancing variables.
 
 
 #### Minimum Functionality
@@ -343,36 +353,5 @@ Write a description of the final status of the project. Did you achieve all your
 [4] "c# - Efficient way to remove ALL whitespace from String? - Stack Overflow". [Online]. Available: https://stackoverflow.com/questions/6219454/efficient-way-to-remove-all-whitespace-from-string.
 [5] "Unity". [Online]. Available: https://unity3d.com/learn/tutorials/modules/intermediate/live-training-archive/modal-window.
 [6] “Unity (game engine),” Wikipedia, 06-Apr-2018. [Online]. Available: https://en.wikipedia.org/wiki/Unity_(game_engine).
-[7] “安卓开发---仿网易云小火箭dialog一个简单的自动更新弹窗以及下载apk,” 安卓开发---仿网易云小火箭dialog一个简单的自动更新弹窗以及下载apk - CSDN博客. [Online]. Available: https://blog.csdn.net/panghaha12138/article/details/72412902.
+[7] “Background Music 찮 10,” 찮_ٶ֪, 24-Sep-2013. [Online]. Available: https://zhidao.baidu.com/question/133866833918388365.html?fr=ala&word=天天爱消除bgm. [Accessed: 08-Apr-2018].
 
------- PRIOR README BELOW ------
-
-CSCI4176 Group3
-Minimum Functionality
-At a minimum we shall deliver:
-A tiled map with three segments, one for each player and a neutral zone in the middle
-One (1) resource: money
-Three (3) units: one (1) for building, one (1) for gathering resources, and one (1) for defending 
-One (1) offensive action to capture an enemy tile
-A single resource collection point in the neutral zone
-Two (2) buildings, one(1) which can defend a tile and one (1) that can increase the income from a tile
-One (1) trap a player can use defensively without the other player being aware of it
-A stand in A.I. which acts as an opponent but performs no actions 
-Basic Sound effects
-
-Expected Functionality 
-In addition to minimum functionality we expect to deliver:
-Multiple resources with money being the primary resource and others being used to allow access to higher tier units
-Multiple tiers of units that function as better versions of the basic units but require higher tier resources
-Multiple resource collection points around the map of varied value.
-Multiple offensive actions for the player to use against their opponent
-Multiple traps a player can use defensively without the other player being aware of it
-
-Bonus Expectation
-Lobby based network multiplayer (no matchmaking or ranking)
-Random map generation
-Highly polished Visuals  
-Team or Free-For-All game mode
-More units, maps, tools, features, etc.
-Player Progress Tracking
-Local Multiplayer (2 Players 1 screen)
