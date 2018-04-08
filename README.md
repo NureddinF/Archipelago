@@ -98,6 +98,54 @@ To determine wheather the touch on the screen is trying to zoom, pan the camera 
 		}
 ```
 
+**Problem 2: Merging Android Studio and Unity projects**
+
+The initial set of menus with the login screen and registration was done in android studio (Java activities). The actual gameplay for the game was doen in unity (C# scripts). We had to find a way to allow these seperate parts of the app to pass information to one another to allow Unity to know if the game was being played as single player or one of the multiplayer options. 
+
+To do this we had to build the unity project as android library and import it into the android studio project. This resulted in two modules in the project. We then had to modify the gradle for the unity module to make it a library:
+```
+
+```
+
+Next we had to add the unity library to the main app's gradle:
+
+```
+
+```
+
+Exporting the unity project automatically generates an Activity to represent it. Our android studio code launched the unity part by launching the unity activity with an intent. To pass addtional information to the unity part, Extra's are added to the intent:
+
+```
+
+```
+
+In the unity activity it reads the intent data and then stores it in the activity while providing getters to retrieve it:
+
+```
+
+
+```
+
+When the unity code exectus it uses static c# functions to make native calls to the java getters:
+
+```
+
+```
+
+When the unity code wants to pass information back to android studio it can do this by making other native calls to the java activity. The following closes the game and returns to the menu screen when the player has won:
+
+```
+
+```
+
+It was found that when unity project closes it doesn't do it cleanly (letting all its threads finish and join or something like that). Instead, when it closes it issues a "kill -9" on its process ID. This resulted in the entire app closing, not just the untiy part, when the game returned to android studio code. This was fixed by editting the unity android manifest to start the unity section in a different process:
+
+```
+
+```
+
+We also had to edit the android manifest to remove the intent filter on the generated activity. If this was not done then the app would have two icons on the device allowing the user to either start from the login screen or go to the game screen directly.
+
 ## Feature Section
 ###Local Storage
 	- Remeber me function created on Login, users login credentials are saved and are loaded when user opens application.
