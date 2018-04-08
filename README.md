@@ -358,3 +358,8 @@ During the 3 months of development we were able to achieve a lot and inevitably 
 
 [7] “Background Music 찮 10,” 찮_ٶ֪, 24-Sep-2013. [Online]. Available: https://zhidao.baidu.com/question/133866833918388365.html?fr=ala&word=天天爱消除bgm. [Accessed: 08-Apr-2018].
 
+[8] “How to hide a button programmatically?,” android - How to hide a button programmatically? - Stack Overflow. [Online]. Available: https://stackoverflow.com/questions/6173400/how-to-hide-a-button-programmatically. [Accessed: 08-Apr-2018].
+
+[9] “How to hide a button programmatically?,” android - How to hide a button programmatically? - Stack Overflow. [Online]. Available: https://stackoverflow.com/questions/6173400/how-to-hide-a-button-programmatically. [Accessed: 08-Apr-2018].
+
+[10] “How to enable multidexing with the new Android Multidex support library,” gradle - How to enable multidexing with the new Android Multidex support library - Stack Overflow. [Online]. Available: https://stackoverflow.com/questions/26609734/how-to-enable-multidexing-with-the-new-android-multidex-support-library. [Accessed: 08-Apr-2018].
