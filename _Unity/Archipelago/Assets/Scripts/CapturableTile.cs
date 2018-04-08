@@ -195,8 +195,14 @@ public class CapturableTile: NetworkBehaviour{
 			
 		if (player == Player.PlayerId.P1) {
 			numP1UnitsOnHex += numUnits;
+			if (numP2UnitsOnHex == 0) {
+				thisHex.RpcEnableUnitIcon (player);
+			}
 		} else if(player == Player.PlayerId.P2){
 			numP2UnitsOnHex += numUnits;
+			if (numP1UnitsOnHex == 0) {
+				thisHex.RpcEnableUnitIcon (player);
+			}
 		}
 
 		if (GetComponent<Hex>().getHexOwner() != player && !isCapturing) {
@@ -212,8 +218,22 @@ public class CapturableTile: NetworkBehaviour{
 		}
 		if (player == Player.PlayerId.P1) {
 			numP1UnitsOnHex -= numUnits;
+			if(numP1UnitsOnHex == 0){
+				if(numP2UnitsOnHex == 0){
+					thisHex.RpcDisableUnitIcon ();
+				} else {
+					thisHex.RpcEnableUnitIcon (Player.PlayerId.P2);
+				}
+			}
 		} else if(player == Player.PlayerId.P2){
 			numP2UnitsOnHex -= numUnits;
+			if(numP2UnitsOnHex == 0){
+				if(numP1UnitsOnHex == 0){
+					thisHex.RpcDisableUnitIcon ();
+				} else {
+					thisHex.RpcEnableUnitIcon (Player.PlayerId.P1);
+				}
+			}
 		}
 	}
 
