@@ -1,8 +1,5 @@
 # Archipelago
 Archipelago is a tile based mobile strategy game where 2 players connect via a network connection and compete for territory with the goal of reaching a predetermined sum of gold before their opponent does. Archipelago takes advantage of device storage to save player profile information. Enjoy upbeat and pleasant background music while you play; so we recommend using earphones or turning on sound while playing. Each captured tile adds to the total gold being earned. Players can build worker units to capture new tiles and build new buildings, which helps to both defend their territory as well as produce more gold. In addition players can also train warriors to battle the opponent head on to expand their territory.
-
-^^^^^ One paragraph to describe your project. Your description should include the project concept andkey features implemented. ^^^^^
-
 ## Libraries
 Provide a list of **ALL** the libraries you used for your project. Example:
 
@@ -307,13 +304,13 @@ When the game was changed to be multiplayer, it had to be redesigned to have sta
 
 ## Feature Section
 ### Local Storage
--- Device storage is utilized through the following: the remember me function created on Login and a user's login credentials are saved and are loaded when user opens application.
+- Device storage is utilized through the following: the remember me function created on Login and a user's login credentials are saved and are loaded when user opens application.
 ### Touch
--- To utilize a touchscreen device's touch features we added a pinch to zoom touch gesture, drag to pan camera touch gesture, and a single touch/tap/click to select.
+- To utilize a touchscreen device's touch features we added a pinch to zoom touch gesture, drag to pan camera touch gesture, and a single touch/tap/click to select.
 ### Sound
--- Background music for Android Studio and Unity and sound effects found in Android Studio. Sound options can be turned off inside the settings menu in Android Studio.
+- Background music for Android Studio and Unity and sound effects found in Android Studio. Sound options can be turned off inside the settings menu in Android Studio.
 ### Networking
--- Lobby based multiplayer created for users to play together online. A player can Host the game or join a game. If a player hosts a game their IP address is used by player 2 to join their game.
+- Lobby based multiplayer created for users to play together online. A player can Host the game or join a game. If a player hosts a game their IP address is used by player 2 to join their game.
 
 ## Final Project Status
 The final status of our project is positive. Archipelago is working properly and features all minimal and expected functionality we originally set out to achieve. Including this we were able to achieve both of our bonus functionality goals. Background and sound effects are included in the Android Studio portion of our application and background music is found in the Unity portion. Multiplayer is working, allowing 2 players to connect via a network connection using the Host's IP address.
@@ -348,10 +345,16 @@ During the 3 months of development we were able to achieve a lot and inevitably 
 
 ## Sources
 [1] "gamesplusjames", YouTube, 20-Jul-2016. [Online]. Available: https://www.youtube.com/watch?v=fQ2Dvj5-pfc.
+
 [2] "Pan camera 2d by touch - Unity Answers". [Online]. Available: https://answers.unity.com/questions/517529/pan-camera-2d-by-touch.html.
+
 [3] "Move Camera by drag - Unity Answers". [Online]. Available: https://answers.unity.com/questions/813224/move-camera-by-drag.html.
+
 [4] "c# - Efficient way to remove ALL whitespace from String? - Stack Overflow". [Online]. Available: https://stackoverflow.com/questions/6219454/efficient-way-to-remove-all-whitespace-from-string.
+
 [5] "Unity". [Online]. Available: https://unity3d.com/learn/tutorials/modules/intermediate/live-training-archive/modal-window.
+
 [6] “Unity (game engine),” Wikipedia, 06-Apr-2018. [Online]. Available: https://en.wikipedia.org/wiki/Unity_(game_engine).
+
 [7] “Background Music 찮 10,” 찮_ٶ֪, 24-Sep-2013. [Online]. Available: https://zhidao.baidu.com/question/133866833918388365.html?fr=ala&word=天天爱消除bgm. [Accessed: 08-Apr-2018].
 
