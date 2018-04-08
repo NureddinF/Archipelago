@@ -31,7 +31,7 @@ public class Unit : NetworkBehaviour {
     public void setDestinationHex(Hex h) { 
 		destinationHex = h; 
 		destinationCoord = new Vector3(destinationHex.transform.position.x, destinationHex.transform.position.y, -5);
-		GetComponent<SpriteRenderer> ().flipX = destinationCoord.x < transform.position.x;
+		RpcSetSpriteDir(destinationCoord.x < transform.position.x);
 	}
 	//Get Destination Hex (Endpoint of Unit Travel)
     public Hex getDestinationHex() { 
@@ -72,6 +72,11 @@ public class Unit : NetworkBehaviour {
 		setDestinationHex (toHex.GetComponent<Hex> ());
 		setInitialHex (fromHex.GetComponent<Hex> ());
 		setPlayerId (id);
+	}
+
+	[ClientRpc]
+	private void RpcSetSpriteDir(bool flipx){
+		GetComponent<SpriteRenderer> ().flipX = flipx;
 	}
 }
 

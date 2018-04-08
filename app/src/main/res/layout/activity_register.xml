@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Please Input Username"
-        android:textColorHint="#44ffffff" />
+        android:textColorHint="#000000" />
 
     <EditText
         android:id="@+id/et_pass"
@@ -22,14 +22,14 @@
         android:layout_height="wrap_content"
         android:hint="Please Input Password"
         android:inputType="textPassword"
-        android:textColorHint="#44ffffff" />
+        android:textColorHint="#000000" />
 
     <EditText
         android:id="@+id/et_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Please Input Email"
-        android:textColorHint="#44ffffff" />
+        android:textColorHint="#000000" />
 
     <TextView
         android:id="@+id/tv_tips"
@@ -38,7 +38,7 @@
         android:layout_marginBottom="3dp"
         android:layout_marginTop="2dp"
         android:text="Password at least one number and uppercase and lowercase letters required, 6-16 digits."
-        android:textColorHint="#44ffffff" />
+        android:textColorHint="#000000" />
 
     <Button
         android:layout_width="wrap_content"

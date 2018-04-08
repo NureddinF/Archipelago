@@ -318,4 +318,5 @@ public class HexGrid : NetworkBehaviour {
 		}
 		mapHexes [y, x] = hex;
 	}
+		
 }
