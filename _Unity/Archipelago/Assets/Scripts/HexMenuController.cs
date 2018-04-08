@@ -432,8 +432,12 @@ public class HexMenuController : NetworkBehaviour {
 		if (hasAuthority) {
 			int index = 0;
 			for (int i = 0; i < price.Length; i++) {
+				Debug.Log ("i " + i);
+				Debug.Log ("Building " + buildingId.ToString ());
+				Debug.Log ("Text " + price[i].name.ToString ());
 				if (price [i].name.ToString ().Equals (buildingId.ToString ())) {
 					index = i;
+					break;
 
 				}
 			}
