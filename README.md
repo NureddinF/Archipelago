@@ -99,13 +99,13 @@ To determine wheather the touch on the screen is trying to zoom, pan the camera 
 ```
 
 ## Feature Section
-###Local Storage
+### Local Storage
 Remeber me function created on Login, users login credentials are saved and are loaded when user opens application.
-###Touch
+### Touch
 Pinch to zoom, drag to pan camera, and touch to select and object implemented.
-###Sound
+### Sound
 Background music available.
-###Networking
+### Networking
 Lobby based multiplayer created for users to play together online.
 
 ## Final Project Status
