@@ -220,9 +220,9 @@ public class HexMenuController : NetworkBehaviour {
                     go.AddComponent<RectTransform>();
 					price[count] = textObject.AddComponent<Text> ();
 					price [count].name = go.name;
-					//icon = go.AddComponent<Image>();
 					go.AddComponent<Image>();
                     go.AddComponent<Button>();
+
                     //Set its rect transform properties
                     go.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
                     go.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 1f);
@@ -241,10 +241,11 @@ public class HexMenuController : NetworkBehaviour {
 					go.GetComponent<Image>().sprite = b.getMenuIconSprite();
 
 					//sets the font,size,stile of text
-					price[count].fontSize = 55;
+					price[count].fontSize = 38;
 					price[count].fontStyle = FontStyle.Bold;
 					price[count].color = new Color (0, 0.75f, 0);
 					price[count].font = Resources.GetBuiltinResource (typeof(Font), "Arial.ttf") as Font;
+
 					//aligns it to the middle center of text box
 					price[count].alignment = TextAnchor.MiddleCenter;
 
@@ -257,7 +258,7 @@ public class HexMenuController : NetworkBehaviour {
 					} else {
 						price[count].text = b.getCost ().ToString (); 
 						go.GetComponent<Button> ().onClick.AddListener (() => {
-							CmdTileActionBuild (selectedHex.gameObject , b.buildingId, b.getCost());
+							actionBuild (selectedHex.gameObject , b.buildingId, b.getCost());
 						});
 
 					}
@@ -302,7 +303,7 @@ public class HexMenuController : NetworkBehaviour {
 					if (barracks.GetComponent<Barracks> ().getIsConstructed ()) {
 						//Sets the text component for price of warriors
 						price[0].text = warriorCost.ToString ();
-						price[0].fontSize = 55;
+						price[0].fontSize = 38;
 						price[0].fontStyle = FontStyle.Bold;
 						price[0].color = new Color (0, 0.75f, 0);
 						price[0].font = Resources.GetBuiltinResource (typeof(Font), "Arial.ttf") as Font;
@@ -426,22 +427,30 @@ public class HexMenuController : NetworkBehaviour {
 		price [0].color = new Color (0, 0.75f, 0);
 	}
 
+
+	void actionBuild(GameObject tile, Building.BuildingType buildingId, float cost){
+		if (hasAuthority) {
+			int index = 0;
+			for (int i = 0; i < price.Length; i++) {
+				if (price [i].name.ToString ().Equals (buildingId.ToString ())) {
+					index = i;
+
+				}
+			}
+			CmdTileActionBuild (tile, buildingId, cost, index);
+			Debug.Log ("Count: " + index);
+			Debug.Log ("price text: " + price [index].text);
+		}
+
+	}
+
 		
 	// Command to build a building
 	[Command]
-	void CmdTileActionBuild(GameObject tile, Building.BuildingType buildingId, float cost){
+	void CmdTileActionBuild(GameObject tile, Building.BuildingType buildingId, float cost, int count){
 		float totalGold = GetComponent<Player> ().getCurrentMoney ();
 		if(totalGold < cost) {
-			//loops through price text array to find the the text we want to change the color for
-			for (int i = 0; i < price.Length; i++) {
-				//compares the price name equals the name of the building
-				if (price [i].name.ToString ().Equals (buildingId.ToString ())) {
-					//sets true in the boolean array to corresponding index
-					whichText [i] = true;
-				}
-			}
-
-			RpcActionBuildFailed ();
+			RpcActionBuildFailed (count);
 			Debug.Log ("INSUFFICENT FUNDS");
 		}
 		else {
@@ -453,18 +462,10 @@ public class HexMenuController : NetworkBehaviour {
 	}
 
 	[ClientRpc]
-	private void RpcActionBuildFailed(){
-		if (price != null) {
-			int textIndex = 0;
-			//goes through which text array to find the index of the text in price array
-			for (int i = 0; i < whichText.Length; i++) {
-				if (whichText [i]) {
-					//gets the index
-					textIndex = i;
-				}
-			}
+	private void RpcActionBuildFailed(int index){
+		if (hasAuthority && price != null) {
 			//starts Coroutine to to ge the color to flash red
-			StartCoroutine(ActionBuildFailed (Color.red, textIndex));
+			StartCoroutine(ActionBuildFailed (Color.red, index));
 		}
 	}
 
